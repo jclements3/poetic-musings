@@ -62,8 +62,8 @@ CMAT/WMAT = core/wrap material; CDIA/WDIA/BDIA/ODIA = core/wrap/bed/overall diam
 | 49* | a0 | 27.500 | 61.631 | 1565.4 | Steel | Bronze | — | — | — | — | — | — | 0.1060 | 2.69 | 54.000 | 240.2 |
 
 **Total string band tension, 49 strings: 1572.9 lbf = 7.00 kN (~713 kgf)** (1465.5 lbf for the 47 tutorial strings + 107.4 lbf extrapolated b0/a0) — the load the
-frame, neck, and pillar carry continuously; the structural budget for the rib and any
-string-band redesign, and why the pillar shrugs at a 2 kg console.
+frame, neck, and pillar carry continuously; the structural budget for the frame, the
+neck sensor rail, and any string-band redesign, and why the pillar shrugs at a 2 kg console.
 
 Longest speaking length: a0* at 61.631 in = 1565.4 mm — consistent with the ~2 m overall frame.
 
