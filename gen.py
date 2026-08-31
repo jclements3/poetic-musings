@@ -18,7 +18,7 @@ def slider(x,w,label2,lines,idt):
 svg.append(slider(790,80,None,["","MIN — VOLUME — MAX"],"S0"))
 svg.append(slider(885,90,None,["","RHYTHM — BALANCE — MELODY"],"S1"))
 svg.append(slider(990,60,None,["OCTAVE","LOW · MID · HIGH"],"S2"))
-svg.append(slider(1065,110,None,["PIANO · FANTASY · VIOLIN","FLUTE · GUITAR · ADSR"],"S3"))
+svg.append(slider(1065,110,None,["MODE","P · O · E · T · I · C"],"S3"))
 svg.append(slider(1190,80,None,["OFF · CAL","PLAY · REC"],"S4"))
 # buttons
 btns=[("RESET","AC","#c9553a"),("DEL","C","#6a6d74"),("TEMPO ▲","√","#6a6d74"),("TEMPO ▼","%","#6a6d74"),("RHYTHM","","#6a6d74"),("ML-C","MC","#6a6d74"),("MUSIC","MR","#d9962a"),("AUTO PLAY","M−","#3b5a7a")]
@@ -89,10 +89,10 @@ table{{border-collapse:collapse;width:100%;margin-top:14px;font-size:13px}} th,t
 <tr><th>ID</th><th>Element</th><th>Count</th><th>Port input</th></tr>
 <tr><td>A0–G7</td><td>Keys, 29 white + 20 black, C2–C6 — pushbuttons like the original VL-1's; ID = pedal-harp string label, one per key; full printable-ASCII legend: letters/./SPC/RET on whites, digits + Forth symbols on blacks, SHIFT layer for uppercase and remaining symbols</td><td>49</td><td>Key matrix, 7×7 scan</td></tr>
 <tr><td>P0–P9</td><td>Reset, Del, Tempo ▲/▼, Rhythm, ML-C, Music, Auto Play, One Key Play ×2</td><td>10</td><td>Fold into matrix (8×8 total)</td></tr>
-<tr><td>S0, S1</td><td>Volume, Balance</td><td>2</td><td>2 ADC ch</td></tr>
-<tr><td>S2</td><td>Octave (low / middle / high)</td><td>3 pos</td><td>2 GPIO</td></tr>
-<tr><td>S3</td><td>Voice (piano / fantasy / violin / flute / guitar / ADSR)</td><td>6 pos</td><td>3 GPIO</td></tr>
-<tr><td>S4</td><td>Mode (off / cal / play / rec)</td><td>4 pos</td><td>2 GPIO</td></tr>
+<tr><td>S0, S1</td><td>Volume, Balance</td><td>2</td><td>ADC, continuous</td></tr>
+<tr><td>S2</td><td>Octave (low / middle / high)</td><td>3 zones</td><td>ADC, zone + hysteresis</td></tr>
+<tr><td>S3</td><td>MODE selector — P·O·E·T·I·C (Piano, Oracle, Erand49, Theremin, IRIG clock, CW). Switches after 1 s dwell in a new zone, banner on V0. Voice select in P mode: MUSIC (P6) + black-key digit</td><td>6 zones</td><td>ADC, zone + hysteresis</td></tr>
+<tr><td>S4</td><td>Off / cal / play / rec — within the current mode (CAL = retune/calibrate, REC = record)</td><td>4 zones</td><td>ADC, zone + hysteresis</td></tr>
 <tr><td>V0</td><td>8.8" 1920×480 bar TFT (~220×55 mm), HDMI driver board</td><td>1</td><td>GPDI/DVI from ULX3S; H2 vga.vhd text mode retimed, plus overlay framebuffer</td></tr>
 <tr><td>—</td><td>Speaker, underside, rear port; ⅛" jack</td><td>1 ch</td><td>PWM/ΣΔ + RC LP</td></tr>
 </table>

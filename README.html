@@ -17,7 +17,7 @@ table{border-collapse:collapse;width:100%;margin-top:14px;font-size:13px} th,td{
 <text x="830.0" y="16" class="tt" text-anchor="middle"></text><text x="830.0" y="23" class="tt" text-anchor="middle">MIN — VOLUME — MAX</text><rect x="790" y="33" width="80" height="12" rx="2" fill="#3b3e44"/><rect x="814.0" y="29" width="20" height="20" rx="2" fill="#6a6d74"/><text x="790" y="56" class="id">S0</text>
 <text x="930.0" y="16" class="tt" text-anchor="middle"></text><text x="930.0" y="23" class="tt" text-anchor="middle">RHYTHM — BALANCE — MELODY</text><rect x="885" y="33" width="90" height="12" rx="2" fill="#3b3e44"/><rect x="912.0" y="29" width="20" height="20" rx="2" fill="#6a6d74"/><text x="885" y="56" class="id">S1</text>
 <text x="1020.0" y="16" class="tt" text-anchor="middle">OCTAVE</text><text x="1020.0" y="23" class="tt" text-anchor="middle">LOW · MID · HIGH</text><rect x="990" y="33" width="60" height="12" rx="2" fill="#3b3e44"/><rect x="1008.0" y="29" width="20" height="20" rx="2" fill="#6a6d74"/><text x="990" y="56" class="id">S2</text>
-<text x="1120.0" y="16" class="tt" text-anchor="middle">PIANO · FANTASY · VIOLIN</text><text x="1120.0" y="23" class="tt" text-anchor="middle">FLUTE · GUITAR · ADSR</text><rect x="1065" y="33" width="110" height="12" rx="2" fill="#3b3e44"/><rect x="1098.0" y="29" width="20" height="20" rx="2" fill="#6a6d74"/><text x="1065" y="56" class="id">S3</text>
+<text x="1120.0" y="16" class="tt" text-anchor="middle">MODE</text><text x="1120.0" y="23" class="tt" text-anchor="middle">P · O · E · T · I · C</text><rect x="1065" y="33" width="110" height="12" rx="2" fill="#3b3e44"/><rect x="1098.0" y="29" width="20" height="20" rx="2" fill="#6a6d74"/><text x="1065" y="56" class="id">S3</text>
 <text x="1230.0" y="16" class="tt" text-anchor="middle">OFF · CAL</text><text x="1230.0" y="23" class="tt" text-anchor="middle">PLAY · REC</text><rect x="1190" y="33" width="80" height="12" rx="2" fill="#3b3e44"/><rect x="1214.0" y="29" width="20" height="20" rx="2" fill="#6a6d74"/><text x="1190" y="56" class="id">S4</text>
 <g transform="translate(800,125)"><text y="-3" class="tt" text-anchor="middle">RESET</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#c9553a"/><text y="40" class="tt" text-anchor="middle">AC</text><text x="-6" y="48" class="id">P0</text></g>
 <g transform="translate(846,125)"><text y="-3" class="tt" text-anchor="middle">DEL</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#6a6d74"/><text y="40" class="tt" text-anchor="middle">C</text><text x="-6" y="48" class="id">P1</text></g>
@@ -95,10 +95,10 @@ table{border-collapse:collapse;width:100%;margin-top:14px;font-size:13px} th,td{
 <tr><th>ID</th><th>Element</th><th>Count</th><th>Port input</th></tr>
 <tr><td>A0–G7</td><td>Keys, 29 white + 20 black, C2–C6 — pushbuttons like the original VL-1's; ID = pedal-harp string label, one per key; full printable-ASCII legend: letters/./SPC/RET on whites, digits + Forth symbols on blacks, SHIFT layer for uppercase and remaining symbols</td><td>49</td><td>Key matrix, 7×7 scan</td></tr>
 <tr><td>P0–P9</td><td>Reset, Del, Tempo ▲/▼, Rhythm, ML-C, Music, Auto Play, One Key Play ×2</td><td>10</td><td>Fold into matrix (8×8 total)</td></tr>
-<tr><td>S0, S1</td><td>Volume, Balance</td><td>2</td><td>2 ADC ch</td></tr>
-<tr><td>S2</td><td>Octave (low / middle / high)</td><td>3 pos</td><td>2 GPIO</td></tr>
-<tr><td>S3</td><td>Voice (piano / fantasy / violin / flute / guitar / ADSR)</td><td>6 pos</td><td>3 GPIO</td></tr>
-<tr><td>S4</td><td>Mode (off / cal / play / rec)</td><td>4 pos</td><td>2 GPIO</td></tr>
+<tr><td>S0, S1</td><td>Volume, Balance</td><td>2</td><td>ADC, continuous</td></tr>
+<tr><td>S2</td><td>Octave (low / middle / high)</td><td>3 zones</td><td>ADC, zone + hysteresis</td></tr>
+<tr><td>S3</td><td>MODE selector — P·O·E·T·I·C (Piano, Oracle, Erand49, Theremin, IRIG clock, CW). Switches after 1 s dwell in a new zone, banner on V0. Voice select in P mode: MUSIC (P6) + black-key digit</td><td>6 zones</td><td>ADC, zone + hysteresis</td></tr>
+<tr><td>S4</td><td>Off / cal / play / rec — within the current mode (CAL = retune/calibrate, REC = record)</td><td>4 zones</td><td>ADC, zone + hysteresis</td></tr>
 <tr><td>V0</td><td>8.8" 1920×480 bar TFT (~220×55 mm), HDMI driver board</td><td>1</td><td>GPDI/DVI from ULX3S; H2 vga.vhd text mode retimed, plus overlay framebuffer</td></tr>
 <tr><td>—</td><td>Speaker, underside, rear port; ⅛" jack</td><td>1 ch</td><td>PWM/ΣΔ + RC LP</td></tr>
 </table>

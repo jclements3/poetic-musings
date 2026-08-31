@@ -154,8 +154,9 @@ Oracle as operator console.
 ## Definition of done — the PM device
 
 - One case: Piano panel + Oracle, ULX3S inside; Santa Glide packs alongside on its Cu.
-- Power on → mode menu on the bar TFT: **Piano/VL-1 · Calculator · Forth · Games ·
-  Theremin · Harp · Clock (IRIG/GPS) · CW · SDR · Demo scripts for the IRAD modules**.
+- Power on → the **S3 MODE slider selects the demonstration: P · O · E · T · I · C**
+  (Piano+calculator · Oracle/Forth/games/IRAD scripts · Erand49 · Theremin · IRIG clock · CW);
+  V0 shows the mode screen, deeper choices via keys.
 - Every mode reachable in under a minute, no laptop, no internet.
 - A demo-day checklist per mode (what to say, what to show, reset procedure) lives in
   each project directory.
