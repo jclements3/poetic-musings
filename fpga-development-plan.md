@@ -33,6 +33,12 @@ Milestones: Basic Plan Sep 2026 · Prototype Dec 2026 · Field Demo Feb 2027. It
 Reliability rule: authorized distributors and name brands only — no clone switch packs,
 no generic pots. Nothing may stick or misbehave in front of the grandkids.
 
+Uniformity rule (decided 2026-08-31): one switch type, one pot type, one cutout each —
+all 59 switches on identical 14×14 mm cutouts, all 5 sliders in identical 45 mm slots.
+Variation lives only in printed caps, knobs, and silk: small caps P0–P7, double-size
+caps on P8/P9 One Key Play (as on the VL-1), continuous silk under S0/S1, printed
+detent zones under S2–S4. Any spare fits any position.
+
 | Part | Qty | Spec / brand | Source | Est. |
 |---|---|---|---|---|
 | Key switches | 70 (59 used + spares) | **Cherry MX2A Silent Red** — decided 2026-08-31 (100M actuations, factory lube, quiet, authorized channel; Kailh BOX considered and passed over) | Mouser/DigiKey | ~$70 |
