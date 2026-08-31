@@ -1,5 +1,10 @@
 # Erand49 frame spec — members, welds, neck stack (2026-08-31)
 
+**CAD master: `frame_cad.py` (build123d) → `frame.step`.** The solid model is the
+dimensional source of truth; the ER sheets and figure 1 are being migrated to
+projections from it (cad-front/side/top.svg are the first). Where a hand-drawn
+sheet disagrees with the STEP, the STEP wins.
+
 Material: 6061-T6 throughout. All strength checks use the **welded** (HAZ) allowable —
 ~140 MPa yield at 2x safety = 70 MPa working — because welding locally erases the T6
 temper. Loads from `string-specs.md`: band pull 7.00 kN (49 strings), string angle

@@ -368,6 +368,18 @@ optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Green Beziers (
 <circle cx="215.8" cy="40" r="6.73" fill="#3b3e44"><title>#49 a0* · Ø 0.1060 in / 2.69 mm — extrapolated</title></circle>
 </svg></div>
 
+<h2>Frame — CAD-projected views (build123d)</h2>
+<p class="sub">The frame now has a parametric solid model — <code>frame_cad.py</code> → <code>frame.step</code> —
+built from the same DXF parameters and the hand-edited neck curves. These views are projected from the
+solid with true hidden-line removal (dashed = hidden), so intersections (the pillar's elliptical pass
+through the inclined web, the plate laps) are geometrically exact rather than hand-drawn. Regenerate:
+<code>LD_LIBRARY_PATH=$HOME/miniconda3/lib python3 frame_cad.py</code>.</p>
+<table><tr>
+<td style="width:44%"><b>Front (XZ)</b><br/><img src="cad-front.svg" style="max-width:100%"/></td>
+<td style="width:16%"><b>Side (YZ)</b><br/><img src="cad-side.svg" style="max-width:100%"/></td>
+<td style="width:40%"><b>Top (XY)</b><br/><img src="cad-top.svg" style="max-width:100%"/></td>
+</tr></table>
+
 <h2>Frame — spec and ISO 128 sections</h2>
 <h3 style="font-size:15px;margin:20px 0 6px">Frame members (see Erand49/frame-spec.md)</h3>
 <table>
