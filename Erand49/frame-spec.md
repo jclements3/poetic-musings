@@ -33,7 +33,7 @@ temper. Loads from `string-specs.md`: band pull 7.00 kN (49 strings), string ang
   head spacing 26.6-35.9 mm. Use threaded harp pins or geared tuners (6-10 mm plate);
   tapered friction pins not recommended.
 - **Sensor optics** in the plate inner faces, +/-25 mm from the string plane; X/Y IR
-  beams cross at +/-45 deg on the string at the amber rail (1 in below each nut).
+  beams cross at +/-45 deg on the string at the amber rail (L/20 below each nut — uniform 5% sampling fraction).
   ~50-70 mm beam path — shorter and better SNR than the 80 mm tube-era gap.
 
 ## Midrib tube notes

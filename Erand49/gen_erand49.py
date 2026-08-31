@@ -110,7 +110,7 @@ def Y(v): return y1 - v*IN   # y-up inches -> y-down mm, 0-based for the viewBox
 # classify the non-string lines: 0.25" ticks (47x3: sharp fret at 0.944L, nut at L,
 # tuner at L+1.5), ~1.53" at 78 deg = tuner leads, rest = frame.
 # The sharp-fret ticks are repositioned to the optical sensor axes near the rib:
-SENSE_IN = 1.0   # sensor beam crossing, inches BELOW THE NUT (rail on the neck)
+SENSE_FRAC = 1/20   # sensor crossing at L/20 below the nut — uniform 5% sampling fraction on every string
 tops = [(g[0], g[2], color(r[1]), r[6]*IN) for r, g in strings]
 geom = {g[0]: (g[1], g[2]) for _, g in strings}   # x -> (ylo, yhi)
 marks, keys, outline, sense = [], [], [], []
@@ -120,7 +120,7 @@ for a, b, L in frame:
         sx = min(geom, key=lambda x: abs(x-mx))
         ylo, yhi = geom[sx]
         if my < yhi - 0.05:            # below the nut = the sharp-fret tick -> move to sensor axis
-            sense.append((sx, yhi - SENSE_IN))
+            sense.append((sx, yhi - (yhi - ylo)*SENSE_FRAC))
         else:
             marks.append((a, b))
     elif L < 2.0:
@@ -129,7 +129,7 @@ for a, b, L in frame:
         keys.append((a, b, best[2], best[3]))
     else: outline.append((a, b))
 for n, note, fg, Lg, odg, tg, gx, glo in gpts:
-    sense.append((gx, glo + Lg - SENSE_IN))
+    sense.append((gx, glo + Lg - Lg*SENSE_FRAC))
 # ---- frame in side view: midrib C-channel band + pillar + ISO 129 dims ----
 band = []
 band.append('<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3b5a7a"/></marker></defs>')
@@ -173,7 +173,7 @@ band.append('</g>')
 for a, b, c, w in keys:
     band.append(f'<line x1="{X(a[0]):.1f}" y1="{Y(a[1]):.1f}" x2="{X(b[0]):.1f}" y2="{Y(b[1]):.1f}" stroke="{c}" stroke-width="{w:.3f}"/>')
 for sx, sy in sense:
-    band.append(f'<g stroke="#a8700f" stroke-width="1.4"><line x1="{X(sx)-3.2:.1f}" y1="{Y(sy):.1f}" x2="{X(sx)+3.2:.1f}" y2="{Y(sy):.1f}"/><line x1="{X(sx):.1f}" y1="{Y(sy)-3.2:.1f}" x2="{X(sx):.1f}" y2="{Y(sy)+3.2:.1f}"/><title>optical X/Y sensor axis — {SENSE_IN:.1f} in / {SENSE_IN*IN:.1f} mm below the nut, sensor rail on the neck</title></g>')
+    band.append(f'<g stroke="#a8700f" stroke-width="1.4"><line x1="{X(sx)-3.2:.1f}" y1="{Y(sy):.1f}" x2="{X(sx)+3.2:.1f}" y2="{Y(sy):.1f}"/><line x1="{X(sx):.1f}" y1="{Y(sy)-3.2:.1f}" x2="{X(sx):.1f}" y2="{Y(sy)+3.2:.1f}"/><title>optical X/Y sensor axis — L/20 below the nut (uniform 5% of speaking length), sensor rail on the neck</title></g>')
 for (n, note, f, Lin, cm, wm, od, t), (x, ylo, yhi) in strings:
     c, odmm = color(note), od*IN
     tip = f"#{n} {note} · {f:g} Hz · {Lin:.3f} in / {Lin*IN:.1f} mm · Ø {od:.3f} in / {odmm:.2f} mm · {t:.1f} lbf"
