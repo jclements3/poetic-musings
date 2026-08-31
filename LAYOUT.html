@@ -131,15 +131,47 @@ underside, rear-ported. Silk legends shown are VL-1 mode; final silk gets a mode
 <circle cx="870" cy="70" r="12" fill="#2a2c30"/><circle cx="870" cy="70" r="4" fill="#e9e4d6"/><text x="870" y="105" class="rs" text-anchor="middle">10 MHz / PPS BNC</text>
 <!-- RF -->
 <text x="990" y="14" class="rg">RF (T·S·U)</text>
-<circle cx="950" cy="70" r="9" fill="#7a5a2a"/><text x="950" y="105" class="rs" text-anchor="middle">ANT PITCH</text>
-<circle cx="1015" cy="70" r="9" fill="#7a5a2a"/><text x="1015" y="105" class="rs" text-anchor="middle">ANT VOL</text>
-<circle cx="1085" cy="70" r="12" fill="#2a2c30"/><circle cx="1085" cy="70" r="4" fill="#c9553a"/><text x="1085" y="105" class="rs" text-anchor="middle">UHF TX SMA</text>
+<text x="1015" y="66" class="rs" text-anchor="middle">theremin + UHF antennas mount on the</text>
+<text x="1015" y="80" class="rs" text-anchor="middle">END PANELS — see end views below</text>
 <!-- SPEAKER PORT -->
 <text x="1205" y="14" class="rg">SPKR</text>
 <g fill="#2a2c30"><rect x="1170" y="55" width="70" height="4" rx="2"/><rect x="1170" y="63" width="70" height="4" rx="2"/><rect x="1170" y="71" width="70" height="4" rx="2"/><rect x="1170" y="79" width="70" height="4" rx="2"/></g><text x="1205" y="105" class="rs" text-anchor="middle">rear port</text>
-<text x="10" y="150" class="rs">Rear panel, viewed from behind. Antenna posts are banana/binding posts feeding the theremin oscillators; an internal relay hands the same antennas to the SDR front end in S mode. HDMI to V0 is internal (matched TFT + driver kit).</text>
+<text x="10" y="150" class="rs">Rear panel, viewed from behind. HDMI to V0 is internal (matched TFT + driver kit). RF connections live on the left and right end panels below.</text>
 </svg></div>
 
+
+<h2>Ends — antenna mounts</h2>
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PM end panels, antenna mounts">
+<style>.el{font-size:11px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}.es{font-size:9px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace}.eg{font-size:10px;font-weight:700;fill:#a8700f;font-family:ui-monospace,Menlo,Consolas,monospace}</style>
+<!-- LEFT END: volume loop -->
+<text x="270" y="20" class="el" text-anchor="middle">LEFT END — VOLUME LOOP (T·S)</text>
+<rect x="120" y="120" width="300" height="120" rx="8" fill="#e9e4d6" stroke="#b9b3a3" stroke-width="1.5"/>
+<text x="132" y="232" class="es">FRONT (keys) →</text><text x="408" y="232" class="es" text-anchor="end">← REAR</text>
+<circle cx="180" cy="150" r="10" fill="#7a5a2a" stroke="#5a421f" stroke-width="1.5"/>
+<path d="M180 140 C 120 60, 240 40, 240 95 C 240 130, 195 132, 180 140" fill="none" stroke="#7a5a2a" stroke-width="4"/>
+<text x="235" y="52" class="es">volume loop, ~10" dia, horizontal —</text>
+<text x="235" y="64" class="es">lower hand = quieter</text>
+<text x="180" y="176" class="es" text-anchor="middle">3/8"-24 stud on</text>
+<text x="180" y="188" class="es" text-anchor="middle">banana post</text>
+<text x="330" y="176" class="es" text-anchor="middle">Colpitts VOL osc board</text>
+<text x="330" y="188" class="es" text-anchor="middle">directly behind post,</text>
+<text x="330" y="200" class="es" text-anchor="middle">short shielded lead</text>
+<!-- RIGHT END: pitch rod + UHF -->
+<text x="1030" y="20" class="el" text-anchor="middle">RIGHT END — PITCH ROD (T·S) + UHF (U)</text>
+<rect x="880" y="120" width="300" height="120" rx="8" fill="#e9e4d6" stroke="#b9b3a3" stroke-width="1.5"/>
+<text x="1168" y="232" class="es" text-anchor="end">FRONT (keys) →</text><text x="892" y="232" class="es">← REAR</text>
+<circle cx="1120" cy="150" r="10" fill="#7a5a2a" stroke="#5a421f" stroke-width="1.5"/>
+<rect x="1116" y="34" width="8" height="108" rx="3" fill="#7a5a2a"/>
+<text x="1112" y="48" class="es" text-anchor="end">pitch rod, ~18" vertical,</text>
+<text x="1112" y="60" class="es" text-anchor="end">closer hand = higher pitch</text>
+<text x="1120" y="176" class="es" text-anchor="middle">3/8"-24 stud on</text>
+<text x="1120" y="188" class="es" text-anchor="middle">banana post</text>
+<circle cx="950" cy="160" r="12" fill="#2a2c30"/><circle cx="950" cy="160" r="4" fill="#c9553a"/>
+<path d="M950 148 L 920 70" stroke="#2a2c30" stroke-width="3" fill="none"/>
+<text x="905" y="60" class="es">UHF whip on SMA bulkhead</text>
+<text x="950" y="200" class="es" text-anchor="middle">TX SMA — 50 Ω</text>
+<text x="10" y="270" class="es">Ends viewed from outside. Both rods unscrew from their posts for transport (clip inside lid). Theremin demo needs the pitch-rod end clear of walls and bodies — orient right end toward the audience. Internal relay hands both theremin antennas to the SDR front end in S mode; UHF whip swaps for a proper antenna via the same SMA when WSPR range matters.</text>
+</svg></div>
 <h2>Inside the box</h2>
 <table>
 <tr><th>Item</th><th>Where</th><th>Connects</th></tr>
