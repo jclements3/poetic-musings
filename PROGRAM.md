@@ -19,7 +19,7 @@ Panel map: `README.html` (regenerate with `gen.py`).
 | P | `Piano/` | 3D-printed 49-key VL-1-derivative keyboard; Oracle is the brains behind its UI | Panel map done (`README.html`); keybed purchase pending |
 | O | `Oracle/` | Console: H2 Forth CPU, 8.8" bar TFT, SD, CW keyer/decoder | `Oracle/clash-h2/` compiles + smoke-tests; Verilog generated; real eForth boots in Clash simulation and reads the first PM register (0x4020 mode zones) from live Forth (`cabal test h2-boot`); capability spec `Oracle/eforth-pm.md` |
 | E | `Erand49/` | Harp: 98 IR optical sensors → pluck detect → KS synthesis → MIDI/I²S | designed: `Erand49/LAYOUT.html` (string band, ER-001..006), `frame_cad.py` → `frame.step` CAD master, string/frame specs, sensor-stations.csv; gate 1 = one string, one ADC eval |
-| T | `Theremin/` | D-Lev-derived theremin; antennas double as SDR input | full repo copied 2026-08-31 from `../theremin` (git history intact) |
+| T | `Theremin/` | D-Lev-derived theremin; antennas double as SDR input | older VHDL-era repo; the measured Clash port lives in `MAIDEN/theremin/clash/` (see LIBRARY.md) |
 | I | `IRIG/` | IRIG-B timecode clock; free-running until G disciplines it | empty — next after C |
 | C | `Coil/` | Santa Glide: sleigh slug in 10 ft tube, 8-coil linear reluctance motor, Alchitry Cu | `Coil/SantaGlide/` — design done, parts ordered, Rev B compiles to `santa_glide.v` |
 
@@ -28,16 +28,17 @@ Panel map: `README.html` (regenerate with `gen.py`).
 | L | Directory | Project | Status |
 |---|---|---|---|
 | M | `MAIDEN/` | Tabletop testbed, unit integration, solver; fusion of 4 cameras + 2 radars into an AI data stream; Ch.10/TMATS | full repo copied 2026-08-31 from `../maiden` (white paper, range BOM, lessons, firmware, finance) |
-| U | `UHF/` | GPS-disciplined CW/WSPR beacon (ham — personal ledger) | empty |
-| S | `SDR/` | Direct-sampling HF on the theremin antennas, AD9226-class ADC | empty |
-| I | `Imaging/` | Global-shutter capture, external trigger, IRIG timestamp, centroid | empty — sensor/FOV study due Sep Basic Plan |
-| N | `Network/` | RMII PHY, MAC, UDP, Ch.10 transport | empty |
-| G | `GPS/` | PPS DPLL, 10 MHz, station clock copies; disciplines IRIG | empty |
+| U | `UHF/` | GPS-disciplined CW/WSPR beacon (ham — personal ledger) | `DESIGN.md` (in progress) |
+| S | `SDR/` | Direct-sampling HF on the theremin antennas, AD9226-class ADC | `DESIGN.md` (in progress) |
+| I | `Imaging/` | Global-shutter capture, external trigger, IRIG timestamp, centroid | `DESIGN.md` (OV9281 tabletop pick, strobe_latch reuse); Sep sensor/FOV study inputs restated |
+| N | `Network/` | RMII PHY, MAC, UDP, Ch.10 transport | `DESIGN.md` — carries MAIDEN recorder PROTOCOL.md framing unchanged inside UDP |
+| G | `GPS/` | PPS DPLL, 10 MHz, station clock copies; disciplines IRIG | `DESIGN.md` — two-layer: unsteered RTC contract (MAIDEN) + DPLL for physical outputs |
 
 ## Root files
 
 - `PROGRAM.md` — this index
 - `PLAN.md` — phased execution plan: each phase ends in a demo, culminating in the PM device
+- `LIBRARY.md` — shared-block inventory: what exists (measured VHDL/Clash), where, and which letters consume it
 - `HANDOFF.md` — 2026-08-29 mobile session handoff (decisions, corrections, PERT outcomes)
 - `fpga-development-plan.md` — ordered plan with difficulty/cost/gates and legacy letter map
 - `fpga-pert-cpm.md` — risks R1–R10, purchase timing
@@ -58,7 +59,9 @@ Panel map: `README.html` (regenerate with `gen.py`).
   Glide standalone.
 - `MAIDEN/` and `Theremin/` keep their own `.git` repos (tracked as gitlinks from this
   repo). Their `.venv`s were not copied — recreate locally if needed.
-- `MAIDEN/theremin/` is an older embedded copy predating the top-level `Theremin/` repo.
+- Repo-vintage note (corrected 2026-08-31): `MAIDEN/theremin/clash/` holds the CURRENT
+  measured Clash library (Maiden.{Cic,Fir,Cordic,Cfar} + the full theremin port with
+  hedgehog specs); the top-level `Theremin/` is the OLDER VHDL-era repo. See LIBRARY.md.
 - Phase 0 gate met 2026-08-31: both firmwares compile (GHC 9.6.7/Clash 1.8.5),
   smoke test passes, Verilog generated, real eForth image boots in the C simulator.
   Toolchain note: some Python tools need `LD_LIBRARY_PATH=$HOME/miniconda3/lib`.
