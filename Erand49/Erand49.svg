@@ -1708,7 +1708,7 @@
   <path
      d="M 138.21996,54.93472 C 182.63611,12.264078 408.32862,-20.833264 472.26137,32.301189 536.19411,85.435641 615.43736,477.80999 746.63448,457.58294 877.8316,437.35589 899.00459,380.96014 976.11185,329.78393 c 77.10725,-51.1762 152.56735,44.68437 124.31275,88.91006"
      fill="none"
-     stroke="#7a5a2a"
+     stroke="#2e7d32"
      stroke-width="2.5"
      opacity="0.6"
      id="path295"
@@ -1719,7 +1719,7 @@
   <path
      d="m 140.74593,240.41583 c 46.26637,-33.24776 127.6104,-109.93822 249.2482,-76.92464 121.6378,33.01357 183.85728,382.8277 336.29284,377.19423 129.22755,-4.77578 242.90891,-155.44055 258.53871,-155.71257 5,-0.24 4,11 5.2,21.4 l 55,-88.55"
      fill="none"
-     stroke="#a8700f"
+     stroke="#66bb6a"
      stroke-width="2"
      opacity="0.6"
      id="path296"
@@ -1735,7 +1735,7 @@
        y1="1848.0"
        x2="982.6"
        y2="417.7"
-       stroke="#8d877a"
+       stroke="#1565c0"
        stroke-width="2"
        id="line143" />
     <line
@@ -1743,7 +1743,7 @@
        y1="417.7"
        x2="1008.0"
        y2="377.1"
-       stroke="#8d877a"
+       stroke="#1565c0"
        stroke-width="1.4"
        stroke-dasharray="6 4"
        id="line144" />
@@ -1752,7 +1752,7 @@
        y1="1848.0"
        x2="1102.4"
        y2="417.7"
-       stroke="#8d877a"
+       stroke="#1565c0"
        stroke-width="2"
        id="line145" />
     <line
@@ -1760,7 +1760,7 @@
        y1="417.7"
        x2="1127.8"
        y2="377.1"
-       stroke="#8d877a"
+       stroke="#1565c0"
        stroke-width="1.4"
        stroke-dasharray="6 4"
        id="line146" />
@@ -1769,7 +1769,7 @@
        y1="1848.0"
        x2="208.7"
        y2="1848.0"
-       stroke="#8d877a"
+       stroke="#1565c0"
        stroke-width="2"
        id="line147" />
     <line
@@ -1777,7 +1777,7 @@
        y1="417.7"
        x2="1102.4"
        y2="417.7"
-       stroke="#8d877a"
+       stroke="#1565c0"
        stroke-width="2"
        id="line148" />
     <line
@@ -1785,7 +1785,7 @@
        y1="377.1"
        x2="1127.8"
        y2="377.1"
-       stroke="#8d877a"
+       stroke="#1565c0"
        stroke-width="2"
        id="line149" />
     <line
@@ -1793,7 +1793,7 @@
        y1="20.3"
        x2="139.6"
        y2="1766.7"
-       stroke="#8d877a"
+       stroke="#d32f2f"
        stroke-width="2"
        id="line150" />
     <line
@@ -1801,7 +1801,7 @@
        y1="1766.7"
        x2="139.6"
        y2="1868.3"
-       stroke="#8d877a"
+       stroke="#d32f2f"
        stroke-width="2"
        stroke-dasharray="7 5"
        id="line151" />
@@ -1810,7 +1810,7 @@
        y1="1868.3"
        x2="139.6"
        y2="1848.0"
-       stroke="#8d877a"
+       stroke="#d32f2f"
        stroke-width="2"
        id="line152" />
     <line
@@ -1818,7 +1818,7 @@
        y1="20.3"
        x2="190.4"
        y2="1685.4"
-       stroke="#8d877a"
+       stroke="#d32f2f"
        stroke-width="2"
        id="line153" />
     <line
@@ -1826,7 +1826,7 @@
        y1="1685.4"
        x2="190.4"
        y2="1787.0"
-       stroke="#8d877a"
+       stroke="#d32f2f"
        stroke-width="2"
        stroke-dasharray="7 5"
        id="line154" />
@@ -1835,7 +1835,7 @@
        y1="1787.0"
        x2="190.4"
        y2="1848.0"
-       stroke="#8d877a"
+       stroke="#d32f2f"
        stroke-width="2"
        id="line155" />
     <line
@@ -1843,20 +1843,20 @@
        y1="20.3"
        x2="190.4"
        y2="20.3"
-       stroke="#8d877a"
+       stroke="#d32f2f"
        stroke-width="2"
        id="line156" />
     <text
        x="366"
        y="1627"
        style="font:700 13px monospace"
-       fill="#8d877a"
+       fill="#1565c0"
        id="text156">midrib C 2.5x4x3/16 open-bottom — floor foot, shoulder step/tongue (ER-005), hinged legs (ER-006)</text>
     <text
        x="203"
        y="934"
        style="font:700 13px monospace"
-       fill="#8d877a"
+       fill="#d32f2f"
        id="text157">pillar Ø2x3/16, through the midrib (ER-004)</text>
   </g>
   <g
