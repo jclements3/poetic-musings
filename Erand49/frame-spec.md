@@ -7,34 +7,32 @@ temper. Loads from `string-specs.md`: band pull 7.00 kN (49 strings), string ang
 
 | Member | Section | Governing load | Result |
 |---|---|---|---|
-| Midrib | **Rect tube, 4 in x 2 in x 3/16 in** — strings through grommeted holes in the top face on centerline; knots concealed inside the sides; threading-access holes in the bottom face | 5.9 kN axial + 3.7 kN transverse over ~1.9 m -> M ~ 0.88 kN-m mid-span | Sx ~ 34.6 cm3 -> ~25 MPa, SF ~5.5 vs welded HAZ; closed section = torsion solved |
-| Pillar | **square tube, 2 in x 2 in x 1/8 in**, top rebated 8 mm each side for the neck plates | few kN compression + hung PM console + lean loads | Euler Pcr ~ 39 kN over ~2 m, ~8x margin; cleat bolts to the flat +Y face |
-| Neck plates x2 | per `Erand49.svg` hand-edited outline | pin + sensor mounting (verified: min pin-edge 16.2 mm, min sensor-edge 7.1 mm) | bolt flush onto the +/-Y faces of pillar and midrib — both members are 50.8 mm wide, so **plate gap = 50.8 mm**; no crown or shoulder blocks; through-bolts with crush sleeves |
+| Midrib | **Rect tube, 4 in x 2.5 in x 3/16 in** — strings through grommeted holes in the top face; knots concealed inside; access holes in the bottom face; bottom face cut away in the base zone only (ER-004) | 5.9 kN axial + 3.7 kN transverse over ~1.9 m -> M ~ 0.88 kN-m mid-span | ~24 MPa, SF ~5.7; closed section over the string band = torsion solved |
+| Pillar | **round tube, 2 in OD x 3/16 in wall**, crown to floor, passing through the midrib base | few kN compression + hung PM console + lean loads | Euler Pcr ~ 31 kN over ~2 m, ~6x margin; cleat on a saddle block |
+| Neck plates x2 | per `Erand49.svg` hand-edited outline | pin + sensor mounting (verified: min pin-edge 16.2 mm, min sensor-edge 7.1 mm) | bolt flush onto the midrib +/-Y faces (63.5 mm wide -> **plate gap = 63.5 mm**); at the crown, 6.35 mm pads per side between the round pillar and the plates, through-bolts with crush sleeves through the tube |
 
 ## Build sequence
 
-1. One welded joint only (**ER-004**): the midrib continues past a0 down to the
-   floor, its end cut horizontal to stand flat (it IS the rear foot). In that
-   string-free zone, a 50.8 mm slot through the TOP face lets the pillar drop
-   inside; the pillar tip, cut at 58 deg, bears flat on the bottom face — crown
-   load crosses in pure compression. Welds only lock it: slot-edge fillets plus
-   one plug weld through the bottom face. Self-fixturing; side walls and the
-   string face stay continuous; HAZ at the moment minimum; no base plate.
-2. Rebate the pillar top 8 mm per side (plate-profile pocket); drill both members'
-   +/-Y faces for the neck-plate through-bolts (crush sleeves inside the tubes).
-3. Bolt the neck plates flush onto pillar top and midrib upper end: the members
-   themselves set the **50.8 mm plate gap** — no blocks, smooth transition.
-4. Bolt the cleat halves to the pillar's flat +Y face for the PM console.
+1. One welded joint only (**ER-004**): stand the pillar, slide the midrib down over
+   it — the bottom face is cut away and the top face holed Ø51 in the string-free
+   zone past a0, so the tube passes over the pillar and self-fixtures. Weld the
+   top-face rim and the bottom cut edges/side walls to the pillar. Both members
+   stand on the floor: pillar foot + the midrib horizontal end cut. No base plate.
+2. Drill the midrib +/-Y faces for the neck-plate through-bolts (crush sleeves
+   inside); make the two 6.35 mm crown pads.
+3. Bolt the neck plates flush onto the midrib upper end (gap = 63.5 mm) and onto
+   the pillar crown via the pads (crush-sleeved bolts through the round tube).
+4. Bolt the cleat saddle around the round pillar for the PM console.
 
-## Neck stack at the 50.8 mm gap
+## Neck stack at the 63.5 mm gap
 
 - **Tuner pins bridge both plates** (through-pins, supported both ends). "Alternating
   left/right" = which side the tuning head exits: odd strings +Y, even -Y; per-plate
-  head spacing 26.6-35.9 mm. Use threaded harp pins or geared tuners (6-10 mm plate);
+  head spacing 26.6-35.9 mm; pins ~13 mm longer at this gap. Use threaded harp pins or geared tuners (6-10 mm plate);
   tapered friction pins not recommended.
 - **Sensor optics** in the plate inner faces, +/-25 mm from the string plane; X/Y IR
   beams cross at +/-45 deg on the string at the amber rail — the DXF optical points, 0.056*L below each flat pin (uniform semitone fraction).
-  ~50-70 mm beam path — shorter and better SNR than the 80 mm tube-era gap.
+  ~64-90 mm beam path at +/-45 deg — routine for 3 mm IR pairs.
 
 ## Midrib tube notes
 

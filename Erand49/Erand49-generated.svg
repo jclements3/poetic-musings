@@ -7,11 +7,14 @@
 <line x1="88.9" y1="1848.0" x2="208.7" y2="1848.0" stroke="#8d877a" stroke-width="2"><title>horizontal end cut — the midrib stands on the floor as the rear foot</title></line>
 <line x1="148.8" y1="1848.0" x2="1063.8" y2="383.6" stroke="#c9553a" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib tube centerline (top face carries the string anchors)</title></line>
 <text x="366" y="1627" class="nl" fill="#8d877a">midrib — RT 4"×2"×3/16" 6061-T6 (ER-003)</text>
-<rect x="139.6" y="20.3" width="50.8" height="1705.7" fill="none" stroke="#8d877a" stroke-width="2"><title>pillar — 2"×2"×1/8" square tube, crown down into the midrib (ER-002/ER-004)</title></rect>
-<line x1="139.6" y1="1726.1" x2="139.6" y2="1818.8" stroke="#8d877a" stroke-width="2" stroke-dasharray="7 5"/>
-<line x1="190.4" y1="1726.1" x2="190.4" y2="1818.8" stroke="#8d877a" stroke-width="2" stroke-dasharray="7 5"/>
-<line x1="139.6" y1="1818.8" x2="190.4" y2="1818.8" stroke="#8d877a" stroke-width="2" stroke-dasharray="7 5"><title>pillar tip inside the midrib — bears on the bottom face (compression)</title></line>
-<text x="200" y="934" class="nl" fill="#8d877a">pillar 2"×2"×1/8"</text>
+<line x1="139.6" y1="20.3" x2="139.6" y2="1766.7" stroke="#8d877a" stroke-width="2"/>
+<line x1="139.6" y1="1766.7" x2="139.6" y2="1868.3" stroke="#8d877a" stroke-width="2" stroke-dasharray="7 5"/>
+<line x1="139.6" y1="1868.3" x2="139.6" y2="1848.0" stroke="#8d877a" stroke-width="2"/>
+<line x1="190.4" y1="20.3" x2="190.4" y2="1685.4" stroke="#8d877a" stroke-width="2"/>
+<line x1="190.4" y1="1685.4" x2="190.4" y2="1787.0" stroke="#8d877a" stroke-width="2" stroke-dasharray="7 5"/>
+<line x1="190.4" y1="1787.0" x2="190.4" y2="1848.0" stroke="#8d877a" stroke-width="2"/>
+<line x1="139.6" y1="20.3" x2="190.4" y2="20.3" stroke="#8d877a" stroke-width="2"><title>pillar — Ø2" × 3/16" round tube, crown to floor, through the midrib (ER-004)</title></line>
+<text x="205" y="934" class="nl" fill="#8d877a">pillar Ø2"×3/16"</text>
 <text x="205" y="1840" class="nl" fill="#8d877a">pillar into midrib + floor foot: ER-004</text>
 <g stroke="#3b5a7a" stroke-width="1" fill="none"><line x1="106" y1="20.3" x2="106" y2="1848.0" marker-start="url(#arr)" marker-end="url(#arr)"/><line x1="98" y1="20.3" x2="139.6" y2="20.3"/><line x1="98" y1="1848.0" x2="139.6" y2="1848.0"/></g>
 <text x="94" y="934" class="nl" fill="#3b5a7a" text-anchor="middle" transform="rotate(-90 94 934)">1828 mm</text>
