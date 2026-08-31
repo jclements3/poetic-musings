@@ -141,9 +141,18 @@ def mp(t, off):
 y_floor = y_base
 def t_at_y(yq, off):
     return (yq - cxi - py_*off) / m
+y_sh = m*(xr_m - 1.5) + cxi                 # shoulder step height (side walls cut horizontal here)
 for off in (0, -2*MHW):
-    (xa, ya), (xb, yb) = mp(t_at_y(y_floor, off) - px_*0, off), mp(xr_m, off)
+    t_end = t_at_y(y_sh, off)
+    (xa, ya), (xb, yb) = mp(t_at_y(y_floor, off), off), mp(t_end, off)
     band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#8d877a" stroke-width="2"/>')
+    (tx1, ty1), (tx2, ty2) = mp(t_end, off), mp(t_end + 1.0, off)
+    band.append(f'<line x1="{tx1:.1f}" y1="{ty1:.1f}" x2="{tx2:.1f}" y2="{ty2:.1f}" stroke="#8d877a" stroke-width="1.4" stroke-dasharray="6 4"/>')
+(sx1, sy1), (sx2, sy2) = mp(t_at_y(y_sh, 0), 0), mp(t_at_y(y_sh, -2*MHW), -2*MHW)
+band.append(f'<line x1="{sx1:.1f}" y1="{sy1:.1f}" x2="{sx2:.1f}" y2="{sy2:.1f}" stroke="#8d877a" stroke-width="2"><title>shoulder step — side walls cut horizontal; neck plates rest here (ER-005)</title></line>')
+(ex1, ey1), (ex2, ey2) = mp(t_at_y(y_sh, 0) + 1.0, 0), mp(t_at_y(y_sh, -2*MHW) + 1.0, -2*MHW)
+band.append(f'<line x1="{ex1:.1f}" y1="{ey1:.1f}" x2="{ex2:.1f}" y2="{ey2:.1f}" stroke="#8d877a" stroke-width="1.4" stroke-dasharray="6 4"><title>center tongue — extends up between the plates, welded to them (ER-005)</title></line>')
+band.append(f'<text x="{sx2+8:.0f}" y="{sy2+2:.0f}" class="nl" fill="#8d877a">shoulder step + tongue: ER-005</text>')
 (fx1, fy1), (fx2, fy2) = mp(t_at_y(y_floor, 0), 0), mp(t_at_y(y_floor, -2*MHW), -2*MHW)
 band.append(f'<line x1="{fx1:.1f}" y1="{fy1:.1f}" x2="{fx2:.1f}" y2="{fy2:.1f}" stroke="#8d877a" stroke-width="2"><title>horizontal end cut — the midrib stands on the floor as the rear foot</title></line>')
 (xa, ya), (xb, yb) = mp(t_at_y(y_floor, -MHW), -MHW), mp(xr_m, -MHW)
@@ -308,7 +317,7 @@ overall diameter</b>. Colors per harp convention: <span class="leg" style="color
 spec. Dark ticks: nut and tuner pin; colored 12° top segments: tuner leads. Amber crosshairs:
 optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Brown/amber Beziers: tuner and
 sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapolated from c1 physics
-(<code>string-specs.md</code>). Frame per <code>frame-spec.md</code>: midrib tube side profile (4" deep, top face on the string-anchor line, dash-dot tube centerline) from the pillar foot to the shoulder; pillar (Ø2" round tube) crown to floor through the midrib's opened base; plates flush on the midrib, crown pads on the pillar; ISO 129 dims in mm.</p>
+(<code>string-specs.md</code>). Frame per <code>frame-spec.md</code>: midrib tube side profile (4" deep, top face on the string-anchor line, dash-dot tube centerline) from the pillar foot to the shoulder; pillar (Ø2" round tube) crown to floor through the midrib's opened base; plates rest on the midrib shoulder steps and weld to its center tongue (ER-005), crown pads on the pillar; ISO 129 dims in mm.</p>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1v-x0:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
 {BAND_STYLE}
 {chr(10).join(band)}
@@ -328,7 +337,7 @@ sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapol
 <tr><td class="k">Pillar</td><td>Square tube 2" × 2" × 1/8", top rebated 8 mm/side for the plates — cleat bolts to the flat +Y face</td><td>Euler ~39 kN vs few kN, ~8× margin</td></tr>
 <tr><td class="k">Neck</td><td>2 plates per <code>Erand49.svg</code>, bolted flush onto the ±Y faces of pillar and midrib (both 50.8 mm wide → plate gap 50.8); no blocks; through-bolts with crush sleeves</td><td>pin-edge ≥ 16.2 mm, sensor-edge ≥ 7.1 mm verified</td></tr>
 </table>
-<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 1060" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 frame ISO 128 sections">
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 1580" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 frame ISO 128 sections">
 <style>.fl{{font-size:11px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}}.fs{{font-size:9px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace}}.fg{{font-size:10px;font-weight:700;fill:#a8700f;font-family:ui-monospace,Menlo,Consolas,monospace}}.dim{{stroke:#3b5a7a;stroke-width:1;fill:none}}.dmt{{font-size:9px;fill:#3b5a7a;font-family:ui-monospace,Menlo,Consolas,monospace}}.cl{{stroke:#c9553a;stroke-width:0.8;stroke-dasharray:12 3 3 3}}</style>
 <defs>
 <pattern id="hat" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="7" stroke="#8d877a" stroke-width="1"/></pattern>
@@ -447,6 +456,41 @@ sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapol
 <text x="20" y="990" class="fs">Assembly: slide the midrib down over the standing pillar — the opened bottom face and the Ø51 top-face hole (both in the</text>
 <text x="20" y="1004" class="fs">string-free zone past a0) let it pass; self-fixturing. Weld the top-face rim and the bottom cut edges to the pillar. Both members</text>
 <text x="20" y="1018" class="fs">stand on the floor: pillar foot plus the midrib horizontal end cut — a wide, stable base line with no base plate and no blocks.</text>
+
+<text x="20" y="1075" class="fg">ER-005 — SHOULDER: PLATES REST ON SIDE-WALL STEPS, WELDED TO THE CENTER TONGUE (section ⊥ member, 2 px/mm)</text>
+<!-- tube below the step -->
+<rect x="256.5" y="1300" width="127" height="120" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
+<rect x="266" y="1309.5" width="108" height="120" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<line x1="256.5" y1="1300" x2="383.5" y2="1300" stroke="#111" stroke-width="1.5"/>
+<!-- tongue -->
+<rect x="272.5" y="1180" width="95" height="120" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
+<!-- plates resting on the steps -->
+<rect x="256.5" y="1160" width="16" height="140" fill="none" stroke="#3b5a7a" stroke-width="1.8"/>
+<rect x="367.5" y="1160" width="16" height="140" fill="none" stroke="#3b5a7a" stroke-width="1.8"/>
+<text x="248" y="1170" class="fs" text-anchor="end">neck plate</text>
+<text x="392" y="1170" class="fs">neck plate</text>
+<!-- welds plate<->tongue -->
+<path d="M272.5 1230 l12 -5 l0 12 z" fill="#c9553a"/>
+<path d="M367.5 1230 l-12 -5 l0 12 z" fill="#c9553a"/>
+<line x1="284.5" y1="1230" x2="210" y2="1210" stroke="#c9553a" stroke-width="1"/>
+<text x="206" y="1206" class="fs" text-anchor="end" style="fill:#c9553a">weld plates to the tongue,</text>
+<text x="206" y="1218" class="fs" text-anchor="end" style="fill:#c9553a">both sides, full height</text>
+<!-- bearing arrows at the steps -->
+<path d="M264 1332 L264 1304" stroke="#3b5a7a" stroke-width="1.5" fill="none"/><path d="M259 1314 L264 1302 L269 1314 Z" fill="#3b5a7a"/>
+<path d="M375.5 1332 L375.5 1304" stroke="#3b5a7a" stroke-width="1.5" fill="none"/><path d="M370.5 1314 L375.5 1302 L380.5 1314 Z" fill="#3b5a7a"/>
+<text x="400" y="1330" class="fs" style="fill:#3b5a7a">plates REST on the horizontal steps —</text>
+<text x="400" y="1342" class="fs" style="fill:#3b5a7a">the string band pull crosses in compression</text>
+<!-- dims -->
+<line x1="256.5" y1="1445" x2="383.5" y2="1445" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="320" y="1461" class="dmt" text-anchor="middle">63.5</text>
+<line x1="272.5" y1="1150" x2="367.5" y2="1150" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="320" y="1142" class="dmt" text-anchor="middle">47.5</text>
+<line x1="236" y1="1290" x2="255" y2="1296" class="dim" marker-end="url(#ar)"/>
+<text x="232" y="1292" class="dmt" text-anchor="end">step = 8 (one plate)</text>
+<!-- notes -->
+<text x="20" y="1510" class="fs">Form the tongue by milling 8 mm — one plate thickness — off each side wall above the horizontal step: tongue = 47.5 wide, exactly</text>
+<text x="20" y="1524" class="fs">the plates' inner gap, and the plate outer faces stay flush at 63.5. Self-fixturing: the step sets plate height, the tongue sets the gap.</text>
+<text x="20" y="1538" class="fs">Load path: string pull on the neck bears down on the steps in compression; the plate-to-tongue welds only locate and carry shear.</text>
 </svg></div>
 
 <p class="sub">Sources: <code>string-specs.md</code> (49-string spec, imperial + metric; band tension

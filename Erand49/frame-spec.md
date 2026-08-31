@@ -9,7 +9,7 @@ temper. Loads from `string-specs.md`: band pull 7.00 kN (49 strings), string ang
 |---|---|---|---|
 | Midrib | **Rect tube, 4 in x 2.5 in x 3/16 in** — strings through grommeted holes in the top face; knots concealed inside; access holes in the bottom face; bottom face cut away in the base zone only (ER-004) | 5.9 kN axial + 3.7 kN transverse over ~1.9 m -> M ~ 0.88 kN-m mid-span | ~24 MPa, SF ~5.7; closed section over the string band = torsion solved |
 | Pillar | **round tube, 2 in OD x 3/16 in wall**, crown to floor, passing through the midrib base | few kN compression + hung PM console + lean loads | Euler Pcr ~ 31 kN over ~2 m, ~6x margin; cleat on a saddle block |
-| Neck plates x2 | per `Erand49.svg` hand-edited outline | pin + sensor mounting (verified: min pin-edge 16.2 mm, min sensor-edge 7.1 mm) | bolt flush onto the midrib +/-Y faces (63.5 mm wide -> **plate gap = 63.5 mm**); at the crown, 6.35 mm pads per side between the round pillar and the plates, through-bolts with crush sleeves through the tube |
+| Neck plates x2 | per `Erand49.svg` hand-edited outline | pin + sensor mounting (verified: min pin-edge 16.2 mm, min sensor-edge 7.1 mm) | rest on the midrib shoulder steps and weld to its center tongue (**ER-005**): side walls milled down 8 mm each above a horizontal step, leaving a 47.5 mm tongue = the plates inner gap; plate outer faces flush at 63.5 (**plate gap = 63.5 mm**). Crown: 6.35 mm pads per side to the round pillar, crush-sleeved bolts |
 
 ## Build sequence
 
@@ -20,8 +20,9 @@ temper. Loads from `string-specs.md`: band pull 7.00 kN (49 strings), string ang
    stand on the floor: pillar foot + the midrib horizontal end cut. No base plate.
 2. Drill the midrib +/-Y faces for the neck-plate through-bolts (crush sleeves
    inside); make the two 6.35 mm crown pads.
-3. Bolt the neck plates flush onto the midrib upper end (gap = 63.5 mm) and onto
-   the pillar crown via the pads (crush-sleeved bolts through the round tube).
+3. Mill the shoulder: horizontal step in both side walls, center tongue 47.5 mm
+   (ER-005). Set the plates on the steps, weld them to the tongue both sides;
+   at the crown, bolt via the 6.35 mm pads (crush sleeves through the round tube).
 4. Bolt the cleat saddle around the round pillar for the PM console.
 
 ## Neck stack at the 63.5 mm gap
