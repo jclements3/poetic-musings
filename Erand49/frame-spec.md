@@ -13,8 +13,12 @@ temper. Loads from `string-specs.md`: band pull 7.00 kN (49 strings), string ang
 
 ## Build sequence
 
-1. One weld only: pillar foot -> midrib base (and both to the base plate/plinth),
-   made in the open with full torch access — joint detail: **ER-004**.
+1. One welded joint only (**ER-004**): cut 50.8 mm slots through the midrib's top
+   and bottom faces near its base end, slide the midrib down over the pillar
+   (self-fixturing interlock), fillet the slot edges to the pillar all around.
+   Side walls stay continuous; the base is the bending-moment minimum, so the
+   face cuts and the weld HAZ cost nothing. Pillar foot sockets into the plinth —
+   no base plate.
 2. Rebate the pillar top 8 mm per side (plate-profile pocket); drill both members'
    +/-Y faces for the neck-plate through-bolts (crush sleeves inside the tubes).
 3. Bolt the neck plates flush onto pillar top and midrib upper end: the members

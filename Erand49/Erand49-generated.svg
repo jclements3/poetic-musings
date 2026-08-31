@@ -2,14 +2,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="942mm" height="1924mm" viewBox="109 0 1073 1924">
 <style>.nl{font-size:13px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}</style>
 <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3b5a7a"/></marker></defs>
-<line x1="190.4" y1="1685.4" x2="1020.7" y2="356.7" stroke="#8d877a" stroke-width="2"/>
-<line x1="190.4" y1="1877.1" x2="1106.9" y2="410.6" stroke="#8d877a" stroke-width="2"/>
-<line x1="190.4" y1="1781.3" x2="1063.8" y2="383.6" stroke="#c9553a" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib tube centerline (top face carries the string anchors)</title></line>
+<line x1="124.4" y1="1791.1" x2="1020.7" y2="356.7" stroke="#8d877a" stroke-width="2"/>
+<line x1="124.4" y1="1982.8" x2="1106.9" y2="410.6" stroke="#8d877a" stroke-width="2"/>
+<line x1="124.4" y1="1887.0" x2="1063.8" y2="383.6" stroke="#c9553a" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib tube centerline (top face carries the string anchors)</title></line>
 <text x="366" y="1627" class="nl" fill="#8d877a">midrib — RT 4"×2"×3/16" 6061-T6 (ER-003)</text>
 <rect x="139.6" y="20.3" width="50.8" height="1827.7" fill="none" stroke="#8d877a" stroke-width="2"><title>pillar — 2"×2"×1/8" square tube, base to crown (ER-002)</title></rect>
 <text x="200" y="934" class="nl" fill="#8d877a">pillar 2"×2"×1/8"</text>
-<rect x="119.6" y="1848.0" width="90.8" height="8" fill="#d9d3c2" stroke="#8d877a" stroke-width="1.5"><title>base plate — joint detail ER-004</title></rect>
-<text x="200" y="1840" class="nl" fill="#8d877a">base joint: ER-004</text>
+<text x="200" y="1840" class="nl" fill="#8d877a">slot-mortise joint: ER-004</text>
 <g stroke="#3b5a7a" stroke-width="1" fill="none"><line x1="106" y1="20.3" x2="106" y2="1848.0" marker-start="url(#arr)" marker-end="url(#arr)"/><line x1="98" y1="20.3" x2="139.6" y2="20.3"/><line x1="98" y1="1848.0" x2="139.6" y2="1848.0"/></g>
 <text x="94" y="934" class="nl" fill="#3b5a7a" text-anchor="middle" transform="rotate(-90 94 934)">1828 mm</text>
 <g stroke="#3b5a7a" stroke-width="1" fill="none"><line x1="139.6" y1="1874.0" x2="190.4" y2="1874.0" marker-start="url(#arr)" marker-end="url(#arr)"/></g>
