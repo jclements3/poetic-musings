@@ -174,8 +174,6 @@ for off in (0, -2*MHW):
     else:
         (xa, ya), (xb, yb) = mp(t0, off), mp(xr_m, off)
         band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#1565c0" stroke-width="2"/>')
-(sx1, sy1), (sx2, sy2) = mp(xr_m - 1.5, -8/25.4), mp(xr_m, -8/25.4)
-band.append(f'<line x1="{sx1:.1f}" y1="{sy1:.1f}" x2="{sx2:.1f}" y2="{sy2:.1f}" stroke="#1565c0" stroke-width="1.4" stroke-dasharray="6 4"><title>shoulder rebate — 8 mm into each side wall along the channel top; plates lap here, web stands proud between them (ER-005)</title></line>')
 # horizontal shoulder weld: plate bottom tab to midrib side wall, both plates.
 # mirrored from Erand49.svg (id="shoulder-weld") when present, else 12 mm below the lap start
 y_w = y_sh - 12/IN
@@ -194,7 +192,7 @@ band.append(f'<line x1="{wx1:.1f}" y1="{wy1:.1f}" x2="{wx2:.1f}" y2="{wy2:.1f}" 
 band.append(f'<text x="{wx2+10:.0f}" y="{wy2+14:.0f}" class="nl" fill="#c9553a">shoulder weld</text>')
 
 (cx2, cy2) = mp(xr_m - 0.6, -2*MHW)
-band.append(f'<text x="{cx2+10:.0f}" y="{cy2+2:.0f}" class="nl" fill="#1565c0">shoulder rebate: ER-005</text>')
+band.append(f'<text x="{cx2+10:.0f}" y="{cy2+2:.0f}" class="nl" fill="#1565c0">shoulder lap: ER-005</text>')
 (fx1, fy1), (fx2, fy2) = mp(t_at_y(y_floor, 0), 0), mp(t_at_y(y_floor, -2*MHW), -2*MHW)
 band.append(f'<line x1="{fx1:.1f}" y1="{fy1:.1f}" x2="{fx2:.1f}" y2="{fy2:.1f}" stroke="#1565c0" stroke-width="2"><title>horizontal end cut — the midrib stands on the floor as the rear foot</title></line>')
 (xa, ya), (xb, yb) = mp(t_at_y(y_floor, -MHW), -MHW), mp(xr_m, -MHW)
@@ -359,7 +357,7 @@ overall diameter</b>. Colors per harp convention: <span class="leg" style="color
 <span class="leg" style="color:#2e5fa3">F blue</span> · others dark gray; hover any string for its
 spec. Dark ticks: nut and tuner pin; colored 12° top segments: tuner leads. Amber crosshairs:
 optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Green Beziers (dark = tuner rail, light = sensor rail) — the neck outline, hand-tuned in <code>Erand49.svg</code>. b0*/a0*: spec extrapolated from c1 physics
-(<code>string-specs.md</code>). Frame colors: <b style="color:#d32f2f">pillar red</b> · <b style="color:#1565c0">midrib blue</b> · <b style="color:#2e7d32">neck green</b>. Per <code>frame-spec.md</code>: midrib channel side profile (4" sides, top web on the string-anchor line, dash-dot centerline) from the pillar foot to the shoulder; pillar (Ø2" round tube) crown to floor through the open-bottom midrib; plates rest on the midrib shoulder steps and weld to its center tongue (ER-005), crown pads on the pillar; ISO 129 dims in mm.</p>
+(<code>string-specs.md</code>). Frame colors: <b style="color:#d32f2f">pillar red</b> · <b style="color:#1565c0">midrib blue</b> · <b style="color:#2e7d32">neck green</b>. Per <code>frame-spec.md</code>: midrib channel side profile (4" sides, top web on the string-anchor line, dash-dot centerline) from the pillar foot to the shoulder; pillar (Ø2" round tube) crown to floor through the open-bottom midrib; plates lap the midrib side walls at the shoulder, joined by the top seam and horizontal fillets (ER-005), crown pads on the pillar; ISO 129 dims in mm.</p>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0v:.0f} 0 {x1v-x0v:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
 {BAND_STYLE}
 {chr(10).join(band)}
@@ -493,41 +491,35 @@ optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Green Beziers (
 <text x="20" y="1004" class="fs">string-free zone past a0) let it pass; self-fixturing. Weld the top-web rim and both side walls to the pillar. Both members</text>
 <text x="20" y="1018" class="fs">stand on the floor: pillar foot plus the midrib horizontal end cut — a wide, stable base line with no base plate and no blocks.</text>
 
-<text x="20" y="1075" class="fg">ER-005 — SHOULDER: PLATES LAP THE CHANNEL TOP ON AN 8 mm REBATE, WELDED TO THE PROUD WEB (section ⊥ member, 2 px/mm)</text>
-<!-- tube below the step -->
-<rect x="256.5" y="1300" width="127" height="120" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
-<rect x="266" y="1309.5" width="108" height="120" fill="#fff" stroke="#111" stroke-width="1.2"/>
-<line x1="256.5" y1="1300" x2="383.5" y2="1300" stroke="#111" stroke-width="1.5"/>
-<!-- tongue -->
-<rect x="272.5" y="1180" width="95" height="120" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
-<!-- plates resting on the steps -->
-<rect x="256.5" y="1160" width="16" height="140" fill="none" stroke="#3b5a7a" stroke-width="1.8"/>
-<rect x="367.5" y="1160" width="16" height="140" fill="none" stroke="#3b5a7a" stroke-width="1.8"/>
-<text x="248" y="1170" class="fs" text-anchor="end">neck plate (bottom edge on the channel top line)</text>
-<text x="392" y="1170" class="fs">neck plate</text>
-<!-- welds plate<->tongue -->
-<path d="M272.5 1230 l12 -5 l0 12 z" fill="#c9553a"/>
-<path d="M367.5 1230 l-12 -5 l0 12 z" fill="#c9553a"/>
-<line x1="284.5" y1="1230" x2="210" y2="1210" stroke="#c9553a" stroke-width="1"/>
-<text x="206" y="1200" class="fs" text-anchor="end" style="fill:#c9553a">welds: channel top to BOTH plates</text>
-<text x="206" y="1212" class="fs" text-anchor="end" style="fill:#c9553a">along the lap, plus the horizontal</text>
-<text x="206" y="1224" class="fs" text-anchor="end" style="fill:#c9553a">plate-to-side-wall fillet each side</text>
-<!-- bearing arrows at the steps -->
-<path d="M264 1332 L264 1304" stroke="#3b5a7a" stroke-width="1.5" fill="none"/><path d="M259 1314 L264 1302 L269 1314 Z" fill="#3b5a7a"/>
-<path d="M375.5 1332 L375.5 1304" stroke="#3b5a7a" stroke-width="1.5" fill="none"/><path d="M370.5 1314 L375.5 1302 L380.5 1314 Z" fill="#3b5a7a"/>
-<text x="400" y="1330" class="fs" style="fill:#3b5a7a">plates bear on the rebate; the horizontal weld line</text>
-<text x="400" y="1342" class="fs" style="fill:#3b5a7a">below the lap ties plate to side wall on each side</text>
+<text x="20" y="1075" class="fg">ER-005 — SHOULDER LAP: PLATES OUTSIDE THE SIDE WALLS — TOP SEAM + HORIZONTAL FILLETS (section ⊥ member, 2 px/mm)</text>
+<!-- channel section at the lap: web top, open bottom -->
+<path d="M256.5 1420 L256.5 1200 L383.5 1200 L383.5 1420 L374 1420 L374 1209.5 L266 1209.5 L266 1420 Z" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
+<text x="320" y="1190" class="fs" text-anchor="middle">midrib channel (63.5 wide), web on top</text>
+<!-- plates lapping outside, bottom edges = the horizontal weld line -->
+<rect x="240.5" y="1120" width="16" height="180" fill="none" stroke="#3b5a7a" stroke-width="1.8"/>
+<rect x="383.5" y="1120" width="16" height="180" fill="none" stroke="#3b5a7a" stroke-width="1.8"/>
+<text x="232" y="1132" class="fs" text-anchor="end">neck plate — laps OVER the side wall,</text>
+<text x="232" y="1144" class="fs" text-anchor="end">stands 8 proud, no milling</text>
+<!-- welds: top seam at the web corners, horizontal fillets at the plate bottoms -->
+<path d="M256.5 1200 l-12 -5 l3 12 z" fill="#c9553a"/>
+<path d="M383.5 1200 l12 -5 l-3 12 z" fill="#c9553a"/>
+<line x1="395.5" y1="1197" x2="470" y2="1170" stroke="#c9553a" stroke-width="1"/>
+<text x="474" y="1168" class="fs" style="fill:#c9553a">top seam: channel top corner to each</text>
+<text x="474" y="1180" class="fs" style="fill:#c9553a">plate — the dashed lap line in figure 1</text>
+<path d="M248.5 1300 l-6 12 l12 0 z" fill="#c9553a"/>
+<path d="M391.5 1300 l-6 12 l12 0 z" fill="#c9553a"/>
+<line x1="397.5" y1="1312" x2="470" y2="1340" stroke="#c9553a" stroke-width="1"/>
+<text x="474" y="1344" class="fs" style="fill:#c9553a">horizontal fillet: each plate bottom edge</text>
+<text x="474" y="1356" class="fs" style="fill:#c9553a">to its side wall (the red weld line)</text>
 <!-- dims -->
 <line x1="256.5" y1="1445" x2="383.5" y2="1445" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
 <text x="320" y="1461" class="dmt" text-anchor="middle">63.5</text>
-<line x1="272.5" y1="1150" x2="367.5" y2="1150" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
-<text x="320" y="1142" class="dmt" text-anchor="middle">47.5</text>
-<line x1="236" y1="1290" x2="255" y2="1296" class="dim" marker-end="url(#ar)"/>
-<text x="232" y="1292" class="dmt" text-anchor="end">rebate = 8 (one plate)</text>
+<line x1="226" y1="1290" x2="240" y2="1296" class="dim" marker-end="url(#ar)"/>
+<text x="222" y="1292" class="dmt" text-anchor="end">plate 8</text>
 <!-- notes -->
-<text x="20" y="1510" class="fs">The rebate runs ALONG the channel top (inclined at the member angle) for the ~60 mm lap: mill 8 mm — one plate thickness — off each</text>
-<text x="20" y="1524" class="fs">side wall's outer face at the top corner. The 47.5 mm center (web + wall remnants) stands proud between the plates and takes the</text>
-<text x="20" y="1538" class="fs">welds. The neck's bottom edge lands ON the channel's top line — the classic harp shoulder corner — and the outer faces stay flush.</text>
+<text x="20" y="1510" class="fs">No rebate — the plates simply lap outside the side walls at the shoulder (8 mm proud per side, zero milling). Two weld systems join</text>
+<text x="20" y="1524" class="fs">the three parts: the TOP SEAM along the lap ties the channel's top corners to both plates (hidden dashed line in figure 1), and the</text>
+<text x="20" y="1538" class="fs">HORIZONTAL FILLET along each plate's bottom tab ties plate to side wall. The neck edge lands on the channel top at the corner.</text>
 
 <text x="20" y="1600" class="fg">ER-006 — HINGED OUTRIGGER LEGS AT THE MIDRIB FOOT (front view YZ, 1 px/mm)</text>
 <!-- floor -->
