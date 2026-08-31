@@ -191,6 +191,14 @@ el = [f'<line x1="{a[0]:.3f}" y1="{FF(a[1]):.3f}" x2="{b[0]:.3f}" y2="{FF(b[1]):
 tx = [f'<text x="{e.dxf.insert.x:.2f}" y="{FF(e.dxf.insert.y):.2f}" font-size="{e.dxf.height:.2f}">{e.dxf.text}</text>'
       for e in msp.query('TEXT')]
 
+# ---- standalone SVG for Inkscape (true scale: 1 user unit = 1 mm) ----
+svg_doc = (f'<?xml version="1.0" encoding="UTF-8"?>\n'
+ f'<svg xmlns="http://www.w3.org/2000/svg" width="{x1-x0:.0f}mm" height="{y1-y0:.0f}mm" '
+ f'viewBox="{x0:.0f} 0 {x1-x0:.0f} {y1-y0:.0f}">\n'
+ '<style>.nl{font-size:13px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}</style>\n'
+ + "\n".join(band) + '\n</svg>\n')
+open(os.path.join(HERE, 'Erand49.svg'), 'w').write(svg_doc)
+
 html = f'''<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=6, user-scalable=yes">
 <title>Erand49 string band</title>
@@ -240,4 +248,4 @@ Band tension 1465.5 lbf ≈ 6.52 kN excluding b0/a0.</p>
 </main></body></html>
 '''
 open(os.path.join(HERE, 'Erand49.html'), 'w').write(html)
-print('wrote Erand49.html')
+print('wrote Erand49.html and Erand49.svg')
