@@ -2658,7 +2658,7 @@
     <title
        id="title296">sensor rail — Bezier fit through all 49 optical X/Y axes, 1 in below the nuts</title>
   </path>
-  <g id="frame-members">
+  <g id="frame-members" sodipodi:insensitive="true">
 <line x1="88.9" y1="1848.0" x2="982.6" y2="417.7" stroke="#8d877a" stroke-width="2"/>
 <line x1="982.6" y1="417.7" x2="1008.0" y2="377.1" stroke="#8d877a" stroke-width="1.4" stroke-dasharray="6 4"/>
 <line x1="208.7" y1="1848.0" x2="1102.4" y2="417.7" stroke="#8d877a" stroke-width="2"/>
@@ -2675,5 +2675,30 @@
 <line x1="139.6" y1="20.3" x2="190.4" y2="20.3" stroke="#8d877a" stroke-width="2"/>
 <text x="366" y="1627" style="font:700 13px monospace" fill="#8d877a">midrib RT 4x2.5x3/16 — floor foot, shoulder step/tongue (ER-005), hinged legs (ER-006)</text>
 <text x="203" y="934" style="font:700 13px monospace" fill="#8d877a">pillar Ø2x3/16, through the midrib (ER-004)</text>
+</g>
+<g id="cross-sections" sodipodi:insensitive="true">
+<text x="760" y="880" style="font:700 16px monospace" fill="#a8700f">MIDRIB — RT 4"×2.5"×3/16" SECTION (2:1)</text>
+<rect x="780" y="900" width="127" height="203.2" fill="#c8c2b0" stroke="#111" stroke-width="2"/>
+<rect x="789.5" y="909.5" width="108" height="184.2" fill="#ffffff" stroke="#111" stroke-width="1.5"/>
+<line x1="843.5" y1="850" x2="843.5" y2="900" stroke="#3b3e44" stroke-width="3"/>
+<rect x="836" y="898" width="15" height="12" fill="#ffffff" stroke="#111" stroke-width="1.2"/>
+<circle cx="843.5" cy="932" r="7" fill="#3b3e44"/>
+<rect x="830" y="1091" width="27" height="12" fill="#ffffff" stroke="#111" stroke-width="1.2" stroke-dasharray="5 3"/>
+<line x1="843.5" y1="880" x2="843.5" y2="1120" stroke="#c9553a" stroke-width="1" stroke-dasharray="14 4 4 4"/>
+<text x="925" y="925" style="font:12px monospace" fill="#333">string in through grommet,</text>
+<text x="925" y="940" style="font:12px monospace" fill="#333">knot inside; access hole</text>
+<text x="925" y="955" style="font:12px monospace" fill="#333">below (dashed)</text>
+<text x="843" y="1135" style="font:12px monospace" fill="#333" text-anchor="middle">63.5</text>
+<text x="762" y="1006" style="font:12px monospace" fill="#333" text-anchor="end">101.6</text>
+<text x="925" y="985" style="font:12px monospace" fill="#333">wall 4.76 typ</text>
+
+<text x="760" y="1220" style="font:700 16px monospace" fill="#a8700f">PILLAR — Ø2"×3/16" SECTION (2:1)</text>
+<circle cx="860" cy="1330" r="50.8" fill="#c8c2b0" stroke="#111" stroke-width="2"/>
+<circle cx="860" cy="1330" r="41.3" fill="#ffffff" stroke="#111" stroke-width="1.5"/>
+<line x1="860" y1="1265" x2="860" y2="1395" stroke="#c9553a" stroke-width="1" stroke-dasharray="14 4 4 4"/>
+<line x1="795" y1="1330" x2="925" y2="1330" stroke="#c9553a" stroke-width="1" stroke-dasharray="14 4 4 4"/>
+<text x="940" y="1315" style="font:12px monospace" fill="#333">Ø50.8, wall 4.76</text>
+<text x="940" y="1332" style="font:12px monospace" fill="#333">crown pads 6.35/side</text>
+<text x="940" y="1349" style="font:12px monospace" fill="#333">to the neck plates</text>
 </g>
 </svg>
