@@ -163,8 +163,17 @@ def t_at_y(yq, off):
     return (yq - cxi - py_*off) / m
 y_sh = m*(xr_m - 1.5) + cxi                 # start of the shoulder lap along the channel top
 for off in (0, -2*MHW):
-    (xa, ya), (xb, yb) = mp(t_at_y(y_floor, off), off), mp(xr_m, off)
-    band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#1565c0" stroke-width="2"/>')
+    t0 = t_at_y(y_floor, off)
+    if off == 0:
+        # channel top: solid to the shoulder lap, then DASHED behind the neck plates —
+        # and that hidden run is a weld: channel top to both plates
+        (xa, ya), (xb, yb) = mp(t0, 0), mp(xr_m - 1.5, 0)
+        band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#1565c0" stroke-width="2"/>')
+        (xc, yc), (xd, yd) = mp(xr_m - 1.5, 0), mp(xr_m, 0)
+        band.append(f'<line x1="{xc:.1f}" y1="{yc:.1f}" x2="{xd:.1f}" y2="{yd:.1f}" stroke="#1565c0" stroke-width="2" stroke-dasharray="7 5"><title>channel top hidden behind the neck plates — welded to BOTH plates along this lap (ER-005)</title></line>')
+    else:
+        (xa, ya), (xb, yb) = mp(t0, off), mp(xr_m, off)
+        band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#1565c0" stroke-width="2"/>')
 (sx1, sy1), (sx2, sy2) = mp(xr_m - 1.5, -8/25.4), mp(xr_m, -8/25.4)
 band.append(f'<line x1="{sx1:.1f}" y1="{sy1:.1f}" x2="{sx2:.1f}" y2="{sy2:.1f}" stroke="#1565c0" stroke-width="1.4" stroke-dasharray="6 4"><title>shoulder rebate — 8 mm into each side wall along the channel top; plates lap here, web stands proud between them (ER-005)</title></line>')
 # horizontal shoulder weld: plate bottom tab to midrib side wall, both plates.
@@ -500,8 +509,9 @@ optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Green Beziers (
 <path d="M272.5 1230 l12 -5 l0 12 z" fill="#c9553a"/>
 <path d="M367.5 1230 l-12 -5 l0 12 z" fill="#c9553a"/>
 <line x1="284.5" y1="1230" x2="210" y2="1210" stroke="#c9553a" stroke-width="1"/>
-<text x="206" y="1206" class="fs" text-anchor="end" style="fill:#c9553a">horizontal fillet: plate bottom</text>
-<text x="206" y="1218" class="fs" text-anchor="end" style="fill:#c9553a">edge to side wall, each plate</text>
+<text x="206" y="1200" class="fs" text-anchor="end" style="fill:#c9553a">welds: channel top to BOTH plates</text>
+<text x="206" y="1212" class="fs" text-anchor="end" style="fill:#c9553a">along the lap, plus the horizontal</text>
+<text x="206" y="1224" class="fs" text-anchor="end" style="fill:#c9553a">plate-to-side-wall fillet each side</text>
 <!-- bearing arrows at the steps -->
 <path d="M264 1332 L264 1304" stroke="#3b5a7a" stroke-width="1.5" fill="none"/><path d="M259 1314 L264 1302 L269 1314 Z" fill="#3b5a7a"/>
 <path d="M375.5 1332 L375.5 1304" stroke="#3b5a7a" stroke-width="1.5" fill="none"/><path d="M370.5 1314 L375.5 1302 L380.5 1314 Z" fill="#3b5a7a"/>
