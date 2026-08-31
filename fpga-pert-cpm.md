@@ -79,7 +79,7 @@ Expected chain: C 3.7 + T 3.2 + F 5.8 + P 10.3 + H 11.7 ≈ **35 weekends**, abo
 | Buy | When | Why |
 |---|---|---|
 | AAs, coil form tube | now | C3 |
-| Bar TFT + HDMI driver kit | during T | arrives for F2 |
+| Bar TFT + HDMI driver kit — VSDISPLAY HSD088IPW1-A00 + VS-HSD088 controller, https://www.amazon.com/dp/B09C31P7FV | during I (Phase 2, new order) | arrives for Oracle display bring-up |
 | Used 49-key MIDI controller | during F | arrives for P1 |
 | 1× ADS131M08 eval, 5× IR pairs | during P | arrives for H1 |
 | CNC rib order (post-micrometer) | start of P | 4-week lead hidden |
