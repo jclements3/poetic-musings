@@ -16,7 +16,7 @@ Panel map: `README.html` (regenerate with `gen.py`).
 
 | L | Directory | Project | Status |
 |---|---|---|---|
-| P | `Piano/` | 3D-printed 49-key VL-1-derivative keyboard; Oracle is the brains behind its UI | Panel map done (`README.html`); keybed purchase pending |
+| P | `Piano/` | 3D-printed 49-key VL-1-derivative keyboard; Oracle is the brains behind its UI | `Piano/DESIGN.md` consolidates panel/switches/case for Phase 5; panel map `README.html` |
 | O | `Oracle/` | Console: H2 Forth CPU, 8.8" bar TFT, SD, CW keyer/decoder | `Oracle/clash-h2/` compiles + smoke-tests; Verilog generated; real eForth boots in Clash simulation and reads the first PM register (0x4020 mode zones) from live Forth (`cabal test h2-boot`); capability spec `Oracle/eforth-pm.md` |
 | E | `Erand49/` | Harp: 98 IR optical sensors → pluck detect → KS synthesis → MIDI/I²S | designed: `Erand49/LAYOUT.html` (string band, ER-001..006), `frame_cad.py` → `frame.step` CAD master, string/frame specs, sensor-stations.csv; gate 1 = one string, one ADC eval |
 | T | `Theremin/` | D-Lev-derived theremin; antennas double as SDR input | older VHDL-era repo; the measured Clash port lives in `MAIDEN/theremin/clash/` (see LIBRARY.md) |
@@ -28,8 +28,8 @@ Panel map: `README.html` (regenerate with `gen.py`).
 | L | Directory | Project | Status |
 |---|---|---|---|
 | M | `MAIDEN/` | Tabletop testbed, unit integration, solver; fusion of 4 cameras + 2 radars into an AI data stream; Ch.10/TMATS | full repo copied 2026-08-31 from `../maiden` (white paper, range BOM, lessons, firmware, finance) |
-| U | `UHF/` | GPS-disciplined CW/WSPR beacon (ham — personal ledger) | `DESIGN.md` (in progress) |
-| S | `SDR/` | Direct-sampling HF on the theremin antennas, AD9226-class ADC | `DESIGN.md` (in progress) |
+| U | `UHF/` | GPS-disciplined CW/WSPR beacon (ham — personal ledger) | `DESIGN.md` — HF WSPR first (20 m), Forth-side encode, TX-only-in-C interlock |
+| S | `SDR/` | Direct-sampling HF on the theremin antennas, AD9226-class ADC | `DESIGN.md` — DDC reuses measured cic_dec/fft512; gate: AM decoded in-box |
 | I | `Imaging/` | Global-shutter capture, external trigger, IRIG timestamp, centroid | `DESIGN.md` (OV9281 tabletop pick, strobe_latch reuse); Sep sensor/FOV study inputs restated |
 | N | `Network/` | RMII PHY, MAC, UDP, Ch.10 transport | `DESIGN.md` — carries MAIDEN recorder PROTOCOL.md framing unchanged inside UDP |
 | G | `GPS/` | PPS DPLL, 10 MHz, station clock copies; disciplines IRIG | `DESIGN.md` — two-layer: unsteered RTC contract (MAIDEN) + DPLL for physical outputs |
