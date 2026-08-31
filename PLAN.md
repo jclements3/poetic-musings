@@ -30,8 +30,10 @@ Toolchain and repo hygiene; no hardware.
 passes its smoke test (0xA5 on oLeds) and generates `h2.v`; SantaGlide generates
 `santa_glide.v`. The real eForth image (3334 words, metacompiled from upstream
 forth-cpu with plain gcc — no gforth) boots in the reference C simulator
-(`2 3 + . → 5`) and is installed as `Oracle/clash-h2/h2.bin`. Next: eForth booting
-in Clash simulation (UART model per `Oracle/forth-cpu-notes.md`).
+(`2 3 + . → 5`) and is installed as `Oracle/clash-h2/h2.bin` — and the same image
+**boots end-to-end in Clash simulation** (`cabal test h2-boot`: banner + arithmetic
+in ~15.4M cycles / ~60 s wall; functional UART model; zero semantic core fixes
+needed vs h2.vhd). The Clash port of the H2 is proven against real software.
 
 ## Phase 1 — C · Santa Glide 🛷 (first demo, standalone)
 
