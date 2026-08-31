@@ -169,8 +169,23 @@ for a, b, c, w in keys:
 for n, note, fg, Lg, odg, tg, gx, glo in gpts:
     tuner_pts.append((X(gx+KEY_DX), Y(glo+Lg+KEY_DY)))
 sense_pts = [(X(sx), Y(sy)) for sx, sy in sense]
-band.append(f'<path d="{crpath(tuner_pts)}" fill="none" stroke="#7a5a2a" stroke-width="2.5" opacity="0.6"><title>tuner rail — Bezier fit through all 49 tuner pins (the neck)</title></path>')
-band.append(f'<path d="{crpath(sense_pts)}" fill="none" stroke="#a8700f" stroke-width="2.0" opacity="0.6"><title>sensor rail — Bezier fit through all 49 optical X/Y axes, 1 in below the nuts</title></path>')
+# use the HAND-EDITED neck curves from Erand49.svg (same coordinate space);
+# fall back to the auto-fit only if the edited paths are not found
+import re
+def edited_rail(colorhex):
+    try:
+        src = open(os.path.join(HERE, 'Erand49.svg')).read()
+        for p in re.findall(r'<path[^>]*>', src):
+            if colorhex in p:
+                return re.search(r'\bd="([^"]+)"', p).group(1)
+    except OSError:
+        pass
+    return None
+t_d = edited_rail('7a5a2a') or crpath(tuner_pts)
+s_d = edited_rail('a8700f') or crpath(sense_pts)
+t_src = 'hand-edited (Erand49.svg)' if edited_rail('7a5a2a') else 'auto-fit'
+band.append(f'<path d="{t_d}" fill="none" stroke="#7a5a2a" stroke-width="2.5" opacity="0.6"><title>tuner rail — {t_src} — the neck top curve</title></path>')
+band.append(f'<path d="{s_d}" fill="none" stroke="#a8700f" stroke-width="2.0" opacity="0.6"><title>sensor rail — {t_src} — the neck bottom curve, optical axes</title></path>')
 
 # ---- cross sections at 5x, aligned to real string x positions ----
 xsec = []
