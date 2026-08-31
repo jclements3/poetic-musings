@@ -7,3 +7,4 @@ Oracle/forth-cpu-upstream/
 Coil/SantaGlide/firmware/verilog/
 Coil/SantaGlide/firmware/*.hi
 Coil/SantaGlide/firmware/*.o
+Coil/SantaGlide/firmware/build/

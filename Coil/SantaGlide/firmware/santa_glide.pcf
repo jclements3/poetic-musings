@@ -1,0 +1,30 @@
+# santa_glide.pcf — Alchitry Cu (Lattice iCE40 HX8K, CB132 package)
+#
+# FPGA ball names verified against the Alchitry Labs V2 board definition
+# (hardware/pinout/CuPin.kt, github.com/alchitry/Alchitry-Labs-V2).
+# "A2, A3, ..." are the Alchitry Br-connector bank-A pin names silk-screened
+# on the Br prototyping element; the second column is the iCE40 ball.
+#
+# All I/O is 3.3 V LVCMOS.
+
+# 100 MHz on-board oscillator
+set_io clk P7
+
+# Reset button on the Cu (active LOW while pressed)
+set_io rst_n P8
+
+# Show switch — Br bank A pin A14 (ball C1). Internal pullup enabled so the
+# input never floats: show runs with the pin open, wire the switch from this
+# pin to GND to pause (or use an SPDT between 3.3 V and GND for direct sense).
+set_io -pullup yes show_on C1
+
+# Gate drives, one contiguous run on Br bank A (channel Cn per SS-003;
+# gates[0] = coil station C0 nearest house A).
+set_io gates[0] M1    # Br A2  -> Q0 gate (100R series, 10k pulldown)
+set_io gates[1] L1    # Br A3  -> Q1
+set_io gates[2] J1    # Br A5  -> Q2
+set_io gates[3] J3    # Br A6  -> Q3
+set_io gates[4] G1    # Br A8  -> Q4
+set_io gates[5] G3    # Br A9  -> Q5
+set_io gates[6] E1    # Br A11 -> Q6
+set_io gates[7] D1    # Br A12 -> Q7

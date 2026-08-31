@@ -9,7 +9,10 @@
 --   * output is a Drive level per coil, then PWM-modulated: RUN / HOLD /
 --     OFF -- never 100 % continuous on the 0.4 ohm 24 AWG coils
 --
--- Target: Alchitry Cu (iCE40 HX8K), 100 MHz System clock
+-- Target: Alchitry Cu (iCE40 HX8K). The board oscillator is 100 MHz, but
+-- the logic runs from a 50 MHz PLL in the board wrapper (cu_top.v): the
+-- 32-bit dwell counters close timing at ~72 MHz on the HX fabric, not 100.
+-- msTicks below is set for the 50 MHz logic clock.
 
 module SantaGlide where
 
@@ -20,7 +23,7 @@ import Clash.Prelude
 ------------------------------------------------------------------------
 
 msTicks :: Unsigned 32
-msTicks = 100000                     -- 1 ms @ 100 MHz
+msTicks = 50000                      -- 1 ms @ 50 MHz (PLL clock, see above)
 
 restMs :: Unsigned 32
 restMs = 2500                        -- pause at each house
@@ -32,6 +35,17 @@ dwellMs i = case min i (maxBound - i) of
   1 -> 250
   2 -> 150
   _ -> 100
+
+-- Dwell in TICKS. Each alternative is `constant * constant`, so Clash
+-- folds it at compile time and the hardware is a 4-way mux of constants.
+-- (Writing `dwellMs coil * msTicks` at a runtime `coil` instead infers a
+-- real 32-bit multiplier, which was the timing-critical path on the iCE40.)
+dwellTicks :: Index 8 -> Unsigned 32
+dwellTicks i = case min i (maxBound - i) of
+  0 -> 400 * msTicks
+  1 -> 250 * msTicks
+  2 -> 150 * msTicks
+  _ -> 100 * msTicks
 
 ------------------------------------------------------------------------
 -- Drive levels (PWM duty, 8-bit)
@@ -92,7 +106,7 @@ step s@St{..} = case phase of
     | coil > 0          -> s { coil = coil - 1, t = 0 }
     | otherwise         -> s { phase = ParkA, rest = restMs * msTicks }
 
-  where dwell = dwellMs coil * msTicks
+  where dwell = dwellTicks coil
 
 ------------------------------------------------------------------------
 -- Output function  (s -> o)  -- STATE ONLY, this is what makes it Moore
