@@ -143,12 +143,12 @@ for off in (+MHW, -MHW):
 (xa, ya), (xb, yb) = mp(pilc, 0), mp(xr_m, 0)
 band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#c9553a" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib centerline = string anchor line</title></line>')
 lx, ly = mp(pilc+4.5, -MHW)
-band.append(f'<text x="{lx:.0f}" y="{ly+30:.0f}" class="nl" fill="#8d877a">midrib — C 4"×1.75"×3/16" 6061-T6, web shown (ER-003)</text>')
+band.append(f'<text x="{lx:.0f}" y="{ly+30:.0f}" class="nl" fill="#8d877a">midrib — RT 4"×2"×3/16" 6061-T6 (ER-003)</text>')
 band.append(f'<rect x="{X(pilc-PW):.1f}" y="{Y(y_crown):.1f}" width="{2*PW*IN:.1f}" height="{Y(y_base)-Y(y_crown):.1f}" fill="none" stroke="#8d877a" stroke-width="2"><title>pillar — 2"×2"×1/8" square tube, base to crown (ER-002)</title></rect>')
 band.append(f'<text x="{X(pilc)+35:.0f}" y="{(Y(y_crown)+Y(y_base))/2:.0f}" class="nl" fill="#8d877a">pillar 2"×2"×1/8"</text>')
-band.append(f'<rect x="{X(pilc-PW)-4:.1f}" y="{Y(y_crown)-14:.1f}" width="{2*PW*IN+8:.1f}" height="14" fill="#d9d3c2" stroke="#8d877a" stroke-width="1.5"><title>crown block — pillar weld, plates bolt on</title></rect>')
+band.append(f'<rect x="{X(pilc-PW)-4:.1f}" y="{Y(y_crown)-14:.1f}" width="{2*PW*IN+8:.1f}" height="14" fill="#d9d3c2" stroke="#8d877a" stroke-width="1.5"><title>pillar top rebate — neck plates sit flush</title></rect>')
 sbx, sby = mp(xr_m-0.6, MHW)
-band.append(f'<rect x="{sbx-24:.1f}" y="{sby-14:.1f}" width="48" height="20" fill="#d9d3c2" stroke="#8d877a" stroke-width="1.5" transform="rotate({-math.degrees(math.atan2(m,1)):.1f} {sbx:.1f} {sby:.1f})"><title>shoulder block — midrib weld, plates bolt on</title></rect>')
+band.append(f'<rect x="{sbx-24:.1f}" y="{sby-14:.1f}" width="48" height="20" fill="#d9d3c2" stroke="#8d877a" stroke-width="1.5" transform="rotate({-math.degrees(math.atan2(m,1)):.1f} {sbx:.1f} {sby:.1f})"><title>plate-to-midrib bolted joint (flush on the tube faces)</title></rect>')
 # ISO 129 dims: overall height, pillar width
 dx0 = X(pilc-PW) - 34
 band.append(f'<g stroke="#3b5a7a" stroke-width="1" fill="none"><line x1="{dx0:.0f}" y1="{Y(y_crown):.1f}" x2="{dx0:.0f}" y2="{Y(y_base):.1f}" marker-start="url(#arr)" marker-end="url(#arr)"/><line x1="{dx0-8:.0f}" y1="{Y(y_crown):.1f}" x2="{X(pilc-PW):.1f}" y2="{Y(y_crown):.1f}"/><line x1="{dx0-8:.0f}" y1="{Y(y_base):.1f}" x2="{X(pilc-PW):.1f}" y2="{Y(y_base):.1f}"/></g>')
@@ -271,7 +271,7 @@ overall diameter</b>. Colors per harp convention: <span class="leg" style="color
 spec. Dark ticks: nut and tuner pin; colored 12° top segments: tuner leads. Amber crosshairs:
 optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Brown/amber Beziers: tuner and
 sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapolated from c1 physics
-(<code>string-specs.md</code>). Frame per <code>frame-spec.md</code>: midrib C-channel side profile (4" web band, red dash-dot centerline on the anchor line) from the pillar foot to the shoulder; pillar (2"×2" square tube) base to crown at the bass end, with crown/shoulder blocks; ISO 129 dims in mm.</p>
+(<code>string-specs.md</code>). Frame per <code>frame-spec.md</code>: midrib C-channel side profile (4" web band, red dash-dot centerline on the anchor line) from the pillar foot to the shoulder; pillar (2"×2" square tube) base to crown at the bass end, plates bolt flush to the member faces (pillar top rebated); ISO 129 dims in mm.</p>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1-x0:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
 {BAND_STYLE}
 {chr(10).join(band)}
@@ -287,9 +287,9 @@ sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapol
 <h3 style="font-size:15px;margin:20px 0 6px">Frame members (see Erand49/frame-spec.md)</h3>
 <table>
 <tr><th>Member</th><th>Section (6061-T6)</th><th>Check @ welded-HAZ allowable</th></tr>
-<tr><td class="k">Midrib</td><td>C-channel 4" × 1.75" × 3/16" — web in the string plane, flanges ±Y, open trough = cable/anchor run</td><td>0.88 kN·m mid-span → ~29 MPa, SF > 4</td></tr>
-<tr><td class="k">Pillar</td><td>Square tube 2" × 2" × 1/8" — cleat bolts to the flat +Y face</td><td>Euler ~39 kN vs few kN, ~8× margin</td></tr>
-<tr><td class="k">Neck</td><td>2 plates per <code>Erand49.svg</code>, bolted to 50 mm shoulder/crown blocks (pre-welded to midrib/pillar)</td><td>pin-edge ≥ 16.2 mm, sensor-edge ≥ 7.1 mm verified</td></tr>
+<tr><td class="k">Midrib</td><td>Rect tube 4" × 2" × 3/16" — strings through grommeted holes in the top face; knots concealed inside the sides; access holes in the bottom face; closed section, no torsion issue</td><td>0.88 kN·m mid-span → ~25 MPa, SF ~5.5</td></tr>
+<tr><td class="k">Pillar</td><td>Square tube 2" × 2" × 1/8", top rebated 8 mm/side for the plates — cleat bolts to the flat +Y face</td><td>Euler ~39 kN vs few kN, ~8× margin</td></tr>
+<tr><td class="k">Neck</td><td>2 plates per <code>Erand49.svg</code>, bolted flush onto the ±Y faces of pillar and midrib (both 50.8 mm wide → plate gap 50.8); no blocks; through-bolts with crush sleeves</td><td>pin-edge ≥ 16.2 mm, sensor-edge ≥ 7.1 mm verified</td></tr>
 </table>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 frame ISO 128 sections">
 <style>.fl{{font-size:11px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}}.fs{{font-size:9px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace}}.fg{{font-size:10px;font-weight:700;fill:#a8700f;font-family:ui-monospace,Menlo,Consolas,monospace}}.dim{{stroke:#3b5a7a;stroke-width:1;fill:none}}.dmt{{font-size:9px;fill:#3b5a7a;font-family:ui-monospace,Menlo,Consolas,monospace}}.cl{{stroke:#c9553a;stroke-width:0.8;stroke-dasharray:12 3 3 3}}</style>
@@ -321,12 +321,12 @@ sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapol
 <!-- dims -->
 <line x1="270" y1="430" x2="370" y2="430" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
 <line x1="270" y1="395" x2="270" y2="435" class="dim"/><line x1="370" y1="395" x2="370" y2="435" class="dim"/>
-<text x="320" y="446" class="dmt" text-anchor="middle">50 (gap = block width)</text>
+<text x="320" y="446" class="dmt" text-anchor="middle">50.8 (gap = member width)</text>
 <line x1="254" y1="48" x2="270" y2="48" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
 <text x="262" y="40" class="dmt" text-anchor="middle">8</text>
 <line x1="270" y1="470" x2="320" y2="470" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
 <text x="295" y="484" class="dmt" text-anchor="middle">25</text>
-<text x="20" y="505" class="fs">Plates bolt to shoulder/crown blocks; blocks pre-welded to midrib/pillar (weld first, plate after — torch access solved by sequence).</text>
+<text x="20" y="505" class="fs">Plates bolt flush onto the ±Y faces of pillar and midrib (both 50.8 wide); pillar top rebated 8 mm/side — smooth transition, no blocks. One weld: pillar↔midrib at the base.</text>
 
 <text x="540" y="20" class="fg">ER-002 — PILLAR SECTION (2" × 2" × 1/8" sq tube)</text>
 <rect x="560" y="120" width="101.6" height="101.6" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
@@ -340,23 +340,30 @@ sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapol
 <text x="470" y="174" class="dmt">bolts here</text>
 <text x="540" y="270" class="fs">Euler ~39 kN over 2 m ⇒ ~8× margin</text>
 <text x="540" y="284" class="fs">incl. hung PM console + lean loads</text>
+<text x="540" y="304" class="fs">top rebated 8 mm each side —</text>
+<text x="540" y="318" class="fs">neck plates recess flush</text>
 
-<text x="810" y="20" class="fg">ER-003 — MIDRIB SECTION (C 4" × 1.75" × 3/16")</text>
-<path d="M860 90 h89 v9.5 h-79.5 v184.6 h79.5 v9.5 h-89 z" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
-<line x1="840" y1="90" x2="840" y2="293.6" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="810" y="20" class="fg">ER-003 — MIDRIB SECTION (RT 4" × 2" × 3/16" rect tube)</text>
+<rect x="860" y="90" width="101.6" height="203.2" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
+<rect x="869.5" y="99.5" width="82.6" height="184.2" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<line x1="910.8" y1="45" x2="910.8" y2="90" stroke="#3b3e44" stroke-width="2.3"/>
+<rect x="904" y="88" width="13.6" height="12" fill="#fff" stroke="#111" stroke-width="1"/>
+<circle cx="910.8" cy="120" r="6" fill="#3b3e44"/>
+<rect x="898" y="281" width="25" height="13" fill="#fff" stroke="#111" stroke-width="1" stroke-dasharray="4 3"/>
+<line x1="910.8" y1="70" x2="910.8" y2="310" class="cl"/>
+<line x1="840" y1="90" x2="840" y2="293.2" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
 <text x="833" y="196" class="dmt" text-anchor="end" transform="rotate(-90 833 196)">101.6</text>
-<line x1="860" y1="70" x2="949" y2="70" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
-<text x="905" y="62" class="dmt" text-anchor="middle">44.5</text>
-<line x1="990" y1="99" x2="950" y2="95" class="dim" marker-end="url(#ar)"/>
-<text x="994" y="102" class="dmt">4.76 typ</text>
-<line x1="864.75" y1="80" x2="864.75" y2="303" class="cl"/>
-<text x="875" y="320" class="fs">web in the string plane — anchors bolt</text>
-<text x="875" y="332" class="fs">through web ℄ (shear-center discipline);</text>
-<text x="875" y="344" class="fs">open trough ±Y = cable + anchor run;</text>
-<text x="875" y="356" class="fs">bolt-on closing strip mid-span if any</text>
-<text x="875" y="368" class="fs">twist at full tension (channel → box)</text>
-<text x="810" y="400" class="fs">0.88 kN·m mid-span → ~29 MPa, SF &gt; 4</text>
-<text x="810" y="414" class="fs">(welded-HAZ allowable 70 MPa)</text>
+<line x1="860" y1="70" x2="961.6" y2="70" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="910" y="62" class="dmt" text-anchor="middle">50.8</text>
+<line x1="1000" y1="99" x2="962" y2="95" class="dim" marker-end="url(#ar)"/>
+<text x="1004" y="102" class="dmt">4.76 typ</text>
+<text x="985" y="130" class="fs">string through grommeted hole</text>
+<text x="985" y="142" class="fs">in the top face ℄; knot rests</text>
+<text x="985" y="154" class="fs">inside, concealed by the sides;</text>
+<text x="985" y="166" class="fs">threading-access hole in the</text>
+<text x="985" y="178" class="fs">bottom face (dashed)</text>
+<text x="810" y="400" class="fs">0.88 kN·m mid-span → ~25 MPa, SF ~5.5</text>
+<text x="810" y="414" class="fs">(welded HAZ); closed section ⇒ no torsion issue</text>
 </svg></div>
 
 <p class="sub">Sources: <code>string-specs.md</code> (49-string spec, imperial + metric; band tension

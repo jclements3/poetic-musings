@@ -5,11 +5,11 @@
 <line x1="122.0" y1="1699.1" x2="977.6" y2="329.8" stroke="#8d877a" stroke-width="2"/>
 <line x1="208.1" y1="1753.0" x2="1063.8" y2="383.6" stroke="#8d877a" stroke-width="2"/>
 <line x1="165.0" y1="1726.1" x2="1020.7" y2="356.7" stroke="#c9553a" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib centerline = string anchor line</title></line>
-<text x="322" y="1600" class="nl" fill="#8d877a">midrib — C 4"×1.75"×3/16" 6061-T6, web shown (ER-003)</text>
+<text x="322" y="1600" class="nl" fill="#8d877a">midrib — RT 4"×2"×3/16" 6061-T6 (ER-003)</text>
 <rect x="139.6" y="20.3" width="50.8" height="1776.9" fill="none" stroke="#8d877a" stroke-width="2"><title>pillar — 2"×2"×1/8" square tube, base to crown (ER-002)</title></rect>
 <text x="200" y="909" class="nl" fill="#8d877a">pillar 2"×2"×1/8"</text>
-<rect x="135.6" y="6.3" width="58.8" height="14" fill="#d9d3c2" stroke="#8d877a" stroke-width="1.5"><title>crown block — pillar weld, plates bolt on</title></rect>
-<rect x="938.4" y="340.2" width="48" height="20" fill="#d9d3c2" stroke="#8d877a" stroke-width="1.5" transform="rotate(-58.0 962.4 354.2)"><title>shoulder block — midrib weld, plates bolt on</title></rect>
+<rect x="135.6" y="6.3" width="58.8" height="14" fill="#d9d3c2" stroke="#8d877a" stroke-width="1.5"><title>pillar top rebate — neck plates sit flush</title></rect>
+<rect x="938.4" y="340.2" width="48" height="20" fill="#d9d3c2" stroke="#8d877a" stroke-width="1.5" transform="rotate(-58.0 962.4 354.2)"><title>plate-to-midrib bolted joint (flush on the tube faces)</title></rect>
 <g stroke="#3b5a7a" stroke-width="1" fill="none"><line x1="106" y1="20.3" x2="106" y2="1797.2" marker-start="url(#arr)" marker-end="url(#arr)"/><line x1="98" y1="20.3" x2="139.6" y2="20.3"/><line x1="98" y1="1797.2" x2="139.6" y2="1797.2"/></g>
 <text x="94" y="909" class="nl" fill="#3b5a7a" text-anchor="middle" transform="rotate(-90 94 909)">1777 mm</text>
 <g stroke="#3b5a7a" stroke-width="1" fill="none"><line x1="139.6" y1="1823.2" x2="190.4" y2="1823.2" marker-start="url(#arr)" marker-end="url(#arr)"/></g>
@@ -276,6 +276,6 @@
 <line x1="215.8" y1="79.4" x2="223.8" y2="42.1" stroke="#3b3e44" stroke-width="2.692"/>
 <g stroke="#555" stroke-width="1.0"><line x1="212.6" y1="79.4" x2="219.0" y2="79.4"/><line x1="220.6" y1="42.1" x2="227.0" y2="42.1"/></g>
 <text x="215.8" y="1668.8" class="nl" fill="#8d877a" text-anchor="middle">a0*</text>
-<path d="m 187.2875,26.224993 c 3.17854,-0.911039 203.29328,-52.278207 272.96798,-5.407695 69.67469,46.870512 136.99076,422.809692 267.58718,424.759752 130.59641,1.95006 168.02998,-65.66091 221.12545,-100.65526 53.09549,-34.99436 98.27979,-28.91693 38.70553,66.46427" fill="none" stroke="#7a5a2a" stroke-width="2.5" opacity="0.6"><title>tuner rail — hand-edited (Erand49.svg) — the neck top curve</title></path>
+<path d="m 187.2875,26.224993 c 3.17854,-0.911039 221.04112,-47.058257 284.97387,6.076196 63.93274,53.134452 145.78598,442.376821 274.37311,425.281751 128.58714,-17.09508 149.23816,-77.6668 202.33363,-112.66115 53.09549,-34.99436 98.27979,-28.91693 38.70553,66.46427" fill="none" stroke="#7a5a2a" stroke-width="2.5" opacity="0.6"><title>tuner rail — hand-edited (Erand49.svg) — the neck top curve</title></path>
 <path d="m 185.6375,120.6751 c 106.2958,0.68191 82.71166,-36.850212 204.34946,-3.83664 121.6378,33.01357 167.18726,416.67353 319.01135,431.43094 151.8241,14.75741 284.31068,-170.72628 277.98648,-138.98113" fill="none" stroke="#a8700f" stroke-width="2.0" opacity="0.6"><title>sensor rail — hand-edited (Erand49.svg) — the neck bottom curve, optical axes</title></path>
 </svg>
