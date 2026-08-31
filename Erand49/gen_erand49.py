@@ -337,7 +337,7 @@ sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapol
 <tr><td class="k">Pillar</td><td>Square tube 2" × 2" × 1/8", top rebated 8 mm/side for the plates — cleat bolts to the flat +Y face</td><td>Euler ~39 kN vs few kN, ~8× margin</td></tr>
 <tr><td class="k">Neck</td><td>2 plates per <code>Erand49.svg</code>, bolted flush onto the ±Y faces of pillar and midrib (both 50.8 mm wide → plate gap 50.8); no blocks; through-bolts with crush sleeves</td><td>pin-edge ≥ 16.2 mm, sensor-edge ≥ 7.1 mm verified</td></tr>
 </table>
-<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 1580" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 frame ISO 128 sections">
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 2130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 frame ISO 128 sections">
 <style>.fl{{font-size:11px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}}.fs{{font-size:9px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace}}.fg{{font-size:10px;font-weight:700;fill:#a8700f;font-family:ui-monospace,Menlo,Consolas,monospace}}.dim{{stroke:#3b5a7a;stroke-width:1;fill:none}}.dmt{{font-size:9px;fill:#3b5a7a;font-family:ui-monospace,Menlo,Consolas,monospace}}.cl{{stroke:#c9553a;stroke-width:0.8;stroke-dasharray:12 3 3 3}}</style>
 <defs>
 <pattern id="hat" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="7" stroke="#8d877a" stroke-width="1"/></pattern>
@@ -491,6 +491,40 @@ sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapol
 <text x="20" y="1510" class="fs">Form the tongue by milling 8 mm — one plate thickness — off each side wall above the horizontal step: tongue = 47.5 wide, exactly</text>
 <text x="20" y="1524" class="fs">the plates' inner gap, and the plate outer faces stay flush at 63.5. Self-fixturing: the step sets plate height, the tongue sets the gap.</text>
 <text x="20" y="1538" class="fs">Load path: string pull on the neck bears down on the steps in compression; the plate-to-tongue welds only locate and carry shear.</text>
+
+<text x="20" y="1600" class="fg">ER-006 — HINGED OUTRIGGER LEGS AT THE MIDRIB FOOT (front view YZ, 1 px/mm)</text>
+<!-- floor -->
+<rect x="120" y="2010" width="800" height="14" fill="url(#hat)" stroke="#111" stroke-width="1.2"/>
+<!-- midrib near the base, seen from the front: 63.5 wide band to the floor -->
+<rect x="488" y="1660" width="63.5" height="350" fill="none" stroke="#111" stroke-width="1.8"/>
+<text x="520" y="1648" class="fs" text-anchor="middle">midrib (front view), floor foot</text>
+<!-- hinges -->
+<circle cx="488" cy="1850" r="6" fill="#fff" stroke="#111" stroke-width="1.5"/>
+<circle cx="551.5" cy="1850" r="6" fill="#fff" stroke="#111" stroke-width="1.5"/>
+<!-- legs deployed -->
+<line x1="488" y1="1850" x2="245" y2="2010" stroke="#111" stroke-width="5"/>
+<line x1="551.5" y1="1850" x2="795" y2="2010" stroke="#111" stroke-width="5"/>
+<rect x="225" y="2004" width="40" height="8" rx="3" fill="#2a2c30"/>
+<rect x="775" y="2004" width="40" height="8" rx="3" fill="#2a2c30"/>
+<text x="300" y="1990" class="fs">rubber foot</text>
+<!-- folded position, dashed along the member -->
+<line x1="488" y1="1850" x2="488" y2="1560" stroke="#111" stroke-width="2.5" stroke-dasharray="7 5"/>
+<line x1="551.5" y1="1850" x2="551.5" y2="1560" stroke="#111" stroke-width="2.5" stroke-dasharray="7 5"/>
+<text x="470" y="1550" class="fs" text-anchor="end">folded for travel — legs lie</text>
+<text x="470" y="1562" class="fs" text-anchor="end">flat along the midrib sides</text>
+<!-- lock -->
+<line x1="470" y1="1905" x2="380" y2="1935" stroke="#c9553a" stroke-width="1"/>
+<text x="376" y="1938" class="fs" text-anchor="end" style="fill:#c9553a">wing-bolt lock at each hinge</text>
+<text x="376" y="1950" class="fs" text-anchor="end" style="fill:#c9553a">(deployed and folded detents)</text>
+<!-- dims -->
+<line x1="245" y1="2050" x2="795" y2="2050" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="520" y="2066" class="dmt" text-anchor="middle">~550 stance</text>
+<line x1="600" y1="1868" x2="700" y2="1935" class="dim" marker-end="url(#ar)"/>
+<text x="704" y="1940" class="dmt">leg ~295, 1"×1/8" flat bar</text>
+<!-- notes -->
+<text x="20" y="2095" class="fs">Without legs the frame's floor footprint in Y is zero — the harp cannot stand. Two legs hinge on shoulder bolts through the</text>
+<text x="20" y="2109" class="fs">midrib side walls near the foot; deployed ~55° to a ~550 mm stance (CG ~0.8 m ⇒ tips only past ~19° of lean — kid-proof), they</text>
+<text x="20" y="2123" class="fs">fold flat along the member for the travel case. Wing-bolt or detent locks both positions.</text>
 </svg></div>
 
 <p class="sub">Sources: <code>string-specs.md</code> (49-string spec, imperial + metric; band tension

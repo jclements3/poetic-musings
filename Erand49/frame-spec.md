@@ -11,6 +11,8 @@ temper. Loads from `string-specs.md`: band pull 7.00 kN (49 strings), string ang
 | Pillar | **round tube, 2 in OD x 3/16 in wall**, crown to floor, passing through the midrib base | few kN compression + hung PM console + lean loads | Euler Pcr ~ 31 kN over ~2 m, ~6x margin; cleat on a saddle block |
 | Neck plates x2 | per `Erand49.svg` hand-edited outline | pin + sensor mounting (verified: min pin-edge 16.2 mm, min sensor-edge 7.1 mm) | rest on the midrib shoulder steps and weld to its center tongue (**ER-005**): side walls milled down 8 mm each above a horizontal step, leaving a 47.5 mm tongue = the plates inner gap; plate outer faces flush at 63.5 (**plate gap = 63.5 mm**). Crown: 6.35 mm pads per side to the round pillar, crush-sleeved bolts |
 
+| Outrigger legs x2 | 1 in x 1/8 in flat bar, ~295 mm, shoulder-bolt hinges through the midrib side walls near the floor foot (**ER-006**) | sideways stability: frame footprint in Y is otherwise zero | deployed ~55 deg -> ~550 mm stance; tips only past ~19 deg lean; fold flat for travel; wing-bolt locks |
+
 ## Build sequence
 
 1. One welded joint only (**ER-004**): stand the pillar, slide the midrib down over
