@@ -128,6 +128,84 @@ with BuildPart() as plate_bp:
     extrude(amount=PLATE_T)
 plate = plate_bp.part
 plates = Pos(0, GAP/2 + PLATE_T, 0) * plate + Pos(0, -GAP/2, 0) * plate
+
+# ---- 49 optical sensor stations: 60-deg beam pairs with PER-STATION YAW ----
+# Sensor points sit near the plate's downhill edge, so a symmetric pair exits the
+# outline on 19 stations. Fix: yaw each pair (psi) so both bores center in the
+# locally available plate span; the pair stays 60 deg apart (independent X/Y via a
+# per-string 2x2 calibration done at CAL). Optics mount on a PCB strip, so the
+# per-station angle costs nothing mechanically.
+sense_pts = [sv(px, py) for (px, py) in ns['sense_px']]
+# plate boundary polygon (model XZ) sampled from the same curves used for the face
+def _samp(segs):
+    pts = []
+    for a, c1, c2, b in segs:
+        for k in range(0, 40):
+            t = k/39; mt = 1-t
+            x = mt**3*a[0]+3*mt*mt*t*c1[0]+3*mt*t*t*c2[0]+t**3*b[0]
+            y = mt**3*a[1]+3*mt*mt*t*c1[1]+3*mt*t*t*c2[1]+t**3*b[1]
+            pts.append(sv(x, y))
+    return pts
+poly = _samp(tuner_c) + [sv(*p) for p in close_pts] + _samp(sense_c)[::-1]
+def x_interval(z, near_x=None):
+    xs = []
+    n = len(poly)
+    for i in range(n):
+        (x1, z1), (x2, z2) = poly[i], poly[(i+1) % n]
+        if (z1 - z) * (z2 - z) <= 0 and z1 != z2:
+            xs.append(x1 + (z - z1)/(z2 - z1)*(x2 - x1))
+    xs.sort()
+    ivs = [(xs[i], xs[i+1]) for i in range(0, len(xs)-1, 2)]
+    if not ivs:
+        return (0, 0)
+    if near_x is None:
+        return max(ivs, key=lambda iv: iv[1]-iv[0])
+    inside = [iv for iv in ivs if iv[0] <= near_x <= iv[1]]
+    if inside:
+        return inside[0]
+    return min(ivs, key=lambda iv: min(abs(near_x-iv[0]), abs(near_x-iv[1])))
+YMID = GAP/2 + PLATE_T/2                     # 35.75
+MARGIN = 1.6 + 5.0
+beams = []
+stations = []                                 # (idx, sx, sz, psi, sep) for the PCB table
+misses = []
+for idx, (sx, sz) in enumerate(sense_pts, 1):
+    lo, hi = x_interval(sz, sx)
+    lo += MARGIN; hi -= MARGIN
+    found = None
+    for sep in (60, 55, 50, 45, 40, 35, 30):  # pair separation, degrees; shrink only if the plate is tight
+        half = sep / 2
+        for step in range(0, 121):
+            for sgn in ((1,) if step == 0 else (1, -1)):
+                psi = sgn * step * 0.5
+                a = YMID * math.tan(math.radians(psi + half))
+                b = YMID * math.tan(math.radians(psi - half))
+                if lo <= sx + min(a, b) and sx + max(a, b) <= hi:
+                    found = (psi, sep)
+                    break
+            if found: break
+        if found: break
+    if not found:
+        misses.append(idx)
+        found = (0.0, 60)
+    psi, sep = found
+    stations.append((idx, sx, sz, psi, sep))
+    for ang in (psi + sep/2, psi - sep/2):
+        beams.append(Pos(sx, 0, sz) * Rot(0, 0, ang) * Rot(-90, 0, 0) * Cylinder(1.6, 130))
+narrow = [(i, sep) for i, _, _, _, sep in stations if sep < 60]
+print(f"pair separations: {len(stations)-len(narrow)} stations at 60 deg; narrowed: {narrow}")
+print("bore landing:", "ALL 49 STATIONS FIT" if not misses else f"STILL MISSING: {misses}")
+for i in (misses or [])[:6]:
+    sx, sz = sense_pts[i-1]
+    print(f"   station {i}: z={sz:.1f} span={x_interval(sz, sx)} sx={sx:.1f}")
+with open(os.path.join(HERE, 'sensor-stations.csv'), 'w') as f:
+    f.write("station,x_mm,z_mm,pair_yaw_deg,pair_separation_deg,bore_dia_mm\n")
+    for idx, sx, sz, psi, sep in stations:
+        f.write(f"{idx},{sx:.2f},{sz:.2f},{psi:.1f},{sep},3.2\n")
+print("wrote sensor-stations.csv (PCB placement table)")
+plates = plates.cut(*beams)
+print("sensor beam bores drilled")
+
 # note: Plane.XZ extrudes toward -Y in build123d; positions may need sign fixes on first run
 
 assembly = Compound(children=[
