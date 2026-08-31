@@ -109,9 +109,9 @@ t_end = tuner_c[-1][3]                     # on the band bottom edge
 s_end = sense_c[-1][3]                     # on the channel top (shoulder corner)
 t_start, s_start = tuner_c[0][0], sense_c[0][0]
 # shoulder closing per the agreed joint: bottom edge -> weld corner -> weld line -> corner
-edge_pt = lambda x: (x, 417.7 - 1.61*(x - 1042))    # svg coords of the band bottom edge
+edge_pt = lambda x: (x, 410.5669 + 1.600300*(1106.8856 - x))   # REAL band bottom edge (from mp)
 weld_y = 429.7
-x_weld_end = 1042 - (weld_y - 417.7)/1.61 * -1 if False else 1042 - 12/1.61
+x_weld_end = 1094.9296
 close_pts = [t_end, edge_pt(x_weld_end), (990.0, weld_y), s_end]
 
 with BuildPart() as plate_bp:
