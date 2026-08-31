@@ -5,6 +5,8 @@
 <line x1="88.9" y1="1848.0" x2="1020.7" y2="356.7" stroke="#8d877a" stroke-width="2"/>
 <line x1="208.7" y1="1848.0" x2="1106.9" y2="410.6" stroke="#8d877a" stroke-width="2"/>
 <line x1="989.4" y1="421.9" x2="1027.5" y2="361.0" stroke="#8d877a" stroke-width="1.4" stroke-dasharray="6 4"><title>shoulder rebate — 8 mm into each side wall along the channel top; plates lap here, web stands proud between them (ER-005)</title></line>
+<line x1="975.1" y1="429.7" x2="1094.9" y2="429.7" stroke="#c9553a" stroke-width="2.5"><title>shoulder weld — horizontal fillet, plate bottom edge to midrib side wall, both plates (ER-005); position mirrors id=shoulder-weld in Erand49.svg</title></line>
+<text x="1105" y="444" class="nl" fill="#c9553a">shoulder weld</text>
 <text x="1102" y="437" class="nl" fill="#8d877a">shoulder rebate: ER-005</text>
 <line x1="88.9" y1="1848.0" x2="208.7" y2="1848.0" stroke="#8d877a" stroke-width="2"><title>horizontal end cut — the midrib stands on the floor as the rear foot</title></line>
 <line x1="148.8" y1="1848.0" x2="1063.8" y2="383.6" stroke="#c9553a" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib tube centerline (top face carries the string anchors)</title></line>

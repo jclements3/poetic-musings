@@ -167,6 +167,23 @@ for off in (0, -2*MHW):
     band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#8d877a" stroke-width="2"/>')
 (sx1, sy1), (sx2, sy2) = mp(xr_m - 1.5, -8/25.4), mp(xr_m, -8/25.4)
 band.append(f'<line x1="{sx1:.1f}" y1="{sy1:.1f}" x2="{sx2:.1f}" y2="{sy2:.1f}" stroke="#8d877a" stroke-width="1.4" stroke-dasharray="6 4"><title>shoulder rebate — 8 mm into each side wall along the channel top; plates lap here, web stands proud between them (ER-005)</title></line>')
+# horizontal shoulder weld: plate bottom tab to midrib side wall, both plates.
+# mirrored from Erand49.svg (id="shoulder-weld") when present, else 12 mm below the lap start
+y_w = y_sh - 12/IN
+(wx1, wy1) = mp(t_at_y(y_w, 0), 0)
+(wx2, wy2) = mp(t_at_y(y_w, -2*MHW), -2*MHW)
+try:
+    import re as _re2
+    _svg2 = open(os.path.join(HERE, 'Erand49.svg')).read()
+    _wl = _re2.search(r'<line[^>]*id="shoulder-weld"[^>]*>', _svg2, _re2.S)
+    if _wl:
+        _g = dict(_re2.findall(r'(x1|y1|x2|y2)="([-\d.]+)"', _wl.group(0)))
+        wx1, wy1, wx2, wy2 = float(_g['x1']), float(_g['y1']), float(_g['x2']), float(_g['y2'])
+except OSError:
+    pass
+band.append(f'<line x1="{wx1:.1f}" y1="{wy1:.1f}" x2="{wx2:.1f}" y2="{wy2:.1f}" stroke="#c9553a" stroke-width="2.5"><title>shoulder weld — horizontal fillet, plate bottom edge to midrib side wall, both plates (ER-005); position mirrors id=shoulder-weld in Erand49.svg</title></line>')
+band.append(f'<text x="{wx2+10:.0f}" y="{wy2+14:.0f}" class="nl" fill="#c9553a">shoulder weld</text>')
+
 (cx2, cy2) = mp(xr_m - 0.6, -2*MHW)
 band.append(f'<text x="{cx2+10:.0f}" y="{cy2+2:.0f}" class="nl" fill="#8d877a">shoulder rebate: ER-005</text>')
 (fx1, fy1), (fx2, fy2) = mp(t_at_y(y_floor, 0), 0), mp(t_at_y(y_floor, -2*MHW), -2*MHW)
@@ -484,13 +501,13 @@ sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapol
 <path d="M272.5 1230 l12 -5 l0 12 z" fill="#c9553a"/>
 <path d="M367.5 1230 l-12 -5 l0 12 z" fill="#c9553a"/>
 <line x1="284.5" y1="1230" x2="210" y2="1210" stroke="#c9553a" stroke-width="1"/>
-<text x="206" y="1206" class="fs" text-anchor="end" style="fill:#c9553a">weld plates to the proud web,</text>
-<text x="206" y="1218" class="fs" text-anchor="end" style="fill:#c9553a">both sides, full lap length</text>
+<text x="206" y="1206" class="fs" text-anchor="end" style="fill:#c9553a">horizontal fillet: plate bottom</text>
+<text x="206" y="1218" class="fs" text-anchor="end" style="fill:#c9553a">edge to side wall, each plate</text>
 <!-- bearing arrows at the steps -->
 <path d="M264 1332 L264 1304" stroke="#3b5a7a" stroke-width="1.5" fill="none"/><path d="M259 1314 L264 1302 L269 1314 Z" fill="#3b5a7a"/>
 <path d="M375.5 1332 L375.5 1304" stroke="#3b5a7a" stroke-width="1.5" fill="none"/><path d="M370.5 1314 L375.5 1302 L380.5 1314 Z" fill="#3b5a7a"/>
-<text x="400" y="1330" class="fs" style="fill:#3b5a7a">plates BEAR on the rebate ledges (normal to the</text>
-<text x="400" y="1342" class="fs" style="fill:#3b5a7a">channel top); the welds carry the along-slope shear</text>
+<text x="400" y="1330" class="fs" style="fill:#3b5a7a">plates bear on the rebate; the horizontal weld line</text>
+<text x="400" y="1342" class="fs" style="fill:#3b5a7a">below the lap ties plate to side wall on each side</text>
 <!-- dims -->
 <line x1="256.5" y1="1445" x2="383.5" y2="1445" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
 <text x="320" y="1461" class="dmt" text-anchor="middle">63.5</text>
