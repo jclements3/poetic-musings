@@ -1,0 +1,431 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=6, user-scalable=yes">
+<title>Erand49 harp layout</title>
+<style>
+html,body{margin:0;background:#fff !important;color:#111 !important;font:16px/1.5 ui-monospace,Menlo,Consolas,monospace}
+main{max-width:1100px;margin:0 auto;padding:16px}
+h1{font-size:22px;margin:0 0 4px} h2{font-size:17px;margin:28px 0 8px;border-bottom:2px solid #111;padding-bottom:4px}
+h3{font-size:15px;margin:20px 0 6px}
+p{margin:0 0 10px} .sub{color:#444} .k{font-weight:700} .leg{font-weight:700}
+table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;padding:6px 8px;border-bottom:1px solid #999;vertical-align:top} th{background:#eee}
+.wrap{overflow:auto;border:1px solid #ccc;margin:8px 0} .wrap svg{min-width:900px}
+</style></head><body><main>
+<h1>ERAND49 — HARP LAYOUT</h1>
+<p class="sub">The silent 49-string optical harp (A0–G7). The PM console is its voice and control
+surface — connection, docking, and travel live in the PM's <code>../LAYOUT.html</code>; this page is
+the instrument itself: string band, sensors, and frame.</p>
+
+<h2>String band — Erard DXF geometry, true scale</h2>
+<p class="sub">From <code>erard original stringband tutorial.dxf</code>: variable spacing
+(13.325→17.94 mm, ratio 1.025), sloped anchors, in mm — <b>each stroke width is the string's actual
+overall diameter</b>. Colors per harp convention: <span class="leg" style="color:#c0392b">C red</span> ·
+<span class="leg" style="color:#2e5fa3">F blue</span> · others dark gray; hover any string for its
+spec. Dark ticks: nut and tuner pin; colored 12° top segments: tuner leads. Amber crosshairs:
+optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Brown/amber Beziers: tuner and
+sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapolated from c1 physics
+(<code>string-specs.md</code>). Gray diagonal: midrib, full 49-string span.</p>
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="185 0 821 1685" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
+<style>.nl{font-size:13px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}</style>
+<line x1="193.0" y1="1681.4" x2="987.7" y2="409.6" stroke="#8d877a" stroke-width="3.5"><title>midrib — 6061-T6 aluminum extrusion; carries the 7.00 kN string-band pull; anchors all 49 strings</title></line>
+<text x="193.0" y="1721.4" class="nl" fill="#8d877a">midrib (Al 6061-T6)</text>
+<g stroke="#555" stroke-width="1.0" fill="none">
+<line x1="250.8" y1="68.8" x2="257.2" y2="68.8"/>
+<line x1="258.9" y1="30.7" x2="265.3" y2="30.7"/>
+<line x1="268.8" y1="65.3" x2="275.1" y2="65.3"/>
+<line x1="276.9" y1="27.2" x2="283.2" y2="27.2"/>
+<line x1="286.7" y1="61.9" x2="293.0" y2="61.9"/>
+<line x1="294.8" y1="23.8" x2="301.1" y2="23.8"/>
+<line x1="304.6" y1="58.4" x2="311.0" y2="58.4"/>
+<line x1="312.7" y1="20.3" x2="319.1" y2="20.3"/>
+<line x1="322.6" y1="60.0" x2="328.9" y2="60.0"/>
+<line x1="330.7" y1="21.9" x2="337.0" y2="21.9"/>
+<line x1="340.5" y1="61.6" x2="346.9" y2="61.6"/>
+<line x1="348.6" y1="23.5" x2="355.0" y2="23.5"/>
+<line x1="358.4" y1="63.2" x2="364.8" y2="63.2"/>
+<line x1="366.5" y1="25.1" x2="372.9" y2="25.1"/>
+<line x1="376.4" y1="64.8" x2="382.7" y2="64.8"/>
+<line x1="384.5" y1="26.7" x2="390.8" y2="26.7"/>
+<line x1="394.3" y1="71.5" x2="400.7" y2="71.5"/>
+<line x1="402.4" y1="33.4" x2="408.8" y2="33.4"/>
+<line x1="412.3" y1="83.1" x2="418.6" y2="83.1"/>
+<line x1="420.4" y1="45.0" x2="426.7" y2="45.0"/>
+<line x1="430.2" y1="74.6" x2="436.5" y2="74.6"/>
+<line x1="438.3" y1="36.5" x2="444.7" y2="36.5"/>
+<line x1="448.1" y1="81.3" x2="454.5" y2="81.3"/>
+<line x1="456.2" y1="43.2" x2="462.6" y2="43.2"/>
+<line x1="465.6" y1="129.1" x2="471.9" y2="129.1"/>
+<line x1="473.7" y1="91.0" x2="480.0" y2="91.0"/>
+<line x1="483.0" y1="156.8" x2="489.3" y2="156.8"/>
+<line x1="491.1" y1="118.7" x2="497.4" y2="118.7"/>
+<line x1="500.4" y1="194.5" x2="506.8" y2="194.5"/>
+<line x1="508.5" y1="156.4" x2="514.9" y2="156.4"/>
+<line x1="517.8" y1="232.3" x2="524.2" y2="232.3"/>
+<line x1="525.9" y1="194.2" x2="532.3" y2="194.2"/>
+<line x1="534.2" y1="266.7" x2="540.6" y2="266.7"/>
+<line x1="542.3" y1="228.6" x2="548.7" y2="228.6"/>
+<line x1="550.6" y1="311.1" x2="557.0" y2="311.1"/>
+<line x1="558.7" y1="273.0" x2="565.1" y2="273.0"/>
+<line x1="567.0" y1="345.5" x2="573.4" y2="345.5"/>
+<line x1="575.1" y1="307.4" x2="581.5" y2="307.4"/>
+<line x1="582.4" y1="386.5" x2="588.8" y2="386.5"/>
+<line x1="590.5" y1="348.4" x2="596.8" y2="348.4"/>
+<line x1="597.8" y1="407.3" x2="604.1" y2="407.3"/>
+<line x1="605.9" y1="369.2" x2="612.2" y2="369.2"/>
+<line x1="613.2" y1="433.2" x2="619.5" y2="433.2"/>
+<line x1="621.3" y1="395.1" x2="627.6" y2="395.1"/>
+<line x1="628.5" y1="454.1" x2="634.9" y2="454.1"/>
+<line x1="636.6" y1="416.0" x2="643.0" y2="416.0"/>
+<line x1="643.9" y1="469.8" x2="650.3" y2="469.8"/>
+<line x1="652.0" y1="431.7" x2="658.4" y2="431.7"/>
+<line x1="659.3" y1="480.6" x2="665.6" y2="480.6"/>
+<line x1="667.4" y1="442.5" x2="673.7" y2="442.5"/>
+<line x1="674.6" y1="491.4" x2="681.0" y2="491.4"/>
+<line x1="682.8" y1="453.3" x2="689.1" y2="453.3"/>
+<line x1="689.0" y1="498.7" x2="695.4" y2="498.7"/>
+<line x1="697.1" y1="460.6" x2="703.5" y2="460.6"/>
+<line x1="703.4" y1="506.0" x2="709.7" y2="506.0"/>
+<line x1="711.5" y1="467.9" x2="717.8" y2="467.9"/>
+<line x1="717.7" y1="508.3" x2="724.1" y2="508.3"/>
+<line x1="725.8" y1="470.2" x2="732.2" y2="470.2"/>
+<line x1="732.1" y1="510.6" x2="738.4" y2="510.6"/>
+<line x1="740.2" y1="472.5" x2="746.5" y2="472.5"/>
+<line x1="746.4" y1="512.9" x2="752.8" y2="512.9"/>
+<line x1="754.5" y1="474.8" x2="760.9" y2="474.8"/>
+<line x1="760.8" y1="505.1" x2="767.1" y2="505.1"/>
+<line x1="768.9" y1="467.0" x2="775.2" y2="467.0"/>
+<line x1="775.1" y1="507.3" x2="781.5" y2="507.3"/>
+<line x1="783.2" y1="469.2" x2="789.6" y2="469.2"/>
+<line x1="788.4" y1="501.2" x2="794.8" y2="501.2"/>
+<line x1="796.5" y1="463.1" x2="802.9" y2="463.1"/>
+<line x1="801.8" y1="495.0" x2="808.1" y2="495.0"/>
+<line x1="809.9" y1="456.9" x2="816.2" y2="456.9"/>
+<line x1="815.1" y1="488.8" x2="821.4" y2="488.8"/>
+<line x1="823.2" y1="450.7" x2="829.5" y2="450.7"/>
+<line x1="828.4" y1="482.7" x2="834.8" y2="482.7"/>
+<line x1="836.5" y1="444.6" x2="842.8" y2="444.6"/>
+<line x1="841.7" y1="476.5" x2="848.1" y2="476.5"/>
+<line x1="849.8" y1="438.4" x2="856.2" y2="438.4"/>
+<line x1="855.1" y1="470.3" x2="861.4" y2="470.3"/>
+<line x1="863.2" y1="432.2" x2="869.5" y2="432.2"/>
+<line x1="868.4" y1="464.1" x2="874.7" y2="464.1"/>
+<line x1="876.5" y1="426.0" x2="882.8" y2="426.0"/>
+<line x1="881.7" y1="452.9" x2="888.1" y2="452.9"/>
+<line x1="889.8" y1="414.8" x2="896.2" y2="414.8"/>
+<line x1="895.0" y1="441.7" x2="901.4" y2="441.7"/>
+<line x1="903.1" y1="403.6" x2="909.5" y2="403.6"/>
+<line x1="908.4" y1="430.5" x2="914.7" y2="430.5"/>
+<line x1="916.5" y1="392.4" x2="922.8" y2="392.4"/>
+<line x1="921.7" y1="419.2" x2="928.0" y2="419.2"/>
+<line x1="929.8" y1="381.1" x2="936.1" y2="381.1"/>
+<line x1="935.0" y1="408.0" x2="941.3" y2="408.0"/>
+<line x1="943.1" y1="369.9" x2="949.5" y2="369.9"/>
+<line x1="948.3" y1="396.8" x2="954.7" y2="396.8"/>
+<line x1="956.4" y1="358.7" x2="962.8" y2="358.7"/>
+<line x1="961.7" y1="385.5" x2="968.0" y2="385.5"/>
+<line x1="969.7" y1="347.4" x2="976.1" y2="347.4"/>
+</g>
+<line x1="254.0" y1="68.8" x2="262.1" y2="30.7" stroke="#c0392b" stroke-width="2.311"/>
+<line x1="271.9" y1="65.3" x2="280.0" y2="27.2" stroke="#3b3e44" stroke-width="2.108"/>
+<line x1="289.9" y1="61.9" x2="298.0" y2="23.8" stroke="#3b3e44" stroke-width="1.930"/>
+<line x1="307.8" y1="58.4" x2="315.9" y2="20.3" stroke="#2e5fa3" stroke-width="1.803"/>
+<line x1="325.8" y1="60.0" x2="333.9" y2="21.9" stroke="#3b3e44" stroke-width="1.626"/>
+<line x1="343.7" y1="61.6" x2="351.8" y2="23.5" stroke="#3b3e44" stroke-width="1.448"/>
+<line x1="361.6" y1="63.2" x2="369.7" y2="25.1" stroke="#3b3e44" stroke-width="1.372"/>
+<line x1="379.6" y1="64.8" x2="387.7" y2="26.7" stroke="#c0392b" stroke-width="1.270"/>
+<line x1="397.5" y1="71.5" x2="405.6" y2="33.4" stroke="#3b3e44" stroke-width="1.168"/>
+<line x1="415.4" y1="83.1" x2="423.5" y2="45.0" stroke="#3b3e44" stroke-width="2.642"/>
+<line x1="433.4" y1="74.6" x2="441.5" y2="36.5" stroke="#2e5fa3" stroke-width="2.540"/>
+<line x1="451.3" y1="81.3" x2="459.4" y2="43.2" stroke="#3b3e44" stroke-width="2.337"/>
+<line x1="468.7" y1="129.1" x2="476.8" y2="91.0" stroke="#3b3e44" stroke-width="2.184"/>
+<line x1="486.2" y1="156.8" x2="494.3" y2="118.7" stroke="#3b3e44" stroke-width="2.057"/>
+<line x1="503.6" y1="194.5" x2="511.7" y2="156.4" stroke="#c0392b" stroke-width="2.057"/>
+<line x1="521.0" y1="232.3" x2="529.1" y2="194.2" stroke="#3b3e44" stroke-width="1.930"/>
+<line x1="537.4" y1="266.7" x2="545.5" y2="228.6" stroke="#3b3e44" stroke-width="1.676"/>
+<line x1="553.8" y1="311.1" x2="561.9" y2="273.0" stroke="#2e5fa3" stroke-width="1.676"/>
+<line x1="570.2" y1="345.5" x2="578.3" y2="307.4" stroke="#3b3e44" stroke-width="1.549"/>
+<line x1="585.6" y1="386.5" x2="593.7" y2="348.4" stroke="#3b3e44" stroke-width="1.549"/>
+<line x1="601.0" y1="407.3" x2="609.1" y2="369.2" stroke="#3b3e44" stroke-width="1.270"/>
+<line x1="616.3" y1="433.2" x2="624.4" y2="395.1" stroke="#c0392b" stroke-width="1.270"/>
+<line x1="631.7" y1="454.1" x2="639.8" y2="416.0" stroke="#3b3e44" stroke-width="1.270"/>
+<line x1="647.1" y1="469.8" x2="655.2" y2="431.7" stroke="#3b3e44" stroke-width="1.143"/>
+<line x1="662.5" y1="480.6" x2="670.6" y2="442.5" stroke="#2e5fa3" stroke-width="1.143"/>
+<line x1="677.8" y1="491.4" x2="685.9" y2="453.3" stroke="#3b3e44" stroke-width="1.143"/>
+<line x1="692.2" y1="498.7" x2="700.3" y2="460.6" stroke="#3b3e44" stroke-width="1.016"/>
+<line x1="706.5" y1="506.0" x2="714.6" y2="467.9" stroke="#3b3e44" stroke-width="1.016"/>
+<line x1="720.9" y1="508.3" x2="729.0" y2="470.2" stroke="#c0392b" stroke-width="1.016"/>
+<line x1="735.2" y1="510.6" x2="743.3" y2="472.5" stroke="#3b3e44" stroke-width="0.914"/>
+<line x1="749.6" y1="512.9" x2="757.7" y2="474.8" stroke="#3b3e44" stroke-width="0.914"/>
+<line x1="763.9" y1="505.1" x2="772.0" y2="467.0" stroke="#2e5fa3" stroke-width="0.914"/>
+<line x1="778.3" y1="507.3" x2="786.4" y2="469.2" stroke="#3b3e44" stroke-width="0.914"/>
+<line x1="791.6" y1="501.2" x2="799.7" y2="463.1" stroke="#3b3e44" stroke-width="0.813"/>
+<line x1="804.9" y1="495.0" x2="813.0" y2="456.9" stroke="#3b3e44" stroke-width="0.813"/>
+<line x1="818.3" y1="488.8" x2="826.4" y2="450.7" stroke="#c0392b" stroke-width="0.813"/>
+<line x1="831.6" y1="482.7" x2="839.7" y2="444.6" stroke="#3b3e44" stroke-width="0.762"/>
+<line x1="844.9" y1="476.5" x2="853.0" y2="438.4" stroke="#3b3e44" stroke-width="0.711"/>
+<line x1="858.2" y1="470.3" x2="866.3" y2="432.2" stroke="#2e5fa3" stroke-width="0.711"/>
+<line x1="871.6" y1="464.1" x2="879.7" y2="426.0" stroke="#3b3e44" stroke-width="0.711"/>
+<line x1="884.9" y1="452.9" x2="893.0" y2="414.8" stroke="#3b3e44" stroke-width="0.635"/>
+<line x1="898.2" y1="441.7" x2="906.3" y2="403.6" stroke="#3b3e44" stroke-width="0.635"/>
+<line x1="911.5" y1="430.5" x2="919.6" y2="392.4" stroke="#c0392b" stroke-width="0.635"/>
+<line x1="924.9" y1="419.2" x2="933.0" y2="381.1" stroke="#3b3e44" stroke-width="0.635"/>
+<line x1="938.2" y1="408.0" x2="946.3" y2="369.9" stroke="#3b3e44" stroke-width="0.635"/>
+<line x1="951.5" y1="396.8" x2="959.6" y2="358.7" stroke="#2e5fa3" stroke-width="0.635"/>
+<line x1="964.8" y1="385.5" x2="972.9" y2="347.4" stroke="#3b3e44" stroke-width="0.635"/>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="250.8" y1="94.2" x2="257.2" y2="94.2"/><line x1="254.0" y1="91.0" x2="254.0" y2="97.4"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="268.7" y1="90.7" x2="275.1" y2="90.7"/><line x1="271.9" y1="87.5" x2="271.9" y2="93.9"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="286.7" y1="87.3" x2="293.1" y2="87.3"/><line x1="289.9" y1="84.1" x2="289.9" y2="90.5"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="304.6" y1="83.8" x2="311.0" y2="83.8"/><line x1="307.8" y1="80.6" x2="307.8" y2="87.0"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="322.6" y1="85.4" x2="329.0" y2="85.4"/><line x1="325.8" y1="82.2" x2="325.8" y2="88.6"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="340.5" y1="87.0" x2="346.9" y2="87.0"/><line x1="343.7" y1="83.8" x2="343.7" y2="90.2"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="358.4" y1="88.6" x2="364.8" y2="88.6"/><line x1="361.6" y1="85.4" x2="361.6" y2="91.8"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="376.4" y1="90.2" x2="382.8" y2="90.2"/><line x1="379.6" y1="87.0" x2="379.6" y2="93.4"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="394.3" y1="96.9" x2="400.7" y2="96.9"/><line x1="397.5" y1="93.7" x2="397.5" y2="100.1"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="412.2" y1="108.5" x2="418.6" y2="108.5"/><line x1="415.4" y1="105.3" x2="415.4" y2="111.7"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="430.2" y1="100.0" x2="436.6" y2="100.0"/><line x1="433.4" y1="96.8" x2="433.4" y2="103.2"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="448.1" y1="106.7" x2="454.5" y2="106.7"/><line x1="451.3" y1="103.5" x2="451.3" y2="109.9"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="465.5" y1="154.5" x2="471.9" y2="154.5"/><line x1="468.7" y1="151.3" x2="468.7" y2="157.7"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="483.0" y1="182.2" x2="489.4" y2="182.2"/><line x1="486.2" y1="179.0" x2="486.2" y2="185.4"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="500.4" y1="219.9" x2="506.8" y2="219.9"/><line x1="503.6" y1="216.7" x2="503.6" y2="223.1"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="517.8" y1="257.7" x2="524.2" y2="257.7"/><line x1="521.0" y1="254.5" x2="521.0" y2="260.9"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="534.2" y1="292.1" x2="540.6" y2="292.1"/><line x1="537.4" y1="288.9" x2="537.4" y2="295.3"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="550.6" y1="336.5" x2="557.0" y2="336.5"/><line x1="553.8" y1="333.3" x2="553.8" y2="339.7"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="567.0" y1="370.9" x2="573.4" y2="370.9"/><line x1="570.2" y1="367.7" x2="570.2" y2="374.1"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="582.4" y1="411.9" x2="588.8" y2="411.9"/><line x1="585.6" y1="408.7" x2="585.6" y2="415.1"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="597.8" y1="432.7" x2="604.2" y2="432.7"/><line x1="601.0" y1="429.5" x2="601.0" y2="435.9"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="613.1" y1="458.6" x2="619.5" y2="458.6"/><line x1="616.3" y1="455.4" x2="616.3" y2="461.8"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="628.5" y1="479.5" x2="634.9" y2="479.5"/><line x1="631.7" y1="476.3" x2="631.7" y2="482.7"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="643.9" y1="495.2" x2="650.3" y2="495.2"/><line x1="647.1" y1="492.0" x2="647.1" y2="498.4"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="659.3" y1="506.0" x2="665.7" y2="506.0"/><line x1="662.5" y1="502.8" x2="662.5" y2="509.2"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="674.6" y1="516.8" x2="681.0" y2="516.8"/><line x1="677.8" y1="513.6" x2="677.8" y2="520.0"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="689.0" y1="524.1" x2="695.4" y2="524.1"/><line x1="692.2" y1="520.9" x2="692.2" y2="527.3"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="703.3" y1="531.4" x2="709.7" y2="531.4"/><line x1="706.5" y1="528.2" x2="706.5" y2="534.6"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="717.7" y1="533.7" x2="724.1" y2="533.7"/><line x1="720.9" y1="530.5" x2="720.9" y2="536.9"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="732.0" y1="536.0" x2="738.4" y2="536.0"/><line x1="735.2" y1="532.8" x2="735.2" y2="539.2"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="746.4" y1="538.3" x2="752.8" y2="538.3"/><line x1="749.6" y1="535.1" x2="749.6" y2="541.5"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="760.7" y1="530.5" x2="767.1" y2="530.5"/><line x1="763.9" y1="527.3" x2="763.9" y2="533.7"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="775.1" y1="532.7" x2="781.5" y2="532.7"/><line x1="778.3" y1="529.5" x2="778.3" y2="535.9"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="788.4" y1="526.6" x2="794.8" y2="526.6"/><line x1="791.6" y1="523.4" x2="791.6" y2="529.8"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="801.7" y1="520.4" x2="808.1" y2="520.4"/><line x1="804.9" y1="517.2" x2="804.9" y2="523.6"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="815.1" y1="514.2" x2="821.5" y2="514.2"/><line x1="818.3" y1="511.0" x2="818.3" y2="517.4"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="828.4" y1="508.1" x2="834.8" y2="508.1"/><line x1="831.6" y1="504.9" x2="831.6" y2="511.3"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="841.7" y1="501.9" x2="848.1" y2="501.9"/><line x1="844.9" y1="498.7" x2="844.9" y2="505.1"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="855.0" y1="495.7" x2="861.4" y2="495.7"/><line x1="858.2" y1="492.5" x2="858.2" y2="498.9"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="868.4" y1="489.5" x2="874.8" y2="489.5"/><line x1="871.6" y1="486.3" x2="871.6" y2="492.7"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="881.7" y1="478.3" x2="888.1" y2="478.3"/><line x1="884.9" y1="475.1" x2="884.9" y2="481.5"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="895.0" y1="467.1" x2="901.4" y2="467.1"/><line x1="898.2" y1="463.9" x2="898.2" y2="470.3"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="908.3" y1="455.9" x2="914.7" y2="455.9"/><line x1="911.5" y1="452.7" x2="911.5" y2="459.1"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="921.7" y1="444.6" x2="928.1" y2="444.6"/><line x1="924.9" y1="441.4" x2="924.9" y2="447.8"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="935.0" y1="433.4" x2="941.4" y2="433.4"/><line x1="938.2" y1="430.2" x2="938.2" y2="436.6"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="948.3" y1="422.2" x2="954.7" y2="422.2"/><line x1="951.5" y1="419.0" x2="951.5" y2="425.4"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="961.6" y1="410.9" x2="968.0" y2="410.9"/><line x1="964.8" y1="407.7" x2="964.8" y2="414.1"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="232.0" y1="99.1" x2="238.4" y2="99.1"/><line x1="235.2" y1="95.9" x2="235.2" y2="102.3"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<g stroke="#a8700f" stroke-width="1.4"><line x1="212.6" y1="104.8" x2="219.0" y2="104.8"/><line x1="215.8" y1="101.6" x2="215.8" y2="108.0"/><title>optical X/Y sensor axis — 1.0 in / 25.4 mm below the nut, sensor rail on the neck</title></g>
+<line x1="964.8" y1="446.2" x2="964.8" y2="385.5" stroke="#3b3e44" stroke-width="0.635"><title>#1 g7 · 3136 Hz · 2.386 in / 60.6 mm · Ø 0.025 in / 0.64 mm · 11.0 lbf</title></line>
+<text x="964.8" y="470.2" class="nl" fill="#3b3e44" text-anchor="middle">g7</text>
+<line x1="951.5" y1="467.5" x2="951.5" y2="396.8" stroke="#2e5fa3" stroke-width="0.635"><title>#2 f7 · 2793.8 Hz · 2.783 in / 70.7 mm · Ø 0.025 in / 0.64 mm · 11.9 lbf</title></line>
+<text x="951.5" y="491.5" class="nl" fill="#2e5fa3" text-anchor="middle">f7</text>
+<line x1="938.2" y1="488.8" x2="938.2" y2="408.0" stroke="#3b3e44" stroke-width="0.635"><title>#3 e7 · 2637 Hz · 3.181 in / 80.8 mm · Ø 0.025 in / 0.64 mm · 13.8 lbf</title></line>
+<line x1="924.9" y1="510.1" x2="924.9" y2="419.2" stroke="#3b3e44" stroke-width="0.635"><title>#4 d7 · 2349.3 Hz · 3.579 in / 90.9 mm · Ø 0.025 in / 0.64 mm · 13.9 lbf</title></line>
+<line x1="911.5" y1="531.4" x2="911.5" y2="430.5" stroke="#c0392b" stroke-width="0.635"><title>#5 c7 · 2093 Hz · 3.976 in / 101.0 mm · Ø 0.025 in / 0.64 mm · 13.6 lbf</title></line>
+<text x="911.5" y="555.4" class="nl" fill="#c0392b" text-anchor="middle">c7</text>
+<line x1="898.2" y1="552.8" x2="898.2" y2="441.7" stroke="#3b3e44" stroke-width="0.635"><title>#6 b6 · 1975.5 Hz · 4.374 in / 111.1 mm · Ø 0.025 in / 0.64 mm · 14.6 lbf</title></line>
+<line x1="884.9" y1="574.1" x2="884.9" y2="452.9" stroke="#3b3e44" stroke-width="0.635"><title>#7 a6 · 1760 Hz · 4.771 in / 121.2 mm · Ø 0.025 in / 0.64 mm · 13.8 lbf</title></line>
+<line x1="871.6" y1="595.4" x2="871.6" y2="464.1" stroke="#3b3e44" stroke-width="0.711"><title>#8 g6 · 1568 Hz · 5.169 in / 131.3 mm · Ø 0.028 in / 0.71 mm · 16.2 lbf</title></line>
+<line x1="858.2" y1="616.7" x2="858.2" y2="470.3" stroke="#2e5fa3" stroke-width="0.711"><title>#9 f6 · 1396.9 Hz · 5.765 in / 146.4 mm · Ø 0.028 in / 0.71 mm · 15.9 lbf</title></line>
+<text x="858.2" y="640.7" class="nl" fill="#2e5fa3" text-anchor="middle">f6</text>
+<line x1="844.9" y1="638.1" x2="844.9" y2="476.5" stroke="#3b3e44" stroke-width="0.711"><title>#10 e6 · 1318.5 Hz · 6.362 in / 161.6 mm · Ø 0.028 in / 0.71 mm · 17.3 lbf</title></line>
+<line x1="831.6" y1="659.4" x2="831.6" y2="482.7" stroke="#3b3e44" stroke-width="0.762"><title>#11 d6 · 1174.7 Hz · 6.958 in / 176.7 mm · Ø 0.030 in / 0.76 mm · 18.9 lbf</title></line>
+<line x1="818.3" y1="680.7" x2="818.3" y2="488.8" stroke="#c0392b" stroke-width="0.813"><title>#12 c6 · 1046.5 Hz · 7.555 in / 191.9 mm · Ø 0.032 in / 0.81 mm · 20.1 lbf</title></line>
+<text x="818.3" y="704.7" class="nl" fill="#c0392b" text-anchor="middle">c6</text>
+<line x1="804.9" y1="702.0" x2="804.9" y2="495.0" stroke="#3b3e44" stroke-width="0.813"><title>#13 b5 · 987.77 Hz · 8.151 in / 207.0 mm · Ø 0.032 in / 0.81 mm · 20.8 lbf</title></line>
+<line x1="791.6" y1="723.4" x2="791.6" y2="501.2" stroke="#3b3e44" stroke-width="0.813"><title>#14 a5 · 880 Hz · 8.748 in / 222.2 mm · Ø 0.032 in / 0.81 mm · 19.0 lbf</title></line>
+<line x1="778.3" y1="744.7" x2="778.3" y2="507.3" stroke="#3b3e44" stroke-width="0.914"><title>#15 g5 · 783.99 Hz · 9.344 in / 237.3 mm · Ø 0.036 in / 0.91 mm · 21.8 lbf</title></line>
+<line x1="763.9" y1="767.6" x2="763.9" y2="505.1" stroke="#2e5fa3" stroke-width="0.914"><title>#16 f5 · 698.46 Hz · 10.338 in / 262.6 mm · Ø 0.036 in / 0.91 mm · 21.2 lbf</title></line>
+<text x="763.9" y="791.6" class="nl" fill="#2e5fa3" text-anchor="middle">f5</text>
+<line x1="749.6" y1="790.6" x2="749.6" y2="512.9" stroke="#3b3e44" stroke-width="0.914"><title>#17 e5 · 659.26 Hz · 10.934 in / 277.7 mm · Ø 0.036 in / 0.91 mm · 21.1 lbf</title></line>
+<line x1="735.2" y1="813.6" x2="735.2" y2="510.6" stroke="#3b3e44" stroke-width="0.914"><title>#18 d5 · 587.33 Hz · 11.929 in / 303.0 mm · Ø 0.036 in / 0.91 mm · 20.0 lbf</title></line>
+<line x1="720.9" y1="836.5" x2="720.9" y2="508.3" stroke="#c0392b" stroke-width="1.016"><title>#19 c5 · 523.25 Hz · 12.923 in / 328.2 mm · Ø 0.040 in / 1.02 mm · 22.9 lbf</title></line>
+<text x="720.9" y="860.5" class="nl" fill="#c0392b" text-anchor="middle">c5</text>
+<line x1="706.5" y1="859.5" x2="706.5" y2="506.0" stroke="#3b3e44" stroke-width="1.016"><title>#20 b4 · 493.88 Hz · 13.917 in / 353.5 mm · Ø 0.040 in / 1.02 mm · 23.7 lbf</title></line>
+<line x1="692.2" y1="882.5" x2="692.2" y2="498.7" stroke="#3b3e44" stroke-width="1.016"><title>#21 a4 · 440 Hz · 15.109 in / 383.8 mm · Ø 0.040 in / 1.02 mm · 22.2 lbf</title></line>
+<line x1="677.8" y1="905.4" x2="677.8" y2="491.4" stroke="#3b3e44" stroke-width="1.143"><title>#22 g4 · 392 Hz · 16.302 in / 414.1 mm · Ø 0.045 in / 1.14 mm · 25.9 lbf</title></line>
+<line x1="662.5" y1="930.0" x2="662.5" y2="480.6" stroke="#2e5fa3" stroke-width="1.143"><title>#23 f4 · 349.23 Hz · 17.694 in / 449.4 mm · Ø 0.045 in / 1.14 mm · 24.3 lbf</title></line>
+<text x="662.5" y="954.0" class="nl" fill="#2e5fa3" text-anchor="middle">f4</text>
+<line x1="647.1" y1="954.6" x2="647.1" y2="469.8" stroke="#3b3e44" stroke-width="1.143"><title>#24 e4 · 329.63 Hz · 19.086 in / 484.8 mm · Ø 0.045 in / 1.14 mm · 25.1 lbf</title></line>
+<line x1="631.7" y1="979.2" x2="631.7" y2="454.1" stroke="#3b3e44" stroke-width="1.270"><title>#25 d4 · 293.66 Hz · 20.676 in / 525.2 mm · Ø 0.050 in / 1.27 mm · 28.9 lbf</title></line>
+<line x1="616.3" y1="1003.9" x2="616.3" y2="433.2" stroke="#c0392b" stroke-width="1.270"><title>#26 c4 · 261.63 Hz · 22.465 in / 570.6 mm · Ø 0.050 in / 1.27 mm · 27.1 lbf</title></line>
+<text x="616.3" y="1027.9" class="nl" fill="#c0392b" text-anchor="middle">c4</text>
+<line x1="601.0" y1="1028.5" x2="601.0" y2="407.3" stroke="#3b3e44" stroke-width="1.270"><title>#27 b3 · 246.94 Hz · 24.454 in / 621.1 mm · Ø 0.050 in / 1.27 mm · 28.6 lbf</title></line>
+<line x1="585.6" y1="1053.1" x2="585.6" y2="386.5" stroke="#3b3e44" stroke-width="1.549"><title>#28 a3 · 220 Hz · 26.243 in / 666.6 mm · Ø 0.061 in / 1.55 mm · 35.1 lbf</title></line>
+<line x1="570.2" y1="1077.7" x2="570.2" y2="345.5" stroke="#3b3e44" stroke-width="1.549"><title>#29 g3 · 196 Hz · 28.827 in / 732.2 mm · Ø 0.061 in / 1.55 mm · 33.6 lbf</title></line>
+<line x1="553.8" y1="1103.9" x2="553.8" y2="311.1" stroke="#2e5fa3" stroke-width="1.676"><title>#30 f3 · 174.61 Hz · 31.213 in / 792.8 mm · Ø 0.066 in / 1.68 mm · 36.9 lbf</title></line>
+<text x="553.8" y="1127.9" class="nl" fill="#2e5fa3" text-anchor="middle">f3</text>
+<line x1="537.4" y1="1130.2" x2="537.4" y2="266.7" stroke="#3b3e44" stroke-width="1.676"><title>#31 e3 · 164.81 Hz · 33.996 in / 863.5 mm · Ø 0.066 in / 1.68 mm · 39.0 lbf</title></line>
+<line x1="521.0" y1="1156.4" x2="521.0" y2="232.3" stroke="#3b3e44" stroke-width="1.930"><title>#32 d3 · 146.83 Hz · 36.382 in / 924.1 mm · Ø 0.076 in / 1.93 mm · 45.4 lbf</title></line>
+<line x1="503.6" y1="1184.3" x2="503.6" y2="194.5" stroke="#c0392b" stroke-width="2.057"><title>#33 c3 · 130.81 Hz · 38.967 in / 989.8 mm · Ø 0.081 in / 2.06 mm · 47.3 lbf</title></line>
+<text x="503.6" y="1208.3" class="nl" fill="#c0392b" text-anchor="middle">c3</text>
+<line x1="486.2" y1="1212.2" x2="486.2" y2="156.8" stroke="#3b3e44" stroke-width="2.057"><title>#34 b2 · 123.47 Hz · 41.551 in / 1055.4 mm · Ø 0.081 in / 2.06 mm · 47.9 lbf</title></line>
+<line x1="468.7" y1="1240.1" x2="468.7" y2="129.1" stroke="#3b3e44" stroke-width="2.184"><title>#35 a2 · 110 Hz · 43.738 in / 1110.9 mm · Ø 0.086 in / 2.18 mm · 47.8 lbf</title></line>
+<line x1="451.3" y1="1267.9" x2="451.3" y2="81.3" stroke="#3b3e44" stroke-width="2.337"><title>#36 g2 · 97.99 Hz · 46.720 in / 1186.7 mm · Ø 0.092 in / 2.34 mm · 48.8 lbf</title></line>
+<line x1="433.4" y1="1296.6" x2="433.4" y2="74.6" stroke="#2e5fa3" stroke-width="2.540"><title>#37 f2 · 87.31 Hz · 48.112 in / 1222.0 mm · Ø 0.100 in / 2.54 mm · 47.7 lbf</title></line>
+<text x="433.4" y="1320.6" class="nl" fill="#2e5fa3" text-anchor="middle">f2</text>
+<line x1="415.4" y1="1325.4" x2="415.4" y2="83.1" stroke="#3b3e44" stroke-width="2.642"><title>#38 e2 · 82.41 Hz · 48.907 in / 1242.2 mm · Ø 0.104 in / 2.64 mm · 47.2 lbf</title></line>
+<line x1="397.5" y1="1354.1" x2="397.5" y2="71.5" stroke="#3b3e44" stroke-width="1.168"><title>#39 d2 · 73.42 Hz · 50.497 in / 1282.6 mm · Ø 0.046 in / 1.17 mm · 48.8 lbf</title></line>
+<line x1="379.6" y1="1382.8" x2="379.6" y2="64.8" stroke="#c0392b" stroke-width="1.270"><title>#40 c2 · 65.41 Hz · 51.889 in / 1318.0 mm · Ø 0.050 in / 1.27 mm · 49.9 lbf</title></line>
+<text x="379.6" y="1406.8" class="nl" fill="#c0392b" text-anchor="middle">c2</text>
+<line x1="361.6" y1="1411.5" x2="361.6" y2="63.2" stroke="#3b3e44" stroke-width="1.372"><title>#41 b1 · 61.74 Hz · 53.082 in / 1348.3 mm · Ø 0.054 in / 1.37 mm · 50.9 lbf</title></line>
+<line x1="343.7" y1="1440.2" x2="343.7" y2="61.6" stroke="#3b3e44" stroke-width="1.448"><title>#42 a1 · 55 Hz · 54.275 in / 1378.6 mm · Ø 0.057 in / 1.45 mm · 53.2 lbf</title></line>
+<line x1="325.8" y1="1468.9" x2="325.8" y2="60.0" stroke="#3b3e44" stroke-width="1.626"><title>#43 g1 · 49 Hz · 55.468 in / 1408.9 mm · Ø 0.064 in / 1.63 mm · 50.8 lbf</title></line>
+<line x1="307.8" y1="1497.6" x2="307.8" y2="58.4" stroke="#2e5fa3" stroke-width="1.803"><title>#44 f1 · 43.65 Hz · 56.661 in / 1439.2 mm · Ø 0.071 in / 1.80 mm · 48.9 lbf</title></line>
+<text x="307.8" y="1521.6" class="nl" fill="#2e5fa3" text-anchor="middle">f1</text>
+<line x1="289.9" y1="1526.3" x2="289.9" y2="61.9" stroke="#3b3e44" stroke-width="1.930"><title>#45 e1 · 41.2 Hz · 57.655 in / 1464.4 mm · Ø 0.076 in / 1.93 mm · 49.1 lbf</title></line>
+<line x1="271.9" y1="1555.0" x2="271.9" y2="65.3" stroke="#3b3e44" stroke-width="2.108"><title>#46 d1 · 36.71 Hz · 58.649 in / 1489.7 mm · Ø 0.083 in / 2.11 mm · 51.0 lbf</title></line>
+<line x1="254.0" y1="1583.7" x2="254.0" y2="68.8" stroke="#c0392b" stroke-width="2.311"><title>#47 c1 · 32.7 Hz · 59.643 in / 1514.9 mm · Ø 0.091 in / 2.31 mm · 52.7 lbf</title></line>
+<text x="254.0" y="1607.7" class="nl" fill="#c0392b" text-anchor="middle">c1</text>
+<line x1="235.2" y1="1613.9" x2="235.2" y2="73.7" stroke="#3b3e44" stroke-width="2.426"><title>#48 b0 · 30.868 Hz · 60.637 in / 1540.2 mm · Ø 0.0955 in / 2.43 mm · 53.4 lbf — EXTRAPOLATED from c1 (see string-specs.md)</title></line>
+<line x1="235.2" y1="73.7" x2="243.1" y2="36.4" stroke="#3b3e44" stroke-width="2.426"/>
+<g stroke="#555" stroke-width="1.0"><line x1="232.0" y1="73.7" x2="238.4" y2="73.7"/><line x1="239.9" y1="36.4" x2="246.3" y2="36.4"/></g>
+<text x="235.2" y="1637.9" class="nl" fill="#8d877a" text-anchor="middle">b0*</text>
+<line x1="215.8" y1="1644.8" x2="215.8" y2="79.4" stroke="#3b3e44" stroke-width="2.692"><title>#49 a0 · 27.5 Hz · 61.631 in / 1565.4 mm · Ø 0.1060 in / 2.69 mm · 54.0 lbf — EXTRAPOLATED from c1 (see string-specs.md)</title></line>
+<line x1="215.8" y1="79.4" x2="223.8" y2="42.1" stroke="#3b3e44" stroke-width="2.692"/>
+<g stroke="#555" stroke-width="1.0"><line x1="212.6" y1="79.4" x2="219.0" y2="79.4"/><line x1="220.6" y1="42.1" x2="227.0" y2="42.1"/></g>
+<text x="215.8" y="1668.8" class="nl" fill="#8d877a" text-anchor="middle">a0*</text>
+<path d="M 223.8 42.1 C 227.0 41.1 236.7 38.3 243.1 36.4 C 249.5 34.5 255.9 32.2 262.1 30.7 C 268.3 29.2 274.1 28.4 280.0 27.2 C 286.0 26.1 292.0 24.9 298.0 23.8 C 303.9 22.6 309.9 20.6 315.9 20.3 C 321.9 20.0 327.9 21.4 333.9 21.9 C 339.8 22.4 345.8 23.0 351.8 23.5 C 357.8 24.0 363.7 24.6 369.7 25.1 C 375.7 25.6 381.7 25.3 387.7 26.7 C 393.6 28.1 399.6 30.3 405.6 33.4 C 411.6 36.4 417.6 44.5 423.5 45.0 C 429.5 45.6 435.5 36.8 441.5 36.5 C 447.5 36.2 453.5 34.1 459.4 43.2 C 465.3 52.2 471.0 78.4 476.8 91.0 C 482.6 103.6 488.5 107.8 494.3 118.7 C 500.1 129.6 505.9 143.9 511.7 156.4 C 517.5 169.0 523.5 182.2 529.1 194.2 C 534.7 206.2 540.1 215.4 545.5 228.6 C 551.0 241.7 556.4 259.9 561.9 273.0 C 567.4 286.1 573.0 294.8 578.3 307.4 C 583.6 319.9 588.5 338.1 593.7 348.4 C 598.8 358.7 603.9 361.4 609.1 369.2 C 614.2 377.0 619.3 387.4 624.4 395.1 C 629.6 402.9 634.7 409.9 639.8 416.0 C 644.9 422.1 650.1 427.3 655.2 431.7 C 660.3 436.2 665.4 438.9 670.6 442.5 C 675.7 446.1 681.0 450.2 685.9 453.3 C 690.9 456.3 695.5 458.2 700.3 460.6 C 705.1 463.0 709.8 466.3 714.6 467.9 C 719.4 469.5 724.2 469.4 729.0 470.2 C 733.8 471.0 738.5 471.7 743.3 472.5 C 748.1 473.3 752.9 475.7 757.7 474.8 C 762.5 473.9 767.2 467.9 772.0 467.0 C 776.8 466.0 781.8 469.9 786.4 469.2 C 791.0 468.6 795.3 465.1 799.7 463.1 C 804.2 461.0 808.6 459.0 813.0 456.9 C 817.5 454.8 821.9 452.8 826.4 450.7 C 830.8 448.7 835.2 446.6 839.7 444.6 C 844.1 442.5 848.6 440.4 853.0 438.4 C 857.5 436.3 861.9 434.3 866.3 432.2 C 870.8 430.1 875.2 428.9 879.7 426.0 C 884.1 423.1 888.5 418.5 893.0 414.8 C 897.4 411.1 901.9 407.3 906.3 403.6 C 910.7 399.8 915.2 396.1 919.6 392.4 C 924.1 388.6 928.5 384.8 933.0 381.1 C 937.4 377.4 941.8 373.6 946.3 369.9 C 950.7 366.2 955.2 362.4 959.6 358.7 C 964.1 354.9 970.7 349.3 972.9 347.4" fill="none" stroke="#7a5a2a" stroke-width="2.5" opacity="0.6"><title>tuner rail — Bezier fit through all 49 tuner pins (the neck)</title></path>
+<path d="M 215.8 104.8 C 219.1 103.8 228.8 100.9 235.2 99.1 C 241.5 97.3 247.9 95.6 254.0 94.2 C 260.1 92.8 266.0 91.9 271.9 90.7 C 277.9 89.6 283.9 88.4 289.9 87.3 C 295.8 86.1 301.8 84.1 307.8 83.8 C 313.8 83.5 319.8 84.9 325.8 85.4 C 331.7 85.9 337.7 86.5 343.7 87.0 C 349.7 87.5 355.6 88.1 361.6 88.6 C 367.6 89.1 373.6 88.8 379.6 90.2 C 385.5 91.6 391.5 93.8 397.5 96.9 C 403.5 99.9 409.5 108.0 415.4 108.5 C 421.4 109.1 427.4 100.3 433.4 100.0 C 439.4 99.7 445.4 97.6 451.3 106.7 C 457.2 115.7 462.9 141.9 468.7 154.5 C 474.5 167.1 480.3 171.3 486.2 182.2 C 492.0 193.1 497.8 207.4 503.6 219.9 C 509.4 232.5 515.4 245.7 521.0 257.7 C 526.6 269.7 531.9 278.9 537.4 292.1 C 542.9 305.2 548.4 323.4 553.8 336.5 C 559.3 349.6 564.9 358.3 570.2 370.9 C 575.5 383.4 580.5 401.6 585.6 411.9 C 590.7 422.2 595.8 424.9 601.0 432.7 C 606.1 440.5 611.2 450.9 616.3 458.6 C 621.5 466.4 626.6 473.4 631.7 479.5 C 636.8 485.6 642.0 490.8 647.1 495.2 C 652.2 499.7 657.3 502.4 662.5 506.0 C 667.6 509.6 672.9 513.7 677.8 516.8 C 682.8 519.8 687.4 521.7 692.2 524.1 C 697.0 526.5 701.7 529.8 706.5 531.4 C 711.3 533.0 716.1 532.9 720.9 533.7 C 725.7 534.5 730.4 535.2 735.2 536.0 C 740.0 536.8 744.8 539.2 749.6 538.3 C 754.4 537.4 759.1 531.4 763.9 530.5 C 768.7 529.5 773.7 533.4 778.3 532.7 C 782.9 532.1 787.2 528.6 791.6 526.6 C 796.1 524.5 800.5 522.5 804.9 520.4 C 809.4 518.3 813.8 516.3 818.3 514.2 C 822.7 512.2 827.2 510.1 831.6 508.1 C 836.0 506.0 840.5 503.9 844.9 501.9 C 849.3 499.8 853.8 497.8 858.2 495.7 C 862.7 493.6 867.1 492.4 871.6 489.5 C 876.0 486.6 880.4 482.0 884.9 478.3 C 889.3 474.6 893.8 470.8 898.2 467.1 C 902.7 463.3 907.1 459.6 911.5 455.9 C 916.0 452.1 920.4 448.3 924.9 444.6 C 929.3 440.9 933.7 437.1 938.2 433.4 C 942.6 429.7 947.1 425.9 951.5 422.2 C 956.0 418.4 962.6 412.8 964.8 410.9" fill="none" stroke="#a8700f" stroke-width="2.0" opacity="0.6"><title>sensor rail — Bezier fit through all 49 optical X/Y axes, 1 in below the nuts</title></path>
+</svg></div>
+
+<h2>Cross sections — diameters at 5×, at each string's real position</h2>
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="185 0 821 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="String cross sections at 5x">
+<text x="201" y="100" style="font-size:15px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace">plain nylon → nylon-wrapped (#28 a3) → bronze-wound steel (#39 d2)</text>
+<circle cx="964.8" cy="40" r="1.59" fill="#3b3e44"><title>#1 g7 · Ø 0.025 in / 0.64 mm</title></circle>
+<circle cx="951.5" cy="40" r="1.59" fill="#2e5fa3"><title>#2 f7 · Ø 0.025 in / 0.64 mm</title></circle>
+<circle cx="938.2" cy="40" r="1.59" fill="#3b3e44"><title>#3 e7 · Ø 0.025 in / 0.64 mm</title></circle>
+<circle cx="924.9" cy="40" r="1.59" fill="#3b3e44"><title>#4 d7 · Ø 0.025 in / 0.64 mm</title></circle>
+<circle cx="911.5" cy="40" r="1.59" fill="#c0392b"><title>#5 c7 · Ø 0.025 in / 0.64 mm</title></circle>
+<circle cx="898.2" cy="40" r="1.59" fill="#3b3e44"><title>#6 b6 · Ø 0.025 in / 0.64 mm</title></circle>
+<circle cx="884.9" cy="40" r="1.59" fill="#3b3e44"><title>#7 a6 · Ø 0.025 in / 0.64 mm</title></circle>
+<circle cx="871.6" cy="40" r="1.78" fill="#3b3e44"><title>#8 g6 · Ø 0.028 in / 0.71 mm</title></circle>
+<circle cx="858.2" cy="40" r="1.78" fill="#2e5fa3"><title>#9 f6 · Ø 0.028 in / 0.71 mm</title></circle>
+<circle cx="844.9" cy="40" r="1.78" fill="#3b3e44"><title>#10 e6 · Ø 0.028 in / 0.71 mm</title></circle>
+<circle cx="831.6" cy="40" r="1.90" fill="#3b3e44"><title>#11 d6 · Ø 0.030 in / 0.76 mm</title></circle>
+<circle cx="818.3" cy="40" r="2.03" fill="#c0392b"><title>#12 c6 · Ø 0.032 in / 0.81 mm</title></circle>
+<circle cx="804.9" cy="40" r="2.03" fill="#3b3e44"><title>#13 b5 · Ø 0.032 in / 0.81 mm</title></circle>
+<circle cx="791.6" cy="40" r="2.03" fill="#3b3e44"><title>#14 a5 · Ø 0.032 in / 0.81 mm</title></circle>
+<circle cx="778.3" cy="40" r="2.29" fill="#3b3e44"><title>#15 g5 · Ø 0.036 in / 0.91 mm</title></circle>
+<circle cx="763.9" cy="40" r="2.29" fill="#2e5fa3"><title>#16 f5 · Ø 0.036 in / 0.91 mm</title></circle>
+<circle cx="749.6" cy="40" r="2.29" fill="#3b3e44"><title>#17 e5 · Ø 0.036 in / 0.91 mm</title></circle>
+<circle cx="735.2" cy="40" r="2.29" fill="#3b3e44"><title>#18 d5 · Ø 0.036 in / 0.91 mm</title></circle>
+<circle cx="720.9" cy="40" r="2.54" fill="#c0392b"><title>#19 c5 · Ø 0.040 in / 1.02 mm</title></circle>
+<circle cx="706.5" cy="40" r="2.54" fill="#3b3e44"><title>#20 b4 · Ø 0.040 in / 1.02 mm</title></circle>
+<circle cx="692.2" cy="40" r="2.54" fill="#3b3e44"><title>#21 a4 · Ø 0.040 in / 1.02 mm</title></circle>
+<circle cx="677.8" cy="40" r="2.86" fill="#3b3e44"><title>#22 g4 · Ø 0.045 in / 1.14 mm</title></circle>
+<circle cx="662.5" cy="40" r="2.86" fill="#2e5fa3"><title>#23 f4 · Ø 0.045 in / 1.14 mm</title></circle>
+<circle cx="647.1" cy="40" r="2.86" fill="#3b3e44"><title>#24 e4 · Ø 0.045 in / 1.14 mm</title></circle>
+<circle cx="631.7" cy="40" r="3.17" fill="#3b3e44"><title>#25 d4 · Ø 0.050 in / 1.27 mm</title></circle>
+<circle cx="616.3" cy="40" r="3.17" fill="#c0392b"><title>#26 c4 · Ø 0.050 in / 1.27 mm</title></circle>
+<circle cx="601.0" cy="40" r="3.17" fill="#3b3e44"><title>#27 b3 · Ø 0.050 in / 1.27 mm</title></circle>
+<circle cx="585.6" cy="40" r="3.87" fill="#3b3e44"><title>#28 a3 · Ø 0.061 in / 1.55 mm</title></circle>
+<circle cx="570.2" cy="40" r="3.87" fill="#3b3e44"><title>#29 g3 · Ø 0.061 in / 1.55 mm</title></circle>
+<circle cx="553.8" cy="40" r="4.19" fill="#2e5fa3"><title>#30 f3 · Ø 0.066 in / 1.68 mm</title></circle>
+<circle cx="537.4" cy="40" r="4.19" fill="#3b3e44"><title>#31 e3 · Ø 0.066 in / 1.68 mm</title></circle>
+<circle cx="521.0" cy="40" r="4.83" fill="#3b3e44"><title>#32 d3 · Ø 0.076 in / 1.93 mm</title></circle>
+<circle cx="503.6" cy="40" r="5.14" fill="#c0392b"><title>#33 c3 · Ø 0.081 in / 2.06 mm</title></circle>
+<circle cx="486.2" cy="40" r="5.14" fill="#3b3e44"><title>#34 b2 · Ø 0.081 in / 2.06 mm</title></circle>
+<circle cx="468.7" cy="40" r="5.46" fill="#3b3e44"><title>#35 a2 · Ø 0.086 in / 2.18 mm</title></circle>
+<circle cx="451.3" cy="40" r="5.84" fill="#3b3e44"><title>#36 g2 · Ø 0.092 in / 2.34 mm</title></circle>
+<circle cx="433.4" cy="40" r="6.35" fill="#2e5fa3"><title>#37 f2 · Ø 0.100 in / 2.54 mm</title></circle>
+<circle cx="415.4" cy="40" r="6.60" fill="#3b3e44"><title>#38 e2 · Ø 0.104 in / 2.64 mm</title></circle>
+<circle cx="397.5" cy="40" r="2.92" fill="#3b3e44"><title>#39 d2 · Ø 0.046 in / 1.17 mm</title></circle>
+<circle cx="379.6" cy="40" r="3.17" fill="#c0392b"><title>#40 c2 · Ø 0.050 in / 1.27 mm</title></circle>
+<circle cx="361.6" cy="40" r="3.43" fill="#3b3e44"><title>#41 b1 · Ø 0.054 in / 1.37 mm</title></circle>
+<circle cx="343.7" cy="40" r="3.62" fill="#3b3e44"><title>#42 a1 · Ø 0.057 in / 1.45 mm</title></circle>
+<circle cx="325.8" cy="40" r="4.06" fill="#3b3e44"><title>#43 g1 · Ø 0.064 in / 1.63 mm</title></circle>
+<circle cx="307.8" cy="40" r="4.51" fill="#2e5fa3"><title>#44 f1 · Ø 0.071 in / 1.80 mm</title></circle>
+<circle cx="289.9" cy="40" r="4.83" fill="#3b3e44"><title>#45 e1 · Ø 0.076 in / 1.93 mm</title></circle>
+<circle cx="271.9" cy="40" r="5.27" fill="#3b3e44"><title>#46 d1 · Ø 0.083 in / 2.11 mm</title></circle>
+<circle cx="254.0" cy="40" r="5.78" fill="#c0392b"><title>#47 c1 · Ø 0.091 in / 2.31 mm</title></circle>
+<circle cx="235.2" cy="40" r="6.06" fill="#3b3e44"><title>#48 b0* · Ø 0.0955 in / 2.43 mm — extrapolated</title></circle>
+<circle cx="215.8" cy="40" r="6.73" fill="#3b3e44"><title>#49 a0* · Ø 0.1060 in / 2.69 mm — extrapolated</title></circle>
+</svg></div>
+
+<h2>Frame — spec and ISO 128 sections</h2>
+<h3 style="font-size:15px;margin:20px 0 6px">Frame members (see Erand49/frame-spec.md)</h3>
+<table>
+<tr><th>Member</th><th>Section (6061-T6)</th><th>Check @ welded-HAZ allowable</th></tr>
+<tr><td class="k">Midrib</td><td>C-channel 4" × 1.75" × 3/16" — web in the string plane, flanges ±Y, open trough = cable/anchor run</td><td>0.88 kN·m mid-span → ~29 MPa, SF > 4</td></tr>
+<tr><td class="k">Pillar</td><td>Square tube 2" × 2" × 1/8" — cleat bolts to the flat +Y face</td><td>Euler ~39 kN vs few kN, ~8× margin</td></tr>
+<tr><td class="k">Neck</td><td>2 plates per <code>Erand49.svg</code>, bolted to 50 mm shoulder/crown blocks (pre-welded to midrib/pillar)</td><td>pin-edge ≥ 16.2 mm, sensor-edge ≥ 7.1 mm verified</td></tr>
+</table>
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 frame ISO 128 sections">
+<style>.fl{font-size:11px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}.fs{font-size:9px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace}.fg{font-size:10px;font-weight:700;fill:#a8700f;font-family:ui-monospace,Menlo,Consolas,monospace}.dim{stroke:#3b5a7a;stroke-width:1;fill:none}.dmt{font-size:9px;fill:#3b5a7a;font-family:ui-monospace,Menlo,Consolas,monospace}.cl{stroke:#c9553a;stroke-width:0.8;stroke-dasharray:12 3 3 3}</style>
+<defs>
+<pattern id="hat" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="7" stroke="#8d877a" stroke-width="1"/></pattern>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3b5a7a"/></marker>
+</defs>
+<text x="20" y="20" class="fg">ER-001 — NECK, SECTION A–A AT A PIN STATION (first angle, dims mm, 2 px/mm)</text>
+<!-- plates -->
+<rect x="254" y="60" width="16" height="330" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
+<rect x="370" y="60" width="16" height="330" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
+<!-- through pin -->
+<rect x="240" y="90" width="150" height="11" rx="2" fill="#6a6d74" stroke="#111"/>
+<rect x="390" y="84" width="16" height="23" rx="2" fill="#6a6d74" stroke="#111"/>
+<text x="412" y="100" class="fs">tuning head (alternates ±Y)</text>
+<text x="245" y="82" class="fs">through-pin Ø5.5 — bears in BOTH plates</text>
+<!-- string centerline -->
+<line x1="320" y1="60" x2="320" y2="470" class="cl"/>
+<circle cx="320" cy="300" r="2.6" fill="#111"/>
+<text x="328" y="296" class="fs">string (XZ plane)</text>
+<!-- sensors: crossed 45deg beams -->
+<rect x="270" y="244" width="10" height="12" fill="#c58a1f"/><rect x="270" y="344" width="10" height="12" fill="#c58a1f"/>
+<rect x="360" y="244" width="10" height="12" fill="#3b5a7a"/><rect x="360" y="344" width="10" height="12" fill="#3b5a7a"/>
+<line x1="280" y1="250" x2="360" y2="350" stroke="#c58a1f" stroke-width="1.2" stroke-dasharray="5 4"/>
+<line x1="280" y1="350" x2="360" y2="250" stroke="#c58a1f" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="180" y="252" class="fs" text-anchor="end">IR emit ×2</text>
+<text x="415" y="352" class="fs">detect ×2 — X/Y beams cross</text>
+<text x="415" y="364" class="fs">at ±45° on the sensor rail</text>
+<!-- dims -->
+<line x1="270" y1="430" x2="370" y2="430" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<line x1="270" y1="395" x2="270" y2="435" class="dim"/><line x1="370" y1="395" x2="370" y2="435" class="dim"/>
+<text x="320" y="446" class="dmt" text-anchor="middle">50 (gap = block width)</text>
+<line x1="254" y1="48" x2="270" y2="48" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="262" y="40" class="dmt" text-anchor="middle">8</text>
+<line x1="270" y1="470" x2="320" y2="470" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="295" y="484" class="dmt" text-anchor="middle">25</text>
+<text x="20" y="505" class="fs">Plates bolt to shoulder/crown blocks; blocks pre-welded to midrib/pillar (weld first, plate after — torch access solved by sequence).</text>
+
+<text x="540" y="20" class="fg">ER-002 — PILLAR SECTION (2" × 2" × 1/8" sq tube)</text>
+<rect x="560" y="120" width="101.6" height="101.6" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
+<rect x="566.4" y="126.4" width="88.8" height="88.8" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<line x1="560" y1="100" x2="661.6" y2="100" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="610" y="92" class="dmt" text-anchor="middle">50.8</text>
+<line x1="690" y1="126" x2="662" y2="126" class="dim" marker-end="url(#ar)"/>
+<text x="694" y="130" class="dmt">3.2 wall</text>
+<line x1="560" y1="120" x2="530" y2="150" class="dim" marker-start="url(#ar)"/>
+<text x="470" y="162" class="dmt">+Y face — cleat</text>
+<text x="470" y="174" class="dmt">bolts here</text>
+<text x="540" y="270" class="fs">Euler ~39 kN over 2 m ⇒ ~8× margin</text>
+<text x="540" y="284" class="fs">incl. hung PM console + lean loads</text>
+
+<text x="810" y="20" class="fg">ER-003 — MIDRIB SECTION (C 4" × 1.75" × 3/16")</text>
+<path d="M860 90 h89 v9.5 h-79.5 v184.6 h79.5 v9.5 h-89 z" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
+<line x1="840" y1="90" x2="840" y2="293.6" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="833" y="196" class="dmt" text-anchor="end" transform="rotate(-90 833 196)">101.6</text>
+<line x1="860" y1="70" x2="949" y2="70" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="905" y="62" class="dmt" text-anchor="middle">44.5</text>
+<line x1="990" y1="99" x2="950" y2="95" class="dim" marker-end="url(#ar)"/>
+<text x="994" y="102" class="dmt">4.76 typ</text>
+<line x1="864.75" y1="80" x2="864.75" y2="303" class="cl"/>
+<text x="875" y="320" class="fs">web in the string plane — anchors bolt</text>
+<text x="875" y="332" class="fs">through web ℄ (shear-center discipline);</text>
+<text x="875" y="344" class="fs">open trough ±Y = cable + anchor run;</text>
+<text x="875" y="356" class="fs">bolt-on closing strip mid-span if any</text>
+<text x="875" y="368" class="fs">twist at full tension (channel → box)</text>
+<text x="810" y="400" class="fs">0.88 kN·m mid-span → ~29 MPa, SF &gt; 4</text>
+<text x="810" y="414" class="fs">(welded-HAZ allowable 70 MPa)</text>
+</svg></div>
+
+<p class="sub">Sources: <code>string-specs.md</code> (49-string spec, imperial + metric; band tension
+1572.9 lbf ≈ 7.00 kN) · <code>frame-spec.md</code> (members, welds, build sequence) ·
+<code>Erand49.svg</code> (hand-edited neck master) · regenerate this page:
+<code>python3 gen_erand49.py</code>.</p>
+</main></body></html>

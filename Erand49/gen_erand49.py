@@ -200,37 +200,126 @@ svg_doc = (f'<?xml version="1.0" encoding="UTF-8"?>\n'
 # Erand49.svg is now the USER-EDITED neck design (Inkscape) — never overwrite it.
 open(os.path.join(HERE, 'Erand49-generated.svg'), 'w').write(svg_doc)
 
-# ---- inject the figures into ../LAYOUT.html between markers (single-file doc) ----
+# ---- standalone harp page: Erand49/LAYOUT.html ----
 BAND_STYLE = '<style>.nl{font-size:13px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}</style>'
-frag = f"""<!-- ERAND49-BAND:BEGIN -->
-<h3 style="font-size:15px;margin:20px 0 6px">String band — Erard DXF geometry, true scale</h3>
-<p class="sub">From <code>Erand49/erard original stringband tutorial.dxf</code>: variable spacing
+html = f"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=6, user-scalable=yes">
+<title>Erand49 harp layout</title>
+<style>
+html,body{{margin:0;background:#fff !important;color:#111 !important;font:16px/1.5 ui-monospace,Menlo,Consolas,monospace}}
+main{{max-width:1100px;margin:0 auto;padding:16px}}
+h1{{font-size:22px;margin:0 0 4px}} h2{{font-size:17px;margin:28px 0 8px;border-bottom:2px solid #111;padding-bottom:4px}}
+h3{{font-size:15px;margin:20px 0 6px}}
+p{{margin:0 0 10px}} .sub{{color:#444}} .k{{font-weight:700}} .leg{{font-weight:700}}
+table{{border-collapse:collapse;width:100%;font-size:14px}} th,td{{text-align:left;padding:6px 8px;border-bottom:1px solid #999;vertical-align:top}} th{{background:#eee}}
+.wrap{{overflow:auto;border:1px solid #ccc;margin:8px 0}} .wrap svg{{min-width:900px}}
+</style></head><body><main>
+<h1>ERAND49 — HARP LAYOUT</h1>
+<p class="sub">The silent 49-string optical harp (A0–G7). The PM console is its voice and control
+surface — connection, docking, and travel live in the PM's <code>../LAYOUT.html</code>; this page is
+the instrument itself: string band, sensors, and frame.</p>
+
+<h2>String band — Erard DXF geometry, true scale</h2>
+<p class="sub">From <code>erard original stringband tutorial.dxf</code>: variable spacing
 (13.325→17.94 mm, ratio 1.025), sloped anchors, in mm — <b>each stroke width is the string's actual
-overall diameter</b>. C red · F blue · others dark gray; hover any string for its spec. Dark ticks:
-nut and tuner pin; colored 12° top segments: tuner leads. Amber crosshairs: optical X/Y sensor axes,
-1.0 in below each nut on the neck rail. Brown/amber Beziers: tuner and sensor rails (hand-tuned neck:
-<code>Erand49/Erand49.svg</code>). b0*/a0*: spec extrapolated from c1 physics (string-specs.md).
-Gray diagonal: midrib (Al 6061-T6 C-channel), full 49-string span.</p>
+overall diameter</b>. Colors per harp convention: <span class="leg" style="color:#c0392b">C red</span> ·
+<span class="leg" style="color:#2e5fa3">F blue</span> · others dark gray; hover any string for its
+spec. Dark ticks: nut and tuner pin; colored 12° top segments: tuner leads. Amber crosshairs:
+optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Brown/amber Beziers: tuner and
+sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapolated from c1 physics
+(<code>string-specs.md</code>). Gray diagonal: midrib, full 49-string span.</p>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1-x0:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
 {BAND_STYLE}
 {chr(10).join(band)}
 </svg></div>
-<h3 style="font-size:15px;margin:20px 0 6px">Cross sections — diameters at 5×, at each string's real position</h3>
+
+<h2>Cross sections — diameters at 5×, at each string's real position</h2>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1-x0:.0f} 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="String cross sections at 5x">
 <text x="{x0+16:.0f}" y="100" style="font-size:15px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace">plain nylon → nylon-wrapped (#28 a3) → bronze-wound steel (#39 d2)</text>
 {chr(10).join(xsec)}
 </svg></div>
-<p class="sub">Specs: <code>Erand49/string-specs.md</code> · band tension 1572.9 lbf ≈ 7.00 kN (49 strings) · regenerate: <code>python3 Erand49/gen_erand49.py</code></p>
-<!-- ERAND49-BAND:END -->"""
 
-lay_path = os.path.join(HERE, '..', 'LAYOUT.html')
-lay = open(lay_path).read()
-B, E = '<!-- ERAND49-BAND:BEGIN -->', '<!-- ERAND49-BAND:END -->'
-if B in lay:
-    lay = lay[:lay.index(B)] + frag + lay[lay.index(E)+len(E):]
-else:
-    anchor = '<h3 style="font-size:15px;margin:20px 0 6px">Frame members'
-    assert anchor in lay
-    lay = lay.replace(anchor, frag + '\n' + anchor, 1)
-open(lay_path, 'w').write(lay)
-print('wrote LAYOUT.html (band figures) and Erand49-generated.svg')
+<h2>Frame — spec and ISO 128 sections</h2>
+<h3 style="font-size:15px;margin:20px 0 6px">Frame members (see Erand49/frame-spec.md)</h3>
+<table>
+<tr><th>Member</th><th>Section (6061-T6)</th><th>Check @ welded-HAZ allowable</th></tr>
+<tr><td class="k">Midrib</td><td>C-channel 4" × 1.75" × 3/16" — web in the string plane, flanges ±Y, open trough = cable/anchor run</td><td>0.88 kN·m mid-span → ~29 MPa, SF > 4</td></tr>
+<tr><td class="k">Pillar</td><td>Square tube 2" × 2" × 1/8" — cleat bolts to the flat +Y face</td><td>Euler ~39 kN vs few kN, ~8× margin</td></tr>
+<tr><td class="k">Neck</td><td>2 plates per <code>Erand49.svg</code>, bolted to 50 mm shoulder/crown blocks (pre-welded to midrib/pillar)</td><td>pin-edge ≥ 16.2 mm, sensor-edge ≥ 7.1 mm verified</td></tr>
+</table>
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 frame ISO 128 sections">
+<style>.fl{{font-size:11px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}}.fs{{font-size:9px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace}}.fg{{font-size:10px;font-weight:700;fill:#a8700f;font-family:ui-monospace,Menlo,Consolas,monospace}}.dim{{stroke:#3b5a7a;stroke-width:1;fill:none}}.dmt{{font-size:9px;fill:#3b5a7a;font-family:ui-monospace,Menlo,Consolas,monospace}}.cl{{stroke:#c9553a;stroke-width:0.8;stroke-dasharray:12 3 3 3}}</style>
+<defs>
+<pattern id="hat" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="7" stroke="#8d877a" stroke-width="1"/></pattern>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3b5a7a"/></marker>
+</defs>
+<text x="20" y="20" class="fg">ER-001 — NECK, SECTION A–A AT A PIN STATION (first angle, dims mm, 2 px/mm)</text>
+<!-- plates -->
+<rect x="254" y="60" width="16" height="330" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
+<rect x="370" y="60" width="16" height="330" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
+<!-- through pin -->
+<rect x="240" y="90" width="150" height="11" rx="2" fill="#6a6d74" stroke="#111"/>
+<rect x="390" y="84" width="16" height="23" rx="2" fill="#6a6d74" stroke="#111"/>
+<text x="412" y="100" class="fs">tuning head (alternates ±Y)</text>
+<text x="245" y="82" class="fs">through-pin Ø5.5 — bears in BOTH plates</text>
+<!-- string centerline -->
+<line x1="320" y1="60" x2="320" y2="470" class="cl"/>
+<circle cx="320" cy="300" r="2.6" fill="#111"/>
+<text x="328" y="296" class="fs">string (XZ plane)</text>
+<!-- sensors: crossed 45deg beams -->
+<rect x="270" y="244" width="10" height="12" fill="#c58a1f"/><rect x="270" y="344" width="10" height="12" fill="#c58a1f"/>
+<rect x="360" y="244" width="10" height="12" fill="#3b5a7a"/><rect x="360" y="344" width="10" height="12" fill="#3b5a7a"/>
+<line x1="280" y1="250" x2="360" y2="350" stroke="#c58a1f" stroke-width="1.2" stroke-dasharray="5 4"/>
+<line x1="280" y1="350" x2="360" y2="250" stroke="#c58a1f" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="180" y="252" class="fs" text-anchor="end">IR emit ×2</text>
+<text x="415" y="352" class="fs">detect ×2 — X/Y beams cross</text>
+<text x="415" y="364" class="fs">at ±45° on the sensor rail</text>
+<!-- dims -->
+<line x1="270" y1="430" x2="370" y2="430" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<line x1="270" y1="395" x2="270" y2="435" class="dim"/><line x1="370" y1="395" x2="370" y2="435" class="dim"/>
+<text x="320" y="446" class="dmt" text-anchor="middle">50 (gap = block width)</text>
+<line x1="254" y1="48" x2="270" y2="48" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="262" y="40" class="dmt" text-anchor="middle">8</text>
+<line x1="270" y1="470" x2="320" y2="470" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="295" y="484" class="dmt" text-anchor="middle">25</text>
+<text x="20" y="505" class="fs">Plates bolt to shoulder/crown blocks; blocks pre-welded to midrib/pillar (weld first, plate after — torch access solved by sequence).</text>
+
+<text x="540" y="20" class="fg">ER-002 — PILLAR SECTION (2" × 2" × 1/8" sq tube)</text>
+<rect x="560" y="120" width="101.6" height="101.6" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
+<rect x="566.4" y="126.4" width="88.8" height="88.8" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<line x1="560" y1="100" x2="661.6" y2="100" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="610" y="92" class="dmt" text-anchor="middle">50.8</text>
+<line x1="690" y1="126" x2="662" y2="126" class="dim" marker-end="url(#ar)"/>
+<text x="694" y="130" class="dmt">3.2 wall</text>
+<line x1="560" y1="120" x2="530" y2="150" class="dim" marker-start="url(#ar)"/>
+<text x="470" y="162" class="dmt">+Y face — cleat</text>
+<text x="470" y="174" class="dmt">bolts here</text>
+<text x="540" y="270" class="fs">Euler ~39 kN over 2 m ⇒ ~8× margin</text>
+<text x="540" y="284" class="fs">incl. hung PM console + lean loads</text>
+
+<text x="810" y="20" class="fg">ER-003 — MIDRIB SECTION (C 4" × 1.75" × 3/16")</text>
+<path d="M860 90 h89 v9.5 h-79.5 v184.6 h79.5 v9.5 h-89 z" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
+<line x1="840" y1="90" x2="840" y2="293.6" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="833" y="196" class="dmt" text-anchor="end" transform="rotate(-90 833 196)">101.6</text>
+<line x1="860" y1="70" x2="949" y2="70" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="905" y="62" class="dmt" text-anchor="middle">44.5</text>
+<line x1="990" y1="99" x2="950" y2="95" class="dim" marker-end="url(#ar)"/>
+<text x="994" y="102" class="dmt">4.76 typ</text>
+<line x1="864.75" y1="80" x2="864.75" y2="303" class="cl"/>
+<text x="875" y="320" class="fs">web in the string plane — anchors bolt</text>
+<text x="875" y="332" class="fs">through web ℄ (shear-center discipline);</text>
+<text x="875" y="344" class="fs">open trough ±Y = cable + anchor run;</text>
+<text x="875" y="356" class="fs">bolt-on closing strip mid-span if any</text>
+<text x="875" y="368" class="fs">twist at full tension (channel → box)</text>
+<text x="810" y="400" class="fs">0.88 kN·m mid-span → ~29 MPa, SF &gt; 4</text>
+<text x="810" y="414" class="fs">(welded-HAZ allowable 70 MPa)</text>
+</svg></div>
+
+<p class="sub">Sources: <code>string-specs.md</code> (49-string spec, imperial + metric; band tension
+1572.9 lbf ≈ 7.00 kN) · <code>frame-spec.md</code> (members, welds, build sequence) ·
+<code>Erand49.svg</code> (hand-edited neck master) · regenerate this page:
+<code>python3 gen_erand49.py</code>.</p>
+</main></body></html>
+"""
+open(os.path.join(HERE, 'LAYOUT.html'), 'w').write(html)
+print('wrote Erand49/LAYOUT.html and Erand49-generated.svg')
