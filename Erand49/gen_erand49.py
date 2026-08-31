@@ -137,15 +137,20 @@ _h = math.hypot(1, m)
 px_, py_ = -m/_h, 1/_h                            # unit perpendicular to midrib axis
 def mp(t, off):
     return X(t + px_*off), Y(m*t + cxi + py_*off)
+# midrib stops AT the pillar face (coped joint, ER-004) — no clumsy overlap
 for off in (0, -2*MHW):
-    (xa, ya), (xb, yb) = mp(pilc, off), mp(xr_m, off)
+    t0 = pilc + PW - px_*off
+    (xa, ya), (xb, yb) = mp(t0, off), mp(xr_m, off)
     band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#8d877a" stroke-width="2"/>')
-(xa, ya), (xb, yb) = mp(pilc, -MHW), mp(xr_m, -MHW)
+t0c = pilc + PW - px_*(-MHW)
+(xa, ya), (xb, yb) = mp(t0c, -MHW), mp(xr_m, -MHW)
 band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#c9553a" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib tube centerline (top face carries the string anchors)</title></line>')
 lx, ly = mp(pilc+4.5, -2*MHW)
 band.append(f'<text x="{lx:.0f}" y="{ly+30:.0f}" class="nl" fill="#8d877a">midrib — RT 4"×2"×3/16" 6061-T6 (ER-003)</text>')
 band.append(f'<rect x="{X(pilc-PW):.1f}" y="{Y(y_crown):.1f}" width="{2*PW*IN:.1f}" height="{Y(y_base)-Y(y_crown):.1f}" fill="none" stroke="#8d877a" stroke-width="2"><title>pillar — 2"×2"×1/8" square tube, base to crown (ER-002)</title></rect>')
 band.append(f'<text x="{X(pilc)+35:.0f}" y="{(Y(y_crown)+Y(y_base))/2:.0f}" class="nl" fill="#8d877a">pillar 2"×2"×1/8"</text>')
+band.append(f'<rect x="{X(pilc-PW)-20:.1f}" y="{Y(y_base):.1f}" width="{2*PW*IN+40:.1f}" height="8" fill="#d9d3c2" stroke="#8d877a" stroke-width="1.5"><title>base plate — joint detail ER-004</title></rect>')
+band.append(f'<text x="{X(pilc)+35:.0f}" y="{Y(y_base)-8:.0f}" class="nl" fill="#8d877a">base joint: ER-004</text>')
 sbx, sby = mp(xr_m-0.6, MHW)
 # ISO 129 dims: overall height, pillar width
 dx0 = X(pilc-PW) - 34
