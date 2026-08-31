@@ -172,9 +172,37 @@ underside, rear-ported. Silk legends shown are VL-1 mode; final silk gets a mode
 <text x="950" y="200" class="es" text-anchor="middle">TX SMA — 50 Ω</text>
 <text x="10" y="270" class="es">Ends viewed from outside. Theremin antennas: each ends in a 3/8"-24 coupler nut and hand-threads onto an insulated bulkhead stud (nylon shoulder washers through the end plate); the stud is the electrical terminal — solder lug under the inside nut, short shielded lead to its oscillator board. Threads seat the same way every time, and the CAL position on S4 retunes after every setup, so connector repeatability is a non-issue. UHF: whip hand-threads onto a standard SMA bulkhead. Nothing needs tools; rods and whip clip inside the lid with thread protectors on the studs. Orient the pitch-rod end toward the audience, clear of walls. Internal relay hands both theremin antennas to the SDR front end in S mode.</text>
 </svg></div>
-<h2>Inside the box</h2>
+<h2>Inside the box — board layout (plan view)</h2>
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PM internal board layout, plan view">
+<style>.bl{font-size:11px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}.bs{font-size:9px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace}.bg2{font-size:10px;font-weight:700;fill:#a8700f;font-family:ui-monospace,Menlo,Consolas,monospace}</style>
+<rect x="20" y="30" width="1210" height="360" rx="10" fill="#f4f1e8" stroke="#b9b3a3" stroke-width="2"/>
+<text x="25" y="22" class="bg2">PLAN VIEW — panel removed, front edge at bottom, scale ≈ 2.4 px/mm (case 504 × 150 mm)</text>
+<!-- rear rail -->
+<rect x="40" y="40" width="200" height="70" rx="4" fill="#d9d3c2" stroke="#8d877a"/><text x="140" y="70" class="bs" text-anchor="middle">POWER BOARD</text><text x="140" y="82" class="bs" text-anchor="middle">OR-diode · polyfuses ×4</text><text x="140" y="94" class="bs" text-anchor="middle">(barrel + USB-C on rear wall)</text>
+<rect x="560" y="40" width="230" height="122" rx="4" fill="#3b5a7a" fill-opacity="0.25" stroke="#3b5a7a"/><text x="675" y="90" class="bl" text-anchor="middle">ULX3S 85F</text><text x="675" y="104" class="bs" text-anchor="middle">96 × 51 mm — USB + microSD</text><text x="675" y="116" class="bs" text-anchor="middle">face the rear wall cutouts</text>
+<rect x="880" y="40" width="100" height="60" rx="4" fill="#d9d3c2" stroke="#8d877a"/><text x="930" y="66" class="bs" text-anchor="middle">RMII PHY</text><text x="930" y="78" class="bs" text-anchor="middle">at RJ45</text>
+<rect x="1000" y="40" width="90" height="60" rx="4" fill="#d9d3c2" stroke="#8d877a"/><text x="1045" y="66" class="bs" text-anchor="middle">GPS +</text><text x="1045" y="78" class="bs" text-anchor="middle">PPS</text>
+<rect x="1105" y="40" width="105" height="85" rx="4" fill="#c9553a" fill-opacity="0.18" stroke="#c9553a"/><text x="1157" y="75" class="bs" text-anchor="middle">UHF PA</text><text x="1157" y="87" class="bs" text-anchor="middle">shielded can,</text><text x="1157" y="99" class="bs" text-anchor="middle">at TX SMA</text>
+<!-- battery bay -->
+<rect x="270" y="42" width="170" height="336" rx="6" fill="none" stroke="#a8700f" stroke-width="2.5" stroke-dasharray="8 5"/><text x="355" y="180" class="bl" text-anchor="middle">BATTERY</text><text x="355" y="196" class="bl" text-anchor="middle">BAY</text><text x="355" y="216" class="bs" text-anchor="middle">USB power bank</text><text x="355" y="228" class="bs" text-anchor="middle">≤ 150×70×25 mm</text><text x="355" y="240" class="bs" text-anchor="middle">underside door,</text><text x="355" y="252" class="bs" text-anchor="middle">foam-padded</text><text x="355" y="264" class="bs" text-anchor="middle">USB-C stub to</text><text x="355" y="276" class="bs" text-anchor="middle">power board</text>
+<!-- display band (surface layer) -->
+<rect x="60" y="112" width="528" height="130" rx="3" fill="none" stroke="#3b3e44" stroke-width="2" stroke-dasharray="4 4"/><text x="465" y="130" class="bs" text-anchor="end">V0 TFT 220 × 55 (surface layer)</text>
+<rect x="600" y="170" width="150" height="70" rx="4" fill="#d9d3c2" stroke="#8d877a"/><text x="675" y="200" class="bs" text-anchor="middle">TFT DRIVER</text><text x="675" y="212" class="bs" text-anchor="middle">short HDMI to ULX3S</text>
+<rect x="800" y="112" width="400" height="55" rx="3" fill="none" stroke="#3b3e44" stroke-width="2" stroke-dasharray="4 4"/><text x="1000" y="145" class="bs" text-anchor="middle">SLIDER PCB S0–S4 (surface layer) — 7-wire loom down to ADC/GPIO</text>
+<!-- oscillators at ends -->
+<rect x="32" y="150" width="60" height="110" rx="4" fill="#d9d3c2" stroke="#8d877a"/><text x="62" y="196" class="bs" text-anchor="middle">VOL</text><text x="62" y="208" class="bs" text-anchor="middle">OSC</text>
+<rect x="1158" y="150" width="60" height="110" rx="4" fill="#d9d3c2" stroke="#8d877a"/><text x="1188" y="196" class="bs" text-anchor="middle">PITCH</text><text x="1188" y="208" class="bs" text-anchor="middle">OSC</text>
+<!-- audio -->
+<rect x="100" y="170" width="120" height="60" rx="4" fill="#d9d3c2" stroke="#8d877a"/><text x="160" y="196" class="bs" text-anchor="middle">AUDIO AMP</text><text x="160" y="208" class="bs" text-anchor="middle">GPIO mute</text>
+<circle cx="150" cy="305" r="65" fill="none" stroke="#8d877a" stroke-width="2" stroke-dasharray="4 4"/><text x="150" y="300" class="bs" text-anchor="middle">SPKR</text><text x="150" y="312" class="bs" text-anchor="middle">(underside)</text>
+<!-- key matrix strip -->
+<rect x="240" y="250" width="960" height="128" rx="4" fill="#3ba85a" fill-opacity="0.12" stroke="#3ba85a"/><text x="720" y="308" class="bl" text-anchor="middle">8×8 KEY MATRIX PCB — 59× MX2A + 1N4148, full width behind the front wall</text><text x="720" y="324" class="bs" text-anchor="middle">one 16-wire ribbon (8 rows + 8 cols) up to ULX3S GPIO</text>
+<text x="25" y="412" class="bs">Solid = boards on the case floor. Dashed = surface layer (TFT, slider PCB) or underside (speaker, battery door). Wedge case: ~40 mm tall at the front edge, ~70 mm at the rear — the bank lies flat in its bay left of the ULX3S, weight centered so the box doesn't tip toward the pitch-rod end. All inter-board runs are along the rear wall; the only front-back crossings are the matrix ribbon and speaker pair.</text>
+</svg></div>
+<h2>Inside the box — what connects where</h2>
 <table>
 <tr><th>Item</th><th>Where</th><th>Connects</th></tr>
+<tr><td>Battery bay + USB power bank</td><td>center-left, underside door</td><td>USB-C stub to power board; bank is removable — swap mid-demo, charge at home</td></tr>
 <tr><td class="k">ULX3S ECP5-85F</td><td>center, under display band</td><td>everything; GPDI→TFT driver, SDRAM/microSD/USB onboard</td></tr>
 <tr><td>TFT + HDMI driver (matched kit)</td><td>display band, 55 mm</td><td>GPDI from ULX3S — verify active area before cutting</td></tr>
 <tr><td>Key/button matrix (8×8)</td><td>under keybed</td><td>49 keys A0–G7 + P0–P9 fold into one scan</td></tr>
@@ -193,7 +221,7 @@ underside, rear-ported. Silk legends shown are VL-1 mode; final silk gets a mode
 brick; Santa Glide's 24 V coil supply is a different rig and never travels in this case.</p>
 <table>
 <tr><th>Element</th><th>Design</th></tr>
-<tr><td class="k">Input</td><td>5 V via rear barrel jack (wall brick) <i>or</i> rear USB-C (any USB power bank) — ideal-diode OR inside, so either works and swapping is safe live. Master rocker (PWR) cuts everything.</td></tr>
+<tr><td class="k">Input</td><td>5 V via rear barrel jack (wall brick) <i>or</i> rear USB-C or the internal battery-bay bank — ideal-diode OR inside, so either works and swapping is safe live. Master rocker (PWR) cuts everything.</td></tr>
 <tr><td class="k">Budget</td><td>ULX3S ≈ 1 A · bar TFT + driver ≈ 1 A · audio amp ≈ 0.5 A peak · GPS/RF/misc ≈ 0.5 A → design rail 5 V / 4 A. A demo on a power bank runs the display at reduced backlight.</td></tr>
 <tr><td class="k">Distribution</td><td>Star from the input OR-point; each branch (FPGA, display, audio, RF/GPS) on its own polyfuse so no single fault darkens the whole demo.</td></tr>
 <tr><td class="k">Sequencing</td><td>Audio amp held muted by FPGA GPIO until a bitstream is up — no power-on pop through the speaker. Display backlight enabled by GPIO likewise.</td></tr>
