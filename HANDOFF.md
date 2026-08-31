@@ -23,7 +23,7 @@
 - Case last; TFT+HDMI driver as matched kit.
 
 ## Files
-- README.html (was vl1-49key-panel-layout.html) — panel map (gen.py regenerates); vl1-49key-panel-layout.png is a stale render (old B/D/K IDs)
+- README.html (was vl1-49key-panel-layout.html) — panel map (gen.py regenerates, incl. the PNG)
 - vl1-panel-layout.html — original VL-1 panel map
 - vl1-clash-module-tree.md — 36 modules, MAIDEN overlaps starred
 - fpga-venn.png/.svg, fpga-venn4.png/.svg — 3- and 4-set overlap (venn4.py regenerates; built ✓ / planned ○)

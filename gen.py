@@ -100,3 +100,24 @@ table{{border-collapse:collapse;width:100%;margin-top:14px;font-size:13px}} th,t
 </main></body></html>'''
 import os
 open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'README.html'),'w').write(html)
+
+# --- also render the PNG (cairosvg; classes inlined since cairosvg skips <style>) ---
+try:
+    import re as _re, cairosvg as _cs
+    _s = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'README.html')).read()
+    _svg = _re.search(r'<svg viewBox="0 0 1300 330".*?</svg>', _s, _re.S).group(0)
+    _CLS = {'t':('8','700','#111'),'tt':('6','700','#111'),'tw':('7','700','#ffffff'),
+            'lbl':('6','700','#111'),'sh':('6','400','#555'),'bk':('8','700','#fff'),
+            'bks':('7','700','#ffffff'),'hp':('6','700','#a8700f'),'hpb':('6','700','#f2c14e'),
+            'id':('6','700','#b3341c')}
+    def _r(m):
+        c = m.group(1)
+        if c not in _CLS: return m.group(0)
+        sz, w, fill = _CLS[c]
+        return f'font-size="{sz}" font-weight="{w}" fill="{fill}" font-family="DejaVu Sans Mono,monospace"'
+    _svg = _re.sub(r'class="(\w+)"', _r, _svg)
+    _cs.svg2png(bytestring=_svg.encode(), output_width=2600,
+                write_to=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'vl1-49key-panel-layout.png'))
+    print('rendered vl1-49key-panel-layout.png')
+except Exception as _e:
+    print('png render skipped:', _e)

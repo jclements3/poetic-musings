@@ -44,7 +44,7 @@ Panel map: `README.html` (regenerate with `gen.py`).
 - `one-box-overview.html` — single-page program overview with embedded panel SVG
 - `README.html` + `gen.py` — 49-key panel map and its generator
 - `vl1-panel-layout.html` — original VL-1 panel map (reference)
-- `vl1-49key-panel-layout.png` — stale render (old B/D/K IDs); replace at next export
+- `vl1-49key-panel-layout.png` — current render (gen.py emits it via cairosvg)
 - `vl1-clash-module-tree.md` — 36 Clash modules, MAIDEN overlaps starred
 - `fpga-venn*.svg/.png`, `venn4.py` — 3- and 4-set component-overlap diagrams
 
