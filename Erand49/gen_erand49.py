@@ -132,9 +132,13 @@ for (n, note, f, Lin, cm, wm, od, t), (x, ylo, yhi) in strings:
     band.append(f'<line x1="{X(x):.1f}" y1="{Y(ylo):.1f}" x2="{X(x):.1f}" y2="{Y(yhi):.1f}" stroke="{c}" stroke-width="{odmm:.3f}"><title>{tip}</title></line>')
     if note.startswith(("c", "f")) or n in (1, 47):
         band.append(f'<text x="{X(x):.1f}" y="{Y(ylo)+24:.1f}" class="nl" fill="{c}" text-anchor="middle">{note}</text>')
+KEY_DX, KEY_DY = 1.5*math.sin(math.radians(12)), 1.5*math.cos(math.radians(12))  # 12 deg off vertical
 for n, note, fg, Lg, odg, tg, gx, glo in gpts:
     tip = f"#{n} {note} · {fg:g} Hz · {Lg:.3f} in / {Lg*IN:.1f} mm · Ø {odg:.4f} in / {odg*IN:.2f} mm · {tg:.1f} lbf — EXTRAPOLATED from c1 (see string-specs.md)"
-    band.append(f'<line x1="{X(gx):.1f}" y1="{Y(glo):.1f}" x2="{X(gx):.1f}" y2="{Y(glo+Lg):.1f}" stroke="{color(note)}" stroke-width="{odg*IN:.3f}" stroke-dasharray="10 8"><title>{tip}</title></line>')
+    top = glo + Lg
+    band.append(f'<line x1="{X(gx):.1f}" y1="{Y(glo):.1f}" x2="{X(gx):.1f}" y2="{Y(top):.1f}" stroke="{color(note)}" stroke-width="{odg*IN:.3f}" stroke-dasharray="10 8"><title>{tip}</title></line>')
+    band.append(f'<line x1="{X(gx):.1f}" y1="{Y(top):.1f}" x2="{X(gx+KEY_DX):.1f}" y2="{Y(top+KEY_DY):.1f}" stroke="{color(note)}" stroke-width="{odg*IN:.3f}" stroke-dasharray="10 8"/>')
+    band.append(f'<g stroke="#555" stroke-width="1.0" stroke-dasharray="4 3"><line x1="{X(gx)-3.2:.1f}" y1="{Y(top):.1f}" x2="{X(gx)+3.2:.1f}" y2="{Y(top):.1f}"/><line x1="{X(gx+KEY_DX)-3.2:.1f}" y1="{Y(top+KEY_DY):.1f}" x2="{X(gx+KEY_DX)+3.2:.1f}" y2="{Y(top+KEY_DY):.1f}"/></g>')
     band.append(f'<text x="{X(gx):.1f}" y="{Y(glo)+24:.1f}" class="nl" fill="#8d877a" text-anchor="middle">{note}*</text>')
 
 # ---- cross sections at 5x, aligned to real string x positions ----
