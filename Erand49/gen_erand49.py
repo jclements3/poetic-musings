@@ -136,9 +136,9 @@ KEY_DX, KEY_DY = 1.5*math.sin(math.radians(12)), 1.5*math.cos(math.radians(12)) 
 for n, note, fg, Lg, odg, tg, gx, glo in gpts:
     tip = f"#{n} {note} · {fg:g} Hz · {Lg:.3f} in / {Lg*IN:.1f} mm · Ø {odg:.4f} in / {odg*IN:.2f} mm · {tg:.1f} lbf — EXTRAPOLATED from c1 (see string-specs.md)"
     top = glo + Lg
-    band.append(f'<line x1="{X(gx):.1f}" y1="{Y(glo):.1f}" x2="{X(gx):.1f}" y2="{Y(top):.1f}" stroke="{color(note)}" stroke-width="{odg*IN:.3f}" stroke-dasharray="10 8"><title>{tip}</title></line>')
-    band.append(f'<line x1="{X(gx):.1f}" y1="{Y(top):.1f}" x2="{X(gx+KEY_DX):.1f}" y2="{Y(top+KEY_DY):.1f}" stroke="{color(note)}" stroke-width="{odg*IN:.3f}" stroke-dasharray="10 8"/>')
-    band.append(f'<g stroke="#555" stroke-width="1.0" stroke-dasharray="4 3"><line x1="{X(gx)-3.2:.1f}" y1="{Y(top):.1f}" x2="{X(gx)+3.2:.1f}" y2="{Y(top):.1f}"/><line x1="{X(gx+KEY_DX)-3.2:.1f}" y1="{Y(top+KEY_DY):.1f}" x2="{X(gx+KEY_DX)+3.2:.1f}" y2="{Y(top+KEY_DY):.1f}"/></g>')
+    band.append(f'<line x1="{X(gx):.1f}" y1="{Y(glo):.1f}" x2="{X(gx):.1f}" y2="{Y(top):.1f}" stroke="{color(note)}" stroke-width="{odg*IN:.3f}"><title>{tip}</title></line>')
+    band.append(f'<line x1="{X(gx):.1f}" y1="{Y(top):.1f}" x2="{X(gx+KEY_DX):.1f}" y2="{Y(top+KEY_DY):.1f}" stroke="{color(note)}" stroke-width="{odg*IN:.3f}"/>')
+    band.append(f'<g stroke="#555" stroke-width="1.0"><line x1="{X(gx)-3.2:.1f}" y1="{Y(top):.1f}" x2="{X(gx)+3.2:.1f}" y2="{Y(top):.1f}"/><line x1="{X(gx+KEY_DX)-3.2:.1f}" y1="{Y(top+KEY_DY):.1f}" x2="{X(gx+KEY_DX)+3.2:.1f}" y2="{Y(top+KEY_DY):.1f}"/></g>')
     band.append(f'<text x="{X(gx):.1f}" y="{Y(glo)+24:.1f}" class="nl" fill="#8d877a" text-anchor="middle">{note}*</text>')
 
 # ---- cross sections at 5x, aligned to real string x positions ----
@@ -179,9 +179,9 @@ tuner pin; the angled top segment — 1.5 in at 12° off vertical, in the string
 diameter — is its lead to the tuner. The amber crosshairs low on every string are the <b>optical
 X/Y sensor axes</b> — the point in the rib where each string's two orthogonal IR beams cross,
 1.0 in / 25.4 mm below each nut — the sensor rail mounts on the neck (the DXF's sharp-fret ticks were
-repositioned there). b0/a0 dashed in their string colors: full spec extrapolated from c1 physics
-(marked * — see string-specs.md), lengths continuing the bass trend, tensions 53.4 / 54.0 lbf,
-Ø 0.0955 / 0.1060 in.</p>
+repositioned there). b0/a0 draw like every other string; their spec is extrapolated from c1 physics
+(marked * — see string-specs.md and the hover text), lengths continuing the bass trend,
+tensions 53.4 / 54.0 lbf, Ø 0.0955 / 0.1060 in.</p>
 
 <h2>String band — DXF geometry, lengths and diameters to one scale</h2>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1-x0:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
