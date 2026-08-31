@@ -1,0 +1,202 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=6, user-scalable=yes">
+<title>One box — POETIC + MUSING program overview</title>
+<style>
+html,body{margin:0;background:#fff !important;color:#111 !important;font:16px/1.5 ui-monospace,Menlo,Consolas,monospace}
+main{max-width:1100px;margin:0 auto;padding:16px}
+h1{font-size:22px;margin:0 0 4px} h2{font-size:17px;margin:28px 0 8px;border-bottom:2px solid #111;padding-bottom:4px}
+p{margin:0 0 10px} .sub{color:#444}
+table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;padding:6px 8px;border-bottom:1px solid #999;vertical-align:top} th{background:#eee}
+.wrap{overflow:auto;border:1px solid #ccc;margin:8px 0} .wrap svg{min-width:900px}
+.chain{font-size:18px;font-weight:700;letter-spacing:.05em;padding:10px;background:#f4f1e8;border-left:6px solid #a8700f}
+.k{font-weight:700}
+</style></head><body><main>
+<h1>ONE BOX — POETIC + MUSING PROGRAM OVERVIEW</h1>
+<p class="sub">POETIC (personal) + MUSING (IRAD). One library, one Forth console (Oracle), one case. The Piano VL-49 — the 3D-printed keyboard below, with Oracle as the brains behind its user interface — is the platform demo; theremin, harp, HWIL, radar, games all plug into it. ULX3S ECP5-85F is the only board in the box; Santa Glide (C) runs standalone on an Alchitry Cu.</p>
+
+<h2>Build order (serial, finish before starting)</h2>
+<p class="chain">C → I → O → T → P → E &nbsp;&nbsp;·&nbsp;&nbsp; MUSING (IRAD): G → N → U → S → I → M</p>
+<table>
+<tr><th>#</th><th>Proj</th><th>Finish line</th><th>Cost</th></tr>
+<tr><td>1</td><td class="k">C coil — Santa Glide</td><td>Slug glides house A→B→A continuously while the show switch is on, parks on pause; dwell profile tuned. Standalone on Alchitry Cu</td><td>$0 left (all parts ordered)</td></tr>
+<tr><td>2</td><td class="k">I IRIG clock</td><td>Spec-valid IRIG-B out, verified on scope/decoder; free-running crystal until G disciplines it</td><td>$0</td></tr>
+<tr><td>3</td><td class="k">O Oracle console</td><td>Prompt on bar TFT, no laptop; <code>1 2 + .</code> → 3; GPIO toggle, ADC read, SD block 1 loads; CW keyer sends, decoder prints</td><td>~$60 TFT</td></tr>
+<tr><td>4</td><td class="k">T theremin</td><td>Oscillator hardware on bench; ECP5 port tracks pitch and volume from antennas through speaker</td><td>$0 (ordered)</td></tr>
+<tr><td>5</td><td class="k">P piano VL-49</td><td>3D-printed panel per layout below, Oracle behind the UI; 49 keys scan; <code>90099914 patch!</code> plays; Da Da Da on One Key Play; A/B vs real VL-1; antennas + theremin source select</td><td>~$150</td></tr>
+<tr><td>6</td><td class="k">E harp Erand49</td><td>Gate 1: one string, one ADC, pluck on display. Gate 2: 49 strings, I²S out, playable</td><td>~$1,240</td></tr>
+</table>
+
+<h2>Panel</h2>
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="49-key VL-1 derivative panel layout"><style>.t{font-size:8px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}.tt{font-size:6px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}.tw{font-size:7px;font-weight:700;fill:#ffffff;font-family:ui-monospace,Menlo,Consolas,monospace}.lbl{font-size:6px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}.sh{font-size:6px;fill:#555;font-family:ui-monospace,Menlo,Consolas,monospace}.bk{font-size:8px;font-weight:700;fill:#fff;font-family:ui-monospace,Menlo,Consolas,monospace}.bks{font-size:7px;font-weight:700;fill:#ffffff;font-family:ui-monospace,Menlo,Consolas,monospace}.hp{font-size:6px;font-weight:700;fill:#a8700f;font-family:ui-monospace,Menlo,Consolas,monospace}.hpb{font-size:6px;font-weight:700;fill:#f2c14e;font-family:ui-monospace,Menlo,Consolas,monospace}.id{font-size:6px;fill:#b3341c;font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700}</style>
+<rect x="5" y="5" width="1290" height="320" rx="12" fill="#e9e4d6" stroke="#b9b3a3" stroke-width="1.5"/>
+<rect x="40" y="22" width="700" height="140" rx="4" fill="#3b3e44"/><rect x="50" y="40" width="680" height="112" rx="2" fill="#0d1117"/><g style="font:bold 9px ui-monospace,Menlo,monospace;fill:#9fff8a"><text x="58" y="56">ok</text><text x="58" y="70">90099914 patch!  ok</text><text x="58" y="84">: arp  begin key? until  ;  ok</text><text x="58" y="98">rec  100 notes  tempo 120  rock-1</text><text x="58" y="112">▶ C4  E4  G4  C5  _</text></g><polyline points="380,120 400,90 430,100 470,106 520,112 560,118 600,124 640,132 700,140" fill="none" stroke="#c9553a" stroke-width="1.5"/><text x="380" y="148" class="tw">ADSSR envelope, live</text><text x="390" y="32" class="tw" text-anchor="middle">8.8" 1920×480 BAR TFT, HDMI — FORTH CONSOLE + ENVELOPE/SPECTRUM VIEW</text><text x="44" y="30" class="id">V0</text>
+<text x="830.0" y="16" class="tt" text-anchor="middle"></text><text x="830.0" y="23" class="tt" text-anchor="middle">MIN — VOLUME — MAX</text><rect x="790" y="33" width="80" height="12" rx="2" fill="#3b3e44"/><rect x="814.0" y="29" width="20" height="20" rx="2" fill="#6a6d74"/><text x="790" y="56" class="id">S0</text>
+<text x="930.0" y="16" class="tt" text-anchor="middle"></text><text x="930.0" y="23" class="tt" text-anchor="middle">RHYTHM — BALANCE — MELODY</text><rect x="885" y="33" width="90" height="12" rx="2" fill="#3b3e44"/><rect x="912.0" y="29" width="20" height="20" rx="2" fill="#6a6d74"/><text x="885" y="56" class="id">S1</text>
+<text x="1020.0" y="16" class="tt" text-anchor="middle">OCTAVE</text><text x="1020.0" y="23" class="tt" text-anchor="middle">LOW · MID · HIGH</text><rect x="990" y="33" width="60" height="12" rx="2" fill="#3b3e44"/><rect x="1008.0" y="29" width="20" height="20" rx="2" fill="#6a6d74"/><text x="990" y="56" class="id">S2</text>
+<text x="1120.0" y="16" class="tt" text-anchor="middle">PIANO · FANTASY · VIOLIN</text><text x="1120.0" y="23" class="tt" text-anchor="middle">FLUTE · GUITAR · ADSR</text><rect x="1065" y="33" width="110" height="12" rx="2" fill="#3b3e44"/><rect x="1098.0" y="29" width="20" height="20" rx="2" fill="#6a6d74"/><text x="1065" y="56" class="id">S3</text>
+<text x="1230.0" y="16" class="tt" text-anchor="middle">OFF · CAL</text><text x="1230.0" y="23" class="tt" text-anchor="middle">PLAY · REC</text><rect x="1190" y="33" width="80" height="12" rx="2" fill="#3b3e44"/><rect x="1214.0" y="29" width="20" height="20" rx="2" fill="#6a6d74"/><text x="1190" y="56" class="id">S4</text>
+<g transform="translate(800,125)"><text y="-3" class="tt" text-anchor="middle">RESET</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#c9553a"/><text y="40" class="tt" text-anchor="middle">AC</text><text x="-6" y="48" class="id">P0</text></g>
+<g transform="translate(846,125)"><text y="-3" class="tt" text-anchor="middle">DEL</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#6a6d74"/><text y="40" class="tt" text-anchor="middle">C</text><text x="-6" y="48" class="id">P1</text></g>
+<g transform="translate(892,125)"><text y="-3" class="tt" text-anchor="middle">TEMPO ▲</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#6a6d74"/><text y="40" class="tt" text-anchor="middle">√</text><text x="-6" y="48" class="id">P2</text></g>
+<g transform="translate(938,125)"><text y="-3" class="tt" text-anchor="middle">TEMPO ▼</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#6a6d74"/><text y="40" class="tt" text-anchor="middle">%</text><text x="-6" y="48" class="id">P3</text></g>
+<g transform="translate(984,125)"><text y="-3" class="tt" text-anchor="middle">RHYTHM</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#6a6d74"/><text y="40" class="tt" text-anchor="middle"></text><text x="-6" y="48" class="id">P4</text></g>
+<g transform="translate(1030,125)"><text y="-3" class="tt" text-anchor="middle">ML-C</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#6a6d74"/><text y="40" class="tt" text-anchor="middle">MC</text><text x="-6" y="48" class="id">P5</text></g>
+<g transform="translate(1076,125)"><text y="-3" class="tt" text-anchor="middle">MUSIC</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#d9962a"/><text y="40" class="tt" text-anchor="middle">MR</text><text x="-6" y="48" class="id">P6</text></g>
+<g transform="translate(1122,125)"><text y="-3" class="tt" text-anchor="middle">AUTO PLAY</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#3b5a7a"/><text y="40" class="tt" text-anchor="middle">M−</text><text x="-6" y="48" class="id">P7</text></g>
+<text x="1220" y="118" class="tt" text-anchor="middle">ONE KEY PLAY</text>
+<g transform="translate(1195,125)"><rect x="-15" y="0" width="30" height="42" rx="4" fill="#3b5a7a"/><circle cx="0" cy="21" r="6" fill="none" stroke="#e9e4d6" stroke-width="1.5"/><text y="52" class="tt" text-anchor="middle">M+</text><text x="-15" y="60" class="id">P8</text></g>
+<g transform="translate(1248,125)"><rect x="-15" y="0" width="30" height="42" rx="4" fill="#3b5a7a"/><circle cx="0" cy="21" r="6" fill="none" stroke="#e9e4d6" stroke-width="1.5"/><text x="-15" y="60" class="id">P9</text></g>
+<g fill="#f4f0e6" stroke="#8d877a" stroke-width="1"><rect x="40" y="180" width="42" height="130"/><rect x="82" y="180" width="42" height="130"/><rect x="124" y="180" width="42" height="130"/><rect x="166" y="180" width="42" height="130"/><rect x="208" y="180" width="42" height="130"/><rect x="250" y="180" width="42" height="130"/><rect x="292" y="180" width="42" height="130"/><rect x="334" y="180" width="42" height="130"/><rect x="376" y="180" width="42" height="130"/><rect x="418" y="180" width="42" height="130"/><rect x="460" y="180" width="42" height="130"/><rect x="502" y="180" width="42" height="130"/><rect x="544" y="180" width="42" height="130"/><rect x="586" y="180" width="42" height="130"/><rect x="628" y="180" width="42" height="130"/><rect x="670" y="180" width="42" height="130"/><rect x="712" y="180" width="42" height="130"/><rect x="754" y="180" width="42" height="130"/><rect x="796" y="180" width="42" height="130"/><rect x="838" y="180" width="42" height="130"/><rect x="880" y="180" width="42" height="130"/><rect x="922" y="180" width="42" height="130"/><rect x="964" y="180" width="42" height="130"/><rect x="1006" y="180" width="42" height="130"/><rect x="1048" y="180" width="42" height="130"/><rect x="1090" y="180" width="42" height="130"/><rect x="1132" y="180" width="42" height="130"/><rect x="1174" y="180" width="42" height="130"/><rect x="1216" y="180" width="42" height="130"/></g>
+<g class="lbl" text-anchor="middle"><text x="61.0" y="204">C2</text><text x="103.0" y="204">D2</text><text x="145.0" y="204">E2</text><text x="187.0" y="204">F2</text><text x="229.0" y="204">G2</text><text x="271.0" y="204">A2</text><text x="313.0" y="204">B2</text><text x="355.0" y="204">C3</text><text x="397.0" y="204">D3</text><text x="439.0" y="204">E3</text><text x="481.0" y="204">F3</text><text x="523.0" y="204">G3</text><text x="565.0" y="204">A3</text><text x="607.0" y="204">B3</text><text x="649.0" y="204">C4</text><text x="691.0" y="204">D4</text><text x="733.0" y="204">E4</text><text x="775.0" y="204">F4</text><text x="817.0" y="204">G4</text><text x="859.0" y="204">A4</text><text x="901.0" y="204">B4</text><text x="943.0" y="204">C5</text><text x="985.0" y="204">D5</text><text x="1027.0" y="204">E5</text><text x="1069.0" y="204">F5</text><text x="1111.0" y="204">G5</text><text x="1153.0" y="204">A5</text><text x="1195.0" y="204">B5</text><text x="1237.0" y="204">C6</text></g>
+<g fill="#2a2c30"><rect x="69" y="180" width="26" height="78" rx="2"/><rect x="111" y="180" width="26" height="78" rx="2"/><rect x="195" y="180" width="26" height="78" rx="2"/><rect x="237" y="180" width="26" height="78" rx="2"/><rect x="279" y="180" width="26" height="78" rx="2"/><rect x="363" y="180" width="26" height="78" rx="2"/><rect x="405" y="180" width="26" height="78" rx="2"/><rect x="489" y="180" width="26" height="78" rx="2"/><rect x="531" y="180" width="26" height="78" rx="2"/><rect x="573" y="180" width="26" height="78" rx="2"/><rect x="657" y="180" width="26" height="78" rx="2"/><rect x="699" y="180" width="26" height="78" rx="2"/><rect x="783" y="180" width="26" height="78" rx="2"/><rect x="825" y="180" width="26" height="78" rx="2"/><rect x="867" y="180" width="26" height="78" rx="2"/><rect x="951" y="180" width="26" height="78" rx="2"/><rect x="993" y="180" width="26" height="78" rx="2"/><rect x="1077" y="180" width="26" height="78" rx="2"/><rect x="1119" y="180" width="26" height="78" rx="2"/><rect x="1161" y="180" width="26" height="78" rx="2"/></g>
+<g class="t" text-anchor="middle"><text x="61.0" y="304">SPC</text><text x="103.0" y="304">a</text><text x="145.0" y="304">b</text><text x="187.0" y="304">c</text><text x="229.0" y="304">d</text><text x="271.0" y="304">e</text><text x="313.0" y="304">f</text><text x="355.0" y="304">g</text><text x="397.0" y="304">h</text><text x="439.0" y="304">i</text><text x="481.0" y="304">j</text><text x="523.0" y="304">k</text><text x="565.0" y="304">l</text><text x="607.0" y="304">m</text><text x="649.0" y="304">n</text><text x="691.0" y="304">o</text><text x="733.0" y="304">p</text><text x="775.0" y="304">q</text><text x="817.0" y="304">r</text><text x="859.0" y="304">s</text><text x="901.0" y="304">t</text><text x="943.0" y="304">u</text><text x="985.0" y="304">v</text><text x="1027.0" y="304">w</text><text x="1069.0" y="304">x</text><text x="1111.0" y="304">y</text><text x="1153.0" y="304">z</text><text x="1195.0" y="304">.</text><text x="1237.0" y="304">RET</text></g>
+<g class="sh" text-anchor="middle"><text x="61.0" y="288"></text><text x="103.0" y="288">A</text><text x="145.0" y="288">B</text><text x="187.0" y="288">C</text><text x="229.0" y="288">D</text><text x="271.0" y="288">E</text><text x="313.0" y="288">F</text><text x="355.0" y="288">G</text><text x="397.0" y="288">H</text><text x="439.0" y="288">I</text><text x="481.0" y="288">J</text><text x="523.0" y="288">K</text><text x="565.0" y="288">L</text><text x="607.0" y="288">M</text><text x="649.0" y="288">N</text><text x="691.0" y="288">O</text><text x="733.0" y="288">P</text><text x="775.0" y="288">Q</text><text x="817.0" y="288">R</text><text x="859.0" y="288">S</text><text x="901.0" y="288">T</text><text x="943.0" y="288">U</text><text x="985.0" y="288">V</text><text x="1027.0" y="288">W</text><text x="1069.0" y="288">X</text><text x="1111.0" y="288">Y</text><text x="1153.0" y="288">Z</text><text x="1195.0" y="288">,</text><text x="1237.0" y="288"></text></g>
+<g class="bk" text-anchor="middle"><text x="82" y="250">0</text><text x="124" y="250">1</text><text x="208" y="250">2</text><text x="250" y="250">3</text><text x="292" y="250">4</text><text x="376" y="250">5</text><text x="418" y="250">6</text><text x="502" y="250">7</text><text x="544" y="250">8</text><text x="586" y="250">9</text><text x="670" y="250">:</text><text x="712" y="250">;</text><text x="796" y="250">!</text><text x="838" y="250">@</text><text x="880" y="250">'</text><text x="964" y="250">&quot;</text><text x="1006" y="250">-</text><text x="1090" y="250">=</text><text x="1132" y="250">/</text><text x="1174" y="250">*</text></g>
+<g class="bks" text-anchor="middle"><text x="82" y="216">)</text><text x="124" y="216">(</text><text x="208" y="216">#</text><text x="250" y="216">$</text><text x="292" y="216">%</text><text x="376" y="216">^</text><text x="418" y="216">&amp;</text><text x="502" y="216">+</text><text x="544" y="216">&lt;</text><text x="586" y="216">&gt;</text><text x="670" y="216">?</text><text x="712" y="216">[</text><text x="796" y="216">]</text><text x="838" y="216">{</text><text x="880" y="216">}</text><text x="964" y="216">\</text><text x="1006" y="216">|</text><text x="1090" y="216">_</text><text x="1132" y="216">`</text><text x="1174" y="216">~</text></g>
+<text x="61.0" y="192" class="hp" text-anchor="middle">A0</text>
+<text x="82.0" y="192" class="hpb" text-anchor="middle">B0</text>
+<text x="103.0" y="192" class="hp" text-anchor="middle">C1</text>
+<text x="124.0" y="192" class="hpb" text-anchor="middle">D1</text>
+<text x="145.0" y="192" class="hp" text-anchor="middle">E1</text>
+<text x="187.0" y="192" class="hp" text-anchor="middle">F1</text>
+<text x="208.0" y="192" class="hpb" text-anchor="middle">G1</text>
+<text x="229.0" y="192" class="hp" text-anchor="middle">A1</text>
+<text x="250.0" y="192" class="hpb" text-anchor="middle">B1</text>
+<text x="271.0" y="192" class="hp" text-anchor="middle">C2</text>
+<text x="292.0" y="192" class="hpb" text-anchor="middle">D2</text>
+<text x="313.0" y="192" class="hp" text-anchor="middle">E2</text>
+<text x="355.0" y="192" class="hp" text-anchor="middle">F2</text>
+<text x="376.0" y="192" class="hpb" text-anchor="middle">G2</text>
+<text x="397.0" y="192" class="hp" text-anchor="middle">A2</text>
+<text x="418.0" y="192" class="hpb" text-anchor="middle">B2</text>
+<text x="439.0" y="192" class="hp" text-anchor="middle">C3</text>
+<text x="481.0" y="192" class="hp" text-anchor="middle">D3</text>
+<text x="502.0" y="192" class="hpb" text-anchor="middle">E3</text>
+<text x="523.0" y="192" class="hp" text-anchor="middle">F3</text>
+<text x="544.0" y="192" class="hpb" text-anchor="middle">G3</text>
+<text x="565.0" y="192" class="hp" text-anchor="middle">A3</text>
+<text x="586.0" y="192" class="hpb" text-anchor="middle">B3</text>
+<text x="607.0" y="192" class="hp" text-anchor="middle">C4</text>
+<text x="649.0" y="192" class="hp" text-anchor="middle">D4</text>
+<text x="670.0" y="192" class="hpb" text-anchor="middle">E4</text>
+<text x="691.0" y="192" class="hp" text-anchor="middle">F4</text>
+<text x="712.0" y="192" class="hpb" text-anchor="middle">G4</text>
+<text x="733.0" y="192" class="hp" text-anchor="middle">A4</text>
+<text x="775.0" y="192" class="hp" text-anchor="middle">B4</text>
+<text x="796.0" y="192" class="hpb" text-anchor="middle">C5</text>
+<text x="817.0" y="192" class="hp" text-anchor="middle">D5</text>
+<text x="838.0" y="192" class="hpb" text-anchor="middle">E5</text>
+<text x="859.0" y="192" class="hp" text-anchor="middle">F5</text>
+<text x="880.0" y="192" class="hpb" text-anchor="middle">G5</text>
+<text x="901.0" y="192" class="hp" text-anchor="middle">A5</text>
+<text x="943.0" y="192" class="hp" text-anchor="middle">B5</text>
+<text x="964.0" y="192" class="hpb" text-anchor="middle">C6</text>
+<text x="985.0" y="192" class="hp" text-anchor="middle">D6</text>
+<text x="1006.0" y="192" class="hpb" text-anchor="middle">E6</text>
+<text x="1027.0" y="192" class="hp" text-anchor="middle">F6</text>
+<text x="1069.0" y="192" class="hp" text-anchor="middle">G6</text>
+<text x="1090.0" y="192" class="hpb" text-anchor="middle">A6</text>
+<text x="1111.0" y="192" class="hp" text-anchor="middle">B6</text>
+<text x="1132.0" y="192" class="hpb" text-anchor="middle">C7</text>
+<text x="1153.0" y="192" class="hp" text-anchor="middle">D7</text>
+<text x="1174.0" y="192" class="hpb" text-anchor="middle">E7</text>
+<text x="1195.0" y="192" class="hp" text-anchor="middle">F7</text>
+<text x="1237.0" y="192" class="hp" text-anchor="middle">G7</text>
+<g class="lbl" text-anchor="middle"><text x="607.0" y="272">MARCH</text><text x="649.0" y="272">WALTZ</text><text x="691.0" y="272">4-BEAT</text><text x="733.0" y="272">SWING</text><text x="775.0" y="272">ROCK-1</text><text x="817.0" y="272">ROCK-2</text><text x="859.0" y="272">BOSSA</text><text x="901.0" y="272">SAMBA</text><text x="943.0" y="272">RHUMBA</text><text x="985.0" y="272">BEGUINE</text></g>
+<text x="40" y="320" class="id">Keys A0..G7 — 29 white + 20 black, C2–C6; key ID = gold pedal-harp string label (49 diatonic, one per key, as on the Erand49). ASCII base on key, SHIFT above (SHIFT = One Key Play L / P8); DEL = backspace.</text>
+</svg></div>
+<p class="sub">Gold = harp string A0–G7 (one per key). ASCII base on key, SHIFT above (SHIFT = One Key Play L). 8.8" 1920×480 bar TFT over GPDI. Antennas: pitch rod right end, volume loop left end (added at P).</p>
+
+<h2>What the box demonstrates</h2>
+<table>
+<tr><th>As-is</th><th>With one plug-in</th><th>Never (needs the IRAD system)</th></tr>
+<tr><td>Forth console, display, ADC path, voice/sequencer, theremin, harp front end, key matrix, SD games</td><td>Doppler spectrum (dadamachines board), GPS/IRIG time (PPS module), camera (DVP + SDRAM)</td><td>Three-station fusion, truth-logger validation, cross-station time sync, Ch.10 at field rate, real aircraft</td></tr>
+</table>
+
+<h2>Component overlap</h2>
+<div class="wrap"><svg style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000" font-family="ui-monospace,Menlo,Consolas,monospace"><rect width="1200" height="1000" fill="#fff"/>
+<ellipse cx="450" cy="530" rx="360" ry="225" transform="rotate(-40 450 530)" fill="#3b7dd8" fill-opacity="0.16" stroke="#3b7dd8" stroke-width="3"/>
+<ellipse cx="600" cy="630" rx="360" ry="225" transform="rotate(-40 600 630)" fill="#d8443b" fill-opacity="0.16" stroke="#d8443b" stroke-width="3"/>
+<ellipse cx="600" cy="630" rx="360" ry="225" transform="rotate(40 600 630)" fill="#3ba85a" fill-opacity="0.16" stroke="#3ba85a" stroke-width="3"/>
+<ellipse cx="750" cy="530" rx="360" ry="225" transform="rotate(40 750 530)" fill="#c58a1f" fill-opacity="0.16" stroke="#c58a1f" stroke-width="3"/>
+<text x="60" y="240" font-size="30" font-weight="700" fill="#3b7dd8">THEREMIN</text>
+<text x="120" y="940" font-size="30" font-weight="700" fill="#d8443b">MAIDEN</text>
+<text x="720" y="960" font-size="30" font-weight="700" fill="#3ba85a">PIANO (VL-49)</text>
+<text x="880" y="240" font-size="30" font-weight="700" fill="#c58a1f">HARP (Erand49)</text>
+<text x="30" y="40" font-size="16" fill="#111">FPGA component overlap — four projects, one Clash library.  ✓ built   ○ planned   Centre = shared by all, H2 Forth SoC is the control plane for each.</text>
+<text x="264" y="535" font-size="14" font-weight="400" fill="#111" text-anchor="middle">✓ LC oscillator front end</text>
+<text x="264" y="553" font-size="14" font-weight="400" fill="#111" text-anchor="middle">✓ Antenna capacitance</text>
+<text x="264" y="571" font-size="14" font-weight="400" fill="#111" text-anchor="middle">✓ Frequency counter</text>
+<text x="264" y="590" font-size="14" font-weight="400" fill="#111" text-anchor="middle">✓ Pitch→note quantizer</text>
+<text x="438" y="836" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ IRIG-B decoder</text>
+<text x="438" y="854" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ Ch.10/TMATS packetizer</text>
+<text x="438" y="872" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ Dual-ch I/Q front end</text>
+<text x="438" y="890" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ Camera/gate trigger</text>
+<text x="762" y="817" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ 8×8 key matrix + ASCII</text>
+<text x="762" y="836" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ Pulse-pattern osc (10)</text>
+<text x="762" y="854" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ ADSSR envelope</text>
+<text x="762" y="872" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ Rhythm ROM + percussion</text>
+<text x="762" y="890" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ 100-note sequencer</text>
+<text x="762" y="908" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ GPDI TMDS + overlay</text>
+<text x="936" y="517" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ 49× KS waveguides</text>
+<text x="936" y="535" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ Allpass fractional delay</text>
+<text x="936" y="553" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ X/Y magnitude + angle</text>
+<text x="936" y="571" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ Velocity log map</text>
+<text x="936" y="590" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ 98-ch sensor mux</text>
+<text x="936" y="608" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ Dispersion reg B_q16</text>
+<text x="345" y="742" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ FIR filter</text>
+<text x="345" y="759" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ Phase/freq estimator</text>
+<text x="363" y="449" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ NCO phase-inc table</text>
+<text x="363" y="466" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ Vibrato LFO</text>
+<text x="363" y="483" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ ΣΔ/PWM DAC</text>
+<text x="600" y="791" font-size="13" font-weight="400" fill="#111" text-anchor="middle">○ Video timing + text</text>
+<text x="600" y="808" font-size="13" font-weight="400" fill="#111" text-anchor="middle">○ 512-pt FFT tap</text>
+<text x="837" y="457" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ CA-CFAR detector</text>
+<text x="837" y="474" font-size="13" font-weight="400" fill="#111" text-anchor="middle">○ DC-removal HPF</text>
+<text x="855" y="733" font-size="13" font-weight="400" fill="#111" text-anchor="middle">○ I²S/TDM link</text>
+<text x="855" y="750" font-size="13" font-weight="400" fill="#111" text-anchor="middle">○ Event frame UART</text>
+<text x="855" y="767" font-size="13" font-weight="400" fill="#111" text-anchor="middle">○ Note↔string map</text>
+<text x="706" y="379" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ CIC decimator</text>
+<text x="706" y="396" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ CORDIC</text>
+<text x="754" y="623" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ 512-pt FFT</text>
+<text x="754" y="640" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ BRAM tables</text>
+<text x="754" y="657" font-size="13" font-weight="400" fill="#111" text-anchor="middle">○ Timestamped events</text>
+<text x="754" y="673" font-size="13" font-weight="400" fill="#111" text-anchor="middle">○ Timer tick</text>
+<text x="494" y="388" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ Envelope gating</text>
+<text x="600" y="469" font-size="15" font-weight="700" fill="#111" text-anchor="middle">H2 FORTH SoC (control plane)</text>
+<text x="600" y="488" font-size="15" font-weight="700" fill="#111" text-anchor="middle">✓ PLL + reset</text>
+<text x="600" y="508" font-size="15" font-weight="700" fill="#111" text-anchor="middle">✓ UART + FIFO</text>
+<text x="600" y="527" font-size="15" font-weight="700" fill="#111" text-anchor="middle">✓ Register bus</text>
+<text x="600" y="547" font-size="15" font-weight="700" fill="#111" text-anchor="middle">✓ Fixed-point mult</text>
+<text x="600" y="566" font-size="15" font-weight="700" fill="#111" text-anchor="middle">✓ SPI ADC reader</text>
+</svg></div>
+
+<h2>Board and spend</h2>
+<table>
+<tr><th>Item</th><th>Cost</th><th>Ledger</th></tr>
+<tr><td>ULX3S ECP5-85F — 84k LUT, 208 BRAM, 156 DSP, 32 MB SDRAM, microSD, GPDI</td><td>owned</td><td>P</td></tr>
+<tr><td>8.8" bar TFT + HDMI driver</td><td>$60</td><td>P</td></tr>
+<tr><td>13× ADS131M08 + carrier PCB (harp)</td><td>$180</td><td>P</td></tr>
+<tr><td>49-key membrane matrix, case</td><td>$150</td><td>P</td></tr>
+<tr><td>Harp strings, rib CNC, 98 IR pairs</td><td>~$1,000</td><td>P</td></tr>
+<tr><td>Station boards ×3, PHY, GPS, radar, cameras</td><td>~$1,225</td><td>IRAD</td></tr>
+</table>
+<p class="sub">Personal total ≈ $1,450. FPGA-adjacent share ≈ $240. Ledgers never commingle; IRAD plugs modules into the box, it does not buy the box.</p>
+
+<h2>Letters</h2>
+<table>
+<tr><th>L</th><th>Features</th></tr>
+<tr><td>P</td><td>3D-printed 49-key panel/case per layout above; key matrix, ASCII/harp legends, pulse-pattern osc, ADSSR, LFOs, patch BCD reg, rhythm ROM, sequencer, mixer, overlay, theremin select, SD banks, games — Oracle is the brains behind the UI</td></tr>
+<tr><td>O</td><td>Oracle: H2 CPU, eForth, UART, register bus, timer, IRQ, GPDI text/VT100 on bar TFT, SD blocks, GPIO/ADC words, CW keyer/decoder (old F, D absorbed)</td></tr>
+<tr><td>E</td><td>Erand49: 49 strings, 98 IR, DC HPF, CORDIC mag/angle, CA-CFAR onset, velocity map, 49 KS waveguides, allpass delay, dispersion reg, I²S/TDM, event UART (A absorbed)</td></tr>
+<tr><td>T</td><td>LC oscillator, antenna sense, freq counter, pitch quantizer, CIC/FIR, NCO, envelope, vibrato, ΣΔ DAC</td></tr>
+<tr><td>I</td><td>IRIG-B generator/decoder, DC-level + modulated out; free-running crystal, disciplined by G; time shown on Oracle</td></tr>
+<tr><td>C</td><td>Santa Glide: 8-coil linear reluctance glide, steel slug in 10 ft silicone tube over the snow village; Alchitry Cu, Moore FSM, PWM Hold/Run, IRLZ44N + 1N5408 flyback, show switch</td></tr>
+<tr><td>M</td><td>MAIDEN: tabletop testbed (elastic draw-stop rig, range mat, ArUco, wire truth model), unit integration, solver; I/Q Doppler, CFAR, camera, IRIG-B, Ch.10/TMATS, 3-station fusion at RCRC (old S absorbed)</td></tr>
+<tr><td>U</td><td>UHF beacon: GPS-disciplined CW/WSPR, ham — personal ledger</td></tr>
+<tr><td>S</td><td>SDR: direct-sampling HF on theremin antennas, AD9226-class ADC, DDC (CIC/FIR), waterfall on Oracle</td></tr>
+<tr><td>I</td><td>Imaging: global-shutter camera capture, external trigger, IRIG timestamp, centroid</td></tr>
+<tr><td>N</td><td>Network: RMII PHY, MAC, UDP, Ch.10 transport</td></tr>
+<tr><td>G</td><td>GPS: PPS DPLL, 10 MHz, station clock copies; disciplines the IRIG clock</td></tr>
+</table>
+</main></body></html>

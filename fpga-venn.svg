@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 1000" font-family="ui-monospace,Menlo,Consolas,monospace">
+<rect width="1100" height="1000" fill="#fff"/>
+<circle cx="400" cy="370" r="330" fill="#3b7dd8" fill-opacity="0.18" stroke="#3b7dd8" stroke-width="3"/>
+<circle cx="700" cy="370" r="330" fill="#d8443b" fill-opacity="0.18" stroke="#d8443b" stroke-width="3"/>
+<circle cx="550" cy="630" r="330" fill="#3ba85a" fill-opacity="0.18" stroke="#3ba85a" stroke-width="3"/>
+<text x="150" y="70" font-size="30" font-weight="700" fill="#2a5ea8">THEREMIN</text>
+<text x="800" y="70" font-size="30" font-weight="700" fill="#a8302a">MAIDEN</text>
+<text x="470" y="985" font-size="30" font-weight="700" fill="#2a7a42">PIANO (VL-49)</text>
+<text x="30" y="30" font-size="16" fill="#111">Module count: Theremin 17 · MAIDEN 20 · Piano 22 · Shared by all three 5</text>
+<text x="215" y="271" font-size="15" font-weight="400" fill="#111" text-anchor="middle">LC oscillator front end</text>
+<text x="215" y="290" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Antenna capacitance sense</text>
+<text x="215" y="310" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Frequency counter</text>
+<text x="215" y="329" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Pitch → note quantizer</text>
+<text x="890" y="261" font-size="15" font-weight="400" fill="#111" text-anchor="middle">CA-CFAR detector</text>
+<text x="890" y="280" font-size="15" font-weight="400" fill="#111" text-anchor="middle">IRIG-B time decoder</text>
+<text x="890" y="300" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Ch.10 / TMATS packetizer</text>
+<text x="890" y="320" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Dual-channel I/Q front end</text>
+<text x="890" y="339" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Camera / gate trigger</text>
+<text x="550" y="802" font-size="15" font-weight="400" fill="#111" text-anchor="middle">8×8 key matrix + ASCII decoder</text>
+<text x="550" y="821" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Pulse-pattern oscillator (10)</text>
+<text x="550" y="840" font-size="15" font-weight="400" fill="#111" text-anchor="middle">ADSSR shared-step envelope</text>
+<text x="550" y="860" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Tremolo LFO · patch BCD reg</text>
+<text x="550" y="880" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Rhythm ROM + percussion</text>
+<text x="550" y="899" font-size="15" font-weight="400" fill="#111" text-anchor="middle">100-note sequencer FSM</text>
+<text x="550" y="918" font-size="15" font-weight="400" fill="#111" text-anchor="middle">GPDI TMDS + overlay FB</text>
+<text x="550" y="226" font-size="15" font-weight="400" fill="#111" text-anchor="middle">CIC ×8 decimator</text>
+<text x="550" y="245" font-size="15" font-weight="400" fill="#111" text-anchor="middle">FIR filter</text>
+<text x="550" y="265" font-size="15" font-weight="400" fill="#111" text-anchor="middle">CORDIC</text>
+<text x="550" y="284" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Phase / freq estimator</text>
+<text x="360" y="571" font-size="15" font-weight="400" fill="#111" text-anchor="middle">NCO phase-inc table</text>
+<text x="360" y="590" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Envelope gating</text>
+<text x="360" y="610" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Vibrato LFO</text>
+<text x="360" y="629" font-size="15" font-weight="400" fill="#111" text-anchor="middle">ΣΔ / PWM DAC</text>
+<text x="745" y="551" font-size="15" font-weight="400" fill="#111" text-anchor="middle">H2 Forth console</text>
+<text x="745" y="571" font-size="15" font-weight="400" fill="#111" text-anchor="middle">512-pt FFT</text>
+<text x="745" y="590" font-size="15" font-weight="400" fill="#111" text-anchor="middle">BRAM pattern tables</text>
+<text x="745" y="610" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Timestamped event buffer</text>
+<text x="745" y="629" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Video timing + text mode</text>
+<text x="745" y="649" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Timer tick</text>
+<text x="550" y="426" font-size="17" font-weight="700" fill="#111" text-anchor="middle">PLL + reset sync</text>
+<text x="550" y="448" font-size="17" font-weight="700" fill="#111" text-anchor="middle">UART + FIFO</text>
+<text x="550" y="470" font-size="17" font-weight="700" fill="#111" text-anchor="middle">Register bus</text>
+<text x="550" y="492" font-size="17" font-weight="700" fill="#111" text-anchor="middle">Fixed-point multiply</text>
+<text x="550" y="514" font-size="17" font-weight="700" fill="#111" text-anchor="middle">SPI ADC reader</text>
+</svg>

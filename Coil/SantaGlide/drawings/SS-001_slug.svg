@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="580" viewBox="0 0 900 580" font-family="Arial, Helvetica, sans-serif">
+  <!-- sheet -->
+  <rect x="0" y="0" width="900" height="580" fill="#ffffff"/>
+  <rect x="15" y="15" width="870" height="550" fill="none" stroke="#000" stroke-width="2"/>
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M0,1.5 L10,5 L0,8.5 z" fill="#000"/>
+    </marker>
+  </defs>
+
+  <!-- ============ MAIN (FRONT) VIEW, scale 10:1 ============ -->
+  <!-- axis centre y=250, part x 140..340 -->
+  <!-- centreline (thin chain) -->
+  <line x1="120" y1="250" x2="360" y2="250" stroke="#000" stroke-width="0.75" stroke-dasharray="14 3 3 3"/>
+
+  <!-- outline (thick continuous) : chamfered ends, anti-roll flat on bottom -->
+  <path d="M145,236 L335,236 L340,241 L340,255 L335,260 L145,260 L140,255 L140,241 Z"
+        fill="none" stroke="#000" stroke-width="2.2" stroke-linejoin="miter"/>
+  <!-- chamfer edge lines (visible edges) -->
+  <line x1="145" y1="236" x2="145" y2="260" stroke="#000" stroke-width="2.2"/>
+  <line x1="335" y1="236" x2="335" y2="260" stroke="#000" stroke-width="2.2"/>
+
+  <!-- length dimension: 20 -->
+  <line x1="140" y1="232" x2="140" y2="196" stroke="#000" stroke-width="0.75"/>
+  <line x1="340" y1="232" x2="340" y2="196" stroke="#000" stroke-width="0.75"/>
+  <line x1="140" y1="202" x2="340" y2="202" stroke="#000" stroke-width="0.75" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="240" y="196" font-size="15" text-anchor="middle">20</text>
+
+  <!-- chamfer callout -->
+  <line x1="337" y1="238" x2="386" y2="176" stroke="#000" stroke-width="0.75" marker-start="url(#arr)"/>
+  <line x1="386" y1="176" x2="470" y2="176" stroke="#000" stroke-width="0.75"/>
+  <text x="392" y="171" font-size="14">0.5 &#215; 45&#176;  BOTH ENDS</text>
+
+  <!-- flat callout -->
+  <line x1="250" y1="260" x2="290" y2="316" stroke="#000" stroke-width="0.75" marker-start="url(#arr)"/>
+  <line x1="290" y1="316" x2="420" y2="316" stroke="#000" stroke-width="0.75"/>
+  <text x="296" y="311" font-size="14">FLAT 0.4 DEEP, FULL LENGTH</text>
+  <text x="296" y="332" font-size="12">(ANTI-ROLL &#8212; SANTA PAINTED OPPOSITE FACE)</text>
+
+  <!-- view label -->
+  <text x="240" y="292" font-size="13" text-anchor="middle" font-weight="bold">FRONT VIEW</text>
+
+  <!-- ============ LEFT END VIEW (first-angle: placed to the right) ============ -->
+  <!-- centre (560,248), R=14px -> circle D2.8 ; chord (flat) at +10 -->
+  <!-- centrelines -->
+  <line x1="536" y1="248" x2="584" y2="248" stroke="#000" stroke-width="0.75" stroke-dasharray="12 3 3 3"/>
+  <line x1="560" y1="224" x2="560" y2="272" stroke="#000" stroke-width="0.75" stroke-dasharray="12 3 3 3"/>
+
+  <!-- outer profile: major arc + flat chord -->
+  <path d="M 550.2,258 A 14,14 0 1 1 569.8,258 Z" fill="none" stroke="#000" stroke-width="2.2"/>
+  <!-- chamfer edge circle (D1.8) -->
+  <circle cx="560" cy="248" r="9" fill="none" stroke="#000" stroke-width="1.1"/>
+
+  <!-- diameter leader -->
+  <line x1="569.9" y1="238.1" x2="606" y2="204" stroke="#000" stroke-width="0.75" marker-start="url(#arr)"/>
+  <line x1="606" y1="204" x2="648" y2="204" stroke="#000" stroke-width="0.75"/>
+  <text x="612" y="199" font-size="15">&#216;2.8</text>
+  <text x="654" y="196" font-size="10">&#8722;0.05</text>
+  <text x="654" y="206" font-size="10">&#8722;0.15</text>
+
+  <!-- across-flat dimension 2.4 -->
+  <line x1="560" y1="234" x2="632" y2="234" stroke="#000" stroke-width="0.75"/>
+  <line x1="552" y1="258" x2="632" y2="258" stroke="#000" stroke-width="0.75"/>
+  <line x1="626" y1="234" x2="626" y2="258" stroke="#000" stroke-width="0.75" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="634" y="251" font-size="15">2.4</text>
+
+  <!-- view label -->
+  <text x="560" y="292" font-size="13" text-anchor="middle" font-weight="bold">END VIEW</text>
+
+  <!-- ============ NOTES ============ -->
+  <text x="40" y="392" font-size="14" font-weight="bold">NOTES</text>
+  <text x="40" y="412" font-size="13">1.  MATERIAL: MILD STEEL ROD (C1018 OR SIMILAR). DO NOT USE STAINLESS.</text>
+  <text x="40" y="430" font-size="13">2.  BREAK ALL EDGES. POLISH OUTSIDE DIAMETER SMOOTH.</text>
+  <text x="40" y="448" font-size="13">3.  SLIDING FIT IN &#216;3.2 BORE (1/8 in ID TUBE). RADIAL CLEARANCE &#8776; 0.2.</text>
+  <text x="40" y="466" font-size="13">4.  PRIME AND PAINT DECORATION THIN (&#8804; 0.05 PER SIDE); LEAVE END FACES BARE.</text>
+  <text x="40" y="484" font-size="13">5.  GENERAL TOLERANCES: ISO 2768-m. DIMENSIONS IN MILLIMETRES.</text>
+
+  <!-- ============ TITLE BLOCK (ISO 7200 style) ============ -->
+  <g stroke="#000" stroke-width="1.4" fill="none">
+    <rect x="455" y="440" width="430" height="125"/>
+    <line x1="455" y1="472" x2="885" y2="472"/>
+    <line x1="455" y1="504" x2="885" y2="504"/>
+    <line x1="455" y1="534" x2="885" y2="534"/>
+    <line x1="650" y1="440" x2="650" y2="565"/>
+    <line x1="770" y1="472" x2="770" y2="565"/>
+  </g>
+
+  <text x="465" y="459" font-size="10">TITLE</text>
+  <text x="465" y="496" font-size="15" font-weight="bold">SANTA SLUG &#8212; GLIDE SHUTTLE ARMATURE</text>
+
+  <text x="660" y="459" font-size="10">DRAWING NO.</text>
+  <text x="740" y="461" font-size="13" font-weight="bold">SS-001</text>
+
+  <text x="465" y="518" font-size="10">MATERIAL</text>
+  <text x="530" y="520" font-size="12">MILD STEEL</text>
+  <text x="465" y="548" font-size="10">DRAWN</text>
+  <text x="530" y="550" font-size="12">CLAUDE / CLEMENTS VILLAGE WORKS</text>
+
+  <text x="660" y="518" font-size="10">SCALE</text>
+  <text x="700" y="520" font-size="12" font-weight="bold">10:1</text>
+  <text x="660" y="548" font-size="10">UNITS</text>
+  <text x="700" y="550" font-size="12">mm</text>
+
+  <text x="780" y="518" font-size="10">PROJECTION: FIRST ANGLE</text>
+  <!-- first-angle symbol: concentric circles left, frustum widening toward them -->
+  <g stroke="#000" stroke-width="1.3" fill="none">
+    <circle cx="805" cy="545" r="11"/>
+    <circle cx="805" cy="545" r="5"/>
+    <line x1="788" y1="545" x2="822" y2="545" stroke-width="0.6" stroke-dasharray="8 2 2 2"/>
+    <path d="M832,534 L862,540 L862,550 L832,556 Z"/>
+    <line x1="826" y1="545" x2="868" y2="545" stroke-width="0.6" stroke-dasharray="8 2 2 2"/>
+  </g>
+
+  <text x="780" y="459" font-size="10">SHEET</text>
+  <text x="820" y="461" font-size="12">1 / 1</text>
+</svg>

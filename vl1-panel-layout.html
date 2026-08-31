@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VL-1 control panel map</title>
+<style>
+  :root { --bg:#1b1d22; --panel:#e9e4d6; --ink:#23262b; --key:#f4f0e6; --blk:#2a2c30; --slot:#3b3e44; --acc:#c9553a; --amb:#d9962a; --blu:#3b5a7a; --grid:#5a5e66; }
+  html,body { margin:0; background:var(--bg); color:#d8d4c8; font:14px/1.45 ui-monospace, Menlo, Consolas, monospace; }
+  main { max-width:1100px; margin:0 auto; padding:16px; }
+  h1 { font-size:16px; font-weight:600; margin:0 0 4px; letter-spacing:.04em; }
+  p.sub { margin:0 0 12px; color:#9aa0aa; }
+  svg { width:100%; height:auto; display:block; border-radius:6px; }
+  table { border-collapse:collapse; width:100%; margin-top:14px; font-size:13px; }
+  th,td { text-align:left; padding:4px 8px; border-bottom:1px solid #33363c; vertical-align:top; }
+  th { color:#9aa0aa; font-weight:500; }
+  .t { font-size:6.2px; fill:var(--ink); font-family:ui-monospace,Menlo,Consolas,monospace; }
+  .tt { font-size:5px; fill:var(--ink); font-family:ui-monospace,Menlo,Consolas,monospace; }
+  .tw { font-size:5px; fill:#cfd3da; font-family:ui-monospace,Menlo,Consolas,monospace; }
+  .lbl { font-size:4.6px; fill:#4a4e56; font-family:ui-monospace,Menlo,Consolas,monospace; }
+  .id { font-size:4.4px; fill:var(--acc); font-family:ui-monospace,Menlo,Consolas,monospace; font-weight:700; }
+</style>
+</head>
+<body>
+<main>
+<h1>VL-1 CONTROL PANEL MAP</h1>
+<p class="sub">Functional layout for the FPGA port. Red tags are input IDs used in the table below. Not to scale.</p>
+
+<svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="VL-1 panel layout">
+  <!-- chassis -->
+  <rect x="5" y="5" width="990" height="290" rx="12" fill="#e9e4d6" stroke="#b9b3a3" stroke-width="1.5"/>
+
+  <!-- speaker grille -->
+  <g id="speaker">
+    <rect x="22" y="40" width="200" height="215" rx="4" fill="#ded8c8"/>
+    <g stroke="#b7b09e" stroke-width="2">
+      <line x1="30" y1="50" x2="214" y2="50"/><line x1="30" y1="62" x2="214" y2="62"/><line x1="30" y1="74" x2="214" y2="74"/><line x1="30" y1="86" x2="214" y2="86"/><line x1="30" y1="98" x2="214" y2="98"/><line x1="30" y1="110" x2="214" y2="110"/><line x1="30" y1="122" x2="214" y2="122"/><line x1="30" y1="134" x2="214" y2="134"/><line x1="30" y1="146" x2="214" y2="146"/><line x1="30" y1="158" x2="214" y2="158"/><line x1="30" y1="170" x2="214" y2="170"/><line x1="30" y1="182" x2="214" y2="182"/><line x1="30" y1="194" x2="214" y2="194"/><line x1="30" y1="206" x2="214" y2="206"/><line x1="30" y1="218" x2="214" y2="218"/><line x1="30" y1="230" x2="214" y2="230"/><line x1="30" y1="242" x2="214" y2="242"/>
+    </g>
+    <text x="122" y="268" class="lbl" text-anchor="middle">SPEAKER (output, 1 ch PWM/DAC)</text>
+  </g>
+
+  <!-- LCD -->
+  <g id="lcd">
+    <rect x="240" y="30" width="170" height="100" rx="4" fill="#3b3e44"/>
+    <rect x="252" y="55" width="146" height="48" rx="2" fill="#aab39a"/>
+    <text x="325" y="88" text-anchor="middle" style="font:26px ui-monospace,Menlo,monospace; fill:#23262b; letter-spacing:6px">‾6 ‾5 6</text>
+    <text x="325" y="46" class="tw" text-anchor="middle">8-CHARACTER LCD</text>
+    <text x="325" y="120" class="tw" text-anchor="middle">7-seg + sign/flag segments</text>
+    <text x="244" y="38" class="id">D0</text>
+  </g>
+
+  <!-- sliders -->
+  <g id="sliders" font-family="ui-monospace,Menlo,monospace">
+    <!-- volume -->
+    <text x="490" y="36" class="tt" text-anchor="middle">MIN — VOLUME — MAX</text>
+    <rect x="445" y="45" width="90" height="12" rx="2" fill="#3b3e44"/>
+    <rect x="466" y="41" width="26" height="20" rx="2" fill="#6a6d74"/>
+    <text x="445" y="70" class="id">P0</text>
+    <!-- balance -->
+    <text x="615" y="36" class="tt" text-anchor="middle">RHYTHM — BALANCE — MELODY</text>
+    <rect x="565" y="45" width="100" height="12" rx="2" fill="#3b3e44"/>
+    <rect x="602" y="41" width="26" height="20" rx="2" fill="#6a6d74"/>
+    <text x="565" y="70" class="id">P1</text>
+    <!-- octave -->
+    <text x="730" y="30" class="tt" text-anchor="middle">OCTAVE</text>
+    <text x="730" y="37" class="tt" text-anchor="middle">LOW · MID · HIGH</text>
+    <rect x="700" y="45" width="60" height="12" rx="2" fill="#3b3e44"/>
+    <rect x="708" y="41" width="18" height="20" rx="2" fill="#6a6d74"/>
+    <text x="700" y="70" class="id">S0 (3 pos)</text>
+    <!-- voice -->
+    <text x="825" y="24" class="tt" text-anchor="middle">PIANO · FANTASY · VIOLIN</text>
+    <text x="825" y="31" class="tt" text-anchor="middle">FLUTE · GUITAR · ADSR</text>
+    <rect x="775" y="45" width="100" height="12" rx="2" fill="#3b3e44"/>
+    <rect x="800" y="41" width="18" height="20" rx="2" fill="#6a6d74"/>
+    <text x="775" y="70" class="id">S1 (6 pos)</text>
+    <!-- mode -->
+    <text x="935" y="30" class="tt" text-anchor="middle">OFF · CAL</text>
+    <text x="935" y="37" class="tt" text-anchor="middle">PLAY · REC</text>
+    <rect x="905" y="45" width="60" height="12" rx="2" fill="#3b3e44"/>
+    <rect x="930" y="41" width="18" height="20" rx="2" fill="#6a6d74"/>
+    <text x="905" y="70" class="id">S2 (4 pos)</text>
+  </g>
+
+  <!-- pushbuttons -->
+  <g id="buttons">
+    <g transform="translate(494,95)"><text y="-3" class="tt" text-anchor="middle">RESET</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#c9553a"/><text y="40" class="tt" text-anchor="middle">AC</text><text x="-6" y="48" class="id">B0</text></g>
+    <g transform="translate(535,95)"><text y="-3" class="tt" text-anchor="middle">DEL</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#6a6d74"/><text y="40" class="tt" text-anchor="middle">C</text><text x="-6" y="48" class="id">B1</text></g>
+    <g transform="translate(578,95)"><text y="-3" class="tt" text-anchor="middle">TEMPO ▲</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#6a6d74"/><text y="40" class="tt" text-anchor="middle">√</text><text x="-6" y="48" class="id">B2</text></g>
+    <g transform="translate(618,95)"><text y="-3" class="tt" text-anchor="middle">TEMPO ▼</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#6a6d74"/><text y="40" class="tt" text-anchor="middle">%</text><text x="-6" y="48" class="id">B3</text></g>
+    <g transform="translate(660,95)"><text y="-3" class="tt" text-anchor="middle">RHYTHM</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#6a6d74"/><text x="-6" y="48" class="id">B4</text></g>
+    <g transform="translate(705,95)"><text y="-3" class="tt" text-anchor="middle">ML-C</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#6a6d74"/><text y="40" class="tt" text-anchor="middle">MC</text><text x="-6" y="48" class="id">B5</text></g>
+    <g transform="translate(745,95)"><text y="-3" class="tt" text-anchor="middle">MUSIC</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#d9962a"/><text y="40" class="tt" text-anchor="middle">MR</text><text x="-6" y="48" class="id">B6</text></g>
+    <g transform="translate(790,95)"><text y="-3" class="tt" text-anchor="middle">AUTO PLAY</text><rect x="-6" y="2" width="12" height="28" rx="2" fill="#3b5a7a"/><text y="40" class="tt" text-anchor="middle">M−</text><text x="-6" y="48" class="id">B7</text></g>
+    <text x="930" y="88" class="tt" text-anchor="middle">ONE KEY PLAY</text>
+    <g transform="translate(905,95)"><rect x="-15" y="0" width="30" height="42" rx="4" fill="#3b5a7a"/><circle cx="0" cy="21" r="6" fill="none" stroke="#e9e4d6" stroke-width="1.5"/><text y="52" class="tt" text-anchor="middle">M+</text><text x="-15" y="60" class="id">B8</text></g>
+    <g transform="translate(958,95)"><rect x="-15" y="0" width="30" height="42" rx="4" fill="#3b5a7a"/><circle cx="0" cy="21" r="6" fill="none" stroke="#e9e4d6" stroke-width="1.5"/><text x="-15" y="60" class="id">B9</text></g>
+  </g>
+
+  <!-- keyboard: 17 white keys G..B, 12 black -->
+  <g id="keys">
+    <!-- white keys: x = 255 + 43*i, width 43 -->
+    <g fill="#f4f0e6" stroke="#8d877a" stroke-width="1">
+      <rect x="255" y="150" width="43" height="130"/><rect x="298" y="150" width="43" height="130"/><rect x="341" y="150" width="43" height="130"/><rect x="384" y="150" width="43" height="130"/><rect x="427" y="150" width="43" height="130"/><rect x="470" y="150" width="43" height="130"/><rect x="513" y="150" width="43" height="130"/><rect x="556" y="150" width="43" height="130"/><rect x="599" y="150" width="43" height="130"/><rect x="642" y="150" width="43" height="130"/><rect x="685" y="150" width="43" height="130"/><rect x="728" y="150" width="43" height="130"/><rect x="771" y="150" width="43" height="130"/><rect x="814" y="150" width="43" height="130"/><rect x="857" y="150" width="43" height="130"/><rect x="900" y="150" width="43" height="130"/><rect x="943" y="150" width="43" height="130"/>
+    </g>
+    <!-- note names on white keys -->
+    <g class="lbl" text-anchor="middle">
+      <text x="276" y="162">G</text><text x="319" y="162">A</text><text x="362" y="162">B</text><text x="405" y="162">C</text><text x="448" y="162">D</text><text x="491" y="162">E</text><text x="534" y="162">F</text><text x="577" y="162">G</text><text x="620" y="162">A</text><text x="663" y="162">B</text><text x="706" y="162">C</text><text x="749" y="162">D</text><text x="792" y="162">E</text><text x="835" y="162">F</text><text x="878" y="162">G</text><text x="921" y="162">A</text><text x="964" y="162">B</text>
+    </g>
+    <!-- black keys: between white i and i+1 at x=255+43*(i+1)-13, width 26, height 78 -->
+    <g fill="#2a2c30">
+      <rect x="285" y="150" width="26" height="78" rx="2"/>   <!-- G# -->
+      <rect x="328" y="150" width="26" height="78" rx="2"/>   <!-- A# -->
+      <rect x="414" y="150" width="26" height="78" rx="2"/>   <!-- C# -->
+      <rect x="457" y="150" width="26" height="78" rx="2"/>   <!-- D# -->
+      <rect x="543" y="150" width="26" height="78" rx="2"/>   <!-- F# -->
+      <rect x="586" y="150" width="26" height="78" rx="2"/>   <!-- G# -->
+      <rect x="629" y="150" width="26" height="78" rx="2"/>   <!-- A# -->
+      <rect x="715" y="150" width="26" height="78" rx="2"/>   <!-- C# -->
+      <rect x="758" y="150" width="26" height="78" rx="2"/>   <!-- D# -->
+      <rect x="844" y="150" width="26" height="78" rx="2"/>   <!-- F# -->
+      <rect x="887" y="150" width="26" height="78" rx="2"/>   <!-- G# -->
+      <rect x="930" y="150" width="26" height="78" rx="2"/>   <!-- A# -->
+    </g>
+    <!-- rhythm legends printed above white keys 3..12 -->
+    <g class="lbl" text-anchor="middle">
+      <text x="362" y="240">MARCH</text><text x="405" y="240">WALTZ</text><text x="448" y="240">4-BEAT</text><text x="491" y="240">SWING</text><text x="534" y="240">ROCK-1</text><text x="577" y="240">ROCK-2</text><text x="620" y="240">BOSSA</text><text x="663" y="240">SAMBA</text><text x="706" y="240">RHUMBA</text><text x="749" y="240">BEGUINE</text>
+    </g>
+    <!-- calculator legends on white keys -->
+    <g class="t" text-anchor="middle">
+      <text x="276" y="270">+/−</text><text x="319" y="270">.</text><text x="362" y="270">0</text><text x="405" y="270">1</text><text x="448" y="270">2</text><text x="491" y="270">3</text><text x="534" y="270">4</text><text x="577" y="270">5</text><text x="620" y="270">6</text><text x="663" y="270">7</text><text x="706" y="270">8</text><text x="749" y="270">9</text><text x="792" y="270">+</text><text x="835" y="270">×</text><text x="878" y="270">−</text><text x="921" y="270">÷</text><text x="964" y="270">=</text>
+    </g>
+    <text x="258" y="290" class="id">K0..K28 (17 white + 12 black, G2–B4 at middle octave)</text>
+  </g>
+</svg>
+
+<table>
+  <tr><th>ID</th><th>Element</th><th>Count</th><th>Port input</th></tr>
+  <tr><td>K0–K28</td><td>Membrane keys (17 white, 12 black); double as calculator keypad</td><td>29</td><td>Key matrix, ~6×5 scan</td></tr>
+  <tr><td>B0–B9</td><td>Reset, Del, Tempo ▲/▼, Rhythm, ML-C, Music, Auto Play, One Key Play ×2</td><td>10</td><td>Add to matrix or 10 GPIO</td></tr>
+  <tr><td>S0</td><td>Octave slide switch (low / middle / high)</td><td>3 pos</td><td>2 GPIO</td></tr>
+  <tr><td>S1</td><td>Voice slide switch (piano / fantasy / violin / flute / guitar / ADSR)</td><td>6 pos</td><td>3 GPIO</td></tr>
+  <tr><td>S2</td><td>Mode slide switch (off / cal / play / rec)</td><td>4 pos</td><td>2 GPIO</td></tr>
+  <tr><td>P0, P1</td><td>Volume, Balance slide pots</td><td>2</td><td>2 ADC ch (or digital pots)</td></tr>
+  <tr><td>D0</td><td>8-character LCD</td><td>1</td><td>Segment driver or replacement OLED</td></tr>
+  <tr><td>—</td><td>Speaker / headphone out</td><td>1 ch</td><td>PWM/ΣΔ + RC LP filter</td></tr>
+</table>
+</main>
+</body>
+</html>

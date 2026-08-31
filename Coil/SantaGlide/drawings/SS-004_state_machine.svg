@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="580" viewBox="0 0 900 580" font-family="Arial, Helvetica, sans-serif">
+  <rect width="900" height="580" fill="#fff"/>
+  <rect x="15" y="15" width="870" height="550" fill="none" stroke="#000" stroke-width="2"/>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+      <path d="M0,1 L10,5 L0,9 z" fill="#000"/>
+    </marker>
+  </defs>
+
+  <text x="40" y="45" font-size="15" font-weight="bold">STATE MACHINE &#8212; SANTA GLIDE CONTROLLER (8-COIL LINEAR ASSEMBLY)</text>
+  <text x="40" y="62" font-size="10.5">UML STATE NOTATION. STATE = (phase, i, t, rest). i = ACTIVE STATION C0..C7 (SS-002). TRANSITION LABEL: guard / action.</text>
+
+  <!-- dwell table -->
+  <rect x="650" y="70" width="225" height="52" fill="none" stroke="#000" stroke-width="1.2"/>
+  <line x1="650" y1="88" x2="875" y2="88" stroke="#000" stroke-width="1"/>
+  <line x1="650" y1="105" x2="875" y2="105" stroke="#000" stroke-width="1"/>
+  <line x1="705" y1="70" x2="705" y2="122" stroke="#000" stroke-width="1"/>
+  <text x="655" y="83" font-size="9.5" font-weight="bold">dwell(i)</text>
+  <text x="655" y="100" font-size="9.5">i</text>
+  <text x="655" y="117" font-size="9.5">ms</text>
+  <g font-size="9.5" text-anchor="middle">
+    <text x="716" y="100">0</text><text x="738" y="100">1</text><text x="760" y="100">2</text><text x="782" y="100">3</text>
+    <text x="804" y="100">4</text><text x="826" y="100">5</text><text x="848" y="100">6</text><text x="868" y="100">7</text>
+    <text x="716" y="117">400</text><text x="738" y="117">250</text><text x="760" y="117">150</text><text x="782" y="117">100</text>
+    <text x="804" y="117">100</text><text x="826" y="117">150</text><text x="848" y="117">250</text><text x="868" y="117">400</text>
+  </g>
+
+  <!-- initial pseudo-state -->
+  <circle cx="38" cy="255" r="6" fill="#000"/>
+  <line x1="44" y1="255" x2="60" y2="255" stroke="#000" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="26" y="242" font-size="9">RESET</text>
+
+  <!-- ======= STATES ======= -->
+  <!-- PARK_A -->
+  <rect x="60" y="215" width="160" height="80" rx="12" fill="none" stroke="#000" stroke-width="2"/>
+  <line x1="60" y1="240" x2="220" y2="240" stroke="#000" stroke-width="1.2"/>
+  <text x="140" y="232" font-size="13" font-weight="bold" text-anchor="middle">PARK_A</text>
+  <text x="68" y="257" font-size="9.5">entry / i := 0</text>
+  <text x="68" y="271" font-size="9.5">do / coil[0] := HOLD</text>
+  <text x="68" y="285" font-size="9.5">do / rest := rest &#8722; 1</text>
+
+  <!-- GLIDE_FWD -->
+  <rect x="330" y="105" width="240" height="85" rx="12" fill="none" stroke="#000" stroke-width="2"/>
+  <line x1="330" y1="130" x2="570" y2="130" stroke="#000" stroke-width="1.2"/>
+  <text x="450" y="122" font-size="13" font-weight="bold" text-anchor="middle">GLIDE_FWD  (A &#8594; B)</text>
+  <text x="338" y="147" font-size="9.5">do / coil[i] := RUN,  all others OFF</text>
+  <text x="338" y="161" font-size="9.5">do / t := t + 1</text>
+  <text x="338" y="175" font-size="9.5">exit / rest := 2.5 s</text>
+
+  <!-- PARK_B -->
+  <rect x="680" y="215" width="160" height="80" rx="12" fill="none" stroke="#000" stroke-width="2"/>
+  <line x1="680" y1="240" x2="840" y2="240" stroke="#000" stroke-width="1.2"/>
+  <text x="760" y="232" font-size="13" font-weight="bold" text-anchor="middle">PARK_B</text>
+  <text x="688" y="257" font-size="9.5">entry / i := 7</text>
+  <text x="688" y="271" font-size="9.5">do / coil[7] := HOLD</text>
+  <text x="688" y="285" font-size="9.5">do / rest := rest &#8722; 1</text>
+
+  <!-- GLIDE_REV -->
+  <rect x="330" y="345" width="240" height="85" rx="12" fill="none" stroke="#000" stroke-width="2"/>
+  <line x1="330" y1="370" x2="570" y2="370" stroke="#000" stroke-width="1.2"/>
+  <text x="450" y="362" font-size="13" font-weight="bold" text-anchor="middle">GLIDE_REV  (B &#8594; A)</text>
+  <text x="338" y="387" font-size="9.5">do / coil[i] := RUN,  all others OFF</text>
+  <text x="338" y="401" font-size="9.5">do / t := t + 1</text>
+  <text x="338" y="415" font-size="9.5">exit / rest := 2.5 s</text>
+
+  <!-- ======= TRANSITIONS ======= -->
+  <!-- PARK_A -> GLIDE_FWD -->
+  <line x1="220" y1="240" x2="330" y2="150" stroke="#000" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="70" y="182" font-size="9.5">[showOn &#8743; rest = 0]</text>
+  <text x="70" y="195" font-size="9.5">/ i := 0, t := 0</text>
+
+  <!-- GLIDE_FWD self loop -->
+  <path d="M400,105 C400,58 500,58 500,105" fill="none" stroke="#000" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="512" y="82" font-size="9.5">[t &#8805; dwell(i) &#8743; i &lt; 7]</text>
+  <text x="512" y="95" font-size="9.5">/ i := i + 1, t := 0</text>
+
+  <!-- GLIDE_FWD -> PARK_B -->
+  <line x1="570" y1="150" x2="680" y2="240" stroke="#000" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="640" y="182" font-size="9.5">[t &#8805; dwell(7) &#8743; i = 7]</text>
+  <text x="640" y="195" font-size="9.5">/ arrived at house B</text>
+
+  <!-- PARK_B -> GLIDE_REV -->
+  <line x1="680" y1="275" x2="570" y2="390" stroke="#000" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="640" y="334" font-size="9.5">[showOn &#8743; rest = 0]</text>
+  <text x="640" y="347" font-size="9.5">/ i := 7, t := 0</text>
+
+  <!-- GLIDE_REV self loop -->
+  <path d="M500,430 C500,477 400,477 400,430" fill="none" stroke="#000" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="512" y="452" font-size="9.5">[t &#8805; dwell(i) &#8743; i &gt; 0]</text>
+  <text x="512" y="465" font-size="9.5">/ i := i &#8722; 1, t := 0</text>
+
+  <!-- GLIDE_REV -> PARK_A -->
+  <line x1="330" y1="390" x2="220" y2="275" stroke="#000" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="70" y="334" font-size="9.5">[t &#8805; dwell(0) &#8743; i = 0]</text>
+  <text x="70" y="347" font-size="9.5">/ arrived at house A</text>
+
+  <!-- global (all-states) rule box -->
+  <rect x="60" y="380" width="230" height="60" rx="4" fill="none" stroke="#000" stroke-width="1.2" stroke-dasharray="6 3"/>
+  <text x="68" y="396" font-size="9.5" font-weight="bold">ALL STATES  [&#172;showOn]</text>
+  <text x="68" y="410" font-size="9.5">timers t, rest FROZEN</text>
+  <text x="68" y="424" font-size="9.5">coil[i] := HOLD (Santa parks in place)</text>
+  <text x="68" y="437" font-size="9.5">resumes exactly where stopped</text>
+
+  <!-- ======= NOTES ======= -->
+  <g font-size="10">
+    <text x="35" y="498" font-weight="bold" font-size="12">NOTES</text>
+    <text x="35" y="513">1.  OUTPUT gates[0..7] IS ONE-HOT ON i, PWM-MODULATED: RUN &#8776; 10&#8211;25 % DUTY, HOLD &#8776; 5 % DUTY.</text>
+    <text x="50" y="527">24 AWG COILS &#8776; 0.4 &#937; AT 24 V &#8212; NEVER 100 % CONTINUOUS. BENCH SUPPLY CC LIMIT SET BEFORE TEST.</text>
+    <text x="35" y="541">2.  dwell(i) IS THE VELOCITY PROFILE: SYMMETRIC, SLOW AT HOUSES, FAST MID-ARC. EDIT TABLE ONLY TO RETUNE.</text>
+    <text x="35" y="555">3.  100 MHz CLOCK: 1 ms = 100 000 TICKS. rest = 2.5 s PAUSE AT EACH HOUSE. CODE: SantaGlide.hs (mealy step).</text>
+  </g>
+
+  <!-- ======= TITLE BLOCK ======= -->
+  <g stroke="#000" stroke-width="1.4" fill="none">
+    <rect x="455" y="480" width="430" height="85"/>
+    <line x1="455" y1="508" x2="885" y2="508"/>
+    <line x1="455" y1="536" x2="885" y2="536"/>
+    <line x1="650" y1="480" x2="650" y2="565"/>
+    <line x1="770" y1="480" x2="770" y2="565"/>
+  </g>
+  <text x="463" y="494" font-size="9">TITLE</text>
+  <text x="463" y="529" font-size="13" font-weight="bold">STATE MACHINE &#8212; SANTA GLIDE</text>
+  <text x="658" y="494" font-size="9">DRAWING NO.</text>
+  <text x="736" y="497" font-size="12" font-weight="bold">SS-004</text>
+  <text x="778" y="494" font-size="9">SHEET</text>
+  <text x="815" y="497" font-size="11">1 / 1</text>
+  <text x="463" y="551" font-size="9">DRAWN</text>
+  <text x="500" y="553" font-size="10">CLAUDE / CLEMENTS VILLAGE WORKS</text>
+  <text x="658" y="522" font-size="9">DATE</text>
+  <text x="692" y="524" font-size="10">2026-08-30</text>
+  <text x="658" y="551" font-size="9">REF</text>
+  <text x="692" y="553" font-size="10">SS-002, SS-003</text>
+  <text x="778" y="522" font-size="9">NOTATION: UML 2.5</text>
+  <text x="778" y="551" font-size="9">PRESENTATION: ISO 128</text>
+</svg>

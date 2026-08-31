@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000" font-family="ui-monospace,Menlo,Consolas,monospace"><rect width="1200" height="1000" fill="#fff"/>
+<ellipse cx="450" cy="530" rx="360" ry="225" transform="rotate(-40 450 530)" fill="#3b7dd8" fill-opacity="0.16" stroke="#3b7dd8" stroke-width="3"/>
+<ellipse cx="600" cy="630" rx="360" ry="225" transform="rotate(-40 600 630)" fill="#d8443b" fill-opacity="0.16" stroke="#d8443b" stroke-width="3"/>
+<ellipse cx="600" cy="630" rx="360" ry="225" transform="rotate(40 600 630)" fill="#3ba85a" fill-opacity="0.16" stroke="#3ba85a" stroke-width="3"/>
+<ellipse cx="750" cy="530" rx="360" ry="225" transform="rotate(40 750 530)" fill="#c58a1f" fill-opacity="0.16" stroke="#c58a1f" stroke-width="3"/>
+<text x="60" y="240" font-size="30" font-weight="700" fill="#3b7dd8">THEREMIN</text>
+<text x="120" y="940" font-size="30" font-weight="700" fill="#d8443b">MAIDEN</text>
+<text x="720" y="960" font-size="30" font-weight="700" fill="#3ba85a">PIANO (VL-49)</text>
+<text x="880" y="240" font-size="30" font-weight="700" fill="#c58a1f">HARP (Erand49)</text>
+<text x="30" y="40" font-size="16" fill="#111">FPGA component overlap — four projects, one Clash library.  ✓ built   ○ planned   Centre = shared by all, H2 Forth SoC is the control plane for each.</text>
+<text x="264" y="535" font-size="14" font-weight="400" fill="#111" text-anchor="middle">✓ LC oscillator front end</text>
+<text x="264" y="553" font-size="14" font-weight="400" fill="#111" text-anchor="middle">✓ Antenna capacitance</text>
+<text x="264" y="571" font-size="14" font-weight="400" fill="#111" text-anchor="middle">✓ Frequency counter</text>
+<text x="264" y="590" font-size="14" font-weight="400" fill="#111" text-anchor="middle">✓ Pitch→note quantizer</text>
+<text x="438" y="836" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ IRIG-B decoder</text>
+<text x="438" y="854" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ Ch.10/TMATS packetizer</text>
+<text x="438" y="872" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ Dual-ch I/Q front end</text>
+<text x="438" y="890" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ Camera/gate trigger</text>
+<text x="762" y="817" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ 8×8 key matrix + ASCII</text>
+<text x="762" y="836" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ Pulse-pattern osc (10)</text>
+<text x="762" y="854" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ ADSSR envelope</text>
+<text x="762" y="872" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ Rhythm ROM + percussion</text>
+<text x="762" y="890" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ 100-note sequencer</text>
+<text x="762" y="908" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ GPDI TMDS + overlay</text>
+<text x="936" y="517" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ 49× KS waveguides</text>
+<text x="936" y="535" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ Allpass fractional delay</text>
+<text x="936" y="553" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ X/Y magnitude + angle</text>
+<text x="936" y="571" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ Velocity log map</text>
+<text x="936" y="590" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ 98-ch sensor mux</text>
+<text x="936" y="608" font-size="14" font-weight="400" fill="#111" text-anchor="middle">○ Dispersion reg B_q16</text>
+<text x="345" y="742" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ FIR filter</text>
+<text x="345" y="759" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ Phase/freq estimator</text>
+<text x="363" y="449" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ NCO phase-inc table</text>
+<text x="363" y="466" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ Vibrato LFO</text>
+<text x="363" y="483" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ ΣΔ/PWM DAC</text>
+<text x="600" y="791" font-size="13" font-weight="400" fill="#111" text-anchor="middle">○ Video timing + text</text>
+<text x="600" y="808" font-size="13" font-weight="400" fill="#111" text-anchor="middle">○ 512-pt FFT tap</text>
+<text x="837" y="457" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ CA-CFAR detector</text>
+<text x="837" y="474" font-size="13" font-weight="400" fill="#111" text-anchor="middle">○ DC-removal HPF</text>
+<text x="855" y="733" font-size="13" font-weight="400" fill="#111" text-anchor="middle">○ I²S/TDM link</text>
+<text x="855" y="750" font-size="13" font-weight="400" fill="#111" text-anchor="middle">○ Event frame UART</text>
+<text x="855" y="767" font-size="13" font-weight="400" fill="#111" text-anchor="middle">○ Note↔string map</text>
+<text x="706" y="379" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ CIC decimator</text>
+<text x="706" y="396" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ CORDIC</text>
+<text x="754" y="623" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ 512-pt FFT</text>
+<text x="754" y="640" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ BRAM tables</text>
+<text x="754" y="657" font-size="13" font-weight="400" fill="#111" text-anchor="middle">○ Timestamped events</text>
+<text x="754" y="673" font-size="13" font-weight="400" fill="#111" text-anchor="middle">○ Timer tick</text>
+<text x="494" y="388" font-size="13" font-weight="400" fill="#111" text-anchor="middle">✓ Envelope gating</text>
+<text x="600" y="469" font-size="15" font-weight="700" fill="#111" text-anchor="middle">H2 FORTH SoC (control plane)</text>
+<text x="600" y="488" font-size="15" font-weight="700" fill="#111" text-anchor="middle">✓ PLL + reset</text>
+<text x="600" y="508" font-size="15" font-weight="700" fill="#111" text-anchor="middle">✓ UART + FIFO</text>
+<text x="600" y="527" font-size="15" font-weight="700" fill="#111" text-anchor="middle">✓ Register bus</text>
+<text x="600" y="547" font-size="15" font-weight="700" fill="#111" text-anchor="middle">✓ Fixed-point mult</text>
+<text x="600" y="566" font-size="15" font-weight="700" fill="#111" text-anchor="middle">✓ SPI ADC reader</text>
+</svg>

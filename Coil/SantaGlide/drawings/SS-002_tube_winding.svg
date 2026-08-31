@@ -1,0 +1,171 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="580" viewBox="0 0 900 580" font-family="Arial, Helvetica, sans-serif">
+  <rect x="0" y="0" width="900" height="580" fill="#fff"/>
+  <rect x="15" y="15" width="870" height="550" fill="none" stroke="#000" stroke-width="2"/>
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M0,1.5 L10,5 L0,8.5 z" fill="#000"/>
+    </marker>
+    <pattern id="hatch" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="#000" stroke-width="0.8"/>
+    </pattern>
+    <pattern id="xhatch" width="5" height="5" patternUnits="userSpaceOnUse">
+      <path d="M0,5 L5,0 M0,0 L5,5" stroke="#000" stroke-width="0.6"/>
+    </pattern>
+  </defs>
+
+  <text x="40" y="45" font-size="15" font-weight="bold">TUBE WINDING LAYOUT &#8212; 10 ft SILICONE TUBE, 8 COIL STATIONS</text>
+  <text x="40" y="63" font-size="11">LAYOUT DIMENSIONS IN INCHES FROM DATUM A (INSIDE FACE OF HOUSE A MOUNT). COIL WIDTHS EXAGGERATED FOR CLARITY.</text>
+
+  <!-- ============ LAYOUT VIEW ============ -->
+  <!-- tube from x=60 (0 in) to x=840 (120 in); 6.5 px per inch; centreline y=200 -->
+  <line x1="45" y1="200" x2="855" y2="200" stroke="#000" stroke-width="0.75" stroke-dasharray="14 3 3 3"/>
+  <line x1="60" y1="192" x2="840" y2="192" stroke="#000" stroke-width="2"/>
+  <line x1="60" y1="208" x2="840" y2="208" stroke="#000" stroke-width="2"/>
+  <line x1="60" y1="192" x2="60" y2="208" stroke="#000" stroke-width="2"/>
+  <line x1="840" y1="192" x2="840" y2="208" stroke="#000" stroke-width="2"/>
+  <!-- bore (hidden lines) -->
+  <line x1="60" y1="197" x2="840" y2="197" stroke="#000" stroke-width="0.75" stroke-dasharray="5 3"/>
+  <line x1="60" y1="203" x2="840" y2="203" stroke="#000" stroke-width="0.75" stroke-dasharray="5 3"/>
+
+  <!-- house mounts, 6 in each end -->
+  <rect x="60" y="186" width="39" height="28" fill="url(#hatch)" stroke="#000" stroke-width="1.2"/>
+  <rect x="801" y="186" width="39" height="28" fill="url(#hatch)" stroke="#000" stroke-width="1.2"/>
+  <text x="79" y="180" font-size="11" text-anchor="middle">HOUSE A MOUNT</text>
+  <text x="820" y="180" font-size="11" text-anchor="middle">HOUSE B MOUNT</text>
+
+  <!-- coil bands at 4,14,28,46,62,80,94,104 in from datum A (datum x=99, 6.5 px/in) -->
+  <g fill="url(#xhatch)" stroke="#000" stroke-width="1.3">
+    <rect x="120" y="185" width="10" height="30"/>
+    <rect x="185" y="185" width="10" height="30"/>
+    <rect x="276" y="185" width="10" height="30"/>
+    <rect x="393" y="185" width="10" height="30"/>
+    <rect x="497" y="185" width="10" height="30"/>
+    <rect x="614" y="185" width="10" height="30"/>
+    <rect x="705" y="185" width="10" height="30"/>
+    <rect x="770" y="185" width="10" height="30"/>
+  </g>
+
+  <!-- ordinate dimensioning from datum A -->
+  <circle cx="99" cy="200" r="3" fill="#000"/>
+  <text x="99" y="128" font-size="12" text-anchor="middle" font-weight="bold">0</text>
+  <line x1="99" y1="185" x2="99" y2="134" stroke="#000" stroke-width="0.75"/>
+  <g stroke="#000" stroke-width="0.75">
+    <line x1="125" y1="185" x2="125" y2="150"/>
+    <line x1="190" y1="185" x2="190" y2="150"/>
+    <line x1="281" y1="185" x2="281" y2="150"/>
+    <line x1="398" y1="185" x2="398" y2="150"/>
+    <line x1="502" y1="185" x2="502" y2="150"/>
+    <line x1="619" y1="185" x2="619" y2="150"/>
+    <line x1="710" y1="185" x2="710" y2="150"/>
+    <line x1="775" y1="185" x2="775" y2="150"/>
+    <line x1="801" y1="185" x2="801" y2="134"/>
+  </g>
+  <g font-size="12" text-anchor="middle">
+    <text x="125" y="145">4</text>
+    <text x="190" y="145">14</text>
+    <text x="281" y="145">28</text>
+    <text x="398" y="145">46</text>
+    <text x="502" y="145">62</text>
+    <text x="619" y="145">80</text>
+    <text x="710" y="145">94</text>
+    <text x="775" y="145">104</text>
+    <text x="801" y="128" font-weight="bold">108</text>
+  </g>
+
+  <!-- coil / gate labels -->
+  <g font-size="11" text-anchor="middle">
+    <text x="125" y="230">C0</text><text x="190" y="230">C1</text><text x="281" y="230">C2</text><text x="398" y="230">C3</text>
+    <text x="502" y="230">C4</text><text x="619" y="230">C5</text><text x="710" y="230">C6</text><text x="775" y="230">C7</text>
+  </g>
+  <g font-size="9" text-anchor="middle" fill="#000">
+    <text x="125" y="243">gates[0]</text><text x="190" y="243">gates[1]</text><text x="281" y="243">gates[2]</text><text x="398" y="243">gates[3]</text>
+    <text x="502" y="243">gates[4]</text><text x="619" y="243">gates[5]</text><text x="710" y="243">gates[6]</text><text x="775" y="243">gates[7]</text>
+  </g>
+
+  <!-- flight path + overall dims -->
+  <line x1="99" y1="214" x2="99" y2="266" stroke="#000" stroke-width="0.75"/>
+  <line x1="801" y1="214" x2="801" y2="266" stroke="#000" stroke-width="0.75"/>
+  <line x1="99" y1="260" x2="801" y2="260" stroke="#000" stroke-width="0.75" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="450" y="255" font-size="12" text-anchor="middle">108  (FLIGHT PATH, DATUM A &#8594; B)</text>
+
+  <line x1="60" y1="214" x2="60" y2="292" stroke="#000" stroke-width="0.75"/>
+  <line x1="840" y1="214" x2="840" y2="292" stroke="#000" stroke-width="0.75"/>
+  <line x1="60" y1="286" x2="840" y2="286" stroke="#000" stroke-width="0.75" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="450" y="281" font-size="12" text-anchor="middle">120  (FULL TUBE, 10 ft)</text>
+
+  <!-- ============ DETAIL B: COIL STATION SECTION (mm, enlarged) ============ -->
+  <text x="55" y="330" font-size="13" font-weight="bold">DETAIL B &#8212; COIL STATION SECTION (DIMENSIONS IN mm, ENLARGED)</text>
+
+  <!-- tube walls in section; centre y=415; scale ~5 px/mm: OD 6.35->32, ID 3.175->16 -->
+  <line x1="70" y1="415" x2="360" y2="415" stroke="#000" stroke-width="0.75" stroke-dasharray="12 3 3 3"/>
+  <!-- windings: band 20mm -> 100 px, build 2mm -> 10px -->
+  <rect x="155" y="379" width="100" height="10" fill="url(#xhatch)" stroke="#000" stroke-width="1.5"/>
+  <rect x="155" y="441" width="100" height="10" fill="url(#xhatch)" stroke="#000" stroke-width="1.5"/>
+  <!-- tube wall sections -->
+  <rect x="85" y="389" width="260" height="10" fill="url(#hatch)" stroke="#000" stroke-width="1.5"/>
+  <rect x="85" y="431" width="260" height="10" fill="url(#hatch)" stroke="#000" stroke-width="1.5"/>
+  <!-- slug in bore -->
+  <rect x="185" y="404" width="100" height="20" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <line x1="185" y1="421" x2="285" y2="421" stroke="#000" stroke-width="0.8"/>
+  <text x="235" y="418" font-size="9" text-anchor="middle">SLUG (SS-001)</text>
+
+  <!-- band width dim -->
+  <line x1="155" y1="379" x2="155" y2="352" stroke="#000" stroke-width="0.75"/>
+  <line x1="255" y1="379" x2="255" y2="352" stroke="#000" stroke-width="0.75"/>
+  <line x1="155" y1="358" x2="255" y2="358" stroke="#000" stroke-width="0.75" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="205" y="353" font-size="12" text-anchor="middle">20</text>
+
+  <!-- build height dim -->
+  <line x1="255" y1="379" x2="300" y2="379" stroke="#000" stroke-width="0.75"/>
+  <line x1="255" y1="389" x2="300" y2="389" stroke="#000" stroke-width="0.75"/>
+  <line x1="295" y1="379" x2="295" y2="389" stroke="#000" stroke-width="0.75" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="303" y="388" font-size="11">2 MAX</text>
+
+  <!-- leads -->
+  <line x1="255" y1="384" x2="330" y2="368" stroke="#000" stroke-width="1"/>
+  <line x1="255" y1="446" x2="330" y2="462" stroke="#000" stroke-width="1"/>
+  <text x="334" y="368" font-size="10">FINISH &#8594; +24 V BUS</text>
+  <text x="334" y="466" font-size="10">START &#8594; MOSFET DRAIN</text>
+
+  <!-- turns leader -->
+  <line x1="180" y1="446" x2="120" y2="486" stroke="#000" stroke-width="0.75" marker-start="url(#arr)"/>
+  <text x="60" y="500" font-size="11">&#8776;300 TURNS, 28 AWG</text>
+  <text x="60" y="513" font-size="11">(5 LAYERS &#215; 60 TURNS)</text>
+
+  <!-- ============ NOTES ============ -->
+  <g font-size="11.5">
+    <text x="455" y="330" font-weight="bold" font-size="13">NOTES</text>
+    <text x="455" y="348">1.  WIRE: 28 AWG ENAMELLED MAGNET WIRE. &#8776;30 ft PER COIL, &#8776;250 ft TOTAL.</text>
+    <text x="455" y="365">2.  WIND ALL 8 COILS IN THE SAME DIRECTION. MARK EACH START LEAD.</text>
+    <text x="455" y="382">3.  ALL FINISH LEADS COMMON TO BATTERY + BUS. EACH START LEAD TO ITS</text>
+    <text x="470" y="397">IRLZ44N DRAIN. 1N5408 FLYBACK DIODE ACROSS EACH COIL, STRIPE TO +.</text>
+    <text x="455" y="414">4.  SECURE EACH WINDING WITH TAPE OR CA GLUE; SCRAPE ENAMEL AT TERMINATIONS.</text>
+    <text x="455" y="431">5.  STATION SPACING IS DELIBERATELY DENSER NEAR THE HOUSES (GAPS</text>
+    <text x="470" y="446">10-14-18-16-18-14-10 in) FOR FINE CONTROL AT LAUNCH AND LANDING.</text>
+    <text x="455" y="463">6.  C0 IS NEAREST HOUSE A AND MAPS TO gates[0] IN SANTA GLIDE FIRMWARE.</text>
+  </g>
+
+  <!-- ============ TITLE BLOCK ============ -->
+  <g stroke="#000" stroke-width="1.4" fill="none">
+    <rect x="455" y="480" width="430" height="85"/>
+    <line x1="455" y1="508" x2="885" y2="508"/>
+    <line x1="455" y1="536" x2="885" y2="536"/>
+    <line x1="650" y1="480" x2="650" y2="565"/>
+    <line x1="770" y1="480" x2="770" y2="565"/>
+  </g>
+  <text x="463" y="494" font-size="9">TITLE</text>
+  <text x="463" y="529" font-size="13" font-weight="bold">TUBE WINDING LAYOUT &#8212; SANTA GLIDE</text>
+  <text x="658" y="494" font-size="9">DRAWING NO.</text>
+  <text x="736" y="497" font-size="12" font-weight="bold">SS-002</text>
+  <text x="778" y="494" font-size="9">SHEET</text>
+  <text x="815" y="497" font-size="11">1 / 1</text>
+  <text x="463" y="551" font-size="9">DRAWN</text>
+  <text x="500" y="553" font-size="10">CLAUDE / CLEMENTS VILLAGE WORKS</text>
+  <text x="658" y="522" font-size="9">SCALE</text>
+  <text x="692" y="524" font-size="10">NTS / DIMS GOVERN</text>
+  <text x="658" y="551" font-size="9">UNITS</text>
+  <text x="692" y="553" font-size="10">in (LAYOUT), mm (DETAIL)</text>
+  <text x="778" y="522" font-size="9">REF: SLUG SS-001</text>
+  <text x="778" y="551" font-size="9">TOL: ISO 2768-m</text>
+</svg>

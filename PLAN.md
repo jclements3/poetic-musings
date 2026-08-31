@@ -1,0 +1,170 @@
+# PLAN — incremental build of the PM device
+
+The end state: **one portable controller** — the 3D-printed 49-key Piano panel with the
+Oracle Forth console as its brains on a single ULX3S ECP5-85F — that boots to a mode
+menu and can demonstrate every POETIC MUSING project on demand. Every phase below ends
+with a **working demo someone can watch**, so there is always something to show the
+grandkids, and nothing is started until the previous demo passes its gate
+(finish-before-start rule).
+
+Scope/cost/difficulty per project: `fpga-development-plan.md`. This file is the
+execution order and the demo that closes each phase.
+
+Milestones: **Basic Plan Sep 2026 · Prototype Dec 2026 · Field Demo Feb 2027.**
+December critical path: Phases 0–2, then 3, 7, 8, 12a. Everything else has slack.
+
+---
+
+## Phase 0 — Foundations (now)
+
+Toolchain and repo hygiene; no hardware.
+
+1. Install GHC 9.x + Clash 1.8 (cabal) on the desktop.
+2. `Coil/SantaGlide/firmware/SantaGlide.hs`: first compile (`clash --verilog`), fix
+   type errors, simulate in `clashi` — confirm `gates` walks 0→7→0 with the dwell table.
+3. `Oracle/clash-h2/`: `cabal build`, run the smoke test (`0xA5` on `oLeds`).
+4. Sep Basic Plan inputs due: Imaging sensor/trigger/FOV study; metrology pick for I
+   (used GS-101B or Thunderbolt-class GPSDO).
+
+**Gate:** both firmwares compile and simulate. Nothing soldered yet.
+
+## Phase 1 — C · Santa Glide 🛷 (first demo, standalone)
+
+Per `Coil/SantaGlide/HANDOFF.md` §7: pin constraints → channel 0 on the bench at
+12 V/CC 2 A → 7 more driver channels → wind 8 coils (200T, 24 AWG) on the tube →
+slug in, all dwells 400 ms → tune `runDuty`, then the dwell table, then voltage.
+
+**Demo:** flip the show switch; Santa glides house A→B→A over the snow village,
+pauses at each house, parks when switched off. Runs on the Alchitry Cu with no
+laptop — the first take-anywhere demo, and the Christmas deliverable.
+**Teaches:** Moore FSMs, PWM, MOSFET drive, magnetics.
+
+## Phase 2 — I · IRIG clock ⏱
+
+IRIG-B generator on the ULX3S: 1 s frame counter, BCD time fields, 10 ms bit cells,
+DC-level and modulated outputs. Free-running on the board crystal (disciplined later,
+Phase 7). Verify frames on scope/decoder.
+
+**Demo:** a clock that emits real range timecode; decode it and show the time moving.
+**Teaches:** counters, framing, serialization — the second rep of Phase 1's skills.
+
+## Phase 3 — O · Oracle 🖥 (the box gets its brains)
+
+1. H2 as black-box VHDL first: eForth `ok` prompt over USB serial; `1 2 + .` → 3.
+2. Bar TFT: verify active area against datasheet **before cutting anything**; GPDI
+   text/VT100; prompt on glass, laptop unplugged.
+3. SD block read (block 1 loads); GPIO/ADC words; timer/IRQ.
+4. CW keyer/decoder peripheral — keyer sends, decoder prints to screen.
+5. Clash port of H2 (`Oracle/clash-h2/`) replaces the VHDL as Lessons 12–14.
+
+**Demo:** a self-contained Forth computer — type on it, compute, load a game from SD,
+key CW and watch it decode.
+**Teaches:** soft CPUs, Forth, memory-mapped I/O, video timing.
+
+## Phase 4 — T · Theremin 🎵
+
+Bench the LC oscillator hardware; the Clash port already passes. Pitch + volume from
+the antennas through the speaker; envelope/spectrum view on Oracle. From here on the
+theremin suite runs as the regression target for every library change.
+
+**Demo:** play music from thin air; watch the pitch track on the display.
+**Teaches:** mixed-signal, frequency counting, NCOs, DSP basics.
+
+## Phase 5 — P · Piano 🎹 (the PM device takes physical form)
+
+Micrometer bore check, then order the harp rib (long lead — see PERT). Buy the used
+49-key MIDI keybed; print the panel per `README.html`; mount bar TFT, sliders S0–S4,
+buttons P0–P9; wire the 8×8 matrix. VL-1 synth engine: 5 voices + ADSR slot, 10
+rhythms, 100-note sequencer, One Key Play, calculator mode. A/B against the real VL-1.
+
+Design task before printing: mode-neutral silk legends — VL-1 emulation is one mode of
+the PM device, not its identity (see PROGRAM.md open items).
+
+**Demo:** *this is PM device v1* — a playable instrument/computer: Da Da Da on One Key
+Play, `90099914 patch!`, ASCII keyboard into Forth, theremin as a voice source.
+**Teaches:** integration — every prior phase is running inside one object.
+
+## Phase 6 — E · Erand49 🪕
+
+Gate 1 first, cheap: **one string, one ADC eval, 5 IR pairs** — pluck detected
+(CORDIC mag + CA-CFAR), shown on Oracle, sounds a KS voice. Only then buy the
+13 ADCs / 98 IR pairs. Gate 2: 49 strings, harp-master I²S 24/96 into the box,
+3 Mbaud event frames, playable.
+
+**Demo:** pluck real strings, optical sensors catch it, the box sings; harp drives
+the Piano synth over MIDI-style events.
+**Teaches:** detection theory, physical modeling synthesis, multi-channel ADC.
+
+---
+
+## IRAD track (MUSING) — interleave after Phase 3 as funding allows
+
+U and S slip after Phase 6 if IRAD funding is delayed.
+
+## Phase 7 — G · GPS 🛰
+
+u-blox with PPS; PPS-locked 10 MHz DPLL; discipline the Phase 2 IRIG clock; verify
+against the GPSDO metrology reference. Station clock copies become a stock module.
+
+**Demo:** the clock from Phase 2 stops drifting — show holdover vs. locked.
+
+## Phase 8 — N · Network 🌐
+
+RMII PHY, MAC, UDP. Stream ADC samples to a laptop, zero drops over 10 min.
+Ch.10 transport framing on top. (Bench capture tooling from Oracle earns its keep here.)
+
+**Demo:** live sensor data from the box onto a laptop screen across the room.
+
+## Phase 9 — U · UHF 📡 (ham — personal ledger)
+
+GPS-disciplined CW + WSPR beacon.
+
+**Demo:** transmit, then pull up wsprnet and show the grandkids their signal was
+heard hundreds of miles away.
+
+## Phase 10 — S · SDR 📻
+
+AD9226-class ADC direct-sampling HF on the theremin antennas; DDC (CIC/FIR);
+waterfall on Oracle; decode a broadcast or WSPR signal.
+
+**Demo:** the theremin's antennas become a radio receiver — same box, new mode.
+
+## Phase 11 — I · Imaging 📷
+
+Global-shutter sensor per the Sep study; external trigger; IRIG timestamp; centroid
+extraction; stream over N.
+
+**Demo:** wave something in front of the camera, watch timestamped centroids stream.
+
+## Phase 12 — M · MAIDEN 🎯 (capstone)
+
+a. **Single station (Dec Prototype gate):** tabletop testbed (elastic draw-stop rig,
+   range mat, ArUco, wire truth model); one station records IRIG-stamped Doppler +
+   video into Ch.10.
+b. **Fusion (Feb Field Demo gate):** 4 cameras + 2 radars fused into one AI data
+   stream; three-station fusion at RCRC.
+
+**Demo:** launch on the tabletop range; replay the fused, time-aligned data stream.
+**Consumes:** every phase above — G time, N transport, Imaging, SDR/ADC skills,
+Oracle as operator console.
+
+---
+
+## Definition of done — the PM device
+
+- One case: Piano panel + Oracle, ULX3S inside; Santa Glide packs alongside on its Cu.
+- Power on → mode menu on the bar TFT: **Piano/VL-1 · Calculator · Forth · Games ·
+  Theremin · Harp · Clock (IRIG/GPS) · CW · SDR · Demo scripts for the IRAD modules**.
+- Every mode reachable in under a minute, no laptop, no internet.
+- A demo-day checklist per mode (what to say, what to show, reset procedure) lives in
+  each project directory.
+
+## Standing rules
+
+- Finish before start; a phase closes only when its demo passes in front of a person.
+- Theremin suite = regression gate for every shared-library change after Phase 4.
+- Two boards only: ULX3S in the box, Alchitry Cu in Santa Glide.
+- Ledgers never commingle (P personal, I IRAD; U is ham/personal). Personal hardware
+  can be re-bought on IRAD when M needs its own copies.
+- Buy late: 1 ADC eval before 13; 5 IR pairs before 98; rib only after bore check;
+  case last; TFT + HDMI as a matched kit.

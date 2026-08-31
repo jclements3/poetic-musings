@@ -1,0 +1,64 @@
+cabal-version:       2.4
+name:                clash-h2
+version:             0.1.0.0
+synopsis:            The H2 Forth CPU (howerj/forth-cpu) in Clash
+license:             MIT
+build-type:          Simple
+extra-source-files:  README.md, h2.bin
+
+common common-options
+  default-language: Haskell2010
+  default-extensions:
+    BangPatterns BinaryLiterals ConstraintKinds DataKinds DefaultSignatures
+    DeriveAnyClass DeriveDataTypeable DeriveFoldable DeriveFunctor DeriveGeneric
+    DeriveLift DeriveTraversable DoAndIfThenElse EmptyCase FlexibleContexts
+    FlexibleInstances GADTs GeneralizedNewtypeDeriving InstanceSigs
+    KindSignatures LambdaCase MultiParamTypeClasses MultiWayIf NamedFieldPuns
+    NoStarIsType PartialTypeSignatures PatternGuards PolyKinds RankNTypes
+    RecordWildCards ScopedTypeVariables StandaloneDeriving TupleSections
+    TypeApplications TypeFamilies TypeSynonymInstances ViewPatterns
+    TemplateHaskell QuasiQuotes NoImplicitPrelude
+  ghc-options:
+    -Wall -Wcompat
+    -haddock
+    -fplugin GHC.TypeLits.Extra.Solver
+    -fplugin GHC.TypeLits.Normalise
+    -fplugin GHC.TypeLits.KnownNat.Solver
+    -fexpose-all-unfoldings
+    -fno-worker-wrapper
+    -fno-cse
+  build-depends:
+    base,
+    Cabal,
+    clash-prelude >= 1.8 && < 1.10,
+    ghc-typelits-natnormalise,
+    ghc-typelits-extra,
+    ghc-typelits-knownnat
+
+library
+  import: common-options
+  hs-source-dirs: src
+  exposed-modules:
+    H2
+    H2.System
+
+executable clash
+  import: common-options
+  main-is: bin/Clash.hs
+  build-depends: base, clash-ghc, clash-h2
+  if !os(Windows)
+    ghc-options: -dynamic
+
+executable clashi
+  import: common-options
+  main-is: bin/Clashi.hs
+  build-depends: base, clash-ghc, clash-h2
+  if !os(Windows)
+    ghc-options: -dynamic
+
+test-suite h2-test
+  import: common-options
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: Spec.hs
+  build-depends: base, clash-prelude, clash-h2
