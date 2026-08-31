@@ -280,6 +280,17 @@ brick; Santa Glide's 24 V coil supply is a different rig and never travels in th
 <tr><td class="k">UHF TX</td><td>WSPR/CW at these power levels lives inside the 5 V budget; the PA branch has its own fuse and the mode menu interlocks TX (no RF unless U mode is selected).</td></tr>
 <tr><td class="k">Runtime</td><td>~2–3 h on a common 10 Ah bank at demo brightness — enough for any show-and-tell without a wall outlet.</td></tr>
 </table>
+<h2>Storage — one microSD carries everything</h2>
+<table>
+<tr><th>Where</th><th>What lives there</th></tr>
+<tr><td class="k">ULX3S config flash (not removable)</td><td>The golden bitstream — all modes resident (the 85F fits everything, see SWAG). Box always powers up into PM even with no card.</td></tr>
+<tr><td class="k">microSD, rear slot</td><td>Content, as raw Forth blocks — no filesystem: Forth system + extensions · games · VL-1 patches · sequencer recordings (a block range per grandkid — "take your song home" = hand them a card) · IRAD demo scripts · logs (CW transcripts, WSPR spots, IRIG captures)</td></tr>
+<tr><td class="k">Spare "demo card" microSD, lid pocket</td><td>A known-good clone of the card above, games preloaded, recording area blank. Card trouble mid-demo = swap, not debug — same philosophy as the spare battery bank.</td></tr>
+</table>
+<p class="sub">One card is enough for every mode — block ranges partition it (system / games / recordings /
+scripts / logs), and even a small card is thousands of times the need. The rear USB jack is serial
+console and programming only, never storage: a USB stick would need a USB host stack in the FPGA,
+ruled out like the USB touchscreen.</p>
 <h2>Modes — the S3 slider is the selector</h2>
 <p class="chain">S3 MODE: P · O · E · T · I · C — the mnemonic is printed on the panel and the slider is the state</p>
 <table>
@@ -303,7 +314,9 @@ current mode. Deeper choices (which game, which band, which demo script) are V0 
 <tr><td>Santa Glide</td><td>own case: Alchitry Cu + driver board + coil tube, rolled</td><td>standalone; 24 V supply stays home unless the village travels</td></tr>
 <tr><td>Erand49 harp</td><td>own case when the demo calls for it</td><td>one RJ45 to HARP port</td></tr>
 <tr><td>Antenna rods</td><td>unscrew, clip inside lid</td><td>binding posts</td></tr>
-<tr><td>Demo card</td><td>lid pocket</td><td>per-mode checklist: what to say, what to show, how to reset</td></tr>
+<tr><td>Cue card (paper)</td><td>lid pocket</td><td>per-mode checklist: what to say, what to show, how to reset</td></tr>
+<tr><td>Spare demo microSD</td><td>lid pocket</td><td>known-good clone — swap, not debug, mid-demo</td></tr>
+<tr><td>Spare battery bank</td><td>lid pocket</td><td>charged; this is the "battery swap"</td></tr>
 </table>
 
 <h2>Input philosophy — buttons, not touchscreen</h2>
