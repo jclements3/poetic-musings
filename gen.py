@@ -34,6 +34,9 @@ svg.append('<g class="lbl" text-anchor="middle">'+"".join(f'<text x="{x+KW/2}" y
 # black keys
 blk=[i for i in range(28) if NOTES[i%7] in "CDFGA"]
 svg.append('<g fill="#2a2c30">'+"".join(f'<rect x="{W0+KW*(i+1)-BW//2}" y="{KY}" width="{BW}" height="{BH}" rx="2"/>' for i in blk)+'</g>')
+# VL-1 style: keys are flat button caps (Cherry MX2A Silent Red) set in the printed keyboard graphic
+svg.append('<g fill="#ffffff" stroke="#8d877a" stroke-width="1.2">'+"".join(f'<rect x="{x+KW/2-13}" y="{KY+104}" width="26" height="26" rx="3"/>' for x in xs)+'</g>')
+svg.append('<g fill="#0c0d0f" stroke="#55575c" stroke-width="1.2">'+"".join(f'<rect x="{W0+KW*(i+1)-9}" y="{KY+50}" width="18" height="24" rx="2"/>' for i in blk)+'</g>')
 # ASCII layers. Base printed large at key bottom; SHIFT layer (hold One Key Play L = P8) printed above it.
 wb = ["SPC"]+list("abcdefghijklmnopqrstuvwxyz")+[".","RET"]
 ws = [""]+[c.upper() for c in "abcdefghijklmnopqrstuvwxyz"]+[",",""]
@@ -41,7 +44,7 @@ bb = list("0123456789")+list(":;!@'\"-=/*")
 bs = list(")(#$%^&+<>")+list("?[]{}\\|_`~")
 def esc(c): return c.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace('"',"&quot;")
 svg.append('<g class="t" text-anchor="middle">'+"".join(f'<text x="{x+KW/2}" y="{KY+124}">{esc(c)}</text>' for x,c in zip(xs,wb))+'</g>')
-svg.append('<g class="sh" text-anchor="middle">'+"".join(f'<text x="{x+KW/2}" y="{KY+108}">{esc(c)}</text>' for x,c in zip(xs,ws))+'</g>')
+svg.append('<g class="sh" text-anchor="middle">'+"".join(f'<text x="{x+KW/2}" y="{KY+101}">{esc(c)}</text>' for x,c in zip(xs,ws))+'</g>')
 bx=[W0+KW*(i+1) for i in blk]
 svg.append('<g class="bk" text-anchor="middle">'+"".join(f'<text x="{x}" y="{KY+70}">{esc(c)}</text>' for x,c in zip(bx,bb))+'</g>')
 svg.append('<g class="bks" text-anchor="middle">'+"".join(f'<text x="{x}" y="{KY+36}">{esc(c)}</text>' for x,c in zip(bx,bs))+'</g>')
@@ -64,7 +67,7 @@ for (x,kind),lab in zip(keys,harp):
         svg.append(f'<text x="{x+BW/2}" y="{KY+12}" class="hpb" text-anchor="middle">{lab}</text>')
 rhy=["MARCH","WALTZ","4-BEAT","SWING","ROCK-1","ROCK-2","BOSSA","SAMBA","RHUMBA","BEGUINE"]
 svg.append('<g class="lbl" text-anchor="middle">'+"".join(f'<text x="{xs[13+j]+KW/2}" y="{KY+92}">{r}</text>' for j,r in enumerate(rhy))+'</g>')
-svg.append(f'<text x="{W0}" y="320" class="id">Keys A0..G7 — 29 white + 20 black, C2–C6; key ID = gold pedal-harp string label (49 diatonic, one per key, as on the Erand49). ASCII base on key, SHIFT above (SHIFT = One Key Play L / P8); DEL = backspace.</text>')
+svg.append(f'<text x="{W0}" y="320" class="id">Keys A0..G7 — 29 white + 20 black, C2–C6; flat button caps (Cherry MX2A Silent Red) in a printed keyboard graphic, as on the original VL-1. Key ID = gold pedal-harp string label. ASCII base on cap, SHIFT above (SHIFT = One Key Play L / P8); DEL = backspace.</text>')
 body="\n".join(svg)
 html=f'''<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=6, user-scalable=yes"><title>VL-1 49-key panel map</title>
@@ -78,7 +81,7 @@ table{{border-collapse:collapse;width:100%;margin-top:14px;font-size:13px}} th,t
 .sh{{font-size:6px;fill:#555;font-family:ui-monospace,Menlo,Consolas,monospace}} .bk{{font-size:8px;font-weight:700;fill:#fff;font-family:ui-monospace,Menlo,Consolas,monospace}} .bks{{font-size:7px;font-weight:700;fill:#ffffff;font-family:ui-monospace,Menlo,Consolas,monospace}} .hp{{font-size:6px;font-weight:700;fill:#a8700f;font-family:ui-monospace,Menlo,Consolas,monospace}} .hpb{{font-size:6px;font-weight:700;fill:#f2c14e;font-family:ui-monospace,Menlo,Consolas,monospace}} .id{{font-size:6px;fill:#b3341c;font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700}}
 </style></head><body><main>
 <h1 style="color:#111">VL-1 DERIVATIVE — 49-KEY PANEL MAP</h1>
-<p class="sub">Speaker removed from the top face; 55 mm display band with full-width bar TFT; sliders banked top-right over the buttons; keyboard extended to 4 octaves C–C. Key pitch unchanged (13 mm). Not to scale.</p>
+<p class="sub">Speaker removed from the top face; 55 mm display band with full-width bar TFT; sliders banked top-right over the buttons; keyboard extended to 4 octaves C–C. Keys are flat button caps (Cherry MX2A Silent Red) set in a printed keyboard graphic, as on the original VL-1. Key pitch unchanged (13 mm). Not to scale.</p>
 <div class="wrap"><svg viewBox="0 0 1300 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="49-key VL-1 derivative panel layout">
 {body}
 </svg></div><p class="sub">Diagram scrolls sideways on a phone.</p>
