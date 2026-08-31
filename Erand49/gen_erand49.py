@@ -291,7 +291,7 @@ sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapol
 <tr><td class="k">Pillar</td><td>Square tube 2" × 2" × 1/8", top rebated 8 mm/side for the plates — cleat bolts to the flat +Y face</td><td>Euler ~39 kN vs few kN, ~8× margin</td></tr>
 <tr><td class="k">Neck</td><td>2 plates per <code>Erand49.svg</code>, bolted flush onto the ±Y faces of pillar and midrib (both 50.8 mm wide → plate gap 50.8); no blocks; through-bolts with crush sleeves</td><td>pin-edge ≥ 16.2 mm, sensor-edge ≥ 7.1 mm verified</td></tr>
 </table>
-<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 frame ISO 128 sections">
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 1060" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 frame ISO 128 sections">
 <style>.fl{{font-size:11px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}}.fs{{font-size:9px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace}}.fg{{font-size:10px;font-weight:700;fill:#a8700f;font-family:ui-monospace,Menlo,Consolas,monospace}}.dim{{stroke:#3b5a7a;stroke-width:1;fill:none}}.dmt{{font-size:9px;fill:#3b5a7a;font-family:ui-monospace,Menlo,Consolas,monospace}}.cl{{stroke:#c9553a;stroke-width:0.8;stroke-dasharray:12 3 3 3}}</style>
 <defs>
 <pattern id="hat" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="7" stroke="#8d877a" stroke-width="1"/></pattern>
@@ -364,6 +364,46 @@ sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapol
 <text x="985" y="178" class="fs">bottom face (dashed)</text>
 <text x="810" y="400" class="fs">0.88 kN·m mid-span → ~25 MPa, SF ~5.5</text>
 <text x="810" y="414" class="fs">(welded HAZ); closed section ⇒ no torsion issue</text>
+
+<text x="20" y="555" class="fg">ER-004 — BASE JOINT: PILLAR ↔ MIDRIB WELD (side view XZ, 1 px/mm, dims mm)</text>
+<!-- plinth and base plate -->
+<rect x="80" y="940" width="520" height="16" fill="url(#hat)" stroke="#111" stroke-width="1.2"/>
+<text x="610" y="952" class="fs">plinth</text>
+<rect x="150" y="932" width="240" height="8" fill="#d9d3c2" stroke="#111" stroke-width="1.2"/>
+<circle cx="172" cy="936" r="3.5" fill="none" stroke="#111"/><circle cx="368" cy="936" r="3.5" fill="none" stroke="#111"/>
+<text x="395" y="928" class="fs">base plate 8 thk, M8 ×4 to plinth</text>
+<!-- pillar -->
+<rect x="200" y="700" width="50.8" height="232" fill="none" stroke="#111" stroke-width="1.8"/>
+<line x1="225.4" y1="690" x2="225.4" y2="945" class="cl"/>
+<text x="140" y="720" class="fs" text-anchor="end">pillar 2"×2"×1/8"</text>
+<!-- midrib, coped to the pillar face, landing on the plate -->
+<path d="M250.8 753.7 L330 626 L416 680 L259 932 L250.8 932 Z" fill="none" stroke="#111" stroke-width="1.8"/>
+<line x1="250.8" y1="753.7" x2="259" y2="932" stroke="#111" stroke-width="1" stroke-dasharray="5 4"/>
+<text x="430" y="640" class="fs">midrib RT 4"×2"×3/16",</text>
+<text x="430" y="652" class="fs">end coped to the pillar face</text>
+<!-- weld symbols (fillets) -->
+<path d="M250.8 790 l14 -6 l0 12 z" fill="#c9553a"/>
+<line x1="264.8" y1="790" x2="330" y2="770" stroke="#c9553a" stroke-width="1"/>
+<text x="334" y="772" class="fs" style="fill:#c9553a">a6 fillet, full perimeter of cope</text>
+<path d="M200 932 l-12 -14 l12 0 z" fill="#c9553a"/>
+<line x1="188" y1="918" x2="130" y2="880" stroke="#c9553a" stroke-width="1"/>
+<text x="126" y="874" class="fs" text-anchor="end" style="fill:#c9553a">a5 fillet, pillar↔plate,</text>
+<text x="126" y="886" class="fs" text-anchor="end" style="fill:#c9553a">all around</text>
+<path d="M300 908 l16 -2 l-6 12 z" fill="#c9553a"/>
+<line x1="316" y1="906" x2="430" y2="860" stroke="#c9553a" stroke-width="1"/>
+<text x="434" y="858" class="fs" style="fill:#c9553a">a5 fillet, midrib foot↔plate</text>
+<!-- angle + dims -->
+<path d="M250.8 900 A 60 60 0 0 0 288 848" fill="none" stroke="#3b5a7a" stroke-width="1"/>
+<text x="300" y="884" class="dmt">58°</text>
+<line x1="200" y1="686" x2="250.8" y2="686" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="225" y="678" class="dmt" text-anchor="middle">50.8</text>
+<line x1="136" y1="932" x2="136" y2="940" class="dim"/>
+<line x1="120" y1="936" x2="150" y2="936" class="dim" marker-end="url(#ar)"/>
+<text x="116" y="940" class="dmt" text-anchor="end">8</text>
+<!-- notes -->
+<text x="20" y="990" class="fs">The ONE structural weld in the harp — made in the open, before the pillar rebate and plate drilling. Cope the midrib end to the</text>
+<text x="20" y="1004" class="fs">pillar face (58° from horizontal per the anchor-line slope); fillet all around. The joint sits at the frame's bending-moment minimum,</text>
+<text x="20" y="1018" class="fs">so the weld HAZ lives where stress is lowest; mid-span and the neck joints stay parent-metal. Bolt the base plate to the plinth last.</text>
 </svg></div>
 
 <p class="sub">Sources: <code>string-specs.md</code> (49-string spec, imperial + metric; band tension
