@@ -129,6 +129,26 @@ for a, b, L in frame:
     else: outline.append((a, b))
 for n, note, fg, Lg, odg, tg, gx, glo in gpts:
     sense.append((gx, glo + Lg - Lg*SENSE_RATIO))
+
+# figure 1 mirrors the hand-edited sensor-axes group in Erand49.svg when present
+# (same master-file rule as the neck rails); falls back to the computed DXF points
+sense_px = [(X(sx), Y(sy)) for sx, sy in sense]
+try:
+    import re as _re
+    _svg = open(os.path.join(HERE, 'Erand49.svg')).read()
+    _grp = _re.search(r'<g[^>]*id="sensor-axes"[^>]*>(.*?)</g>', _svg, _re.S)
+    if _grp:
+        _pts = []
+        for _ln in _re.findall(r'<line[^>]*>', _grp.group(1)):
+            _c = _re.search(r'x1="([\d.]+)"[^>]*y1="([\d.]+)"[^>]*x2="([\d.]+)"[^>]*y2="([\d.]+)"', _ln)
+            if _c:
+                _x1, _y1, _x2, _y2 = map(float, _c.groups())
+                if abs(_y1 - _y2) < 0.01:          # the horizontal stroke of each crosshair
+                    _pts.append(((_x1 + _x2) / 2, _y1))
+        if len(_pts) >= 40:
+            sense_px = _pts
+except OSError:
+    pass
 # ---- frame in side view: midrib C-channel band + pillar + ISO 129 dims ----
 band = []
 band.append('<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3b5a7a"/></marker></defs>')
@@ -182,8 +202,8 @@ band += [f'<line x1="{X(a[0]):.1f}" y1="{Y(a[1]):.1f}" x2="{X(b[0]):.1f}" y2="{Y
 band.append('</g>')
 for a, b, c, w in keys:
     band.append(f'<line x1="{X(a[0]):.1f}" y1="{Y(a[1]):.1f}" x2="{X(b[0]):.1f}" y2="{Y(b[1]):.1f}" stroke="{c}" stroke-width="{w:.3f}"/>')
-for sx, sy in sense:
-    band.append(f'<g stroke="#a8700f" stroke-width="1.4"><line x1="{X(sx)-3.2:.1f}" y1="{Y(sy):.1f}" x2="{X(sx)+3.2:.1f}" y2="{Y(sy):.1f}"/><line x1="{X(sx):.1f}" y1="{Y(sy)-3.2:.1f}" x2="{X(sx):.1f}" y2="{Y(sy)+3.2:.1f}"/><title>optical X/Y sensor axis — the DXF optical point, 0.056·L below the flat pin (uniform semitone fraction), sensor rail on the neck</title></g>')
+for cxp, cyp in sense_px:
+    band.append(f'<g stroke="#a8700f" stroke-width="1.4"><line x1="{cxp-3.2:.1f}" y1="{cyp:.1f}" x2="{cxp+3.2:.1f}" y2="{cyp:.1f}"/><line x1="{cxp:.1f}" y1="{cyp-3.2:.1f}" x2="{cxp:.1f}" y2="{cyp+3.2:.1f}"/><title>optical X/Y sensor axis — mirrors the sensor-axes group in Erand49.svg (0.056·L below the flat pin; Gate 1 placeholder, final fraction set on the bench)</title></g>')
 for (n, note, f, Lin, cm, wm, od, t), (x, ylo, yhi) in strings:
     c, odmm = color(note), od*IN
     tip = f"#{n} {note} · {f:g} Hz · {Lin:.3f} in / {Lin*IN:.1f} mm · Ø {od:.3f} in / {odmm:.2f} mm · {t:.1f} lbf"
