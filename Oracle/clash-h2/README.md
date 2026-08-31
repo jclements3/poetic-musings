@@ -9,11 +9,12 @@ instruction encoding, port list, stack/RAM timing, hold line and interrupt
 behaviour, so the existing `embed.hex` images and the C simulator/debugger
 in the original project remain valid references.
 
-> **Status:** written against the Clash 1.8 API but *not yet compiled or
-> simulated in Clash* — the environment this was produced in had no GHC and
-> no Hackage access. The test program and cycle timing were checked against
-> a small Python model of the same logic. Expect to fix a type error or two
-> on first `cabal build`; the structure is sound.
+> **Status:** compiles with GHC 9.6 / Clash 1.8 and **boots the real eForth
+> image in Haskell simulation**: `cabal run h2-boot` loads `h2.bin`, runs the
+> system with a functional UART register model (`src/H2/SystemUart.hs`),
+> feeds `2 3 + . cr` to the console and checks the banner and the printed
+> `5` in the captured transcript. The RTL has not yet been synthesised or
+> run on hardware.
 
 ## Layout
 
@@ -21,7 +22,9 @@ in the original project remain valid references.
 | -------------------- | -------------- | ----- |
 | `src/H2.hs`          | `h2.vhd`       | The core. `h2` is the reusable component, `step` the combinational logic, `topEntity` a stand-alone synthesis target. |
 | `src/H2/System.hs`   | `top.vhd` + `ram.vhd` (tiny subset) | Core + 8K×16 program RAM from `h2.bin` + LEDs/switches at `0x4004`. |
+| `src/H2/SystemUart.hs` | `top.vhd` + `uart.vhd` (simulation-only register model) | Core + RAM + the iUart/oUart register contract; rx fed from a Haskell byte list, tx collected per cycle. No baud clock, no serdes, no FIFO depth — see the module haddock. |
 | `test/Spec.hs`       | `tb.vhd` (smoke test only) | Runs a 5-word program that writes `0xA5` to `oLeds`. |
+| `test/BootSpec.hs`   | — | Boots the real eForth image (`h2.bin`) in Haskell simulation, types `2 3 + . cr` at the console and checks the transcript (`cabal run h2-boot`, from this directory). |
 | `tools/hex2bin.py`   | —              | Converts `embed.hex` into the format `blockRamFile` loads. |
 
 ## How the VHDL maps to Clash
@@ -77,8 +80,10 @@ cabal run clashi
 
 ## What's not ported (yet)
 
-Only the CPU and the trivial LED/switch registers are here. The original
-SoC also has a UART with FIFOs, the VGA/VT100 text terminal, PS/2 keyboard,
+Only the CPU, the trivial LED/switch registers and the *simulation-only*
+UART register model are here (the latter has no baud clock, serdes or
+finite FIFOs, so it is not synthesisable I/O). The original
+SoC also has a real UART with FIFOs, the VGA/VT100 text terminal, PS/2 keyboard,
 timer, 7-segment driver, external SRAM/flash controller and the interrupt
 controller (`core.vhd`, `uart.vhd`, `vga.vhd`, `kbd.vhd`, `timer.vhd`,
 `util.vhd`). The `H2In`/`H2Out` interface is the same as `h2.vhd`, so those

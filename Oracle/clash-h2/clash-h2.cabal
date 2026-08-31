@@ -41,6 +41,7 @@ library
   exposed-modules:
     H2
     H2.System
+    H2.SystemUart
 
 executable clash
   import: common-options
@@ -62,3 +63,14 @@ test-suite h2-test
   hs-source-dirs: test
   main-is: Spec.hs
   build-depends: base, clash-prelude, clash-h2
+
+-- Boots the real eForth image (h2.bin) against the simulation-only UART
+-- register model and checks the console transcript.  Run from the package
+-- directory (h2.bin is opened relative to the working directory).
+test-suite h2-boot
+  import: common-options
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: BootSpec.hs
+  ghc-options: -O2 -rtsopts
+  build-depends: base, clash-prelude, clash-h2, time

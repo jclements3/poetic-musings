@@ -69,6 +69,10 @@ defaultConfig = H2Config
   }
 
 -- | Inputs to the core. Field order matches the VHDL port list.
+--
+--   The fields must stay /lazy/: @ioDin@ closes the combinational loop
+--   through the IO read mux (@io_daddr -> io_din@ in the same cycle), so a
+--   strict record here would make Haskell simulation @<<loop>>@.
 data H2In i = H2In
   { stopIn    :: Bool         -- ^ assert to hold the core in place
   , ioDin     :: Cell         -- ^ data from IO register selected by @io_daddr@
@@ -78,7 +82,9 @@ data H2In i = H2In
   , din       :: Cell         -- ^ RAM data at the previously requested @daddr@
   } deriving (Show, Generic, NFDataX)
 
--- | Outputs of the core.
+-- | Outputs of the core.  Lazy fields for the same reason as 'H2In':
+--   @dre@\/@daddr@ depend on the next TOS, which on an IO load is @ioDin@,
+--   which depends combinationally on @ioDaddr@ of the same record.
 data H2Out = H2Out
   { ioWr    :: Bool  -- ^ IO write strobe
   , ioRe    :: Bool  -- ^ IO read strobe (reads may have side effects)
@@ -93,15 +99,24 @@ data H2Out = H2Out
 
 -- | Architectural state held in flip-flops (the two stacks live in
 --   distributed RAM and are not part of this record).
+--
+--   The fields are strict on purpose: 'register' only forces the record to
+--   WHNF, and with lazy fields the rarely-read registers build unbounded
+--   thunk chains in Haskell simulation (e.g. @irqEnR@ is only demanded by
+--   @cpu?@\/@cpu!@, and @irqAddrR@ never when no interrupt fires — each
+--   chain link also pins that cycle's whole input record, which leaked
+--   ~1KB/cycle over an eForth boot).  The state is only forced one cycle
+--   after it is produced, so — unlike 'H2In'\/'H2Out' — strictness here
+--   cannot create a combinational cycle.
 data H2State n i = H2State
-  { pc       :: Addr
-  , stop     :: Bool         -- ^ registered hold line; core starts stopped
-  , vstkp    :: Unsigned n   -- ^ variable (data) stack pointer
-  , rstkp    :: Unsigned n   -- ^ return stack pointer
-  , tos      :: Cell         -- ^ top of data stack
-  , irqAddrR :: BitVector i  -- ^ registered interrupt vector
-  , irqEnR   :: Bool         -- ^ interrupts enabled
-  , irqR     :: Bool         -- ^ registered interrupt request
+  { pc       :: !Addr
+  , stop     :: !Bool         -- ^ registered hold line; core starts stopped
+  , vstkp    :: !(Unsigned n) -- ^ variable (data) stack pointer
+  , rstkp    :: !(Unsigned n) -- ^ return stack pointer
+  , tos      :: !Cell         -- ^ top of data stack
+  , irqAddrR :: !(BitVector i) -- ^ registered interrupt vector
+  , irqEnR   :: !Bool         -- ^ interrupts enabled
+  , irqR     :: !Bool         -- ^ registered interrupt request
   } deriving (Show, Generic, NFDataX)
 
 resetState :: (KnownNat n, KnownNat i) => H2Config -> H2State n i
