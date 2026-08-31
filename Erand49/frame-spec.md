@@ -9,7 +9,7 @@ temper. Loads from `string-specs.md`: band pull 7.00 kN (49 strings), string ang
 |---|---|---|---|
 | Midrib | **C-channel: 2.5 in web on top (string face) + two 4 in side walls, 3/16 wall, OPEN BOTTOM** — strings through grommeted web holes; knots inside, covered by the sides, serviced from the open bottom | 5.9 kN axial + 3.7 kN transverse over ~1.9 m -> M ~ 0.88 kN-m mid-span | ~40 MPa, SF ~3.5 parent; bow ~3.5 mm; symmetric about the string plane -> shear center on-plane, no string-load torsion |
 | Pillar | **round tube, 2 in OD x 3/16 in wall**, crown to floor, passing through the midrib base | few kN compression + hung PM console + lean loads | Euler Pcr ~ 31 kN over ~2 m, ~6x margin; cleat on a saddle block |
-| Neck plates x2 | per `Erand49.svg` hand-edited outline | pin + sensor mounting (verified: min pin-edge 16.2 mm, min sensor-edge 7.1 mm) | rest on the midrib shoulder steps and weld to its center tongue (**ER-005**): side walls milled down 8 mm each above a horizontal step, leaving a 47.5 mm tongue = the plates inner gap; plate outer faces flush at 63.5 (**plate gap = 63.5 mm**). Crown: 6.35 mm pads per side to the round pillar, crush-sleeved bolts |
+| Neck plates x2 | per `Erand49.svg` hand-edited outline | pin + sensor mounting (verified: min pin-edge 16.2 mm, min sensor-edge 7.1 mm) | lap the channel top on an 8 mm inclined rebate (**ER-005**): mill one plate thickness off each side wall outer face along the top corner for the ~60 mm lap; the 47.5 mm center stands proud between the plates and takes the welds; the neck bottom edge lands ON the channel top line (classic shoulder corner); outer faces flush at 63.5 (**plate gap = 63.5 mm**). Crown: 6.35 mm pads per side to the round pillar, crush-sleeved bolts |
 
 | Outrigger legs x2 | 1 in x 1/8 in flat bar, ~295 mm, shoulder-bolt hinges through the midrib side walls near the floor foot (**ER-006**) | sideways stability: frame footprint in Y is otherwise zero | deployed ~55 deg -> ~550 mm stance; tips only past ~19 deg lean; fold flat for travel; wing-bolt locks |
 
@@ -22,9 +22,10 @@ temper. Loads from `string-specs.md`: band pull 7.00 kN (49 strings), string ang
    stand on the floor: pillar foot + the midrib horizontal end cut. No base plate.
 2. Drill the midrib +/-Y faces for the neck-plate through-bolts (crush sleeves
    inside); make the two 6.35 mm crown pads.
-3. Mill the shoulder: horizontal step in both side walls, center tongue 47.5 mm
-   (ER-005). Set the plates on the steps, weld them to the tongue both sides;
-   at the crown, bolt via the 6.35 mm pads (crush sleeves through the round tube).
+3. Mill the shoulder rebate: 8 mm off each side wall outer face along the top
+   corner, ~60 mm lap (ER-005). Set the plates in the rebate — bottom edges on
+   the channel top line — weld to the proud center both sides; at the crown,
+   bolt via the 6.35 mm pads (crush sleeves through the round tube).
 4. Bolt the cleat saddle around the round pillar for the PM console.
 
 ## Neck stack at the 63.5 mm gap

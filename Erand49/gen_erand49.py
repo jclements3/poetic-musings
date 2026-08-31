@@ -161,18 +161,14 @@ def mp(t, off):
 y_floor = y_base
 def t_at_y(yq, off):
     return (yq - cxi - py_*off) / m
-y_sh = m*(xr_m - 1.5) + cxi                 # shoulder step height (side walls cut horizontal here)
+y_sh = m*(xr_m - 1.5) + cxi                 # start of the shoulder lap along the channel top
 for off in (0, -2*MHW):
-    t_end = t_at_y(y_sh, off)
-    (xa, ya), (xb, yb) = mp(t_at_y(y_floor, off), off), mp(t_end, off)
+    (xa, ya), (xb, yb) = mp(t_at_y(y_floor, off), off), mp(xr_m, off)
     band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#8d877a" stroke-width="2"/>')
-    (tx1, ty1), (tx2, ty2) = mp(t_end, off), mp(t_end + 1.0, off)
-    band.append(f'<line x1="{tx1:.1f}" y1="{ty1:.1f}" x2="{tx2:.1f}" y2="{ty2:.1f}" stroke="#8d877a" stroke-width="1.4" stroke-dasharray="6 4"/>')
-(sx1, sy1), (sx2, sy2) = mp(t_at_y(y_sh, 0), 0), mp(t_at_y(y_sh, -2*MHW), -2*MHW)
-band.append(f'<line x1="{sx1:.1f}" y1="{sy1:.1f}" x2="{sx2:.1f}" y2="{sy2:.1f}" stroke="#8d877a" stroke-width="2"><title>shoulder step — side walls cut horizontal; neck plates rest here (ER-005)</title></line>')
-(ex1, ey1), (ex2, ey2) = mp(t_at_y(y_sh, 0) + 1.0, 0), mp(t_at_y(y_sh, -2*MHW) + 1.0, -2*MHW)
-band.append(f'<line x1="{ex1:.1f}" y1="{ey1:.1f}" x2="{ex2:.1f}" y2="{ey2:.1f}" stroke="#8d877a" stroke-width="1.4" stroke-dasharray="6 4"><title>center tongue — extends up between the plates, welded to them (ER-005)</title></line>')
-band.append(f'<text x="{sx2+8:.0f}" y="{sy2+2:.0f}" class="nl" fill="#8d877a">shoulder step + tongue: ER-005</text>')
+(sx1, sy1), (sx2, sy2) = mp(xr_m - 1.5, -8/25.4), mp(xr_m, -8/25.4)
+band.append(f'<line x1="{sx1:.1f}" y1="{sy1:.1f}" x2="{sx2:.1f}" y2="{sy2:.1f}" stroke="#8d877a" stroke-width="1.4" stroke-dasharray="6 4"><title>shoulder rebate — 8 mm into each side wall along the channel top; plates lap here, web stands proud between them (ER-005)</title></line>')
+(cx2, cy2) = mp(xr_m - 0.6, -2*MHW)
+band.append(f'<text x="{cx2+10:.0f}" y="{cy2+2:.0f}" class="nl" fill="#8d877a">shoulder rebate: ER-005</text>')
 (fx1, fy1), (fx2, fy2) = mp(t_at_y(y_floor, 0), 0), mp(t_at_y(y_floor, -2*MHW), -2*MHW)
 band.append(f'<line x1="{fx1:.1f}" y1="{fy1:.1f}" x2="{fx2:.1f}" y2="{fy2:.1f}" stroke="#8d877a" stroke-width="2"><title>horizontal end cut — the midrib stands on the floor as the rear foot</title></line>')
 (xa, ya), (xb, yb) = mp(t_at_y(y_floor, -MHW), -MHW), mp(xr_m, -MHW)
@@ -471,7 +467,7 @@ sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapol
 <text x="20" y="1004" class="fs">string-free zone past a0) let it pass; self-fixturing. Weld the top-web rim and both side walls to the pillar. Both members</text>
 <text x="20" y="1018" class="fs">stand on the floor: pillar foot plus the midrib horizontal end cut — a wide, stable base line with no base plate and no blocks.</text>
 
-<text x="20" y="1075" class="fg">ER-005 — SHOULDER: PLATES REST ON SIDE-WALL STEPS, WELDED TO THE CENTER TONGUE (section ⊥ member, 2 px/mm)</text>
+<text x="20" y="1075" class="fg">ER-005 — SHOULDER: PLATES LAP THE CHANNEL TOP ON AN 8 mm REBATE, WELDED TO THE PROUD WEB (section ⊥ member, 2 px/mm)</text>
 <!-- tube below the step -->
 <rect x="256.5" y="1300" width="127" height="120" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
 <rect x="266" y="1309.5" width="108" height="120" fill="#fff" stroke="#111" stroke-width="1.2"/>
@@ -481,30 +477,30 @@ sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapol
 <!-- plates resting on the steps -->
 <rect x="256.5" y="1160" width="16" height="140" fill="none" stroke="#3b5a7a" stroke-width="1.8"/>
 <rect x="367.5" y="1160" width="16" height="140" fill="none" stroke="#3b5a7a" stroke-width="1.8"/>
-<text x="248" y="1170" class="fs" text-anchor="end">neck plate</text>
+<text x="248" y="1170" class="fs" text-anchor="end">neck plate (bottom edge on the channel top line)</text>
 <text x="392" y="1170" class="fs">neck plate</text>
 <!-- welds plate<->tongue -->
 <path d="M272.5 1230 l12 -5 l0 12 z" fill="#c9553a"/>
 <path d="M367.5 1230 l-12 -5 l0 12 z" fill="#c9553a"/>
 <line x1="284.5" y1="1230" x2="210" y2="1210" stroke="#c9553a" stroke-width="1"/>
-<text x="206" y="1206" class="fs" text-anchor="end" style="fill:#c9553a">weld plates to the tongue,</text>
-<text x="206" y="1218" class="fs" text-anchor="end" style="fill:#c9553a">both sides, full height</text>
+<text x="206" y="1206" class="fs" text-anchor="end" style="fill:#c9553a">weld plates to the proud web,</text>
+<text x="206" y="1218" class="fs" text-anchor="end" style="fill:#c9553a">both sides, full lap length</text>
 <!-- bearing arrows at the steps -->
 <path d="M264 1332 L264 1304" stroke="#3b5a7a" stroke-width="1.5" fill="none"/><path d="M259 1314 L264 1302 L269 1314 Z" fill="#3b5a7a"/>
 <path d="M375.5 1332 L375.5 1304" stroke="#3b5a7a" stroke-width="1.5" fill="none"/><path d="M370.5 1314 L375.5 1302 L380.5 1314 Z" fill="#3b5a7a"/>
-<text x="400" y="1330" class="fs" style="fill:#3b5a7a">plates REST on the horizontal steps —</text>
-<text x="400" y="1342" class="fs" style="fill:#3b5a7a">the string band pull crosses in compression</text>
+<text x="400" y="1330" class="fs" style="fill:#3b5a7a">plates BEAR on the rebate ledges (normal to the</text>
+<text x="400" y="1342" class="fs" style="fill:#3b5a7a">channel top); the welds carry the along-slope shear</text>
 <!-- dims -->
 <line x1="256.5" y1="1445" x2="383.5" y2="1445" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
 <text x="320" y="1461" class="dmt" text-anchor="middle">63.5</text>
 <line x1="272.5" y1="1150" x2="367.5" y2="1150" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
 <text x="320" y="1142" class="dmt" text-anchor="middle">47.5</text>
 <line x1="236" y1="1290" x2="255" y2="1296" class="dim" marker-end="url(#ar)"/>
-<text x="232" y="1292" class="dmt" text-anchor="end">step = 8 (one plate)</text>
+<text x="232" y="1292" class="dmt" text-anchor="end">rebate = 8 (one plate)</text>
 <!-- notes -->
-<text x="20" y="1510" class="fs">Form the tongue by milling 8 mm — one plate thickness — off each side wall above the horizontal step: tongue = 47.5 wide, exactly</text>
-<text x="20" y="1524" class="fs">the plates' inner gap, and the plate outer faces stay flush at 63.5. Self-fixturing: the step sets plate height, the tongue sets the gap.</text>
-<text x="20" y="1538" class="fs">Load path: string pull on the neck bears down on the steps in compression; the plate-to-tongue welds only locate and carry shear.</text>
+<text x="20" y="1510" class="fs">The rebate runs ALONG the channel top (inclined at the member angle) for the ~60 mm lap: mill 8 mm — one plate thickness — off each</text>
+<text x="20" y="1524" class="fs">side wall's outer face at the top corner. The 47.5 mm center (web + wall remnants) stands proud between the plates and takes the</text>
+<text x="20" y="1538" class="fs">welds. The neck's bottom edge lands ON the channel's top line — the classic harp shoulder corner — and the outer faces stay flush.</text>
 
 <text x="20" y="1600" class="fg">ER-006 — HINGED OUTRIGGER LEGS AT THE MIDRIB FOOT (front view YZ, 1 px/mm)</text>
 <!-- floor -->
