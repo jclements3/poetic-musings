@@ -1,7 +1,12 @@
-# Generates Erand49.html — true-scale string band drawing.
-# Lengths and line widths share one scale (viewBox units = mm), so the
-# stroke width of each string IS its overall diameter (ODIA).
-import os
+# Generates Erand49.html — string band drawn from the Erard DXF geometry.
+# Band drawing units are mm: string positions/lengths come from the DXF
+# (matched to the spec table by length), and each stroke width IS the
+# string's actual overall diameter (ODIA). C red, F blue, others gray.
+import os, math
+import ezdxf
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+IN = 25.4
 
 # STR#, NOTE, FREQ Hz, LENGTH in, CMAT, WMAT, ODIA in, TENSION lbf  (Erard tutorial)
 ROWS = [
@@ -30,72 +35,106 @@ ROWS = [
  (45,"e1",41.200,57.655,"Steel","Bronze",0.076,49.053),(46,"d1",36.710,58.649,"Steel","Bronze",0.083,50.985),
  (47,"c1",32.700,59.643,"Steel","Bronze",0.091,52.693),
 ]
-# Erand49 is 49 strings (A0-G7); b0/a0 specs not in the tutorial — drawn dashed as placeholders.
-GHOSTS = [(48,"b0",30.868,60.8),(49,"a0",27.500,62.0)]  # lengths extrapolated, TBD
-
-IN = 25.4
-PITCH = 15.0          # string spacing, mm
-X0, YRIB = 45.0, 1580.0
-W = X0 + PITCH*(len(ROWS)+len(GHOSTS)) + 45.0
+GHOSTS = [(48,"b0",30.868),(49,"a0",27.500)]  # not in the tutorial; geometry extrapolated, spec TBD
 
 def color(note):
-    if note.startswith("c"): return "#c0392b"   # C = red (harp convention)
-    if note.startswith("f"): return "#2e5fa3"   # F = blue
+    if note.startswith("c"): return "#c0392b"
+    if note.startswith("f"): return "#2e5fa3"
     return "#3b3e44"
 
-band, xsec = [], []
-for i,(n,note,f,Lin,cm,wm,od,t) in enumerate(ROWS):
-    x = X0 + PITCH*i
-    Lmm, odmm = Lin*IN, od*IN
-    c = color(note)
-    tip = f"#{n} {note} · {f:g} Hz · {Lin:.3f} in / {Lmm:.1f} mm · Ø {od:.3f} in / {odmm:.2f} mm · {t:.1f} lbf"
-    band.append(f'<line x1="{x:.1f}" y1="{YRIB:.1f}" x2="{x:.1f}" y2="{YRIB-Lmm:.1f}" stroke="{c}" stroke-width="{odmm:.3f}"><title>{tip}</title></line>')
-    if note.startswith(("c","f")) or n in (1,47):
-        band.append(f'<text x="{x:.1f}" y="{YRIB+22:.0f}" class="nl" fill="{c}" text-anchor="middle">{note}</text>')
-    xsec.append(f'<circle cx="{x:.1f}" cy="40" r="{odmm*10/2:.2f}" fill="{c}"><title>{tip}</title></circle>')
-for j,(n,note,f,Lin) in enumerate(GHOSTS):
-    x = X0 + PITCH*(len(ROWS)+j)
-    band.append(f'<line x1="{x:.1f}" y1="{YRIB:.1f}" x2="{x:.1f}" y2="{YRIB-Lin*IN:.1f}" stroke="#8d877a" stroke-width="2.4" stroke-dasharray="10 8"><title>#{n} {note} · {f:g} Hz · spec TBD (not in Erard tutorial)</title></line>')
-    band.append(f'<text x="{x:.1f}" y="{YRIB+22:.0f}" class="nl" fill="#8d877a" text-anchor="middle">{note}?</text>')
+# ---- read the DXF ----
+doc = ezdxf.readfile(os.path.join(HERE, 'erard original stringband tutorial.dxf'))
+msp = doc.modelspace()
+dxf_lines = []
+for e in msp.query('LINE'):
+    a, b = e.dxf.start, e.dxf.end
+    dxf_lines.append(((a.x, a.y), (b.x, b.y), math.hypot(b.x-a.x, b.y-a.y)))
 
-# neck profile through string tops
-tops = [(X0+PITCH*i, YRIB-L*IN) for i,(_,_,_,L,_,_,_,_) in enumerate(ROWS)]
-tops += [(X0+PITCH*(len(ROWS)+j), YRIB-L*IN) for j,(_,_,_,L) in enumerate(GHOSTS)]
-neck = " ".join(f"{x:.1f},{y-8:.1f}" for x,y in tops)
+# match each spec row to the DXF line of the same length (all verticals, 47/47 match)
+used = set()
+strings = []   # (row, (x, y_bottom, y_top)) in DXF inches, y-up
+for row in ROWS:
+    L = row[3]
+    best, bd = None, 1e9
+    for i, (a, b, ll) in enumerate(dxf_lines):
+        if i in used: continue
+        d = abs(ll - L)
+        if d < bd: bd, best = d, i
+    assert bd < 0.08, (row, bd)
+    used.add(best)
+    a, b, _ = dxf_lines[best]
+    ylo, yhi = min(a[1], b[1]), max(a[1], b[1])
+    strings.append((row, (a[0], ylo, yhi)))
 
-# --- Érard tutorial drawing, rendered from the DXF (ezdxf) ---
-dxf_section = ''
-try:
-    import ezdxf
-    doc = ezdxf.readfile(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                      'erard original stringband tutorial.dxf'))
-    msp = doc.modelspace()
-    xs, ys = [], []
-    for e in msp.query('LINE'):
-        xs += [e.dxf.start.x, e.dxf.end.x]; ys += [e.dxf.start.y, e.dxf.end.y]
-    x0, x1, y0, y1 = min(xs)-1, max(xs)+1, min(ys)-1, max(ys)+1
-    def F(y): return (y1+y0) - y   # DXF is y-up; SVG is y-down
-    el = []
-    for e in msp.query('LINE'):
-        a, b = e.dxf.start, e.dxf.end
-        el.append(f'<line x1="{a.x:.3f}" y1="{F(a.y):.3f}" x2="{b.x:.3f}" y2="{F(b.y):.3f}"/>')
-    tx = []
-    for e in msp.query('TEXT'):
-        d = e.dxf
-        tx.append(f'<text x="{d.insert.x:.2f}" y="{F(d.insert.y):.2f}" font-size="{d.height:.2f}">{e.dxf.text}</text>')
-    dxf_section = f'''
-<h2>Érard original — rendered from the DXF</h2>
-<p class="sub">Parsed with ezdxf from <code>erard original stringband tutorial.dxf</code>
-({len(el)} lines, {len(tx)} labels; units inches, y-flipped for SVG). Note the real band uses
-<b>variable string spacing</b> — 13.325 mm in the treble opening to 17.94 mm at the bass, ratio 1.025 —
-where the true-scale drawing above uses a uniform 15 mm pitch; string angle 32°, soundboard 52.81 in.</p>
-<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.1f} {y0:.1f} {x1-x0:.1f} {y1-y0:.1f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erard string band drawing from DXF">
-<g stroke="#3b3e44" stroke-width="0.045" fill="none">{''.join(el)}</g>
-<g fill="#7a5a2a" font-family="ui-monospace,Menlo,Consolas,monospace">{''.join(tx)}</g>
-</svg></div>
-'''
-except Exception as ex:
-    dxf_section = f'<p class="sub">(DXF section skipped: {ex})</p>'
+frame = [dxf_lines[i] for i in range(len(dxf_lines)) if i not in used
+         and not (dxf_lines[i][0][0] > 32 and dxf_lines[i][1][0] > 32)]  # drop spec-table rules
+
+# ---- band SVG in mm, y flipped ----
+allx = [g[0] for _, g in strings]; ally = [g[1] for _, g in strings] + [g[2] for _, g in strings]
+for a, b, _ in frame:
+    allx += [a[0], b[0]]; ally += [a[1], b[1]]
+
+# ghost geometry: continue anchor line and spacing ratio past string 47
+(x46, lo46, _), (x47, lo47, _) = strings[-2][1], strings[-1][1]
+dx = (x47 - x46) * 1.025
+slope = (lo47 - lo46) / (x47 - x46)
+gpts = []
+gx, glo = x47, lo47
+for (n, note, Lg) in [(n, note, L) for n, note, L in GHOSTS]:
+    dx *= 1.025
+    gx, glo = gx + dx, glo + slope * dx
+    gpts.append((n, note, Lg, gx, glo))
+    allx.append(gx); ally += [glo, glo + Lg]
+
+x0, x1 = (min(allx)-1.2)*IN, (max(allx)+1.2)*IN
+y0, y1 = (min(ally)-1.6)*IN, (max(ally)+0.8)*IN
+def X(v): return v*IN
+def Y(v): return (y1+y0) - v*IN   # y-up inches -> y-down mm
+
+# classify the non-string lines: 0.25" ticks = flat/natural/sharp marks (47x3),
+# ~1.53" at 78 deg = tuner leads (one per string, 12 deg off vertical), rest = frame
+tops = [(g[0], g[2], color(r[1]), r[6]*IN) for r, g in strings]
+marks, keys, outline = [], [], []
+for a, b, L in frame:
+    if L < 0.5: marks.append((a, b))
+    elif L < 2.0:
+        lo = a if a[1] < b[1] else b
+        best = min(tops, key=lambda t: (t[0]-lo[0])**2 + (t[1]-lo[1])**2)
+        keys.append((a, b, best[2], best[3]))
+    else: outline.append((a, b))
+band = ['<g stroke="#b9b3a3" stroke-width="1.2" fill="none">']
+band += [f'<line x1="{X(a[0]):.1f}" y1="{Y(a[1]):.1f}" x2="{X(b[0]):.1f}" y2="{Y(b[1]):.1f}"/>' for a, b in outline]
+band.append('</g>')
+band.append('<g stroke="#555" stroke-width="1.0" fill="none">')
+band += [f'<line x1="{X(a[0]):.1f}" y1="{Y(a[1]):.1f}" x2="{X(b[0]):.1f}" y2="{Y(b[1]):.1f}"/>' for a, b in marks]
+band.append('</g>')
+for a, b, c, w in keys:
+    band.append(f'<line x1="{X(a[0]):.1f}" y1="{Y(a[1]):.1f}" x2="{X(b[0]):.1f}" y2="{Y(b[1]):.1f}" stroke="{c}" stroke-width="{w:.3f}"/>')
+for (n, note, f, Lin, cm, wm, od, t), (x, ylo, yhi) in strings:
+    c, odmm = color(note), od*IN
+    tip = f"#{n} {note} · {f:g} Hz · {Lin:.3f} in / {Lin*IN:.1f} mm · Ø {od:.3f} in / {odmm:.2f} mm · {t:.1f} lbf"
+    band.append(f'<line x1="{X(x):.1f}" y1="{Y(ylo):.1f}" x2="{X(x):.1f}" y2="{Y(yhi):.1f}" stroke="{c}" stroke-width="{odmm:.3f}"><title>{tip}</title></line>')
+    if note.startswith(("c", "f")) or n in (1, 47):
+        band.append(f'<text x="{X(x):.1f}" y="{Y(ylo)+24:.1f}" class="nl" fill="{c}" text-anchor="middle">{note}</text>')
+for n, note, Lg, gx, glo in gpts:
+    band.append(f'<line x1="{X(gx):.1f}" y1="{Y(glo):.1f}" x2="{X(gx):.1f}" y2="{Y(glo+Lg):.1f}" stroke="#8d877a" stroke-width="2.4" stroke-dasharray="10 8"><title>#{n} {note} · spec TBD (not in Erard tutorial; geometry extrapolated)</title></line>')
+    band.append(f'<text x="{X(gx):.1f}" y="{Y(glo)+24:.1f}" class="nl" fill="#8d877a" text-anchor="middle">{note}?</text>')
+
+# ---- cross sections at 5x, aligned to real string x positions ----
+xsec = []
+for (n, note, f, Lin, cm, wm, od, t), (x, ylo, yhi) in strings:
+    tip = f"#{n} {note} · Ø {od:.3f} in / {od*IN:.2f} mm"
+    xsec.append(f'<circle cx="{X(x):.1f}" cy="40" r="{od*IN*5/2:.2f}" fill="{color(note)}"><title>{tip}</title></circle>')
+
+# ---- full DXF render (lines + text) ----
+fx, fy = [], []
+for a, b, _ in dxf_lines:
+    fx += [a[0], b[0]]; fy += [a[1], b[1]]
+fx0, fx1, fy0, fy1 = min(fx)-1, max(fx)+1, min(fy)-1, max(fy)+1
+def FF(v): return (fy1+fy0) - v
+el = [f'<line x1="{a[0]:.3f}" y1="{FF(a[1]):.3f}" x2="{b[0]:.3f}" y2="{FF(b[1]):.3f}"/>' for a, b, _ in dxf_lines]
+tx = [f'<text x="{e.dxf.insert.x:.2f}" y="{FF(e.dxf.insert.y):.2f}" font-size="{e.dxf.height:.2f}">{e.dxf.text}</text>'
+      for e in msp.query('TEXT')]
 
 html = f'''<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=6, user-scalable=yes">
@@ -108,38 +147,42 @@ p{{margin:0 0 10px}} .sub{{color:#444}}
 .wrap{{overflow:auto;border:1px solid #ccc;margin:8px 0}} .wrap svg{{min-width:900px}}
 .leg{{font-weight:700}}
 </style></head><body><main>
-<h1>ERAND49 — STRING BAND, TRUE SCALE</h1>
-<p class="sub">Erard tutorial stringing (47 strings, g7→c1). Drawing units are millimetres: string lengths
-and <b>line widths are the same scale — each stroke width is the string's actual overall diameter</b>
-(0.64 mm nylon treble to 2.64 mm wrapped bass). Colors per harp convention:
-<span class="leg" style="color:#c0392b">C strings red</span> ·
-<span class="leg" style="color:#2e5fa3">F strings blue</span> · others dark gray.
-Hover any string for its full spec. b0/a0 dashed: Erand49 spans 49 strings but the tutorial specs 47 —
-the two lowest await extrapolation (Gate 2).</p>
+<h1>ERAND49 — STRING BAND, ERARD GEOMETRY, TRUE SCALE</h1>
+<p class="sub">Geometry straight from <code>erard original stringband tutorial.dxf</code> (all 47 strings
+matched to the spec table by length): the DXF's variable spacing (13.325→17.94 mm, ratio 1.025) and
+sloped soundboard anchors, in millimetres, with <b>each stroke width the string's actual overall
+diameter</b>. Colors per harp convention: <span class="leg" style="color:#c0392b">C red</span> ·
+<span class="leg" style="color:#2e5fa3">F blue</span> · others dark gray. Hover any string for its spec.
+b0/a0 dashed: geometry extrapolated (spacing ratio continued), spec TBD — the Erand49 spans 49 strings,
+the tutorial 47. The three short dark ticks on each string are the DXF's flat / natural / sharp
+stations (Erard double-action disc positions); the angled top segment on each string — 1.5 in at 12°
+off vertical, drawn in the string's own color and diameter — is its lead to the tuner.</p>
 
-<h2>String band — lengths and diameters to one scale</h2>
-<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 {W:.0f} 1650" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, true scale">
-<style>.nl{{font-size:13px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}}.an{{font-size:15px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace}}</style>
-<polyline points="{neck}" fill="none" stroke="#7a5a2a" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
-<rect x="{X0-25:.0f}" y="{YRIB:.0f}" width="{W-2*(X0-25):.0f}" height="26" rx="6" fill="#a8700f" fill-opacity="0.35" stroke="#7a5a2a" stroke-width="1.5"/>
-<text x="{X0-10:.0f}" y="{YRIB+60:.0f}" class="an">rib — 49 sensor pairs, one per string anchor</text>
-<text x="{W-40:.0f}" y="{YRIB-1560:.0f}" class="an" text-anchor="end">neck profile = envelope of speaking lengths</text>
+<h2>String band — DXF geometry, lengths and diameters to one scale</h2>
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1-x0:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
+<style>.nl{{font-size:13px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}}</style>
 {chr(10).join(band)}
 </svg></div>
 
-<h2>Cross sections — diameters at 10×</h2>
-<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 {W:.0f} 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="String cross sections at 10x">
-<text x="{X0-10:.0f}" y="100" class="an" style="font-size:15px">plain nylon → nylon-wrapped → bronze-wound steel; the step at #28 (a3) and #39 (d2) is the winding starting</text>
+<h2>Cross sections — diameters at 5×, at each string's real position</h2>
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1-x0:.0f} 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="String cross sections at 5x">
+<text x="{x0+16:.0f}" y="100" style="font-size:15px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace">plain nylon → nylon-wrapped (#28 a3) → bronze-wound steel (#39 d2)</text>
 {chr(10).join(xsec)}
 </svg></div>
 
-{dxf_section}
+<h2>Érard original — rendered from the DXF</h2>
+<p class="sub">Parsed with ezdxf: {len(el)} lines, {len(tx)} labels; units inches, y-flipped for SVG.
+The label table carries the design parameters: spacing groups 13.325→17.9375 mm (ratio 1.025),
+string angle 32°, soundboard 52.81 in, key length 1.5 in at 12°.</p>
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{fx0:.1f} {fy0:.1f} {fx1-fx0:.1f} {fy1-fy0:.1f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erard string band drawing from DXF">
+<g stroke="#3b3e44" stroke-width="0.045" fill="none">{''.join(el)}</g>
+<g fill="#7a5a2a" font-family="ui-monospace,Menlo,Consolas,monospace">{''.join(tx)}</g>
+</svg></div>
+
 <p class="sub">Source: <code>string-specs.md</code> (imperial + metric) and
 <code>erard original stringband tutorial.dxf</code>. Regenerate: <code>python3 gen_erand49.py</code>.
-Band tension 1465.5 lbf ≈ 6.52 kN excluding b0/a0. Speaking-length scale honest to the drawing;
-string spacing drawn at 15 mm pitch.</p>
+Band tension 1465.5 lbf ≈ 6.52 kN excluding b0/a0.</p>
 </main></body></html>
 '''
-out = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Erand49.html')
-open(out,'w').write(html)
-print('wrote', out)
+open(os.path.join(HERE, 'Erand49.html'), 'w').write(html)
+print('wrote Erand49.html')
