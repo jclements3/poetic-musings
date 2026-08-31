@@ -11,7 +11,7 @@
 <text x="1110" y="420" class="nl" fill="#8d877a">shoulder step + tongue: ER-005</text>
 <line x1="88.9" y1="1848.0" x2="208.7" y2="1848.0" stroke="#8d877a" stroke-width="2"><title>horizontal end cut — the midrib stands on the floor as the rear foot</title></line>
 <line x1="148.8" y1="1848.0" x2="1063.8" y2="383.6" stroke="#c9553a" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib tube centerline (top face carries the string anchors)</title></line>
-<text x="366" y="1627" class="nl" fill="#8d877a">midrib — RT 4"×2"×3/16" 6061-T6 (ER-003)</text>
+<text x="366" y="1627" class="nl" fill="#8d877a">midrib — C 2.5"×4"×3/16" open-bottom, 6061-T6 (ER-003)</text>
 <line x1="139.6" y1="20.3" x2="139.6" y2="1766.7" stroke="#8d877a" stroke-width="2"/>
 <line x1="139.6" y1="1766.7" x2="139.6" y2="1868.3" stroke="#8d877a" stroke-width="2" stroke-dasharray="7 5"/>
 <line x1="139.6" y1="1868.3" x2="139.6" y2="1848.0" stroke="#8d877a" stroke-width="2"/>
