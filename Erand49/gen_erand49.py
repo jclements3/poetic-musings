@@ -277,6 +277,7 @@ def _path_xmax(dstr):
         else: i += 1
     return mx
 x1v = max(x1, _path_xmax(t_d) + 15, _path_xmax(s_d) + 15)
+x0v = min(x0, X(pilc-PW) - 75)   # cover the overall-height dimension left of the pillar
 
 # ---- cross sections at 5x, aligned to real string x positions ----
 xsec = []
@@ -300,7 +301,7 @@ tx = [f'<text x="{e.dxf.insert.x:.2f}" y="{FF(e.dxf.insert.y):.2f}" font-size="{
 # ---- standalone SVG for Inkscape (true scale: 1 user unit = 1 mm) ----
 svg_doc = (f'<?xml version="1.0" encoding="UTF-8"?>\n'
  f'<svg xmlns="http://www.w3.org/2000/svg" width="{x1-x0:.0f}mm" height="{y1-y0:.0f}mm" '
- f'viewBox="{x0:.0f} 0 {x1v-x0:.0f} {y1-y0:.0f}">\n'
+ f'viewBox="{x0v:.0f} 0 {x1v-x0v:.0f} {y1-y0:.0f}">\n'
  '<style>.nl{font-size:13px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}</style>\n'
  + "\n".join(band) + '\n</svg>\n')
 # Erand49.svg is now the USER-EDITED neck design (Inkscape) — never overwrite it.
@@ -334,14 +335,14 @@ spec. Dark ticks: nut and tuner pin; colored 12° top segments: tuner leads. Amb
 optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Brown/amber Beziers: tuner and
 sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapolated from c1 physics
 (<code>string-specs.md</code>). Frame per <code>frame-spec.md</code>: midrib channel side profile (4" sides, top web on the string-anchor line, dash-dot centerline) from the pillar foot to the shoulder; pillar (Ø2" round tube) crown to floor through the open-bottom midrib; plates rest on the midrib shoulder steps and weld to its center tongue (ER-005), crown pads on the pillar; ISO 129 dims in mm.</p>
-<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1v-x0:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0v:.0f} 0 {x1v-x0v:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
 {BAND_STYLE}
 {chr(10).join(band)}
 </svg></div>
 
 <h2>Cross sections — diameters at 5×, at each string's real position</h2>
-<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1v-x0:.0f} 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="String cross sections at 5x">
-<text x="{x0+16:.0f}" y="100" style="font-size:15px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace">plain nylon → nylon-wrapped (#28 a3) → bronze-wound steel (#39 d2)</text>
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0v:.0f} 0 {x1v-x0v:.0f} 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="String cross sections at 5x">
+<text x="{x0v+16:.0f}" y="100" style="font-size:15px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace">plain nylon → nylon-wrapped (#28 a3) → bronze-wound steel (#39 d2)</text>
 {chr(10).join(xsec)}
 </svg></div>
 
