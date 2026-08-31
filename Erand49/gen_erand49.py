@@ -116,9 +116,17 @@ for a, b, L in frame:
     else: outline.append((a, b))
 for n, note, fg, Lg, odg, tg, gx, glo in gpts:
     sense.append((gx, glo + Lg - SENSE_IN))
-band = ['<g stroke="#b9b3a3" stroke-width="1.2" fill="none">']
-band += [f'<line x1="{X(a[0]):.1f}" y1="{Y(a[1]):.1f}" x2="{X(b[0]):.1f}" y2="{Y(b[1]):.1f}"/>' for a, b in outline]
-band.append('</g>')
+# the long DXF line along the anchors is the MIDRIB — extend it past both ends
+# (beyond g7 at the treble and past the extrapolated a0 at the bass) to its real span
+band = []
+assert len(outline) == 1
+(oa, ob) = outline[0]
+m = (ob[1]-oa[1]) / (ob[0]-oa[0])
+cx = oa[1] - m*oa[0]
+xr = max(g[0] for _, g in strings) + 0.9          # past g7 (treble)
+xl = min(p[6] for p in gpts) - 0.9                # past a0 (bass)
+band.append(f'<line x1="{X(xl):.1f}" y1="{Y(m*xl+cx):.1f}" x2="{X(xr):.1f}" y2="{Y(m*xr+cx):.1f}" stroke="#8d877a" stroke-width="3.5"><title>midrib — 6061-T6 aluminum extrusion; carries the 7.00 kN string-band pull; anchors all 49 strings</title></line>')
+band.append(f'<text x="{X(xl):.1f}" y="{Y(m*xl+cx)+40:.1f}" class="nl" fill="#8d877a">midrib (Al 6061-T6)</text>')
 band.append('<g stroke="#555" stroke-width="1.0" fill="none">')
 band += [f'<line x1="{X(a[0]):.1f}" y1="{Y(a[1]):.1f}" x2="{X(b[0]):.1f}" y2="{Y(b[1]):.1f}"/>' for a, b in marks]
 band.append('</g>')
@@ -184,7 +192,9 @@ X/Y sensor axes</b> — the point in the rib where each string's two orthogonal 
 1.0 in / 25.4 mm below each nut — the sensor rail mounts on the neck (the DXF's sharp-fret ticks were
 repositioned there). b0/a0 draw like every other string; their spec is extrapolated from c1 physics
 (marked * — see string-specs.md and the hover text), lengths continuing the bass trend,
-tensions 53.4 / 54.0 lbf, Ø 0.0955 / 0.1060 in.</p>
+tensions 53.4 / 54.0 lbf, Ø 0.0955 / 0.1060 in. The gray diagonal is the <b>midrib</b> — the
+anchor spine, extended past g7 and a0 to its true span; aluminum extrusion (6061-T6): the harp is
+silent by design, so the choice is purely structural — 7.00 kN of band pull, no soundboard duty.</p>
 
 <h2>String band — DXF geometry, lengths and diameters to one scale</h2>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1-x0:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
