@@ -8,7 +8,9 @@
 
 -- | Boot the /real/ eForth image (@h2.bin@, built from upstream
 --   @embed.fth@) in Clash simulation, type @2 3 + . cr@ at it over the
---   UART model, and check the console transcript.
+--   UART model, then define and use the first PM capability word
+--   (@mode?@ reading the 0x4020 zone register, @Oracle\/eforth-pm.md@),
+--   and check the console transcript.
 --
 --   Expected behaviour (cross-checked against the upstream C simulator,
 --   which with an nvram image prints the same banner/values but
@@ -19,10 +21,18 @@
 --   > loading... ok           (transfer from empty flash "succeeds"...)
 --   > failed                  (...but block 1 holds no ASCII: no nvram here)
 --   > 2 3 + . cr 5
+--   > : mode? $4020 @ ; decimal mode? . cr 34
 --
 --   The line terminator is a bare CR (0x0D): eForth's @ktap@ ends a line
 --   on @=cr@ ($D) and the upstream simulator's @getch@ clears ICRNL so the
 --   CPU sees CR when Enter is pressed.
+--
+--   eForth syntax notes for the second line: the target's @number?@
+--   (@embed.fth@) accepts a @\$@ prefix for hex, so @\$4020@ parses in any
+--   base — but @cold@ leaves @base@ in /hex/ after the banner, so the test
+--   says @decimal@ explicitly before @.@ and asserts the decimal rendering
+--   @34@ of the register value 0x0022 (s4 PLAY in bits 5:4, s3 zone
+--   2 \"E\" in bits 2:0 — the layout documented in "H2.SystemUart").
 module Main (main) where
 
 import Clash.Prelude
@@ -38,7 +48,7 @@ import H2.SystemUart (h2SystemSim)
 
 -- | Bytes typed at the eForth console.
 consoleInput :: String
-consoleInput = "2 3 + . cr\r"
+consoleInput = "2 3 + . cr\r: mode? $4020 @ ; decimal mode? . cr\r"
 
 -- | Upper bound on simulated cycles.  The run stops early once the
 --   expected output has been seen — a passing boot takes ~15.4M cycles
@@ -53,11 +63,13 @@ after needle s = case L.filter (needle `L.isPrefixOf`) (L.tails s) of
   (t:_) -> P.drop (P.length needle) t
   []    -> ""
 
--- | Success: the banner appeared, and a @5@ was printed after the echoed
---   command line.
+-- | Success: the banner appeared, a @5@ was printed after the first echoed
+--   command line, and @34@ (decimal for the 0x4020 zone register's 0x0022)
+--   after the second.
 bootedOk :: String -> Bool
 bootedOk t = "eFORTH" `L.isInfixOf` t
-          && "5" `L.isInfixOf` after "cr" (after "eFORTH" t)
+          && "5"  `L.isInfixOf` after "cr" (after "eFORTH" t)
+          && "34" `L.isInfixOf` after "decimal mode? . cr" t
 
 main :: IO ()
 main = do
@@ -95,9 +107,9 @@ main = do
             P.++ ", wall time " P.++ show (diffUTCTime t1 t0))
 
   if bootedOk transcript
-    then putStrLn "PASS: eForth booted and computed 2 3 + = 5"
+    then putStrLn "PASS: eForth booted, computed 2 3 + = 5, and mode? read 34 from 0x4020"
     else do
-      putStrLn "FAIL: expected banner + \"5\" not found in transcript"
+      putStrLn "FAIL: expected banner + \"5\" + \"34\" not found in transcript"
       exitFailure
   where
     render c

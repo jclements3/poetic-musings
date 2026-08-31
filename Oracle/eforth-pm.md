@@ -1,6 +1,9 @@
 # eForth-PM — the capability layer that makes the Oracle the brains of the PM device
 
-Design spec only — no Haskell or Forth here yet. This defines what the H2/eForth console
+Design spec — first register live: the 0x4020 zone register (iPanel S3/S4 zones) is
+demonstrated in Clash simulation as of 2026-08-31 (`clash-h2/src/H2/SystemUart.hs` models
+it, `cabal test h2-boot` defines `: mode? $4020 @ ;` at the live eForth console and reads
+the scripted zones back). This defines what the H2/eForth console
 must be able to *do* so that every PM mode (S3: P·O·E·T·I·C) is driven from Forth, per
 `../LAYOUT.html` (panel, storage, modes) and `../PLAN.md` Phase 3. The CPU is the H2
 port in `clash-h2/` (howerj forth-cpu derivative); existing eForth images stay valid,

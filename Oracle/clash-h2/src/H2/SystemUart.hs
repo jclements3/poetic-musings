@@ -37,6 +37,16 @@
 --   has nothing; both must see sane status bits.  Writes to @oVT100@ are
 --   accepted and dropped.
 --
+--   [@iPanel@ (read 0x4020)] the first PM capability register
+--   (@Oracle/eforth-pm.md@ section 1): mode-slider zones, post-hysteresis.
+--   Layout here: bits 2:0 = S3 zone 0–5 (P·O·E·T·I·C), bits 5:4 = S4 zone
+--   (0 OFF · 1 CAL · 2 PLAY · 3 REC), all other bits 0.  On hardware the
+--   gateware digitizes the sliders and compares against zone thresholds
+--   with hysteresis; the sim scripts the clean zone numbers as a constant
+--   (S3 = 2 \"E\", S4 = 2 PLAY, so the register reads @0x0022@).  Read-only
+--   from Forth; writes (oPanelCtrl) are accepted and ignored like the other
+--   unmodelled peripherals.
+--
 --   All other reads return 0 and all other writes (timer, LEDs, 7-segment,
 --   IRQ mask, baud divisors, memory controller, ...) are accepted and
 --   ignored, like unpopulated peripherals.  In particular @iMemDin@
@@ -121,8 +131,13 @@ h2SystemSim instrMem dataMem script = txS
     -- iVT100: no keyboard char pending (bit 8), VT100 never busy (bit 11).
     iVT100 = 0x0900 :: Cell
 
+    -- iPanel: scripted mode-slider zones (see module header) —
+    -- {s4zone[5:4] = 2 PLAY, s3zone[2:0] = 2 "E"}.
+    iPanel = 0x0022 :: Cell
+
     ioDinS = decode <$> ioAddrS <*> iUartS
     decode a u
       | a == 0x4000 = u
       | a == 0x4002 = iVT100
+      | a == 0x4020 = iPanel
       | otherwise   = 0
