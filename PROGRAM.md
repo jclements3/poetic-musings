@@ -17,7 +17,7 @@ Panel map: `README.html` (regenerate with `gen.py`).
 | L | Directory | Project | Status |
 |---|---|---|---|
 | P | `Piano/` | 3D-printed 49-key VL-1-derivative keyboard; Oracle is the brains behind its UI | Panel map done (`README.html`); keybed purchase pending |
-| O | `Oracle/` | Console: H2 Forth CPU, 8.8" bar TFT, SD, CW keyer/decoder | `Oracle/clash-h2/` compiles + smoke-tests; Verilog generated; real eForth image boots in the C sim AND in Clash simulation (`cabal test h2-boot`); PM capability spec in `Oracle/eforth-pm.md` |
+| O | `Oracle/` | Console: H2 Forth CPU, 8.8" bar TFT, SD, CW keyer/decoder | `Oracle/clash-h2/` compiles + smoke-tests; Verilog generated; real eForth boots in Clash simulation and reads the first PM register (0x4020 mode zones) from live Forth (`cabal test h2-boot`); capability spec `Oracle/eforth-pm.md` |
 | E | `Erand49/` | Harp: 98 IR optical sensors → pluck detect → KS synthesis → MIDI/I²S | designed: `Erand49/LAYOUT.html` (string band, ER-001..006), `frame_cad.py` → `frame.step` CAD master, string/frame specs, sensor-stations.csv; gate 1 = one string, one ADC eval |
 | T | `Theremin/` | D-Lev-derived theremin; antennas double as SDR input | full repo copied 2026-08-31 from `../theremin` (git history intact) |
 | I | `IRIG/` | IRIG-B timecode clock; free-running until G disciplines it | empty — next after C |
