@@ -107,10 +107,9 @@ y0, y1 = (min(ally)-3.0)*IN, (max(ally)+0.8)*IN
 def X(v): return v*IN
 def Y(v): return y1 - v*IN   # y-up inches -> y-down mm, 0-based for the viewBox
 
-# classify the non-string lines: 0.25" ticks (47x3: sharp fret at 0.944L, nut at L,
-# tuner at L+1.5), ~1.53" at 78 deg = tuner leads, rest = frame.
-# The sharp-fret ticks are repositioned to the optical sensor axes near the rib:
-SENSE_FRAC = 1/20   # sensor crossing at L/20 below the nut — uniform 5% sampling fraction on every string
+# classify the non-string lines: 0.25" ticks, 3 per string per the DXF: optical point
+# at 0.944L, flat pin at L, tuner at L+1.5; ~1.53" at 78 deg = tuner leads; rest = frame.
+SENSE_RATIO = 1 - 1/1.0594631   # optical point per the DXF: 0.0561*L below the flat pin (a semitone's fret distance)
 tops = [(g[0], g[2], color(r[1]), r[6]*IN) for r, g in strings]
 geom = {g[0]: (g[1], g[2]) for _, g in strings}   # x -> (ylo, yhi)
 marks, keys, outline, sense = [], [], [], []
@@ -119,8 +118,8 @@ for a, b, L in frame:
         mx, my = (a[0]+b[0])/2, (a[1]+b[1])/2
         sx = min(geom, key=lambda x: abs(x-mx))
         ylo, yhi = geom[sx]
-        if my < yhi - 0.05:            # below the nut = the sharp-fret tick -> move to sensor axis
-            sense.append((sx, yhi - (yhi - ylo)*SENSE_FRAC))
+        if my < yhi - 0.05:            # the DXF's bottom tick IS the optical point — use its own position
+            sense.append((sx, my))
         else:
             marks.append((a, b))
     elif L < 2.0:
@@ -129,7 +128,7 @@ for a, b, L in frame:
         keys.append((a, b, best[2], best[3]))
     else: outline.append((a, b))
 for n, note, fg, Lg, odg, tg, gx, glo in gpts:
-    sense.append((gx, glo + Lg - Lg*SENSE_FRAC))
+    sense.append((gx, glo + Lg - Lg*SENSE_RATIO))
 # ---- frame in side view: midrib C-channel band + pillar + ISO 129 dims ----
 band = []
 band.append('<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3b5a7a"/></marker></defs>')
@@ -173,7 +172,7 @@ band.append('</g>')
 for a, b, c, w in keys:
     band.append(f'<line x1="{X(a[0]):.1f}" y1="{Y(a[1]):.1f}" x2="{X(b[0]):.1f}" y2="{Y(b[1]):.1f}" stroke="{c}" stroke-width="{w:.3f}"/>')
 for sx, sy in sense:
-    band.append(f'<g stroke="#a8700f" stroke-width="1.4"><line x1="{X(sx)-3.2:.1f}" y1="{Y(sy):.1f}" x2="{X(sx)+3.2:.1f}" y2="{Y(sy):.1f}"/><line x1="{X(sx):.1f}" y1="{Y(sy)-3.2:.1f}" x2="{X(sx):.1f}" y2="{Y(sy)+3.2:.1f}"/><title>optical X/Y sensor axis — L/20 below the nut (uniform 5% of speaking length), sensor rail on the neck</title></g>')
+    band.append(f'<g stroke="#a8700f" stroke-width="1.4"><line x1="{X(sx)-3.2:.1f}" y1="{Y(sy):.1f}" x2="{X(sx)+3.2:.1f}" y2="{Y(sy):.1f}"/><line x1="{X(sx):.1f}" y1="{Y(sy)-3.2:.1f}" x2="{X(sx):.1f}" y2="{Y(sy)+3.2:.1f}"/><title>optical X/Y sensor axis — the DXF optical point, 0.056·L below the flat pin (uniform semitone fraction), sensor rail on the neck</title></g>')
 for (n, note, f, Lin, cm, wm, od, t), (x, ylo, yhi) in strings:
     c, odmm = color(note), od*IN
     tip = f"#{n} {note} · {f:g} Hz · {Lin:.3f} in / {Lin*IN:.1f} mm · Ø {od:.3f} in / {odmm:.2f} mm · {t:.1f} lbf"

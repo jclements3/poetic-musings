@@ -327,7 +327,7 @@ current mode. Deeper choices (which game, which band, which demo script) are V0 
 <rect x="110" y="85" width="18" height="390" rx="6" fill="#a8700f" fill-opacity="0.5" stroke="#7a5a2a" stroke-width="2"/>
 <path d="M119 88 C 220 60, 330 100, 395 155" fill="none" stroke="#7a5a2a" stroke-width="10" stroke-linecap="round"/>
 <rect x="384" y="150" width="26" height="325" rx="8" transform="rotate(6 397 312)" fill="#a8700f" fill-opacity="0.35" stroke="#7a5a2a" stroke-width="2"/>
-<text x="430" y="330" class="hs">sensor rail on the NECK —</text><text x="430" y="342" class="hs">49 X/Y IR pairs, one per string,</text><text x="430" y="354" class="hs">L/20 below each nut</text>
+<text x="430" y="330" class="hs">sensor rail on the NECK —</text><text x="430" y="342" class="hs">49 X/Y IR pairs, one per string,</text><text x="430" y="354" class="hs">0.056·L below each flat pin</text>
 <!-- strings -->
 <g stroke="#555" stroke-width="1"><line x1="150" y1="80" x2="390" y2="180"/><line x1="175" y1="76" x2="392" y2="215"/><line x1="205" y1="76" x2="394" y2="255"/><line x1="235" y1="80" x2="396" y2="295"/><line x1="265" y1="88" x2="398" y2="330"/><line x1="295" y1="100" x2="400" y2="365"/><line x1="325" y1="113" x2="402" y2="400"/><line x1="355" y1="130" x2="404" y2="435"/><line x1="380" y1="147" x2="406" y2="462"/></g>
 <text x="230" y="200" class="hs">49 strings, A0–G7 — stay tensioned for travel</text>
@@ -359,7 +359,7 @@ current mode. Deeper choices (which game, which band, which demo script) are V0 
 <text x="980" y="355" class="hs" text-anchor="middle">two orthogonal shadow beams ⇒</text>
 <text x="980" y="368" class="hs" text-anchor="middle">X and Y components per string</text>
 <text x="980" y="381" class="hs" text-anchor="middle">→ CORDIC magnitude + angle = pluck vector</text>
-<text x="25" y="537" class="hs">Docked: the PM hangs on the harp pillar — printed French-cleat half on the pillar, mating half recessed into the PM back, retaining clip so a bump cannot lift it off; lifts free for table use. Keys face outward, so solo play means walking around, and duet means one kid at the strings, one at the keys.</text><text x="25" y="551" class="hs">The gold cable drops from the HARP port down a clip channel into the plinth. Theremin antennas stay packed while hung (a rod against a wooden pillar detunes T mode anyway). Plinth feet extend on the pillar side so the hung console cannot tip the harp. Sensors never need realignment: potted in the neck rail, rigid to the nuts.</text>
+<text x="25" y="537" class="hs">Docked: the PM hangs on the harp pillar — printed French-cleat half on the pillar, mating half recessed into the PM back, retaining clip so a bump cannot lift it off; lifts free for table use. Keys face outward, so solo play means walking around, and duet means one kid at the strings, one at the keys.</text><text x="25" y="551" class="hs">The gold cable drops from the HARP port down a clip channel into the plinth. Theremin antennas stay packed while hung (a rod against a wooden pillar detunes T mode anyway). Plinth feet extend on the pillar side so the hung console cannot tip the harp. Sensors never need realignment: potted in the neck rail, rigid to the flat pins.</text>
 </svg></div>
 <table>
 <tr><th>Link element</th><th>Design</th></tr>
@@ -370,7 +370,7 @@ current mode. Deeper choices (which game, which band, which demo script) are V0 
 <tr><td class="k">Where the smarts sit</td><td>Pluck detect (CORDIC mag + CA-CFAR) runs harp-side in the plinth per the handoff; the box receives audio + note events. Harp-side controller board is a Phase 6 gate-1 decision.</td></tr>
 </table>
 <p class="sub"><b>Travel:</b> the harp never comes apart — 49 strings stay at tension (no 45-minute retune at
-the destination) and the sensors are potted in the neck sensor rail, rigid to the nuts, so alignment
+the destination) and the sensors are potted in the neck sensor rail, rigid to the flat pins, so alignment
 survives the road. It rides in its own rigid column case with a soft cover over the strings, like any
 touring lever harp. Setup at the destination: stand the harp, seat the PM in front (or on any table),
 click one cable, S3 to E, CAL on S4 — the CAL pass re-baselines all 98 sensor thresholds in seconds,
