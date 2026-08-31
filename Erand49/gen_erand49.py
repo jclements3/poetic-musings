@@ -219,6 +219,31 @@ t_src = 'hand-edited (Erand49.svg)' if edited_rail('7a5a2a') else 'auto-fit'
 band.append(f'<path d="{t_d}" fill="none" stroke="#7a5a2a" stroke-width="2.5" opacity="0.6"><title>tuner rail — {t_src} — the neck top curve</title></path>')
 band.append(f'<path d="{s_d}" fill="none" stroke="#a8700f" stroke-width="2.0" opacity="0.6"><title>sensor rail — {t_src} — the neck bottom curve, optical axes</title></path>')
 
+# widen the viewBox to cover the hand-edited curves (they may extend past the DXF extents)
+def _path_xmax(dstr):
+    toks = re.findall(r"[mMcClLzZ]|-?\d+\.?\d*(?:e-?\d+)?", dstr)
+    i = 0; cur = (0.0, 0.0); mx = -1e9; cmd = None
+    def f():
+        nonlocal i; v = float(toks[i]); i += 1; return v
+    while i < len(toks):
+        if toks[i] in 'mMcClLzZ': cmd = toks[i]; i += 1
+        if cmd in 'mM':
+            x, y = f(), f(); cur = (x, y) if cmd == 'M' else (cur[0]+x, cur[1]+y)
+            mx = max(mx, cur[0]); cmd = 'l' if cmd == 'm' else 'L'
+        elif cmd in 'cC':
+            while i < len(toks) and toks[i] not in 'mMcClLzZ':
+                v = [f() for _ in range(6)]
+                pts = [(v[0],v[1]),(v[2],v[3]),(v[4],v[5])]
+                if cmd == 'c': pts = [(cur[0]+a, cur[1]+b) for a, b in pts]
+                mx = max(mx, *[p[0] for p in pts]); cur = pts[2]
+        elif cmd in 'lL':
+            while i < len(toks) and toks[i] not in 'mMcClLzZ':
+                x, y = f(), f(); cur = (x, y) if cmd == 'L' else (cur[0]+x, cur[1]+y)
+                mx = max(mx, cur[0])
+        else: i += 1
+    return mx
+x1v = max(x1, _path_xmax(t_d) + 15, _path_xmax(s_d) + 15)
+
 # ---- cross sections at 5x, aligned to real string x positions ----
 xsec = []
 for (n, note, f, Lin, cm, wm, od, t), (x, ylo, yhi) in strings:
@@ -241,7 +266,7 @@ tx = [f'<text x="{e.dxf.insert.x:.2f}" y="{FF(e.dxf.insert.y):.2f}" font-size="{
 # ---- standalone SVG for Inkscape (true scale: 1 user unit = 1 mm) ----
 svg_doc = (f'<?xml version="1.0" encoding="UTF-8"?>\n'
  f'<svg xmlns="http://www.w3.org/2000/svg" width="{x1-x0:.0f}mm" height="{y1-y0:.0f}mm" '
- f'viewBox="{x0:.0f} 0 {x1-x0:.0f} {y1-y0:.0f}">\n'
+ f'viewBox="{x0:.0f} 0 {x1v-x0:.0f} {y1-y0:.0f}">\n'
  '<style>.nl{font-size:13px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}</style>\n'
  + "\n".join(band) + '\n</svg>\n')
 # Erand49.svg is now the USER-EDITED neck design (Inkscape) — never overwrite it.
@@ -275,13 +300,13 @@ spec. Dark ticks: nut and tuner pin; colored 12° top segments: tuner leads. Amb
 optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Brown/amber Beziers: tuner and
 sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapolated from c1 physics
 (<code>string-specs.md</code>). Frame per <code>frame-spec.md</code>: midrib tube side profile (4" deep, top face on the string-anchor line, dash-dot tube centerline) from the pillar foot to the shoulder; pillar (2"×2" square tube) base to crown at the bass end, plates bolt flush to the member faces (pillar top rebated); ISO 129 dims in mm.</p>
-<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1-x0:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1v-x0:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
 {BAND_STYLE}
 {chr(10).join(band)}
 </svg></div>
 
 <h2>Cross sections — diameters at 5×, at each string's real position</h2>
-<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1-x0:.0f} 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="String cross sections at 5x">
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1v-x0:.0f} 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="String cross sections at 5x">
 <text x="{x0+16:.0f}" y="100" style="font-size:15px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace">plain nylon → nylon-wrapped (#28 a3) → bronze-wound steel (#39 d2)</text>
 {chr(10).join(xsec)}
 </svg></div>
