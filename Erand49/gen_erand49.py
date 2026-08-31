@@ -164,9 +164,9 @@ def t_at_y(yq, off):
 y_sh = m*(xr_m - 1.5) + cxi                 # start of the shoulder lap along the channel top
 for off in (0, -2*MHW):
     (xa, ya), (xb, yb) = mp(t_at_y(y_floor, off), off), mp(xr_m, off)
-    band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#8d877a" stroke-width="2"/>')
+    band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#1565c0" stroke-width="2"/>')
 (sx1, sy1), (sx2, sy2) = mp(xr_m - 1.5, -8/25.4), mp(xr_m, -8/25.4)
-band.append(f'<line x1="{sx1:.1f}" y1="{sy1:.1f}" x2="{sx2:.1f}" y2="{sy2:.1f}" stroke="#8d877a" stroke-width="1.4" stroke-dasharray="6 4"><title>shoulder rebate — 8 mm into each side wall along the channel top; plates lap here, web stands proud between them (ER-005)</title></line>')
+band.append(f'<line x1="{sx1:.1f}" y1="{sy1:.1f}" x2="{sx2:.1f}" y2="{sy2:.1f}" stroke="#1565c0" stroke-width="1.4" stroke-dasharray="6 4"><title>shoulder rebate — 8 mm into each side wall along the channel top; plates lap here, web stands proud between them (ER-005)</title></line>')
 # horizontal shoulder weld: plate bottom tab to midrib side wall, both plates.
 # mirrored from Erand49.svg (id="shoulder-weld") when present, else 12 mm below the lap start
 y_w = y_sh - 12/IN
@@ -185,22 +185,22 @@ band.append(f'<line x1="{wx1:.1f}" y1="{wy1:.1f}" x2="{wx2:.1f}" y2="{wy2:.1f}" 
 band.append(f'<text x="{wx2+10:.0f}" y="{wy2+14:.0f}" class="nl" fill="#c9553a">shoulder weld</text>')
 
 (cx2, cy2) = mp(xr_m - 0.6, -2*MHW)
-band.append(f'<text x="{cx2+10:.0f}" y="{cy2+2:.0f}" class="nl" fill="#8d877a">shoulder rebate: ER-005</text>')
+band.append(f'<text x="{cx2+10:.0f}" y="{cy2+2:.0f}" class="nl" fill="#1565c0">shoulder rebate: ER-005</text>')
 (fx1, fy1), (fx2, fy2) = mp(t_at_y(y_floor, 0), 0), mp(t_at_y(y_floor, -2*MHW), -2*MHW)
-band.append(f'<line x1="{fx1:.1f}" y1="{fy1:.1f}" x2="{fx2:.1f}" y2="{fy2:.1f}" stroke="#8d877a" stroke-width="2"><title>horizontal end cut — the midrib stands on the floor as the rear foot</title></line>')
+band.append(f'<line x1="{fx1:.1f}" y1="{fy1:.1f}" x2="{fx2:.1f}" y2="{fy2:.1f}" stroke="#1565c0" stroke-width="2"><title>horizontal end cut — the midrib stands on the floor as the rear foot</title></line>')
 (xa, ya), (xb, yb) = mp(t_at_y(y_floor, -MHW), -MHW), mp(xr_m, -MHW)
-band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#c9553a" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib tube centerline (top face carries the string anchors)</title></line>')
+band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#1565c0" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib tube centerline (top face carries the string anchors)</title></line>')
 lx, ly = mp(pilc+4.5, -2*MHW)
-band.append(f'<text x="{lx:.0f}" y="{ly+30:.0f}" class="nl" fill="#8d877a">midrib — C 2.5"×4"×3/16" open-bottom, 6061-T6 (ER-003)</text>')
+band.append(f'<text x="{lx:.0f}" y="{ly+30:.0f}" class="nl" fill="#1565c0">midrib — C 2.5"×4"×3/16" open-bottom, 6061-T6 (ER-003)</text>')
 # round pillar: continuous crown -> floor, hidden (dashed) where it passes inside the midrib
 for xe in (pilc-PW, pilc+PW):
     y_hi = m*(xe) + cxi                     # top-face line at this pillar edge
     y_lo = y_hi - 2*MHW                     # side-wall lower edge
-    band.append(f'<line x1="{X(xe):.1f}" y1="{Y(y_crown):.1f}" x2="{X(xe):.1f}" y2="{Y(y_hi):.1f}" stroke="#8d877a" stroke-width="2"/>')
-    band.append(f'<line x1="{X(xe):.1f}" y1="{Y(y_hi):.1f}" x2="{X(xe):.1f}" y2="{Y(y_lo):.1f}" stroke="#8d877a" stroke-width="2" stroke-dasharray="7 5"/>')
-    band.append(f'<line x1="{X(xe):.1f}" y1="{Y(y_lo):.1f}" x2="{X(xe):.1f}" y2="{Y(y_floor):.1f}" stroke="#8d877a" stroke-width="2"/>')
-band.append(f'<line x1="{X(pilc-PW):.1f}" y1="{Y(y_crown):.1f}" x2="{X(pilc+PW):.1f}" y2="{Y(y_crown):.1f}" stroke="#8d877a" stroke-width="2"><title>pillar — Ø2" × 3/16" round tube, crown to floor, through the midrib (ER-004)</title></line>')
-band.append(f'<text x="{X(pilc)+40:.0f}" y="{(Y(y_crown)+Y(y_floor))/2:.0f}" class="nl" fill="#8d877a">pillar Ø2"×3/16"</text>')
+    band.append(f'<line x1="{X(xe):.1f}" y1="{Y(y_crown):.1f}" x2="{X(xe):.1f}" y2="{Y(y_hi):.1f}" stroke="#d32f2f" stroke-width="2"/>')
+    band.append(f'<line x1="{X(xe):.1f}" y1="{Y(y_hi):.1f}" x2="{X(xe):.1f}" y2="{Y(y_lo):.1f}" stroke="#d32f2f" stroke-width="2" stroke-dasharray="7 5"/>')
+    band.append(f'<line x1="{X(xe):.1f}" y1="{Y(y_lo):.1f}" x2="{X(xe):.1f}" y2="{Y(y_floor):.1f}" stroke="#d32f2f" stroke-width="2"/>')
+band.append(f'<line x1="{X(pilc-PW):.1f}" y1="{Y(y_crown):.1f}" x2="{X(pilc+PW):.1f}" y2="{Y(y_crown):.1f}" stroke="#d32f2f" stroke-width="2"><title>pillar — Ø2" × 3/16" round tube, crown to floor, through the midrib (ER-004)</title></line>')
+band.append(f'<text x="{X(pilc)+40:.0f}" y="{(Y(y_crown)+Y(y_floor))/2:.0f}" class="nl" fill="#d32f2f">pillar Ø2"×3/16"</text>')
 band.append(f'<text x="{X(pilc)+40:.0f}" y="{Y(y_base)-8:.0f}" class="nl" fill="#8d877a">pillar into midrib + floor foot: ER-004</text>')
 sbx, sby = mp(xr_m-0.6, MHW)
 # ISO 129 dims: overall height, pillar width
@@ -264,11 +264,11 @@ def edited_rail(colorhex):
     except OSError:
         pass
     return None
-t_d = edited_rail('7a5a2a') or crpath(tuner_pts)
-s_d = edited_rail('a8700f') or crpath(sense_pts)
-t_src = 'hand-edited (Erand49.svg)' if edited_rail('7a5a2a') else 'auto-fit'
-band.append(f'<path d="{t_d}" fill="none" stroke="#7a5a2a" stroke-width="2.5" opacity="0.6"><title>tuner rail — {t_src} — the neck top curve</title></path>')
-band.append(f'<path d="{s_d}" fill="none" stroke="#a8700f" stroke-width="2.0" opacity="0.6"><title>sensor rail — {t_src} — the neck bottom curve, optical axes</title></path>')
+t_d = edited_rail('2e7d32') or edited_rail('7a5a2a') or crpath(tuner_pts)
+s_d = edited_rail('66bb6a') or edited_rail('a8700f') or crpath(sense_pts)
+t_src = 'hand-edited (Erand49.svg)' if (edited_rail('2e7d32') or edited_rail('7a5a2a')) else 'auto-fit'
+band.append(f'<path d="{t_d}" fill="none" stroke="#2e7d32" stroke-width="2.5" opacity="0.8"><title>tuner rail — {t_src} — the neck top curve</title></path>')
+band.append(f'<path d="{s_d}" fill="none" stroke="#66bb6a" stroke-width="2.0" opacity="0.8"><title>sensor rail — {t_src} — the neck bottom curve, optical axes</title></path>')
 
 # widen the viewBox to cover the hand-edited curves (they may extend past the DXF extents)
 def _path_xmax(dstr):
@@ -349,9 +349,8 @@ the instrument itself: string band, sensors, and frame.</p>
 overall diameter</b>. Colors per harp convention: <span class="leg" style="color:#c0392b">C red</span> ·
 <span class="leg" style="color:#2e5fa3">F blue</span> · others dark gray; hover any string for its
 spec. Dark ticks: nut and tuner pin; colored 12° top segments: tuner leads. Amber crosshairs:
-optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Brown/amber Beziers: tuner and
-sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapolated from c1 physics
-(<code>string-specs.md</code>). Frame per <code>frame-spec.md</code>: midrib channel side profile (4" sides, top web on the string-anchor line, dash-dot centerline) from the pillar foot to the shoulder; pillar (Ø2" round tube) crown to floor through the open-bottom midrib; plates rest on the midrib shoulder steps and weld to its center tongue (ER-005), crown pads on the pillar; ISO 129 dims in mm.</p>
+optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Green Beziers (dark = tuner rail, light = sensor rail) — the neck outline, hand-tuned in <code>Erand49.svg</code>. b0*/a0*: spec extrapolated from c1 physics
+(<code>string-specs.md</code>). Frame colors: <b style="color:#d32f2f">pillar red</b> · <b style="color:#1565c0">midrib blue</b> · <b style="color:#2e7d32">neck green</b>. Per <code>frame-spec.md</code>: midrib channel side profile (4" sides, top web on the string-anchor line, dash-dot centerline) from the pillar foot to the shoulder; pillar (Ø2" round tube) crown to floor through the open-bottom midrib; plates rest on the midrib shoulder steps and weld to its center tongue (ER-005), crown pads on the pillar; ISO 129 dims in mm.</p>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0v:.0f} 0 {x1v-x0v:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
 {BAND_STYLE}
 {chr(10).join(band)}
