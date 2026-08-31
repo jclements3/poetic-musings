@@ -137,19 +137,28 @@ _h = math.hypot(1, m)
 px_, py_ = -m/_h, 1/_h                            # unit perpendicular to midrib axis
 def mp(t, off):
     return X(t + px_*off), Y(m*t + cxi + py_*off)
-# midrib slot-mortises OVER the pillar (ER-004): band runs to just past the pillar's far side
+# midrib continues to the FLOOR with a horizontal end cut (it is the rear foot);
+# pillar drops through a top-face slot and bears on the bottom face inside (ER-004)
+y_floor = y_base
+def t_at_y(yq, off):
+    return (yq - cxi - py_*off) / m
 for off in (0, -2*MHW):
-    t0 = pilc - PW - 0.6 - px_*off
-    (xa, ya), (xb, yb) = mp(t0, off), mp(xr_m, off)
+    (xa, ya), (xb, yb) = mp(t_at_y(y_floor, off) - px_*0, off), mp(xr_m, off)
     band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#8d877a" stroke-width="2"/>')
-t0c = pilc - PW - 0.6 - px_*(-MHW)
-(xa, ya), (xb, yb) = mp(t0c, -MHW), mp(xr_m, -MHW)
+(fx1, fy1), (fx2, fy2) = mp(t_at_y(y_floor, 0), 0), mp(t_at_y(y_floor, -2*MHW), -2*MHW)
+band.append(f'<line x1="{fx1:.1f}" y1="{fy1:.1f}" x2="{fx2:.1f}" y2="{fy2:.1f}" stroke="#8d877a" stroke-width="2"><title>horizontal end cut — the midrib stands on the floor as the rear foot</title></line>')
+(xa, ya), (xb, yb) = mp(t_at_y(y_floor, -MHW), -MHW), mp(xr_m, -MHW)
 band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#c9553a" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib tube centerline (top face carries the string anchors)</title></line>')
 lx, ly = mp(pilc+4.5, -2*MHW)
 band.append(f'<text x="{lx:.0f}" y="{ly+30:.0f}" class="nl" fill="#8d877a">midrib — RT 4"×2"×3/16" 6061-T6 (ER-003)</text>')
-band.append(f'<rect x="{X(pilc-PW):.1f}" y="{Y(y_crown):.1f}" width="{2*PW*IN:.1f}" height="{Y(y_base)-Y(y_crown):.1f}" fill="none" stroke="#8d877a" stroke-width="2"><title>pillar — 2"×2"×1/8" square tube, base to crown (ER-002)</title></rect>')
+y_enter = m*pilc + cxi                      # top-face line at the pillar
+y_tip   = y_enter - 2*MHW + 0.35            # tip bears on the bottom face inside
+band.append(f'<rect x="{X(pilc-PW):.1f}" y="{Y(y_crown):.1f}" width="{2*PW*IN:.1f}" height="{Y(y_enter)-Y(y_crown):.1f}" fill="none" stroke="#8d877a" stroke-width="2"><title>pillar — 2"×2"×1/8" square tube, crown down into the midrib (ER-002/ER-004)</title></rect>')
+for xe in (pilc-PW, pilc+PW):
+    band.append(f'<line x1="{X(xe):.1f}" y1="{Y(y_enter):.1f}" x2="{X(xe):.1f}" y2="{Y(y_tip):.1f}" stroke="#8d877a" stroke-width="2" stroke-dasharray="7 5"/>')
+band.append(f'<line x1="{X(pilc-PW):.1f}" y1="{Y(y_tip):.1f}" x2="{X(pilc+PW):.1f}" y2="{Y(y_tip):.1f}" stroke="#8d877a" stroke-width="2" stroke-dasharray="7 5"><title>pillar tip inside the midrib — bears on the bottom face (compression)</title></line>')
 band.append(f'<text x="{X(pilc)+35:.0f}" y="{(Y(y_crown)+Y(y_base))/2:.0f}" class="nl" fill="#8d877a">pillar 2"×2"×1/8"</text>')
-band.append(f'<text x="{X(pilc)+35:.0f}" y="{Y(y_base)-8:.0f}" class="nl" fill="#8d877a">slot-mortise joint: ER-004</text>')
+band.append(f'<text x="{X(pilc)+40:.0f}" y="{Y(y_base)-8:.0f}" class="nl" fill="#8d877a">pillar into midrib + floor foot: ER-004</text>')
 sbx, sby = mp(xr_m-0.6, MHW)
 # ISO 129 dims: overall height, pillar width
 dx0 = X(pilc-PW) - 34
@@ -392,42 +401,50 @@ sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapol
 <text x="810" y="400" class="fs">0.88 kN·m mid-span → ~25 MPa, SF ~5.5</text>
 <text x="810" y="414" class="fs">(welded HAZ); closed section ⇒ no torsion issue</text>
 
-<text x="20" y="545" class="fg">ER-004 — BASE JOINT: MIDRIB SLOT-MORTISED OVER THE PILLAR (side view XZ, 1 px/mm, dims mm)</text>
-<!-- plinth with pillar socket -->
-<rect x="80" y="940" width="520" height="16" fill="url(#hat)" stroke="#111" stroke-width="1.2"/>
-<rect x="200" y="940" width="50.8" height="16" fill="#fff" stroke="#111" stroke-width="1.2"/>
-<text x="610" y="952" class="fs">plinth — pillar foot sockets in, no base plate</text>
-<!-- pillar, continuous through the tube into the plinth -->
-<rect x="200" y="620" width="50.8" height="336" fill="none" stroke="#111" stroke-width="1.8"/>
-<line x1="225.4" y1="610" x2="225.4" y2="960" class="cl"/>
-<text x="140" y="650" class="fs" text-anchor="end">pillar 2"×2"×1/8"</text>
-<!-- pillar edges hidden inside the tube -->
-<line x1="200" y1="744" x2="200" y2="937" stroke="#111" stroke-width="1" stroke-dasharray="5 4"/>
-<line x1="250.8" y1="662.7" x2="250.8" y2="855.5" stroke="#111" stroke-width="1" stroke-dasharray="5 4"/>
-<!-- midrib passing over the pillar, slots through top/bottom faces -->
-<line x1="139.6" y1="841" x2="314.5" y2="560.5" stroke="#111" stroke-width="1.8"/>
-<line x1="226.2" y1="895" x2="401" y2="614.5" stroke="#111" stroke-width="1.8"/>
-<line x1="139.6" y1="841" x2="226.2" y2="895" stroke="#111" stroke-width="1.8"/>
-<text x="410" y="600" class="fs">midrib RT 4"×2"×3/16" — 50.8 slots cut</text>
-<text x="410" y="612" class="fs">through the top and bottom faces</text>
-<text x="410" y="624" class="fs">(full face width); side walls continuous</text>
-<!-- weld symbols at the four face/pillar crossings -->
-<path d="M200 744 l-13 -5 l3 12 z" fill="#c9553a"/>
-<path d="M250.8 662.7 l13 -5 l-3 12 z" fill="#c9553a"/>
-<path d="M200 937 l-13 5 l3 -12 z" fill="#c9553a"/>
-<path d="M250.8 855.5 l13 5 l-3 -12 z" fill="#c9553a"/>
-<line x1="263.8" y1="660" x2="360" y2="700" stroke="#c9553a" stroke-width="1"/>
-<text x="364" y="704" class="fs" style="fill:#c9553a">a5 fillet, slot edge to pillar,</text>
-<text x="364" y="716" class="fs" style="fill:#c9553a">all around — top and bottom faces</text>
-<!-- angle + dims -->
-<path d="M225.4 700 A 55 55 0 0 1 260 668" fill="none" stroke="#3b5a7a" stroke-width="1"/>
-<text x="268" y="688" class="dmt">58°</text>
-<line x1="200" y1="606" x2="250.8" y2="606" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
-<text x="225" y="598" class="dmt" text-anchor="middle">50.8</text>
+<text x="20" y="545" class="fg">ER-004 — BASE: PILLAR INSIDE THE MIDRIB; MIDRIB IS THE FLOOR FOOT (side view XZ, 1 px/mm)</text>
+<!-- floor -->
+<rect x="60" y="940" width="560" height="14" fill="url(#hat)" stroke="#111" stroke-width="1.2"/>
+<text x="630" y="951" class="fs">floor / plinth deck</text>
+<!-- midrib: upper edge SLOTTED at the pillar, lower edge continuous, horizontal end cut -->
+<line x1="90.4" y1="940" x2="274.6" y2="644.5" stroke="#111" stroke-width="1.8"/>
+<line x1="325.4" y1="563.1" x2="360" y2="507" stroke="#111" stroke-width="1.8"/>
+<line x1="210.3" y1="940" x2="446" y2="561" stroke="#111" stroke-width="1.8"/>
+<line x1="90.4" y1="940" x2="210.3" y2="940" stroke="#111" stroke-width="1.8"/>
+<text x="392" y="620" class="fs">midrib — top-face slot 50.8,</text>
+<text x="392" y="632" class="fs">in the string-free zone past a0;</text>
+<text x="392" y="644" class="fs">string face continuous above</text>
+<text x="60" y="928" class="fs">horizontal end cut → flat floor foot</text>
+<!-- pillar: solid above the tube, dashed inside, tip on the bottom face -->
+<rect x="274.6" y="560" width="50.8" height="4" fill="none" stroke="none"/>
+<line x1="274.6" y1="565" x2="274.6" y2="644.5" stroke="#111" stroke-width="1.8"/>
+<line x1="325.4" y1="565" x2="325.4" y2="563.1" stroke="#111" stroke-width="1.8"/>
+<line x1="274.6" y1="644.5" x2="274.6" y2="812" stroke="#111" stroke-width="1.2" stroke-dasharray="6 4"/>
+<line x1="325.4" y1="563.1" x2="325.4" y2="770" stroke="#111" stroke-width="1.2" stroke-dasharray="6 4"/>
+<line x1="274.6" y1="812" x2="325.4" y2="770" stroke="#111" stroke-width="1.2" stroke-dasharray="6 4"/>
+<line x1="300" y1="555" x2="300" y2="830" class="cl"/>
+<text x="268" y="580" class="fs" text-anchor="end">pillar 2"×2"×1/8", from the crown</text>
+<text x="330" y="795" class="fs">tip cut 58°, bears flat on the</text>
+<text x="330" y="807" class="fs">bottom face inside — compression</text>
+<!-- welds -->
+<path d="M274.6 644.5 l-13 -4 l2 12 z" fill="#c9553a"/>
+<path d="M325.4 563.1 l13 -4 l-2 12 z" fill="#c9553a"/>
+<line x1="338.4" y1="561" x2="430" y2="530" stroke="#c9553a" stroke-width="1"/>
+<text x="434" y="528" class="fs" style="fill:#c9553a">a5 fillet, slot edges to pillar,</text>
+<text x="434" y="540" class="fs" style="fill:#c9553a">both sides + across</text>
+<path d="M310 776 l14 2 l-8 10 z" fill="#c9553a"/>
+<line x1="324" y1="778" x2="380" y2="840" stroke="#c9553a" stroke-width="1"/>
+<text x="384" y="848" class="fs" style="fill:#c9553a">plug weld through the bottom face</text>
+<text x="384" y="860" class="fs" style="fill:#c9553a">into the tip (locks the bearing)</text>
+<!-- dims -->
+<path d="M300 700 A 55 55 0 0 1 335 668" fill="none" stroke="#3b5a7a" stroke-width="1"/>
+<text x="343" y="688" class="dmt">58°</text>
+<line x1="274.6" y1="552" x2="325.4" y2="552" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text x="300" y="544" class="dmt" text-anchor="middle">50.8</text>
 <!-- notes -->
-<text x="20" y="990" class="fs">The ONE welded joint — self-fixturing: the slots index the pillar square, no jig. Mechanical interlock carries shear by geometry</text>
-<text x="20" y="1004" class="fs">before any weld does. Cutting the 2" faces is free here: the base is the bending-moment minimum, and the 4" side walls stay</text>
-<text x="20" y="1018" class="fs">continuous for the axial path. Weld HAZ confined to the lowest-stress region; pillar foot sockets into the plinth below.</text>
+<text x="20" y="990" class="fs">The pillar drops through a 50.8 slot in the midrib's top face — legal because this zone is past a0, string-free; under the 49</text>
+<text x="20" y="1004" class="fs">strings the top face is continuous. The tip is cut at 58° and bears flat on the bottom face: crown load crosses in pure compression,</text>
+<text x="20" y="1018" class="fs">welds only lock it (slot-edge fillets + one plug weld). Self-fixturing; HAZ at the moment minimum; the midrib's horizontal end cut</text>
+<text x="20" y="1032" class="fs">stands on the floor as the rear foot — no base plate, no extra parts.</text>
 </svg></div>
 
 <p class="sub">Sources: <code>string-specs.md</code> (49-string spec, imperial + metric; band tension
