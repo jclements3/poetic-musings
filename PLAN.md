@@ -26,7 +26,12 @@ Toolchain and repo hygiene; no hardware.
 4. Sep Basic Plan inputs due: Imaging sensor/trigger/FOV study; metrology pick for I
    (used GS-101B or Thunderbolt-class GPSDO).
 
-**Gate:** both firmwares compile and simulate. Nothing soldered yet.
+**Gate: MET 2026-08-31.** Both firmwares compile (GHC 9.6.7 / Clash 1.8.5): clash-h2
+passes its smoke test (0xA5 on oLeds) and generates `h2.v`; SantaGlide generates
+`santa_glide.v`. The real eForth image (3334 words, metacompiled from upstream
+forth-cpu with plain gcc — no gforth) boots in the reference C simulator
+(`2 3 + . → 5`) and is installed as `Oracle/clash-h2/h2.bin`. Next: eForth booting
+in Clash simulation (UART model per `Oracle/forth-cpu-notes.md`).
 
 ## Phase 1 — C · Santa Glide 🛷 (first demo, standalone)
 

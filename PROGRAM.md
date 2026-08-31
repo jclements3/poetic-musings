@@ -17,11 +17,11 @@ Panel map: `README.html` (regenerate with `gen.py`).
 | L | Directory | Project | Status |
 |---|---|---|---|
 | P | `Piano/` | 3D-printed 49-key VL-1-derivative keyboard; Oracle is the brains behind its UI | Panel map done (`README.html`); keybed purchase pending |
-| O | `Oracle/` | Console: H2 Forth CPU, 8.8" bar TFT, SD, CW keyer/decoder | `Oracle/clash-h2/` — H2 Clash port drafted, not yet compiled |
+| O | `Oracle/` | Console: H2 Forth CPU, 8.8" bar TFT, SD, CW keyer/decoder | `Oracle/clash-h2/` compiles + smoke-tests; Verilog generated; real eForth image in `h2.bin` (boots in C sim); PM capability spec in `Oracle/eforth-pm.md` |
 | E | `Erand49/` | Harp: 98 IR optical sensors → pluck detect → KS synthesis → MIDI/I²S | empty — gate 1 is one string, one ADC eval |
 | T | `Theremin/` | D-Lev-derived theremin; antennas double as SDR input | full repo copied 2026-08-31 from `../theremin` (git history intact) |
 | I | `IRIG/` | IRIG-B timecode clock; free-running until G disciplines it | empty — next after C |
-| C | `Coil/` | Santa Glide: sleigh slug in 10 ft tube, 8-coil linear reluctance motor, Alchitry Cu | `Coil/SantaGlide/` — design done, parts ordered, Rev B firmware awaiting first compile |
+| C | `Coil/` | Santa Glide: sleigh slug in 10 ft tube, 8-coil linear reluctance motor, Alchitry Cu | `Coil/SantaGlide/` — design done, parts ordered, Rev B compiles to `santa_glide.v` |
 
 ## MUSING (IRAD)
 
