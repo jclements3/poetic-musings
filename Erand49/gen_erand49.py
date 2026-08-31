@@ -149,6 +149,29 @@ for n, note, fg, Lg, odg, tg, gx, glo in gpts:
     band.append(f'<g stroke="#555" stroke-width="1.0"><line x1="{X(gx)-3.2:.1f}" y1="{Y(top):.1f}" x2="{X(gx)+3.2:.1f}" y2="{Y(top):.1f}"/><line x1="{X(gx+KEY_DX)-3.2:.1f}" y1="{Y(top+KEY_DY):.1f}" x2="{X(gx+KEY_DX)+3.2:.1f}" y2="{Y(top+KEY_DY):.1f}"/></g>')
     band.append(f'<text x="{X(gx):.1f}" y="{Y(glo)+24:.1f}" class="nl" fill="#8d877a" text-anchor="middle">{note}*</text>')
 
+# Bezier rails: Catmull-Rom smooth curves through the 49 tuner pins (the neck's
+# tuner rail) and the 49 optical sensor axes (the sensor rail), in svg mm coords
+def crpath(pts):
+    pts = sorted(pts)
+    d = f'M {pts[0][0]:.1f} {pts[0][1]:.1f}'
+    n = len(pts)
+    for i in range(n-1):
+        p0, p1, p2, p3 = pts[max(i-1,0)], pts[i], pts[i+1], pts[min(i+2,n-1)]
+        c1 = (p1[0]+(p2[0]-p0[0])/6, p1[1]+(p2[1]-p0[1])/6)
+        c2 = (p2[0]-(p3[0]-p1[0])/6, p2[1]-(p3[1]-p1[1])/6)
+        d += f' C {c1[0]:.1f} {c1[1]:.1f} {c2[0]:.1f} {c2[1]:.1f} {p2[0]:.1f} {p2[1]:.1f}'
+    return d
+
+tuner_pts = []
+for a, b, c, w in keys:
+    tp = a if a[1] > b[1] else b
+    tuner_pts.append((X(tp[0]), Y(tp[1])))
+for n, note, fg, Lg, odg, tg, gx, glo in gpts:
+    tuner_pts.append((X(gx+KEY_DX), Y(glo+Lg+KEY_DY)))
+sense_pts = [(X(sx), Y(sy)) for sx, sy in sense]
+band.append(f'<path d="{crpath(tuner_pts)}" fill="none" stroke="#7a5a2a" stroke-width="2.5" opacity="0.6"><title>tuner rail — Bezier fit through all 49 tuner pins (the neck)</title></path>')
+band.append(f'<path d="{crpath(sense_pts)}" fill="none" stroke="#a8700f" stroke-width="2.0" opacity="0.6"><title>sensor rail — Bezier fit through all 49 optical X/Y axes, 1 in below the nuts</title></path>')
+
 # ---- cross sections at 5x, aligned to real string x positions ----
 xsec = []
 for (n, note, f, Lin, cm, wm, od, t), (x, ylo, yhi) in strings:
@@ -194,7 +217,10 @@ repositioned there). b0/a0 draw like every other string; their spec is extrapola
 (marked * — see string-specs.md and the hover text), lengths continuing the bass trend,
 tensions 53.4 / 54.0 lbf, Ø 0.0955 / 0.1060 in. The gray diagonal is the <b>midrib</b> — the
 anchor spine, extended past g7 and a0 to its true span; aluminum extrusion (6061-T6): the harp is
-silent by design, so the choice is purely structural — 7.00 kN of band pull, no soundboard duty.</p>
+silent by design, so the choice is purely structural — 7.00 kN of band pull, no soundboard duty.
+Two Bezier rails fit the top hardware: brown through all 49 tuner pins (the neck's tuner rail),
+amber through all 49 sensor axes (the sensor rail's centerline) — the curves to loft when the
+neck gets modeled.</p>
 
 <h2>String band — DXF geometry, lengths and diameters to one scale</h2>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1-x0:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
