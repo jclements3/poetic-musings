@@ -2,8 +2,10 @@
 
 Source: Erard Harp tutorial (`erard original stringband tutorial.dxf`), original units
 inches and pounds-force; metric columns added (in x 25.4 = mm, lbf x 4.44822 = N).
-47 strings g7 down to c1 as in the tutorial; the Erand49 spans 49 (A0-G7), so the two
-lowest strings (b0, a0) need extrapolated specs before Gate 2.
+47 strings g7 down to c1 as in the tutorial, plus rows 48-49 (b0, a0) extrapolated
+2026-08-31: lengths continue the 0.994 in/step bass trend; tension chosen on the
+band trend; diameters from f = (1/2L)*sqrt(T/mu) calibrated on c1 (effective
+wound-string density 5691 kg/m3, same steel/bronze construction).
 
 CMAT/WMAT = core/wrap material; CDIA/WDIA/BDIA/ODIA = core/wrap/bed/overall diameter.
 
@@ -56,9 +58,13 @@ CMAT/WMAT = core/wrap material; CDIA/WDIA/BDIA/ODIA = core/wrap/bed/overall diam
 | 45 | e1 | 41.200 | 57.655 | 1464.4 | Steel | Bronze | 0.024 | 0.61 | 0.013 | 0.33 | 0.026 | 0.66 | 0.076 | 1.93 | 49.053 | 218.2 |
 | 46 | d1 | 36.710 | 58.649 | 1489.7 | Steel | Bronze | 0.026 | 0.66 | 0.016 | 0.41 | 0.025 | 0.64 | 0.083 | 2.11 | 50.985 | 226.8 |
 | 47 | c1 | 32.700 | 59.643 | 1514.9 | Steel | Bronze | 0.026 | 0.66 | 0.020 | 0.51 | 0.025 | 0.64 | 0.091 | 2.31 | 52.693 | 234.4 |
+| 48* | b0 | 30.868 | 60.637 | 1540.2 | Steel | Bronze | — | — | — | — | — | — | 0.0955 | 2.42 | 53.400 | 237.5 |
+| 49* | a0 | 27.500 | 61.631 | 1565.4 | Steel | Bronze | — | — | — | — | — | — | 0.1060 | 2.69 | 54.000 | 240.2 |
 
-**Total string band tension: 1465.5 lbf = 6.52 kN (~665 kgf)** — the load the
+**Total string band tension, 49 strings: 1572.9 lbf = 7.00 kN (~713 kgf)** (1465.5 lbf for the 47 tutorial strings + 107.4 lbf extrapolated b0/a0) — the load the
 frame, neck, and pillar carry continuously; the structural budget for the rib and any
 string-band redesign, and why the pillar shrugs at a 2 kg console.
 
-Longest speaking length: c1 at 59.643 in = 1514.9 mm — consistent with the ~2 m overall frame.
+Longest speaking length: a0* at 61.631 in = 1565.4 mm — consistent with the ~2 m overall frame.
+
+Rows marked * are extrapolated, not from the tutorial; core/wrap/bed split TBD at stringing.

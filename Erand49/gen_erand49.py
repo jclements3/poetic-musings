@@ -35,7 +35,10 @@ ROWS = [
  (45,"e1",41.200,57.655,"Steel","Bronze",0.076,49.053),(46,"d1",36.710,58.649,"Steel","Bronze",0.083,50.985),
  (47,"c1",32.700,59.643,"Steel","Bronze",0.091,52.693),
 ]
-GHOSTS = [(48,"b0",30.868),(49,"a0",27.500)]  # not in the tutorial; geometry extrapolated, spec TBD
+# b0/a0: not in the tutorial — extrapolated 2026-08-31 from c1 (f=(1/2L)sqrt(T/mu),
+# same wound construction, effective density 5691 kg/m3; lengths continue the 0.994 in/step trend)
+# (STR#, NOTE, FREQ, LENGTH in, ODIA in, TENSION lbf)
+GHOSTS = [(48,"b0",30.868,60.637,0.0955,53.4),(49,"a0",27.500,61.631,0.1060,54.0)]
 
 def color(note):
     if note.startswith("c"): return "#c0392b"
@@ -79,10 +82,10 @@ dx = (x47 - x46) * 1.025
 slope = (lo47 - lo46) / (x47 - x46)
 gpts = []
 gx, glo = x47, lo47
-for (n, note, Lg) in [(n, note, L) for n, note, L in GHOSTS]:
+for (n, note, fg, Lg, odg, tg) in GHOSTS:
     dx *= 1.025
     gx, glo = gx + dx, glo + slope * dx
-    gpts.append((n, note, Lg, gx, glo))
+    gpts.append((n, note, fg, Lg, odg, tg, gx, glo))
     allx.append(gx); ally += [glo, glo + Lg]
 
 x0, x1 = (min(allx)-1.2)*IN, (max(allx)+1.2)*IN
@@ -93,7 +96,7 @@ def Y(v): return y1 - v*IN   # y-up inches -> y-down mm, 0-based for the viewBox
 # classify the non-string lines: 0.25" ticks (47x3: sharp fret at 0.944L, nut at L,
 # tuner at L+1.5), ~1.53" at 78 deg = tuner leads, rest = frame.
 # The sharp-fret ticks are repositioned to the optical sensor axes near the rib:
-SENSE_IN = 1.0   # sensor beam crossing, inches above the soundboard anchor
+SENSE_IN = 1.0   # sensor beam crossing, inches BELOW THE NUT (rail on the neck)
 tops = [(g[0], g[2], color(r[1]), r[6]*IN) for r, g in strings]
 geom = {g[0]: (g[1], g[2]) for _, g in strings}   # x -> (ylo, yhi)
 marks, keys, outline, sense = [], [], [], []
@@ -103,7 +106,7 @@ for a, b, L in frame:
         sx = min(geom, key=lambda x: abs(x-mx))
         ylo, yhi = geom[sx]
         if my < yhi - 0.05:            # below the nut = the sharp-fret tick -> move to sensor axis
-            sense.append((sx, ylo + SENSE_IN))
+            sense.append((sx, yhi - SENSE_IN))
         else:
             marks.append((a, b))
     elif L < 2.0:
@@ -111,8 +114,8 @@ for a, b, L in frame:
         best = min(tops, key=lambda t: (t[0]-lo[0])**2 + (t[1]-lo[1])**2)
         keys.append((a, b, best[2], best[3]))
     else: outline.append((a, b))
-for n, note, Lg, gx, glo in gpts:
-    sense.append((gx, glo + SENSE_IN))
+for n, note, fg, Lg, odg, tg, gx, glo in gpts:
+    sense.append((gx, glo + Lg - SENSE_IN))
 band = ['<g stroke="#b9b3a3" stroke-width="1.2" fill="none">']
 band += [f'<line x1="{X(a[0]):.1f}" y1="{Y(a[1]):.1f}" x2="{X(b[0]):.1f}" y2="{Y(b[1]):.1f}"/>' for a, b in outline]
 band.append('</g>')
@@ -122,16 +125,17 @@ band.append('</g>')
 for a, b, c, w in keys:
     band.append(f'<line x1="{X(a[0]):.1f}" y1="{Y(a[1]):.1f}" x2="{X(b[0]):.1f}" y2="{Y(b[1]):.1f}" stroke="{c}" stroke-width="{w:.3f}"/>')
 for sx, sy in sense:
-    band.append(f'<g stroke="#a8700f" stroke-width="1.4"><line x1="{X(sx)-3.2:.1f}" y1="{Y(sy):.1f}" x2="{X(sx)+3.2:.1f}" y2="{Y(sy):.1f}"/><line x1="{X(sx):.1f}" y1="{Y(sy)-3.2:.1f}" x2="{X(sx):.1f}" y2="{Y(sy)+3.2:.1f}"/><title>optical X/Y sensor axis — {SENSE_IN:.1f} in / {SENSE_IN*IN:.1f} mm above the anchor, in the rib</title></g>')
+    band.append(f'<g stroke="#a8700f" stroke-width="1.4"><line x1="{X(sx)-3.2:.1f}" y1="{Y(sy):.1f}" x2="{X(sx)+3.2:.1f}" y2="{Y(sy):.1f}"/><line x1="{X(sx):.1f}" y1="{Y(sy)-3.2:.1f}" x2="{X(sx):.1f}" y2="{Y(sy)+3.2:.1f}"/><title>optical X/Y sensor axis — {SENSE_IN:.1f} in / {SENSE_IN*IN:.1f} mm below the nut, sensor rail on the neck</title></g>')
 for (n, note, f, Lin, cm, wm, od, t), (x, ylo, yhi) in strings:
     c, odmm = color(note), od*IN
     tip = f"#{n} {note} · {f:g} Hz · {Lin:.3f} in / {Lin*IN:.1f} mm · Ø {od:.3f} in / {odmm:.2f} mm · {t:.1f} lbf"
     band.append(f'<line x1="{X(x):.1f}" y1="{Y(ylo):.1f}" x2="{X(x):.1f}" y2="{Y(yhi):.1f}" stroke="{c}" stroke-width="{odmm:.3f}"><title>{tip}</title></line>')
     if note.startswith(("c", "f")) or n in (1, 47):
         band.append(f'<text x="{X(x):.1f}" y="{Y(ylo)+24:.1f}" class="nl" fill="{c}" text-anchor="middle">{note}</text>')
-for n, note, Lg, gx, glo in gpts:
-    band.append(f'<line x1="{X(gx):.1f}" y1="{Y(glo):.1f}" x2="{X(gx):.1f}" y2="{Y(glo+Lg):.1f}" stroke="#8d877a" stroke-width="2.4" stroke-dasharray="10 8"><title>#{n} {note} · spec TBD (not in Erard tutorial; geometry extrapolated)</title></line>')
-    band.append(f'<text x="{X(gx):.1f}" y="{Y(glo)+24:.1f}" class="nl" fill="#8d877a" text-anchor="middle">{note}?</text>')
+for n, note, fg, Lg, odg, tg, gx, glo in gpts:
+    tip = f"#{n} {note} · {fg:g} Hz · {Lg:.3f} in / {Lg*IN:.1f} mm · Ø {odg:.4f} in / {odg*IN:.2f} mm · {tg:.1f} lbf — EXTRAPOLATED from c1 (see string-specs.md)"
+    band.append(f'<line x1="{X(gx):.1f}" y1="{Y(glo):.1f}" x2="{X(gx):.1f}" y2="{Y(glo+Lg):.1f}" stroke="{color(note)}" stroke-width="{odg*IN:.3f}" stroke-dasharray="10 8"><title>{tip}</title></line>')
+    band.append(f'<text x="{X(gx):.1f}" y="{Y(glo)+24:.1f}" class="nl" fill="#8d877a" text-anchor="middle">{note}*</text>')
 
 # ---- cross sections at 5x, aligned to real string x positions ----
 xsec = []
@@ -166,13 +170,14 @@ matched to the spec table by length): the DXF's variable spacing (13.325→17.94
 sloped soundboard anchors, in millimetres, with <b>each stroke width the string's actual overall
 diameter</b>. Colors per harp convention: <span class="leg" style="color:#c0392b">C red</span> ·
 <span class="leg" style="color:#2e5fa3">F blue</span> · others dark gray. Hover any string for its spec.
-b0/a0 dashed: geometry extrapolated (spacing ratio continued), spec TBD — the Erand49 spans 49 strings,
-the tutorial 47. Dark ticks on each string, from the DXF: the nut (vibrating-point start) and the
+The Erand49 spans 49 strings, the tutorial 47. Dark ticks on each string, from the DXF: the nut (vibrating-point start) and the
 tuner pin; the angled top segment — 1.5 in at 12° off vertical, in the string's own color and
 diameter — is its lead to the tuner. The amber crosshairs low on every string are the <b>optical
 X/Y sensor axes</b> — the point in the rib where each string's two orthogonal IR beams cross,
-1.0 in / 25.4 mm above the soundboard anchor (the DXF's sharp-fret ticks, a semitone below each nut,
-were repositioned there).</p>
+1.0 in / 25.4 mm below each nut — the sensor rail mounts on the neck (the DXF's sharp-fret ticks were
+repositioned there). b0/a0 dashed in their string colors: full spec extrapolated from c1 physics
+(marked * — see string-specs.md), lengths continuing the bass trend, tensions 53.4 / 54.0 lbf,
+Ø 0.0955 / 0.1060 in.</p>
 
 <h2>String band — DXF geometry, lengths and diameters to one scale</h2>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1-x0:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
