@@ -88,8 +88,22 @@ for (n, note, fg, Lg, odg, tg) in GHOSTS:
     gpts.append((n, note, fg, Lg, odg, tg, gx, glo))
     allx.append(gx); ally += [glo, glo + Lg]
 
+# frame side profile (pillar + midrib band) — inches, y-up.
+# y_crown pins to the existing max so Y() mapping (and the hand-edited neck
+# curves, which are absolute coords) do NOT shift.
+mid = max(frame, key=lambda r: r[2])             # the long anchor line
+m = (mid[1][1]-mid[0][1])/(mid[1][0]-mid[0][0])
+cxi = mid[0][1] - m*mid[0][0]
+MHW = 2.0                                        # 4" channel half-height
+PW  = 1.0                                        # 2" pillar half-width
+pilc = min(p[6] for p in gpts) - 2.0             # pillar center, 2 in past a0 (crown/bass end)
+y_crown = max(ally)
+y_base  = m*pilc + cxi - MHW - 0.8
+xr_m = max(g[0] for _, g in strings) + 2.2       # midrib reaches the shoulder (treble end)
+allx += [pilc-PW, pilc+PW, xr_m]; ally.append(y_base)
+
 x0, x1 = (min(allx)-1.2)*IN, (max(allx)+1.2)*IN
-y0, y1 = (min(ally)-1.6)*IN, (max(ally)+0.8)*IN
+y0, y1 = (min(ally)-3.0)*IN, (max(ally)+0.8)*IN
 def X(v): return v*IN
 def Y(v): return y1 - v*IN   # y-up inches -> y-down mm, 0-based for the viewBox
 
@@ -116,17 +130,32 @@ for a, b, L in frame:
     else: outline.append((a, b))
 for n, note, fg, Lg, odg, tg, gx, glo in gpts:
     sense.append((gx, glo + Lg - SENSE_IN))
-# the long DXF line along the anchors is the MIDRIB — extend it past both ends
-# (beyond g7 at the treble and past the extrapolated a0 at the bass) to its real span
+# ---- frame in side view: midrib C-channel band + pillar + ISO 129 dims ----
 band = []
-assert len(outline) == 1
-(oa, ob) = outline[0]
-m = (ob[1]-oa[1]) / (ob[0]-oa[0])
-cx = oa[1] - m*oa[0]
-xr = max(g[0] for _, g in strings) + 0.9          # past g7 (treble)
-xl = min(p[6] for p in gpts) - 0.9                # past a0 (bass)
-band.append(f'<line x1="{X(xl):.1f}" y1="{Y(m*xl+cx):.1f}" x2="{X(xr):.1f}" y2="{Y(m*xr+cx):.1f}" stroke="#8d877a" stroke-width="3.5"><title>midrib — 6061-T6 aluminum extrusion; carries the 7.00 kN string-band pull; anchors all 49 strings</title></line>')
-band.append(f'<text x="{X(xl):.1f}" y="{Y(m*xl+cx)+40:.1f}" class="nl" fill="#8d877a">midrib (Al 6061-T6)</text>')
+band.append('<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3b5a7a"/></marker></defs>')
+_h = math.hypot(1, m)
+px_, py_ = -m/_h, 1/_h                            # unit perpendicular to midrib axis
+def mp(t, off):
+    return X(t + px_*off), Y(m*t + cxi + py_*off)
+for off in (+MHW, -MHW):
+    (xa, ya), (xb, yb) = mp(pilc, off), mp(xr_m, off)
+    band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#8d877a" stroke-width="2"/>')
+(xa, ya), (xb, yb) = mp(pilc, 0), mp(xr_m, 0)
+band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#c9553a" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib centerline = string anchor line</title></line>')
+lx, ly = mp(pilc+4.5, -MHW)
+band.append(f'<text x="{lx:.0f}" y="{ly+30:.0f}" class="nl" fill="#8d877a">midrib — C 4"×1.75"×3/16" 6061-T6, web shown (ER-003)</text>')
+band.append(f'<rect x="{X(pilc-PW):.1f}" y="{Y(y_crown):.1f}" width="{2*PW*IN:.1f}" height="{Y(y_base)-Y(y_crown):.1f}" fill="none" stroke="#8d877a" stroke-width="2"><title>pillar — 2"×2"×1/8" square tube, base to crown (ER-002)</title></rect>')
+band.append(f'<text x="{X(pilc)+35:.0f}" y="{(Y(y_crown)+Y(y_base))/2:.0f}" class="nl" fill="#8d877a">pillar 2"×2"×1/8"</text>')
+band.append(f'<rect x="{X(pilc-PW)-4:.1f}" y="{Y(y_crown)-14:.1f}" width="{2*PW*IN+8:.1f}" height="14" fill="#d9d3c2" stroke="#8d877a" stroke-width="1.5"><title>crown block — pillar weld, plates bolt on</title></rect>')
+sbx, sby = mp(xr_m-0.6, MHW)
+band.append(f'<rect x="{sbx-24:.1f}" y="{sby-14:.1f}" width="48" height="20" fill="#d9d3c2" stroke="#8d877a" stroke-width="1.5" transform="rotate({-math.degrees(math.atan2(m,1)):.1f} {sbx:.1f} {sby:.1f})"><title>shoulder block — midrib weld, plates bolt on</title></rect>')
+# ISO 129 dims: overall height, pillar width
+dx0 = X(pilc-PW) - 34
+band.append(f'<g stroke="#3b5a7a" stroke-width="1" fill="none"><line x1="{dx0:.0f}" y1="{Y(y_crown):.1f}" x2="{dx0:.0f}" y2="{Y(y_base):.1f}" marker-start="url(#arr)" marker-end="url(#arr)"/><line x1="{dx0-8:.0f}" y1="{Y(y_crown):.1f}" x2="{X(pilc-PW):.1f}" y2="{Y(y_crown):.1f}"/><line x1="{dx0-8:.0f}" y1="{Y(y_base):.1f}" x2="{X(pilc-PW):.1f}" y2="{Y(y_base):.1f}"/></g>')
+midy = (Y(y_crown)+Y(y_base))/2
+band.append(f'<text x="{dx0-12:.0f}" y="{midy:.0f}" class="nl" fill="#3b5a7a" text-anchor="middle" transform="rotate(-90 {dx0-12:.0f} {midy:.0f})">{(y_crown-y_base)*IN:.0f} mm</text>')
+band.append(f'<g stroke="#3b5a7a" stroke-width="1" fill="none"><line x1="{X(pilc-PW):.1f}" y1="{Y(y_base)+26:.1f}" x2="{X(pilc+PW):.1f}" y2="{Y(y_base)+26:.1f}" marker-start="url(#arr)" marker-end="url(#arr)"/></g>')
+band.append(f'<text x="{X(pilc):.0f}" y="{Y(y_base)+44:.0f}" class="nl" fill="#3b5a7a" text-anchor="middle">50.8</text>')
 band.append('<g stroke="#555" stroke-width="1.0" fill="none">')
 band += [f'<line x1="{X(a[0]):.1f}" y1="{Y(a[1]):.1f}" x2="{X(b[0]):.1f}" y2="{Y(b[1]):.1f}"/>' for a, b in marks]
 band.append('</g>')
@@ -234,7 +263,7 @@ table{{border-collapse:collapse;width:100%;font-size:14px}} th,td{{text-align:le
 surface — connection, docking, and travel live in the PM's <code>../LAYOUT.html</code>; this page is
 the instrument itself: string band, sensors, and frame.</p>
 
-<h2>String band — Erard DXF geometry, true scale</h2>
+<h2>Figure 1 — harp side-view profile (ISO 128/129): strings on the frame</h2>
 <p class="sub">From <code>erard original stringband tutorial.dxf</code>: variable spacing
 (13.325→17.94 mm, ratio 1.025), sloped anchors, in mm — <b>each stroke width is the string's actual
 overall diameter</b>. Colors per harp convention: <span class="leg" style="color:#c0392b">C red</span> ·
@@ -242,7 +271,7 @@ overall diameter</b>. Colors per harp convention: <span class="leg" style="color
 spec. Dark ticks: nut and tuner pin; colored 12° top segments: tuner leads. Amber crosshairs:
 optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Brown/amber Beziers: tuner and
 sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapolated from c1 physics
-(<code>string-specs.md</code>). Gray diagonal: midrib, full 49-string span.</p>
+(<code>string-specs.md</code>). Frame per <code>frame-spec.md</code>: midrib C-channel side profile (4" web band, red dash-dot centerline on the anchor line) from the pillar foot to the shoulder; pillar (2"×2" square tube) base to crown at the bass end, with crown/shoulder blocks; ISO 129 dims in mm.</p>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1-x0:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
 {BAND_STYLE}
 {chr(10).join(band)}

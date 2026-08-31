@@ -15,7 +15,7 @@ table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;
 surface — connection, docking, and travel live in the PM's <code>../LAYOUT.html</code>; this page is
 the instrument itself: string band, sensors, and frame.</p>
 
-<h2>String band — Erard DXF geometry, true scale</h2>
+<h2>Figure 1 — harp side-view profile (ISO 128/129): strings on the frame</h2>
 <p class="sub">From <code>erard original stringband tutorial.dxf</code>: variable spacing
 (13.325→17.94 mm, ratio 1.025), sloped anchors, in mm — <b>each stroke width is the string's actual
 overall diameter</b>. Colors per harp convention: <span class="leg" style="color:#c0392b">C red</span> ·
@@ -23,11 +23,22 @@ overall diameter</b>. Colors per harp convention: <span class="leg" style="color
 spec. Dark ticks: nut and tuner pin; colored 12° top segments: tuner leads. Amber crosshairs:
 optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Brown/amber Beziers: tuner and
 sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapolated from c1 physics
-(<code>string-specs.md</code>). Gray diagonal: midrib, full 49-string span.</p>
-<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="185 0 821 1685" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
+(<code>string-specs.md</code>). Frame per <code>frame-spec.md</code>: midrib C-channel side profile (4" web band, red dash-dot centerline on the anchor line) from the pillar foot to the shoulder; pillar (2"×2" square tube) base to crown at the bass end, with crown/shoulder blocks; ISO 129 dims in mm.</p>
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="109 0 942 1873" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
 <style>.nl{font-size:13px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}</style>
-<line x1="193.0" y1="1681.4" x2="987.7" y2="409.6" stroke="#8d877a" stroke-width="3.5"><title>midrib — 6061-T6 aluminum extrusion; carries the 7.00 kN string-band pull; anchors all 49 strings</title></line>
-<text x="193.0" y="1721.4" class="nl" fill="#8d877a">midrib (Al 6061-T6)</text>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3b5a7a"/></marker></defs>
+<line x1="122.0" y1="1699.1" x2="977.6" y2="329.8" stroke="#8d877a" stroke-width="2"/>
+<line x1="208.1" y1="1753.0" x2="1063.8" y2="383.6" stroke="#8d877a" stroke-width="2"/>
+<line x1="165.0" y1="1726.1" x2="1020.7" y2="356.7" stroke="#c9553a" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib centerline = string anchor line</title></line>
+<text x="322" y="1600" class="nl" fill="#8d877a">midrib — C 4"×1.75"×3/16" 6061-T6, web shown (ER-003)</text>
+<rect x="139.6" y="20.3" width="50.8" height="1776.9" fill="none" stroke="#8d877a" stroke-width="2"><title>pillar — 2"×2"×1/8" square tube, base to crown (ER-002)</title></rect>
+<text x="200" y="909" class="nl" fill="#8d877a">pillar 2"×2"×1/8"</text>
+<rect x="135.6" y="6.3" width="58.8" height="14" fill="#d9d3c2" stroke="#8d877a" stroke-width="1.5"><title>crown block — pillar weld, plates bolt on</title></rect>
+<rect x="938.4" y="340.2" width="48" height="20" fill="#d9d3c2" stroke="#8d877a" stroke-width="1.5" transform="rotate(-58.0 962.4 354.2)"><title>shoulder block — midrib weld, plates bolt on</title></rect>
+<g stroke="#3b5a7a" stroke-width="1" fill="none"><line x1="106" y1="20.3" x2="106" y2="1797.2" marker-start="url(#arr)" marker-end="url(#arr)"/><line x1="98" y1="20.3" x2="139.6" y2="20.3"/><line x1="98" y1="1797.2" x2="139.6" y2="1797.2"/></g>
+<text x="94" y="909" class="nl" fill="#3b5a7a" text-anchor="middle" transform="rotate(-90 94 909)">1777 mm</text>
+<g stroke="#3b5a7a" stroke-width="1" fill="none"><line x1="139.6" y1="1823.2" x2="190.4" y2="1823.2" marker-start="url(#arr)" marker-end="url(#arr)"/></g>
+<text x="165" y="1841" class="nl" fill="#3b5a7a" text-anchor="middle">50.8</text>
 <g stroke="#555" stroke-width="1.0" fill="none">
 <line x1="250.8" y1="68.8" x2="257.2" y2="68.8"/>
 <line x1="258.9" y1="30.7" x2="265.3" y2="30.7"/>
@@ -295,8 +306,8 @@ sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapol
 </svg></div>
 
 <h2>Cross sections — diameters at 5×, at each string's real position</h2>
-<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="185 0 821 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="String cross sections at 5x">
-<text x="201" y="100" style="font-size:15px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace">plain nylon → nylon-wrapped (#28 a3) → bronze-wound steel (#39 d2)</text>
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="109 0 942 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="String cross sections at 5x">
+<text x="125" y="100" style="font-size:15px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace">plain nylon → nylon-wrapped (#28 a3) → bronze-wound steel (#39 d2)</text>
 <circle cx="964.8" cy="40" r="1.59" fill="#3b3e44"><title>#1 g7 · Ø 0.025 in / 0.64 mm</title></circle>
 <circle cx="951.5" cy="40" r="1.59" fill="#2e5fa3"><title>#2 f7 · Ø 0.025 in / 0.64 mm</title></circle>
 <circle cx="938.2" cy="40" r="1.59" fill="#3b3e44"><title>#3 e7 · Ø 0.025 in / 0.64 mm</title></circle>
