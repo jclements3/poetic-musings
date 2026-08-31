@@ -120,7 +120,7 @@ underside, rear-ported. Silk legends shown are VL-1 mode; final silk gets a mode
 <circle cx="390" cy="70" r="10" fill="#2a2c30"/><circle cx="390" cy="70" r="3.5" fill="#e9e4d6"/><text x="390" y="105" class="rs" text-anchor="middle">CW KEY ⅛"</text>
 <!-- HARP -->
 <text x="470" y="14" class="rg">HARP (E)</text>
-<rect x="455" y="55" width="34" height="28" rx="3" fill="#2a2c30"/><rect x="463" y="75" width="18" height="8" fill="#e9e4d6"/><text x="472" y="105" class="rs" text-anchor="middle">RJ45 — I²S 24/96 + events</text>
+<rect x="455" y="55" width="34" height="28" rx="3" fill="#2a2c30"/><rect x="463" y="75" width="18" height="8" fill="#e9e4d6"/><text x="472" y="105" class="rs" text-anchor="middle">EtherCON RJ45 — I²S + events + 5 V</text>
 <!-- NETWORK -->
 <text x="590" y="14" class="rg">NET (N)</text>
 <rect x="575" y="55" width="34" height="28" rx="3" fill="#2a2c30"/><rect x="583" y="75" width="18" height="8" fill="#e9e4d6"/><text x="592" y="105" class="rs" text-anchor="middle">RJ45 — RMII PHY, UDP/Ch.10</text>
@@ -314,12 +314,72 @@ during the handoff — a bumped slider never yanks a demo. S4 stays orthogonal w
 OFF · CAL (retune/calibrate this mode) · PLAY · REC (record in this mode). RESET (P0) re-inits the
 current mode. Deeper choices (which game, which band, which demo script) are V0 + keys, one level down.</p>
 
+<h2>Erand49 harp — connection and docking</h2>
+<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 harp docking and sensor detail">
+<style>.hl{font-size:11px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}.hs{font-size:9px;fill:#333;font-family:ui-monospace,Menlo,Consolas,monospace}.hg{font-size:10px;font-weight:700;fill:#a8700f;font-family:ui-monospace,Menlo,Consolas,monospace}</style>
+<text x="25" y="20" class="hg">HOME DOCK — side view (not to scale)</text>
+<!-- dimension -->
+<path d="M50 80 L50 500" stroke="#8d877a" stroke-width="1.5"/><path d="M44 92 L50 78 L56 92 Z" fill="#8d877a"/><path d="M44 488 L50 502 L56 488 Z" fill="#8d877a"/><text x="38" y="300" class="hs" transform="rotate(-90 38 300)" text-anchor="middle">2.0 m</text>
+<!-- plinth -->
+<rect x="90" y="470" width="380" height="60" rx="8" fill="#d9d3c2" stroke="#8d877a" stroke-width="2"/>
+<text x="175" y="505" class="hs">PLINTH — harp electronics:</text><text x="175" y="517" class="hs">98-ch IR mux · 13× ADC · harp controller</text>
+<!-- pillar, neck, soundboard -->
+<rect x="110" y="85" width="18" height="390" rx="6" fill="#a8700f" fill-opacity="0.5" stroke="#7a5a2a" stroke-width="2"/>
+<path d="M119 88 C 220 60, 330 100, 395 155" fill="none" stroke="#7a5a2a" stroke-width="10" stroke-linecap="round"/>
+<rect x="384" y="150" width="26" height="325" rx="8" transform="rotate(6 397 312)" fill="#a8700f" fill-opacity="0.35" stroke="#7a5a2a" stroke-width="2"/>
+<text x="430" y="330" class="hs">soundboard rib —</text><text x="430" y="342" class="hs">49 sensor pairs inside,</text><text x="430" y="354" class="hs">rigid to the string anchors</text>
+<!-- strings -->
+<g stroke="#555" stroke-width="1"><line x1="150" y1="80" x2="390" y2="180"/><line x1="175" y1="76" x2="392" y2="215"/><line x1="205" y1="76" x2="394" y2="255"/><line x1="235" y1="80" x2="396" y2="295"/><line x1="265" y1="88" x2="398" y2="330"/><line x1="295" y1="100" x2="400" y2="365"/><line x1="325" y1="113" x2="402" y2="400"/><line x1="355" y1="130" x2="404" y2="435"/><line x1="380" y1="147" x2="406" y2="462"/></g>
+<text x="230" y="200" class="hs">49 strings, A0–G7 — stay tensioned for travel</text>
+<!-- PM cradle -->
+<rect x="480" y="440" width="200" height="50" rx="6" fill="#3b5a7a" fill-opacity="0.25" stroke="#3b5a7a" stroke-width="2"/>
+<text x="580" y="470" class="hl" text-anchor="middle">PM box</text>
+<rect x="470" y="490" width="220" height="40" rx="6" fill="#d9d3c2" stroke="#8d877a" stroke-width="2"/>
+<text x="580" y="515" class="hs" text-anchor="middle">cradle shelf off the plinth</text>
+<!-- cable -->
+<path d="M470 500 C 450 500, 460 495, 455 495" fill="none"/>
+<path d="M480 480 C 460 480, 470 495, 468 495" fill="none"/>
+<path d="M470 465 C 440 465, 450 495, 445 497" fill="none" stroke="#2a2c30" stroke-width="4"/>
+<text x="455" y="452" class="hs" text-anchor="end">one locking cable</text>
+<!-- sensor detail -->
+<text x="740" y="60" class="hg">STRING SENSOR DETAIL — one of 49, inside the rib</text>
+<rect x="740" y="80" width="480" height="380" rx="8" fill="#f4f1e8" stroke="#b9b3a3" stroke-width="2"/>
+<circle cx="980" cy="270" r="14" fill="#8d877a"/><text x="980" y="245" class="hs" text-anchor="middle">string (cross-section)</text>
+<circle cx="980" cy="270" r="60" fill="none" stroke="#c9553a" stroke-width="1.5" stroke-dasharray="4 4"/>
+<text x="1060" y="250" class="hs">vibration orbit</text>
+<!-- X pair -->
+<rect x="820" y="255" width="30" height="30" rx="4" fill="#c58a1f"/><text x="835" y="305" class="hs" text-anchor="middle">IR emit X</text>
+<rect x="1110" y="255" width="30" height="30" rx="4" fill="#3b5a7a"/><text x="1125" y="305" class="hs" text-anchor="middle">detect X</text>
+<path d="M852 270 L1108 270" stroke="#c58a1f" stroke-width="2" stroke-dasharray="6 4"/>
+<!-- Y pair -->
+<rect x="965" y="100" width="30" height="30" rx="4" fill="#c58a1f"/><text x="930" y="120" class="hs" text-anchor="end">IR emit Y</text>
+<rect x="965" y="410" width="30" height="30" rx="4" fill="#3b5a7a"/><text x="1005" y="430" class="hs">detect Y</text>
+<path d="M980 132 L980 408" stroke="#c58a1f" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="980" y="355" class="hs" text-anchor="middle">two orthogonal shadow beams ⇒</text>
+<text x="980" y="368" class="hs" text-anchor="middle">X and Y components per string</text>
+<text x="980" y="381" class="hs" text-anchor="middle">→ CORDIC magnitude + angle = pluck vector</text>
+<text x="25" y="550" class="hs">Docked at home: the PM seats in a cradle shelf on the plinth — harp and console read as one instrument, connected by one short locking cable. Sensors never need realignment: emitters and detectors are potted into the rib, rigid to the string anchors.</text>
+</svg></div>
+<table>
+<tr><th>Link element</th><th>Design</th></tr>
+<tr><td class="k">Connector</td><td>HARP port on the PM rear: locking EtherCON-style RJ45 shell (stage-grade latch — a tripped cable unlatches, it doesn't drag the harp over). Same connector on the plinth.</td></tr>
+<tr><td class="k">Cable</td><td>One shielded Cat-6, 2–3 m: two pairs carry 5 V + return to the harp; one differential pair harp→box (I²S 24/96 audio + 3 Mbaud event frames, framed together, harp is clock master); one differential pair box→harp (control).</td></tr>
+<tr><td class="k">Power budget</td><td>The 98 IR pairs are scanned through the mux — only a handful lit at once — so harp draw is ~0.5 A at 5 V, fine over the cable pairs. Gate 1 measures it; if real load exceeds the budget, the plinth gets its own barrel jack + bank bay under the same 5-V-only rule.</td></tr>
+<tr><td class="k">Where the smarts sit</td><td>Pluck detect (CORDIC mag + CA-CFAR) runs harp-side in the plinth per the handoff; the box receives audio + note events. Harp-side controller board is a Phase 6 gate-1 decision.</td></tr>
+</table>
+<p class="sub"><b>Travel:</b> the harp never comes apart — 49 strings stay at tension (no 45-minute retune at
+the destination) and the sensors are potted in the rib, rigid to the string anchors, so alignment
+survives the road. It rides in its own rigid column case with a soft cover over the strings, like any
+touring lever harp. Setup at the destination: stand the harp, seat the PM in front (or on any table),
+click one cable, S3 to E, CAL on S4 — the CAL pass re-baselines all 98 sensor thresholds in seconds,
+absorbing temperature and ambient-IR differences. The harp is the one PM piece that may simply stay
+home: E mode with no harp connected shows a "connect harp" screen and offers the synth keyboard instead.</p>
 <h2>What travels with it</h2>
 <table>
 <tr><th>Piece</th><th>Carried</th><th>Hookup</th></tr>
 <tr><td class="k">PM box</td><td>the device</td><td>5 V brick or USB power bank</td></tr>
 <tr><td>Santa Glide</td><td>own case: Alchitry Cu + driver board + coil tube, rolled</td><td>standalone; 24 V supply stays home unless the village travels</td></tr>
-<tr><td>Erand49 harp</td><td>own case when the demo calls for it</td><td>one RJ45 to HARP port</td></tr>
+<tr><td>Erand49 harp</td><td>rigid column case, strings stay tensioned, sensors potted in the rib</td><td>one locking cable to HARP port; CAL re-baselines sensors on site</td></tr>
 <tr><td>Antenna rods</td><td>unscrew, clip inside lid</td><td>binding posts</td></tr>
 <tr><td>Cue card (paper)</td><td>lid pocket</td><td>per-mode checklist: what to say, what to show, how to reset</td></tr>
 <tr><td>Spare demo microSD</td><td>lid pocket</td><td>known-good clone — swap, not debug, mid-demo</td></tr>
