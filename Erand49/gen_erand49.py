@@ -98,7 +98,7 @@ MHW = 2.0                                        # 4" channel half-height
 PW  = 1.0                                        # 2" pillar half-width
 pilc = min(p[6] for p in gpts) - 2.0             # pillar center, 2 in past a0 (crown/bass end)
 y_crown = max(ally)
-y_base  = m*pilc + cxi - MHW - 0.8
+y_base  = m*pilc + cxi - 2*MHW - 0.8
 xr_m = max(g[0] for _, g in strings) + 2.2       # midrib reaches the shoulder (treble end)
 allx += [pilc-PW, pilc+PW, xr_m]; ally.append(y_base)
 
@@ -137,18 +137,16 @@ _h = math.hypot(1, m)
 px_, py_ = -m/_h, 1/_h                            # unit perpendicular to midrib axis
 def mp(t, off):
     return X(t + px_*off), Y(m*t + cxi + py_*off)
-for off in (+MHW, -MHW):
+for off in (0, -2*MHW):
     (xa, ya), (xb, yb) = mp(pilc, off), mp(xr_m, off)
     band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#8d877a" stroke-width="2"/>')
-(xa, ya), (xb, yb) = mp(pilc, 0), mp(xr_m, 0)
-band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#c9553a" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib centerline = string anchor line</title></line>')
-lx, ly = mp(pilc+4.5, -MHW)
+(xa, ya), (xb, yb) = mp(pilc, -MHW), mp(xr_m, -MHW)
+band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#c9553a" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib tube centerline (top face carries the string anchors)</title></line>')
+lx, ly = mp(pilc+4.5, -2*MHW)
 band.append(f'<text x="{lx:.0f}" y="{ly+30:.0f}" class="nl" fill="#8d877a">midrib — RT 4"×2"×3/16" 6061-T6 (ER-003)</text>')
 band.append(f'<rect x="{X(pilc-PW):.1f}" y="{Y(y_crown):.1f}" width="{2*PW*IN:.1f}" height="{Y(y_base)-Y(y_crown):.1f}" fill="none" stroke="#8d877a" stroke-width="2"><title>pillar — 2"×2"×1/8" square tube, base to crown (ER-002)</title></rect>')
 band.append(f'<text x="{X(pilc)+35:.0f}" y="{(Y(y_crown)+Y(y_base))/2:.0f}" class="nl" fill="#8d877a">pillar 2"×2"×1/8"</text>')
-band.append(f'<rect x="{X(pilc-PW)-4:.1f}" y="{Y(y_crown)-14:.1f}" width="{2*PW*IN+8:.1f}" height="14" fill="#d9d3c2" stroke="#8d877a" stroke-width="1.5"><title>pillar top rebate — neck plates sit flush</title></rect>')
 sbx, sby = mp(xr_m-0.6, MHW)
-band.append(f'<rect x="{sbx-24:.1f}" y="{sby-14:.1f}" width="48" height="20" fill="#d9d3c2" stroke="#8d877a" stroke-width="1.5" transform="rotate({-math.degrees(math.atan2(m,1)):.1f} {sbx:.1f} {sby:.1f})"><title>plate-to-midrib bolted joint (flush on the tube faces)</title></rect>')
 # ISO 129 dims: overall height, pillar width
 dx0 = X(pilc-PW) - 34
 band.append(f'<g stroke="#3b5a7a" stroke-width="1" fill="none"><line x1="{dx0:.0f}" y1="{Y(y_crown):.1f}" x2="{dx0:.0f}" y2="{Y(y_base):.1f}" marker-start="url(#arr)" marker-end="url(#arr)"/><line x1="{dx0-8:.0f}" y1="{Y(y_crown):.1f}" x2="{X(pilc-PW):.1f}" y2="{Y(y_crown):.1f}"/><line x1="{dx0-8:.0f}" y1="{Y(y_base):.1f}" x2="{X(pilc-PW):.1f}" y2="{Y(y_base):.1f}"/></g>')
@@ -271,7 +269,7 @@ overall diameter</b>. Colors per harp convention: <span class="leg" style="color
 spec. Dark ticks: nut and tuner pin; colored 12° top segments: tuner leads. Amber crosshairs:
 optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Brown/amber Beziers: tuner and
 sensor rails (hand-tuned neck: <code>Erand49.svg</code>). b0*/a0*: spec extrapolated from c1 physics
-(<code>string-specs.md</code>). Frame per <code>frame-spec.md</code>: midrib C-channel side profile (4" web band, red dash-dot centerline on the anchor line) from the pillar foot to the shoulder; pillar (2"×2" square tube) base to crown at the bass end, plates bolt flush to the member faces (pillar top rebated); ISO 129 dims in mm.</p>
+(<code>string-specs.md</code>). Frame per <code>frame-spec.md</code>: midrib tube side profile (4" deep, top face on the string-anchor line, dash-dot tube centerline) from the pillar foot to the shoulder; pillar (2"×2" square tube) base to crown at the bass end, plates bolt flush to the member faces (pillar top rebated); ISO 129 dims in mm.</p>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0:.0f} 0 {x1-x0:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
 {BAND_STYLE}
 {chr(10).join(band)}
