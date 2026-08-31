@@ -72,9 +72,10 @@ theremin suite runs as the regression target for every library change.
 
 ## Phase 5 — P · Piano 🎹 (the PM device takes physical form)
 
-Micrometer bore check, then order the harp rib (long lead — see PERT). Buy the used
-49-key MIDI keybed; print the panel per `README.html`; mount bar TFT, sliders S0–S4,
-buttons P0–P9; wire the 8×8 matrix. VL-1 synth engine: 5 voices + ADSR slot, 10
+Micrometer bore check, then order the harp rib (long lead — see PERT). Keys are
+VL-1-authentic flat buttons: 59 MX-class switches (49 keys + P0–P9) under 3D-printed
+white/black caps set in a printed keyboard graphic; print the panel per `README.html`;
+mount bar TFT and sliders S0–S4; wire the 8×8 matrix (one 1N4148 per switch). VL-1 synth engine: 5 voices + ADSR slot, 10
 rhythms, 100-note sequencer, One Key Play, calculator mode. A/B against the real VL-1.
 
 Design task before printing: mode-neutral silk legends — VL-1 emulation is one mode of

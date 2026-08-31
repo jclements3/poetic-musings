@@ -7,7 +7,7 @@
 - Serial build rule, finish before start: C → I → O → T → P → E (updated on desktop 2026-08-31; was C → T → O → P → E). U/S after E if funding delayed.
 - Piano box is the platform demo (One Box). Not a MAIDEN dependency.
 - Display: 8.8" 1920x480 bar TFT over ULX3S GPDI; 55 mm band; verify active area before cutting.
-- Keyboard: 49 keys C2–C6, gold harp labels A0–G7 one per key, two-layer ASCII (SHIFT = One Key Play L). Buy a used 49-key MIDI controller keybed, not membrane.
+- Keyboard: 49 keys C2–C6, gold harp labels A0–G7 one per key, two-layer ASCII (SHIFT = One Key Play L). ~~Buy a used 49-key MIDI controller keybed, not membrane.~~ Superseded 2026-08-31: VL-1-authentic flat buttons — MX-class switches under 3D-printed white/black caps set in a printed keyboard graphic.
 - H2 forth-cpu (howerj) as control plane; port to Clash as Lessons 12–14; black-box VHDL first.
 - Harp interface: I2S 24/96 harp-master, 3 Mbaud 8-byte event frames, harp does pluck detect (CORDIC mag + CA-CFAR), KS at 96 kHz with allpass fractional delay.
 - One ULX3S ECP5-85F for everything personal; second board optional spare.
