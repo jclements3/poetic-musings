@@ -88,7 +88,7 @@ for (n, note, Lg) in [(n, note, L) for n, note, L in GHOSTS]:
 x0, x1 = (min(allx)-1.2)*IN, (max(allx)+1.2)*IN
 y0, y1 = (min(ally)-1.6)*IN, (max(ally)+0.8)*IN
 def X(v): return v*IN
-def Y(v): return (y1+y0) - v*IN   # y-up inches -> y-down mm
+def Y(v): return y1 - v*IN   # y-up inches -> y-down mm, 0-based for the viewBox
 
 # classify the non-string lines: 0.25" ticks = flat/natural/sharp marks (47x3),
 # ~1.53" at 78 deg = tuner leads (one per string, 12 deg off vertical), rest = frame
