@@ -325,4 +325,4 @@ Band tension 1465.5 lbf ≈ 6.52 kN excluding b0/a0.</p>
 </main></body></html>
 '''
 open(os.path.join(HERE, 'Erand49.html'), 'w').write(html)
-print('wrote Erand49.html and Erand49.svg')
+print('wrote Erand49.html and Erand49-generated.svg')
