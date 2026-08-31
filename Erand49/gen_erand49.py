@@ -197,7 +197,8 @@ svg_doc = (f'<?xml version="1.0" encoding="UTF-8"?>\n'
  f'viewBox="{x0:.0f} 0 {x1-x0:.0f} {y1-y0:.0f}">\n'
  '<style>.nl{font-size:13px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}</style>\n'
  + "\n".join(band) + '\n</svg>\n')
-open(os.path.join(HERE, 'Erand49.svg'), 'w').write(svg_doc)
+# Erand49.svg is now the USER-EDITED neck design (Inkscape) — never overwrite it.
+open(os.path.join(HERE, 'Erand49-generated.svg'), 'w').write(svg_doc)
 
 html = f'''<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=6, user-scalable=yes">
