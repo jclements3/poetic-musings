@@ -169,15 +169,6 @@ off vertical, drawn in the string's own color and diameter — is its lead to th
 {chr(10).join(xsec)}
 </svg></div>
 
-<h2>Érard original — rendered from the DXF</h2>
-<p class="sub">Parsed with ezdxf: {len(el)} lines, {len(tx)} labels; units inches, y-flipped for SVG.
-The label table carries the design parameters: spacing groups 13.325→17.9375 mm (ratio 1.025),
-string angle 32°, soundboard 52.81 in, key length 1.5 in at 12°.</p>
-<div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{fx0:.1f} {fy0:.1f} {fx1-fx0:.1f} {fy1-fy0:.1f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erard string band drawing from DXF">
-<g stroke="#3b3e44" stroke-width="0.045" fill="none">{''.join(el)}</g>
-<g fill="#7a5a2a" font-family="ui-monospace,Menlo,Consolas,monospace">{''.join(tx)}</g>
-</svg></div>
-
 <p class="sub">Source: <code>string-specs.md</code> (imperial + metric) and
 <code>erard original stringband tutorial.dxf</code>. Regenerate: <code>python3 gen_erand49.py</code>.
 Band tension 1465.5 lbf ≈ 6.52 kN excluding b0/a0.</p>
