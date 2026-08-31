@@ -3,6 +3,13 @@ receipts/
 finance/receipts/
 Oracle/forth-cpu-upstream/
 
+# Clash build artifacts (IRIG Phase 2)
+IRIG/clash/dist-newstyle/
+IRIG/clash/verilog/
+IRIG/clash/.ghc.environment.*
+IRIG/clash/src/*.hi
+IRIG/clash/src/*.o
+
 # Clash build artifacts (SantaGlide firmware)
 Coil/SantaGlide/firmware/verilog/
 Coil/SantaGlide/firmware/*.hi

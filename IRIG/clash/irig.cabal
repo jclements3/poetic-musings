@@ -1,0 +1,47 @@
+cabal-version: 2.4
+name:          irig
+version:       0.1.0.0
+synopsis:      IRIG-B timecode generator (Phase 2) for the ULX3S
+build-type:    Simple
+
+common opts
+  default-language:   GHC2021
+  default-extensions: DataKinds
+                      DeriveAnyClass
+                      DerivingStrategies
+                      NoImplicitPrelude
+                      NoStarIsType
+                      RecordWildCards
+                      TemplateHaskell
+                      TypeFamilies
+  ghc-options: -Wall
+               -fplugin GHC.TypeLits.Extra.Solver
+               -fplugin GHC.TypeLits.Normalise
+               -fplugin GHC.TypeLits.KnownNat.Solver
+  build-depends: base
+               , clash-prelude ^>=1.8.1
+               , ghc-typelits-natnormalise
+               , ghc-typelits-extra
+               , ghc-typelits-knownnat
+
+library
+  import:          opts
+  hs-source-dirs:  src
+  exposed-modules: Irig
+
+-- `cabal exec -- clash -isrc Irig --verilog` needs a clash binary built
+-- against THIS package's environment; same trick as Oracle/clash-h2 and
+-- MAIDEN/lessons.
+executable clash
+  import:         opts
+  main-is:        Clash.hs
+  hs-source-dirs: bin
+  build-depends:  clash-ghc ^>=1.8.1, irig
+
+test-suite irig-test
+  import:         opts
+  type:           exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is:        Spec.hs
+  ghc-options:    -O2
+  build-depends:  irig
