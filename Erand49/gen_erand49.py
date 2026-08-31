@@ -66,8 +66,7 @@ for row in ROWS:
     ylo, yhi = min(a[1], b[1]), max(a[1], b[1])
     strings.append((row, (a[0], ylo, yhi)))
 
-frame = [dxf_lines[i] for i in range(len(dxf_lines)) if i not in used
-         and not (dxf_lines[i][0][0] > 32 and dxf_lines[i][1][0] > 32)]  # drop spec-table rules
+frame = [dxf_lines[i] for i in range(len(dxf_lines)) if i not in used]
 
 # ---- band SVG in mm, y flipped ----
 allx = [g[0] for _, g in strings]; ally = [g[1] for _, g in strings] + [g[2] for _, g in strings]
