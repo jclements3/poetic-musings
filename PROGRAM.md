@@ -18,7 +18,7 @@ Panel map: `README.html` (regenerate with `gen.py`).
 |---|---|---|---|
 | P | `Piano/` | 3D-printed 49-key VL-1-derivative keyboard; Oracle is the brains behind its UI | Panel map done (`README.html`); keybed purchase pending |
 | O | `Oracle/` | Console: H2 Forth CPU, 8.8" bar TFT, SD, CW keyer/decoder | `Oracle/clash-h2/` compiles + smoke-tests; Verilog generated; real eForth image in `h2.bin` (boots in C sim); PM capability spec in `Oracle/eforth-pm.md` |
-| E | `Erand49/` | Harp: 98 IR optical sensors → pluck detect → KS synthesis → MIDI/I²S | empty — gate 1 is one string, one ADC eval |
+| E | `Erand49/` | Harp: 98 IR optical sensors → pluck detect → KS synthesis → MIDI/I²S | designed: `Erand49/LAYOUT.html` (string band, ER-001..006), `frame_cad.py` → `frame.step` CAD master, string/frame specs, sensor-stations.csv; gate 1 = one string, one ADC eval |
 | T | `Theremin/` | D-Lev-derived theremin; antennas double as SDR input | full repo copied 2026-08-31 from `../theremin` (git history intact) |
 | I | `IRIG/` | IRIG-B timecode clock; free-running until G disciplines it | empty — next after C |
 | C | `Coil/` | Santa Glide: sleigh slug in 10 ft tube, 8-coil linear reluctance motor, Alchitry Cu | `Coil/SantaGlide/` — design done, parts ordered, Rev B compiles to `santa_glide.v` |
@@ -56,8 +56,9 @@ Panel map: `README.html` (regenerate with `gen.py`).
   mode-neutral layer (or per-demo overlays) — VL-1 emulation is one mode among many.
 - Two boards total: ULX3S ECP5-85F for everything in the box; Alchitry Cu runs Santa
   Glide standalone.
-- `MAIDEN/` and `Theremin/` keep their own `.git` repos; `poetic-musings/` itself is not
-  a git repo yet. Their `.venv`s were not copied — recreate locally if needed.
+- `MAIDEN/` and `Theremin/` keep their own `.git` repos (tracked as gitlinks from this
+  repo). Their `.venv`s were not copied — recreate locally if needed.
 - `MAIDEN/theremin/` is an older embedded copy predating the top-level `Theremin/` repo.
-- First bench tasks when compiling resumes: `Coil/SantaGlide/firmware/SantaGlide.hs` and
-  `Oracle/clash-h2/` have never been compiled.
+- Phase 0 gate met 2026-08-31: both firmwares compile (GHC 9.6.7/Clash 1.8.5),
+  smoke test passes, Verilog generated, real eForth image boots in the C simulator.
+  Toolchain note: some Python tools need `LD_LIBRARY_PATH=$HOME/miniconda3/lib`.
