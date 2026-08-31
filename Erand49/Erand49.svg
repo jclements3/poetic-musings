@@ -2777,4 +2777,6 @@
        id="text322">DESIGN PLACEHOLDER: final fraction set at Gate 1 on the bench (L/18..L/12)</text>
   </g>
 <line id="shoulder-weld" x1="975.1" y1="429.7" x2="1094.9" y2="429.7" stroke="#c9553a" stroke-width="2.5"/>
+<text x="235.2" y="1637.9" class="nl" fill="#8d877a" text-anchor="middle" id="text291">b0*</text>
+<text x="215.8" y="1668.8" class="nl" fill="#8d877a" text-anchor="middle" id="text295">a0*</text>
 </svg>
