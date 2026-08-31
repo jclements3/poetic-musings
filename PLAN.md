@@ -35,8 +35,12 @@ in Clash simulation (UART model per `Oracle/forth-cpu-notes.md`).
 
 ## Phase 1 — C · Santa Glide 🛷 (first demo, standalone)
 
-Per `Coil/SantaGlide/HANDOFF.md` §7: pin constraints → channel 0 on the bench at
-12 V/CC 2 A → 7 more driver channels → wind 8 coils (200T, 24 AWG) on the tube →
+Per `Coil/SantaGlide/HANDOFF.md` §7. Desktop prep done 2026-08-31: synthesized
+bitstream at 50 MHz (PLL from the Cu's 100 MHz osc; timing closes with ~20% margin,
+4% utilization), verified pin constraints (`santa_glide.pcf`, gates on Br bank A),
+FSM re-verified in clashi after retiming — see `firmware/BUILD.md`. Flash from
+Windows with Alchitry Labs (WSL2 has no USB by default). Bench sequence remains:
+channel 0 at 12 V/CC 2 A → 7 more driver channels → wind 8 coils (200T, 24 AWG) →
 slug in, all dwells 400 ms → tune `runDuty`, then the dwell table, then voltage.
 
 **Demo:** flip the show switch; Santa glides house A→B→A over the snow village,
