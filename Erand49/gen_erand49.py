@@ -146,6 +146,9 @@ xsec = []
 for (n, note, f, Lin, cm, wm, od, t), (x, ylo, yhi) in strings:
     tip = f"#{n} {note} · Ø {od:.3f} in / {od*IN:.2f} mm"
     xsec.append(f'<circle cx="{X(x):.1f}" cy="40" r="{od*IN*5/2:.2f}" fill="{color(note)}"><title>{tip}</title></circle>')
+for n, note, fg, Lg, odg, tg, gx, glo in gpts:
+    tip = f"#{n} {note}* · Ø {odg:.4f} in / {odg*IN:.2f} mm — extrapolated"
+    xsec.append(f'<circle cx="{X(gx):.1f}" cy="40" r="{odg*IN*5/2:.2f}" fill="{color(note)}"><title>{tip}</title></circle>')
 
 # ---- full DXF render (lines + text) ----
 fx, fy = [], []
