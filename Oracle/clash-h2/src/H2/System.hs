@@ -26,7 +26,7 @@ module H2.System
   ) where
 
 import Clash.Prelude
-import H2
+import H2 hiding (topEntity)
 
 -- | A 8192-word memory: read address, optional (address, data) write.
 type Memory dom

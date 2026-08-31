@@ -2,3 +2,8 @@ LEDGER.md
 receipts/
 finance/receipts/
 Oracle/forth-cpu-upstream/
+
+# Clash build artifacts (SantaGlide firmware)
+Coil/SantaGlide/firmware/verilog/
+Coil/SantaGlide/firmware/*.hi
+Coil/SantaGlide/firmware/*.o

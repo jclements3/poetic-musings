@@ -3,3 +3,4 @@ verilog/
 vhdl/
 *.hi
 *.o
+.ghc.environment.*

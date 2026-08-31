@@ -1,3 +1,5 @@
+{-# LANGUAGE RecordWildCards #-}
+
 -- SantaGlide.hs  --  Rev B: pure Moore machine per SS-004
 --
 -- Fixes vs Rev A:
