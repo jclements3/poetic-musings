@@ -151,8 +151,8 @@ underside, rear-ported. Silk legends shown are VL-1 mode; final silk gets a mode
 <path d="M180 140 C 120 60, 240 40, 240 95 C 240 130, 195 132, 180 140" fill="none" stroke="#7a5a2a" stroke-width="4"/>
 <text x="235" y="52" class="es">volume loop, ~10" dia, horizontal —</text>
 <text x="235" y="64" class="es">lower hand = quieter</text>
-<text x="180" y="176" class="es" text-anchor="middle">3/8"-24 stud on</text>
-<text x="180" y="188" class="es" text-anchor="middle">banana post</text>
+<text x="180" y="176" class="es" text-anchor="middle">insulated 3/8"-24</text>
+<text x="180" y="188" class="es" text-anchor="middle">stud, hand-tight</text>
 <text x="330" y="176" class="es" text-anchor="middle">Colpitts VOL osc board</text>
 <text x="330" y="188" class="es" text-anchor="middle">directly behind post,</text>
 <text x="330" y="200" class="es" text-anchor="middle">short shielded lead</text>
@@ -164,13 +164,13 @@ underside, rear-ported. Silk legends shown are VL-1 mode; final silk gets a mode
 <rect x="1116" y="34" width="8" height="108" rx="3" fill="#7a5a2a"/>
 <text x="1112" y="48" class="es" text-anchor="end">pitch rod, ~18" vertical,</text>
 <text x="1112" y="60" class="es" text-anchor="end">closer hand = higher pitch</text>
-<text x="1120" y="176" class="es" text-anchor="middle">3/8"-24 stud on</text>
-<text x="1120" y="188" class="es" text-anchor="middle">banana post</text>
+<text x="1120" y="176" class="es" text-anchor="middle">insulated 3/8"-24</text>
+<text x="1120" y="188" class="es" text-anchor="middle">stud, hand-tight</text>
 <circle cx="950" cy="160" r="12" fill="#2a2c30"/><circle cx="950" cy="160" r="4" fill="#c9553a"/>
 <path d="M950 148 L 920 70" stroke="#2a2c30" stroke-width="3" fill="none"/>
 <text x="905" y="60" class="es">UHF whip on SMA bulkhead</text>
 <text x="950" y="200" class="es" text-anchor="middle">TX SMA — 50 Ω</text>
-<text x="10" y="270" class="es">Ends viewed from outside. Both rods unscrew from their posts for transport (clip inside lid). Theremin demo needs the pitch-rod end clear of walls and bodies — orient right end toward the audience. Internal relay hands both theremin antennas to the SDR front end in S mode; UHF whip swaps for a proper antenna via the same SMA when WSPR range matters.</text>
+<text x="10" y="270" class="es">Ends viewed from outside. Theremin antennas: each ends in a 3/8"-24 coupler nut and hand-threads onto an insulated bulkhead stud (nylon shoulder washers through the end plate); the stud is the electrical terminal — solder lug under the inside nut, short shielded lead to its oscillator board. Threads seat the same way every time, and the CAL position on S4 retunes after every setup, so connector repeatability is a non-issue. UHF: whip hand-threads onto a standard SMA bulkhead. Nothing needs tools; rods and whip clip inside the lid with thread protectors on the studs. Orient the pitch-rod end toward the audience, clear of walls. Internal relay hands both theremin antennas to the SDR front end in S mode.</text>
 </svg></div>
 <h2>Inside the box</h2>
 <table>
@@ -187,6 +187,19 @@ underside, rear-ported. Silk legends shown are VL-1 mode; final silk gets a mode
 <tr><td>UHF beacon PA (U)</td><td>rear, shielded corner</td><td>GPS-disciplined CW/WSPR → TX SMA</td></tr>
 </table>
 
+
+<h2>Power</h2>
+<p class="sub">One rule: <b>nothing above 5 V inside the PM box, ever.</b> Mains stays in a sealed wall
+brick; Santa Glide's 24 V coil supply is a different rig and never travels in this case.</p>
+<table>
+<tr><th>Element</th><th>Design</th></tr>
+<tr><td class="k">Input</td><td>5 V via rear barrel jack (wall brick) <i>or</i> rear USB-C (any USB power bank) — ideal-diode OR inside, so either works and swapping is safe live. Master rocker (PWR) cuts everything.</td></tr>
+<tr><td class="k">Budget</td><td>ULX3S ≈ 1 A · bar TFT + driver ≈ 1 A · audio amp ≈ 0.5 A peak · GPS/RF/misc ≈ 0.5 A → design rail 5 V / 4 A. A demo on a power bank runs the display at reduced backlight.</td></tr>
+<tr><td class="k">Distribution</td><td>Star from the input OR-point; each branch (FPGA, display, audio, RF/GPS) on its own polyfuse so no single fault darkens the whole demo.</td></tr>
+<tr><td class="k">Sequencing</td><td>Audio amp held muted by FPGA GPIO until a bitstream is up — no power-on pop through the speaker. Display backlight enabled by GPIO likewise.</td></tr>
+<tr><td class="k">UHF TX</td><td>WSPR/CW at these power levels lives inside the 5 V budget; the PA branch has its own fuse and the mode menu interlocks TX (no RF unless U mode is selected).</td></tr>
+<tr><td class="k">Runtime</td><td>~2–3 h on a common 10 Ah bank at demo brightness — enough for any show-and-tell without a wall outlet.</td></tr>
+</table>
 <h2>Boot: mode menu on V0</h2>
 <p class="chain">PIANO/VL-1 · CALCULATOR · FORTH · GAMES · THEREMIN · HARP · CLOCK (IRIG/GPS) · CW · SDR · IRAD DEMOS</p>
 <p class="sub">The menu is Oracle: a Forth word per mode. Number keys (black keys 0–9) or the first ten
