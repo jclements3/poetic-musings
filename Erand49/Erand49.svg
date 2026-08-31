@@ -34,23 +34,8 @@
      inkscape:current-layer="svg296" />
   <style
      id="style1">.nl{font-size:13px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}</style>
-  <line
-     x1="193.0"
-     y1="1681.4"
-     x2="987.7"
-     y2="409.6"
-     stroke="#8d877a"
-     stroke-width="3.5"
-     id="line1">
-    <title
-       id="title1">midrib — 6061-T6 aluminum extrusion; carries the 7.00 kN string-band pull; anchors all 49 strings</title>
-  </line>
-  <text
-     x="193.0"
-     y="1721.4"
-     class="nl"
-     fill="#8d877a"
-     id="text1">midrib (Al 6061-T6)</text>
+  
+  
   <g
      stroke="#555"
      stroke-width="1.0"
@@ -1655,13 +1640,7 @@
        y2="36.4"
        id="line291" />
   </g>
-  <text
-     x="235.2"
-     y="1637.9"
-     class="nl"
-     fill="#8d877a"
-     text-anchor="middle"
-     id="text291">b0*</text>
+  
   <line
      x1="215.8"
      y1="1644.8"
@@ -1698,13 +1677,7 @@
        y2="42.1"
        id="line295" />
   </g>
-  <text
-     x="215.8"
-     y="1668.8"
-     class="nl"
-     fill="#8d877a"
-     text-anchor="middle"
-     id="text295">a0*</text>
+  
   <path
      d="M 138.21996,54.93472 C 182.63611,12.264078 408.32862,-20.833264 472.26137,32.301189 536.19411,85.435641 615.43736,477.80999 746.63448,457.58294 877.8316,437.35589 899.00459,380.96014 976.11185,329.78393 c 77.10725,-51.1762 152.56735,44.68437 124.31275,88.91006"
      fill="none"
