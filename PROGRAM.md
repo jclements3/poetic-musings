@@ -20,7 +20,7 @@ Panel map: `README.html` (regenerate with `gen.py`).
 | O | `Oracle/` | Console: H2 Forth CPU, 8.8" bar TFT, SD, CW keyer/decoder | `Oracle/clash-h2/` compiles + smoke-tests; Verilog generated; real eForth boots in Clash simulation and reads the first PM register (0x4020 mode zones) from live Forth (`cabal test h2-boot`); capability spec `Oracle/eforth-pm.md` |
 | E | `Erand49/` | Harp: 98 IR optical sensors → pluck detect → KS synthesis → MIDI/I²S | designed: `Erand49/LAYOUT.html` (string band, ER-001..006), `frame_cad.py` → `frame.step` CAD master, string/frame specs, sensor-stations.csv; gate 1 = one string, one ADC eval |
 | T | `Theremin/` | D-Lev-derived theremin; antennas double as SDR input | older VHDL-era repo; the measured Clash port lives in `MAIDEN/theremin/clash/` (see LIBRARY.md) |
-| I | `IRIG/` | IRIG-B timecode clock; free-running until G disciplines it | empty — next after C |
+| I | `IRIG/` | IRIG-B timecode clock; free-running until G disciplines it | **implemented + sim-verified** (`IRIG/clash/`, 8-frame TB, matches the erratum-fixed reference); bench scope check pending |
 | C | `Coil/` | Santa Glide: sleigh slug in 10 ft tube, 8-coil linear reluctance motor, Alchitry Cu | `Coil/SantaGlide/` — design done, parts ordered, Rev B compiles to `santa_glide.v` |
 
 ## MUSING (IRAD)

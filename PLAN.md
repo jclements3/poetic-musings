@@ -54,7 +54,11 @@ laptop — the first take-anywhere demo, and the Christmas deliverable.
 
 IRIG-B generator on the ULX3S: 1 s frame counter, BCD time fields, 10 ms bit cells,
 DC-level and modulated outputs. Free-running on the board crystal (disciplined later,
-Phase 7). Verify frames on scope/decoder.
+Phase 7). **Implemented and sim-verified 2026-08-31** (`IRIG/clash/`: 8-frame testbench
+covering cell widths, markers, rollovers, set latch, AM carrier — cross-checked
+bit-for-bit against MAIDEN's decoder-verified irigb_gen.vhd; Verilog generated,
+elaborates in yosys). Remaining for the gate: scope/decoder verification on the bench
+(needs the ULX3S).
 
 **Demo:** a clock that emits real range timecode; decode it and show the time moving.
 **Teaches:** counters, framing, serialization — the second rep of Phase 1's skills.
