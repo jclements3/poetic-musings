@@ -81,7 +81,7 @@ table{{border-collapse:collapse;width:100%;margin-top:14px;font-size:13px}} th,t
 .sh{{font-size:6px;fill:#555;font-family:ui-monospace,Menlo,Consolas,monospace}} .bk{{font-size:8px;font-weight:700;fill:#fff;font-family:ui-monospace,Menlo,Consolas,monospace}} .bks{{font-size:7px;font-weight:700;fill:#ffffff;font-family:ui-monospace,Menlo,Consolas,monospace}} .hp{{font-size:6px;font-weight:700;fill:#a8700f;font-family:ui-monospace,Menlo,Consolas,monospace}} .hpb{{font-size:6px;font-weight:700;fill:#f2c14e;font-family:ui-monospace,Menlo,Consolas,monospace}} .id{{font-size:6px;fill:#b3341c;font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700}}
 </style></head><body><main>
 <h1 style="color:#111">VL-1 DERIVATIVE — 49-KEY PANEL MAP</h1>
-<p class="sub">Speaker removed from the top face; 55 mm display band with full-width bar TFT; sliders banked top-right over the buttons; keyboard extended to 4 octaves C–C. Keys are flat button caps (Cherry MX2A Silent Red) set in a printed keyboard graphic, as on the original VL-1. Key pitch unchanged (13 mm). Not to scale.</p>
+<p class="sub">Speaker removed from the top face; 55 mm display band with full-width bar TFT; sliders banked top-right over the buttons; keyboard extended to 4 octaves C–C. Keys are flat button caps (Cherry MX2A Silent Red) set in a printed keyboard graphic, as on the original VL-1. Key pitch 16 mm — MX housing limit; original VL-1 was ~13 mm. Not to scale.</p>
 <div class="wrap"><svg viewBox="0 0 1300 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="49-key VL-1 derivative panel layout">
 {body}
 </svg></div><p class="sub">Diagram scrolls sideways on a phone.</p>
@@ -96,7 +96,7 @@ table{{border-collapse:collapse;width:100%;margin-top:14px;font-size:13px}} th,t
 <tr><td>V0</td><td>8.8" 1920×480 bar TFT (~220×55 mm), HDMI driver board</td><td>1</td><td>GPDI/DVI from ULX3S; H2 vga.vhd text mode retimed, plus overlay framebuffer</td></tr>
 <tr><td>—</td><td>Speaker, underside, rear port; ⅛" jack</td><td>1 ch</td><td>PWM/ΣΔ + RC LP</td></tr>
 </table>
-<p class="sub">Body width: 29 × 13 mm + 40 mm margins ≈ 417 mm (original 300 mm); display band 55 mm, verify active area against panel datasheet before cutting. Sounding range with octave switch: C1–C7, 6 octaves.</p>
+<p class="sub">Body width: 29 × 16 mm + 40 mm margins ≈ 504 mm (original 300 mm; 13 mm pitch dropped for the 15.6 mm MX2A housing, 14×14 mm plate cutouts); display band 55 mm, verify active area against panel datasheet before cutting. Sounding range with octave switch: C1–C7, 6 octaves.</p>
 </main></body></html>'''
 import os
 open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'README.html'),'w').write(html)

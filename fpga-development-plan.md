@@ -38,7 +38,7 @@ no generic pots. Nothing may stick or misbehave in front of the grandkids.
 | Key switches | 70 (59 used + spares) | **Cherry MX2A Silent Red** — decided 2026-08-31 (100M actuations, factory lube, quiet, authorized channel; Kailh BOX considered and passed over) | Mouser/DigiKey | ~$70 |
 | Matrix diodes | 70 | 1N4148, onsemi or Vishay (name brand only) | Mouser | ~$5 |
 | Slide pots S0–S4 | 7 (5 used + 2 spares) | Bourns PTA4543-2015CPB103, 45 mm travel, 10 k linear; Bourns knobs | Mouser/DigiKey | ~$25 |
-| Panel + key caps + slider knobs | — | 3D-printed, **PETG or ASA (not PLA** — creeps under finger heat/pressure; a warped key well is a sticking key**)** | own printer | filament |
+| Panel + key caps + slider knobs | — | 3D-printed, **PETG or ASA (not PLA** — creeps under finger heat/pressure; a warped key well is a sticking key**)**. Key pitch **16 mm** (MX housing limit; decided 2026-08-31 over 13 mm mini pitch), body ≈ 504 mm, 14×14 mm plate cutouts | own printer | filament |
 | Solder, wire, misc | — | switches soldered, **no hot-swap sockets** (a socket is one more contact to fail mid-demo); spares live in the lid pocket | on hand | ~$5 |
 
 Firmware-side reliability, free: generous 10 ms debounce (as in Santa Glide), scan
