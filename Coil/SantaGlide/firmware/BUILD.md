@@ -102,3 +102,11 @@ cabal exec -- clash --verilog \
   -fclash-hdldir <repo>/Coil/SantaGlide/firmware/verilog \
   <repo>/Coil/SantaGlide/firmware/SantaGlide.hs
 ```
+
+## Post-retiming simulation check (2026-08-31)
+
+The 100→50 MHz retiming (`msTicks` 50000, `dwellTicks` lookup) was verified in
+clashi at the FSM level: ParkA holds while `rest>0`; GlideFwd advances the coil
+exactly at `t = dwellTicks i`; coil 7 → ParkB reloads `rest = 125,000,000`
+(= 2.5 s at 50 MHz, confirming the tick base); `showOn=False` freezes `t`/`coil`
+and sets `paused`. Ready for first power-up per HANDOFF §7 step 3.
