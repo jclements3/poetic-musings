@@ -206,6 +206,17 @@ _send = _svg_path_end('66bb6a')
 t_lap = (_send[0] / IN) if _send else (xr_m - 1.5)
 
 y_sh = m*(xr_m - 1.5) + cxi                 # start of the shoulder lap along the channel top
+# the channel is SAW-CUT at the outer shoulder junction (JC: the wall bottom
+# ends where the outer neck curve ends); find that t once, use it everywhere
+_tend0 = _svg_path_end('2e7d32')
+t_cut = xr_m
+if _tend0:
+    _lo, _hi = t_at_y(y_floor, -2*MHW), xr_m
+    for _ in range(60):
+        _mid = (_lo + _hi) / 2
+        if mp(_mid, -taper_depth(_mid))[0] < _tend0[0]: _lo = _mid
+        else: _hi = _mid
+    t_cut = (_lo + _hi) / 2
 for off in (0, -2*MHW):
     t0 = t_at_y(y_floor, off)
     if off == 0:
@@ -213,25 +224,16 @@ for off in (0, -2*MHW):
         # and that hidden run is a weld: channel top to both plates
         (xa, ya), (xb, yb) = mp(t0, 0), mp(t_lap, 0)
         band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#1565c0" stroke-width="2"/>')
-        (xc, yc), (xd, yd) = mp(t_lap, 0), mp(xr_m, 0)
+        (xc, yc), (xd, yd) = mp(t_lap, 0), mp(t_cut, 0)
         band.append(f'<line x1="{xc:.1f}" y1="{yc:.1f}" x2="{xd:.1f}" y2="{yd:.1f}" stroke="#1565c0" stroke-width="2" stroke-dasharray="7 5"><title>channel top hidden behind the neck plates — welded to BOTH plates along this lap (ER-005)</title></line>')
     else:
         # tapered lower edge: polyline mp(t, -taper_depth(t)), ENDING exactly at
         # the outer-shoulder junction (the hand-edited tuner rail's endpoint):
         # green, red and blue share that point; the wall does not run past it
-        _tend = _svg_path_end('2e7d32')
-        t_tun = xr_m
-        if _tend:
-            lo, hi = t0, xr_m
-            for _ in range(60):
-                mid = (lo + hi) / 2
-                if mp(mid, -taper_depth(mid))[0] < _tend[0]: lo = mid
-                else: hi = mid
-            t_tun = (lo + hi) / 2
-        ts = [t0 + k*(t_tun - t0)/40 for k in range(41)]
+        ts = [t0 + k*(t_cut - t0)/40 for k in range(41)]
         pts = [mp(t, -taper_depth(t)) for t in ts]
-        if _tend:
-            pts[-1] = (_tend[0], _tend[1])   # land on the junction, not near it
+        if _tend0:
+            pts[-1] = (_tend0[0], _tend0[1])   # land on the junction, not near it
         d = 'M ' + ' L '.join(f'{x:.1f} {y:.1f}' for x, y in pts)
         band.append(f'<path d="{d}" fill="none" stroke="#1565c0" stroke-width="2"><title>side-wall lower edge — tapered 4 in -> 2.25 in toward the shoulder (two saw cuts; moment falls toward the supports)</title></path>')
 # horizontal shoulder weld: plate bottom tab to midrib side wall, both plates.
@@ -255,7 +257,7 @@ band.append(f'<text x="{wx2+10:.0f}" y="{wy2+14:.0f}" class="nl" fill="#c9553a">
 band.append(f'<text x="{cx2+10:.0f}" y="{cy2+2:.0f}" class="nl" fill="#1565c0">shoulder lap: ER-005</text>')
 (fx1, fy1), (fx2, fy2) = mp(t_at_y(y_floor, 0), 0), mp(t_at_y(y_floor, -2*MHW), -2*MHW)
 band.append(f'<line x1="{fx1:.1f}" y1="{fy1:.1f}" x2="{fx2:.1f}" y2="{fy2:.1f}" stroke="#1565c0" stroke-width="2"><title>horizontal end cut — the midrib stands on the floor as the rear foot</title></line>')
-(xa, ya), (xb, yb) = mp(t_at_y(y_floor, -MHW), -MHW), mp(xr_m, -MHW)
+(xa, ya), (xb, yb) = mp(t_at_y(y_floor, -MHW), -MHW), mp(t_cut + 0.3, -MHW)
 band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#1565c0" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib tube centerline (top face carries the string anchors)</title></line>')
 lx, ly = mp(pilc+4.5, -2*MHW)
 band.append(f'<text x="{lx:.0f}" y="{ly+30:.0f}" class="nl" fill="#1565c0">midrib — C 2.5"×4"×3/16" open-bottom, 6061-T6 (ER-003)</text>')
@@ -457,7 +459,7 @@ weld callouts until annotation is migrated.</p>
 <table>
 <tr><th>Member</th><th>Section (6061-T6)</th><th>Check @ welded-HAZ allowable</th></tr>
 <tr><td class="k">Midrib</td><td>Rect tube 4" × 2" × 3/16" — strings through grommeted holes in the top face; knots concealed inside the sides; access holes in the bottom face; closed section, no torsion issue</td><td>0.88 kN·m mid-span → ~25 MPa, SF ~5.5</td></tr>
-<tr><td class="k">Pillar</td><td>Square tube 2" × 2" × 1/8", top rebated 8 mm/side for the plates</td><td>Euler ~39 kN vs few kN, ~8× margin</td></tr>
+<tr><td class="k">Pillar</td><td>Round tube Ø2" × 3/16" wall (6061-T6), crown to floor through the midrib web</td><td>Euler ~39 kN vs few kN, ~8× margin</td></tr>
 <tr><td class="k">Neck</td><td>2 plates per <code>Erand49.svg</code>, bolted flush onto the ±Y faces of pillar and midrib (both 50.8 mm wide → plate gap 50.8); no blocks; through-bolts with crush sleeves</td><td>pin-edge ≥ 16.2 mm, sensor-edge ≥ 7.1 mm verified</td></tr>
 </table>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 2130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 frame ISO 128 sections">

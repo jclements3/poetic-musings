@@ -3,13 +3,13 @@
 <style>.nl{font-size:13px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}</style>
 <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3b5a7a"/></marker></defs>
 <line x1="88.9" y1="1848.0" x2="990.0" y2="405.9" stroke="#1565c0" stroke-width="2"/>
-<line x1="990.0" y1="405.9" x2="1020.7" y2="356.7" stroke="#1565c0" stroke-width="2" stroke-dasharray="7 5"><title>channel top hidden behind the neck plates — welded to BOTH plates along this lap (ER-005)</title></line>
+<line x1="990.0" y1="405.9" x2="1005.5" y2="381.1" stroke="#1565c0" stroke-width="2" stroke-dasharray="7 5"><title>channel top hidden behind the neck plates — welded to BOTH plates along this lap (ER-005)</title></line>
 <path d="M 208.7 1848.0 L 230.7 1812.7 L 252.8 1777.3 L 274.9 1742.0 L 297.0 1706.7 L 319.0 1671.4 L 341.1 1636.0 L 363.2 1600.7 L 385.3 1565.4 L 407.3 1530.1 L 429.4 1494.7 L 451.5 1459.4 L 473.5 1424.0 L 495.2 1388.5 L 516.7 1352.8 L 538.0 1317.0 L 559.1 1281.1 L 580.1 1245.0 L 600.9 1208.9 L 621.5 1172.7 L 642.0 1136.4 L 662.4 1100.0 L 682.8 1063.6 L 703.0 1027.2 L 723.3 990.7 L 743.4 954.2 L 763.6 917.6 L 783.8 881.1 L 803.9 844.6 L 824.2 808.1 L 844.4 771.7 L 864.8 735.3 L 885.2 698.9 L 905.8 662.6 L 926.4 626.4 L 947.2 590.3 L 968.2 554.3 L 989.3 518.4 L 1010.7 482.6 L 1032.2 446.9 L 1054.0 411.4" fill="none" stroke="#1565c0" stroke-width="2"><title>side-wall lower edge — tapered 4 in -> 2.25 in toward the shoulder (two saw cuts; moment falls toward the supports)</title></path>
 <line x1="990.0" y1="405.9" x2="1054.0" y2="411.4" stroke="#c9553a" stroke-width="2.5"><title>shoulder weld — plate bottom edge to midrib side wall between the two neck/member junctions, both plates (ER-005); position mirrors id=shoulder-weld in Erand49.svg</title></line>
 <text x="1064" y="425" class="nl" fill="#c9553a">shoulder weld</text>
 <text x="1102" y="437" class="nl" fill="#1565c0">shoulder lap: ER-005</text>
 <line x1="88.9" y1="1848.0" x2="208.7" y2="1848.0" stroke="#1565c0" stroke-width="2"><title>horizontal end cut — the midrib stands on the floor as the rear foot</title></line>
-<line x1="148.8" y1="1848.0" x2="1063.8" y2="383.6" stroke="#1565c0" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib tube centerline (top face carries the string anchors)</title></line>
+<line x1="148.8" y1="1848.0" x2="1056.2" y2="395.8" stroke="#1565c0" stroke-width="0.8" stroke-dasharray="12 3 3 3"><title>midrib tube centerline (top face carries the string anchors)</title></line>
 <text x="366" y="1627" class="nl" fill="#1565c0">midrib — C 2.5"×4"×3/16" open-bottom, 6061-T6 (ER-003)</text>
 <line x1="139.6" y1="20.3" x2="139.6" y2="1766.7" stroke="#d32f2f" stroke-width="2"/>
 <line x1="139.6" y1="1766.7" x2="139.6" y2="1868.3" stroke="#d32f2f" stroke-width="2" stroke-dasharray="7 5"/>

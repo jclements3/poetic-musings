@@ -58,8 +58,20 @@ midrib = midrib_bp.part
 # floor cut: keep z >= 0
 big = 10000
 midrib = midrib & Box(big, big, big, align=(Align.CENTER, Align.CENTER, Align.MIN))
-# shoulder end cut: plane perpendicular to the axis at xr_m (through the anchor line point)
-Pend = (xr_m * IN, (m_slope * xr_m + cxi - y_floor) * IN)
+# shoulder end cut: plane perpendicular to the axis THROUGH THE OUTER SHOULDER
+# JUNCTION (JC: the wall bottom ends where the outer neck curve ends) — the
+# same t_cut the drawing uses; nothing of the channel pokes past the plates
+_tend0 = ns['_svg_path_end']('2e7d32')
+t_cut = xr_m
+if _tend0:
+    _mpg, _tdg = ns['mp'], ns['taper_depth']
+    _lo, _hi = ns['t_at_y'](y_floor, -2 * ns['MHW']), xr_m
+    for _ in range(60):
+        _mid = (_lo + _hi) / 2
+        if _mpg(_mid, -_tdg(_mid))[0] < _tend0[0]: _lo = _mid
+        else: _hi = _mid
+    t_cut = (_lo + _hi) / 2
+Pend = (t_cut * IN, (m_slope * t_cut + cxi - y_floor) * IN)
 end_cut = Plane(origin=(Pend[0], 0, Pend[1]), z_dir=(u[0], 0, u[1]))
 midrib = split(midrib, bisect_by=end_cut, keep=Keep.BOTTOM)
 
@@ -152,11 +164,10 @@ sense_c = cubics(path_d('66bb6a'))
 t_end = tuner_c[-1][3]                     # on the band bottom edge
 s_end = sense_c[-1][3]                     # on the channel top (shoulder corner)
 t_start, s_start = tuner_c[0][0], sense_c[0][0]
-# shoulder closing per the agreed joint: bottom edge -> weld corner -> weld line -> corner
-edge_pt = lambda x: (x, 410.5669 + 1.600300*(1106.8856 - x))   # REAL band bottom edge (from mp)
-weld_y = 429.7
-x_weld_end = 1094.9296
-close_pts = [t_end, edge_pt(x_weld_end), (990.0, weld_y), s_end]
+# shoulder closing per the CURRENT joint: both rails end ON the shoulder-weld
+# line, so the plate closes with that single straight edge (t_end -> s_end);
+# the old pre-taper tab via (1094.9, 429.7) is gone
+close_pts = [t_end, s_end]
 
 with BuildPart() as plate_bp:
     with BuildSketch(Plane.XZ):
@@ -171,6 +182,11 @@ with BuildPart() as plate_bp:
         make_face()
     extrude(amount=PLATE_T)
 plate = plate_bp.part
+
+# plumb saw cut at the shoulder junction: nothing of the channel extends past
+# the plate edge in front view (JC's 'this is wrong' artifact)
+_xj = sv(*t_end)[0]
+midrib = split(midrib, bisect_by=Plane(origin=(_xj, 0, 0), z_dir=(1, 0, 0)), keep=Keep.BOTTOM)
 plates = Pos(0, GAP/2 + PLATE_T, 0) * plate + Pos(0, -GAP/2, 0) * plate
 
 # ---- 49 optical sensor stations: 60-deg beam pairs with PER-STATION YAW ----
