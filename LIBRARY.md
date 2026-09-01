@@ -78,3 +78,6 @@ first, Clash port as Lessons 12–14):
 | 8x8 key matrix scanner + event FIFO (0x4024) | `Oracle/pm-lib` (PM.Matrix) | debounce, keycode fold, FIFO order/flags, glitch rejection — 6 assertion groups |
 | Slider zone decoder + S3 mode dwell (0x4020) | `Oracle/pm-lib` (PM.Zones) | hysteresis no-flicker, sweeps, 1 s dwell single-fire, register packing |
 | CDC: 2-flop sync, pulse sync, Gray async FIFO | `Oracle/pm-lib` (PM.Cdc) | level/pulse crossing + lossless 60-element streams both directions across a 3.6x non-integer clock ratio |
+| Harp event link: 8N1 UART + A5/cksum framing (0x4036) | `Oracle/pm-lib` (PM.HarpLink) | 3-frame byte-exact loop; full-bit corruption drops exactly the hit frame, resyncs (stop-bit check + inter-frame gap) |
+| 1920x480 text console (0x4026) | `Oracle/pm-video` | pixel-exact IBM-VGA glyph render, timing/polarity asserted both senses; ~200 LUT4, 5 BRAM |
+| SD block model + IRIG peripheral in the eForth sim | `Oracle/clash-h2` (SystemUart) | personal-card boot: owner greet from block 0, real `1 load` from block 1, live IRIG clock + TOD set — all from interactive Forth |
