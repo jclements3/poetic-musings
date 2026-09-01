@@ -75,3 +75,6 @@ first, Clash port as Lessons 12–14):
 | Sigma-delta DAC, sine NCO, 4-ch saturating mixer | `Oracle/pm-audio` (PM.Audio) | DAC density 1% across codes; NCO freq + full-scale; mixer unity/-12dB/sat/mute |
 | VL-1 voice: note table, 10-pattern pulse osc, ADSSR | `Oracle/pm-synth` (PM.Synth) | A4 within 0.01 cent; exact octaves; square duty; full ADSSR envelope trace incl. release |
 | SPI mode-0 master (SD, ADC) | `Oracle/pm-spi` (PM.Spi) | full-duplex byte exchange vs behavioral slave at two dividers; 8 edges/transfer |
+| 8x8 key matrix scanner + event FIFO (0x4024) | `Oracle/pm-lib` (PM.Matrix) | debounce, keycode fold, FIFO order/flags, glitch rejection — 6 assertion groups |
+| Slider zone decoder + S3 mode dwell (0x4020) | `Oracle/pm-lib` (PM.Zones) | hysteresis no-flicker, sweeps, 1 s dwell single-fire, register packing |
+| CDC: 2-flop sync, pulse sync, Gray async FIFO | `Oracle/pm-lib` (PM.Cdc) | level/pulse crossing + lossless 60-element streams both directions across a 3.6x non-integer clock ratio |
