@@ -38,6 +38,7 @@ common common-options
 library
   import: common-options
   hs-source-dirs: src
+  build-depends: irig
   exposed-modules:
     H2
     H2.System
@@ -72,5 +73,7 @@ test-suite h2-boot
   type: exitcode-stdio-1.0
   hs-source-dirs: test
   main-is: BootSpec.hs
-  ghc-options: -O2 -rtsopts
-  build-depends: base, clash-prelude, clash-h2, time
+  -- The large allocation area matters: the ~17M-cycle sample run is GC
+  -- dominated at the default -A size (~6 min wall vs ~4 min with -A128m).
+  ghc-options: -O2 -rtsopts "-with-rtsopts=-A128m"
+  build-depends: base, clash-prelude, clash-h2, time, bytestring, process

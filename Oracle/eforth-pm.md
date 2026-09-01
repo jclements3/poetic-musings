@@ -1,9 +1,22 @@
 # eForth-PM — the capability layer that makes the Oracle the brains of the PM device
 
-Design spec — first register live: the 0x4020 zone register (iPanel S3/S4 zones) is
-demonstrated in Clash simulation as of 2026-08-31 (`clash-h2/src/H2/SystemUart.hs` models
-it, `cabal test h2-boot` defines `: mode? $4020 @ ;` at the live eForth console and reads
-the scripted zones back). This defines what the H2/eForth console
+Design spec — first registers live in Clash simulation (`clash-h2/src/H2/SystemUart.hs`
+models them; `cabal test h2-boot` proves each from live Forth typed at the booted eForth
+console):
+
+- **0x4020 zone register** (iPanel S3/S4 zones), 2026-08-31: `: mode? $4020 @ ;` reads
+  the scripted zones back.
+- **0x4028/0x402A SD/SPI block interface**, 2026-08-31: the SD command layer is defined
+  *in Forth* over the shifter register (CMD17 per 512-byte sector, two per 1024-byte
+  block) against a behavioural SPI-mode card backed by an image from
+  `clash-h2/tools/mkcard.py` — block 0 identity is read and greets the owner
+  (`owner: JC`), and a real `1 load` evaluates block 1's boot source (`PM card ok`).
+- **0x4034 IRIG status + 0x4040 TOD-set block**, 2026-08-31: the sim-verified
+  `IRIG/clash` core is instantiated at its `SNat 1` sim scale (1 s = 10 000 cycles);
+  live Forth reads the status word twice and sees it advance, then sets the time of day
+  through oTodSecs/oTodDay/oTodSet and reads the applied BCD seconds back.
+
+This defines what the H2/eForth console
 must be able to *do* so that every PM mode (S3: P·O·E·T·I·C) is driven from Forth, per
 `../LAYOUT.html` (panel, storage, modes) and `../PLAN.md` Phase 3. The CPU is the H2
 port in `clash-h2/` (howerj forth-cpu derivative); existing eForth images stay valid,
