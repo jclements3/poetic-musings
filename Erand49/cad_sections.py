@@ -44,4 +44,13 @@ x_lap = (xr_m - 0.75) * IN
 slab3 = Pos(x_lap, 0, 900) * Box(T, 300, 1800)
 sec3 = asm & slab3
 export_edges(sec3, 'cad-sec-neckstack.svg', (x_lap + 3000, 0, 900))
+
+# Crown plan (JC): horizontal slice just below the pillar top — the pillar
+# tube between the two neck plates, showing the 6.35 mm side gaps that the
+# crown joint (saddle/spacer, TBD) must close
+y_crown = ns['y_crown']
+z_cr = (y_crown - y_floor) * IN - 30
+slab4 = Pos(pilc*IN, 0, z_cr) * Box(320, 200, T)
+sec4 = asm & slab4
+export_edges(sec4, 'cad-sec-crown.svg', (pilc*IN, 0, z_cr + 3000))
 print('done')
