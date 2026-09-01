@@ -1,0 +1,122 @@
+{
+    "components": [
+        "pm_matrix"
+    ],
+    "dependencies": {
+        "transitive": []
+    },
+    "domains": {
+        "IntelSystem": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 10000,
+            "reset_kind": "Asynchronous",
+            "reset_polarity": "ActiveHigh"
+        },
+        "System": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 10000,
+            "reset_kind": "Asynchronous",
+            "reset_polarity": "ActiveHigh"
+        },
+        "Ulx25": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 40000,
+            "reset_kind": "Asynchronous",
+            "reset_polarity": "ActiveHigh"
+        },
+        "XilinxSystem": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 10000,
+            "reset_kind": "Synchronous",
+            "reset_polarity": "ActiveHigh"
+        }
+    },
+    "files": [
+        {
+            "name": "pm_matrix_shim.cpp",
+            "sha256": "aa2897604942754d49dc7eb0f26c75e008ef3f0a94e95275ea39b306ab224be0"
+        },
+        {
+            "name": "pm_matrix.sdc",
+            "sha256": "40781da2747f3cf79058ce5a4d82f342b2c2f75724408518a280342d77f88e61"
+        },
+        {
+            "name": "pm_matrix.v",
+            "sha256": "cf70726301643d8f474486eb16eda8964871a3800082908d7a3060db9c7d5b71"
+        }
+    ],
+    "flags": [
+        20,
+        20
+    ],
+    "hash": "8fae09a4c05319fa17173d8daf597f01f7b9059c5b52682bbe58e299259d2a47",
+    "top_component": {
+        "name": "pm_matrix",
+        "ports_flat": [
+            {
+                "direction": "in",
+                "domain": "Ulx25",
+                "is_clock": true,
+                "name": "clk",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "domain": "Ulx25",
+                "is_clock": false,
+                "name": "rst",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "domain": "Ulx25",
+                "is_clock": false,
+                "name": "en",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "is_clock": false,
+                "name": "matrix_ctrl",
+                "type_name": "[15:0]",
+                "width": 16
+            },
+            {
+                "direction": "in",
+                "is_clock": false,
+                "name": "ikeys_re",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "is_clock": false,
+                "name": "col_n",
+                "type_name": "[7:0]",
+                "width": 8
+            },
+            {
+                "direction": "out",
+                "is_clock": false,
+                "name": "row_n",
+                "type_name": "[7:0]",
+                "width": 8
+            },
+            {
+                "direction": "out",
+                "is_clock": false,
+                "name": "ikeys",
+                "type_name": "[15:0]",
+                "width": 16
+            }
+        ]
+    },
+    "version": "unstable"
+}

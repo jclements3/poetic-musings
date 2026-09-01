@@ -44,6 +44,9 @@ PM peripherals extend from `0x4020`. **All PM addresses are provisional** until
 | 0x4034 | oIrig — display/capture control | iIrig — BCD time fields, lock/holdover status (from the Phase 2 clock, later G-disciplined) | **Time.** |
 | 0x4036 | oHarp — event-link control | iHarp — pluck event FIFO (string 0–48, velocity) from the Erand49 3 Mbaud link | **Harp events** (Phase 6; address reserved now). |
 
+Status (2026-08-31): 0x4020 zone-decode gateware (S2/S3/S4 hysteresis, 1 s S3 dwell, iPanel packing) exists in `pm-lib` (`Oracle/pm-lib/src/PM/Zones.hs`), sim-verified by `cabal test zones-test`.
+Status (2026-08-31): 0x4024 matrix-scanner gateware (8×8 scan, 10 ms debounce, event FIFO, iKeys/oMatrixCtrl) exists in `pm-lib` (`Oracle/pm-lib/src/PM/Matrix.hs`), sim-verified by `cabal test matrix-test`.
+
 Interrupts (via the stock `oIrcMask` controller): matrix key event, SD transfer done,
 keyer decoder char, harp event, 1 ms timer. Everything else is polled.
 

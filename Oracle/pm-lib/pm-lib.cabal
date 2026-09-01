@@ -1,0 +1,57 @@
+cabal-version: 2.4
+name:          pm-lib
+version:       0.1.0.0
+synopsis:      PM gateware library — panel peripherals behind the eForth-PM register map
+build-type:    Simple
+
+common opts
+  default-language:   GHC2021
+  default-extensions: DataKinds
+                      DeriveAnyClass
+                      DerivingStrategies
+                      NoImplicitPrelude
+                      NoStarIsType
+                      RecordWildCards
+                      TemplateHaskell
+                      TypeFamilies
+  ghc-options: -Wall
+               -fplugin GHC.TypeLits.Extra.Solver
+               -fplugin GHC.TypeLits.Normalise
+               -fplugin GHC.TypeLits.KnownNat.Solver
+  build-depends: base
+               , clash-prelude ^>=1.8.5
+               , ghc-typelits-natnormalise
+               , ghc-typelits-extra
+               , ghc-typelits-knownnat
+
+library
+  import:          opts
+  hs-source-dirs:  src
+  exposed-modules: PM.Ulx25
+                   PM.Matrix
+                   PM.Zones
+
+-- `cabal run clash -- -isrc PM.Matrix --verilog` needs a clash binary built
+-- against THIS package's environment; same trick as Oracle/clash-h2 and
+-- IRIG/clash.
+executable clash
+  import:         opts
+  main-is:        Clash.hs
+  hs-source-dirs: bin
+  build-depends:  clash-ghc ^>=1.8.5, pm-lib
+
+test-suite matrix-test
+  import:         opts
+  type:           exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is:        MatrixSpec.hs
+  ghc-options:    -O2
+  build-depends:  pm-lib
+
+test-suite zones-test
+  import:         opts
+  type:           exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is:        ZonesSpec.hs
+  ghc-options:    -O2
+  build-depends:  pm-lib

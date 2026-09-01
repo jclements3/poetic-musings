@@ -1,0 +1,129 @@
+{
+    "components": [
+        "pm_zones"
+    ],
+    "dependencies": {
+        "transitive": []
+    },
+    "domains": {
+        "IntelSystem": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 10000,
+            "reset_kind": "Asynchronous",
+            "reset_polarity": "ActiveHigh"
+        },
+        "System": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 10000,
+            "reset_kind": "Asynchronous",
+            "reset_polarity": "ActiveHigh"
+        },
+        "Ulx25": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 40000,
+            "reset_kind": "Asynchronous",
+            "reset_polarity": "ActiveHigh"
+        },
+        "XilinxSystem": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 10000,
+            "reset_kind": "Synchronous",
+            "reset_polarity": "ActiveHigh"
+        }
+    },
+    "files": [
+        {
+            "name": "pm_zones_shim.cpp",
+            "sha256": "a6398c428472543dbf054dd754276a770b725b5dacec07e299374bb49e50a37a"
+        },
+        {
+            "name": "pm_zones.sdc",
+            "sha256": "40781da2747f3cf79058ce5a4d82f342b2c2f75724408518a280342d77f88e61"
+        },
+        {
+            "name": "pm_zones.v",
+            "sha256": "62c8bc4de514dfb9efeefc8e899cd555933e682cbf26bb1d42e1d38568a95acb"
+        }
+    ],
+    "flags": [
+        20,
+        20
+    ],
+    "hash": "00b428137840d2ef725c6c1809af01c1aebca199c03644dd4b7b8a5b93dc3f4b",
+    "top_component": {
+        "name": "pm_zones",
+        "ports_flat": [
+            {
+                "direction": "in",
+                "domain": "Ulx25",
+                "is_clock": true,
+                "name": "clk",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "domain": "Ulx25",
+                "is_clock": false,
+                "name": "rst",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "domain": "Ulx25",
+                "is_clock": false,
+                "name": "en",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "is_clock": false,
+                "name": "s2_adc",
+                "type_name": "[11:0]",
+                "width": 12
+            },
+            {
+                "direction": "in",
+                "is_clock": false,
+                "name": "s3_adc",
+                "type_name": "[11:0]",
+                "width": 12
+            },
+            {
+                "direction": "in",
+                "is_clock": false,
+                "name": "s4_adc",
+                "type_name": "[11:0]",
+                "width": 12
+            },
+            {
+                "direction": "out",
+                "is_clock": false,
+                "name": "ipanel",
+                "type_name": "[15:0]",
+                "width": 16
+            },
+            {
+                "direction": "out",
+                "is_clock": false,
+                "name": "mode",
+                "type_name": "[2:0]",
+                "width": 3
+            },
+            {
+                "direction": "out",
+                "is_clock": false,
+                "name": "mode_change",
+                "type_name": "",
+                "width": 1
+            }
+        ]
+    },
+    "version": "unstable"
+}
