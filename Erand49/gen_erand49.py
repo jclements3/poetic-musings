@@ -339,6 +339,7 @@ for a, b, c, w in keys:
 for n, note, fg, Lg, odg, tg, gx, glo in gpts:
     tuner_pts.append((X(gx+KEY_DX), Y(glo+Lg+KEY_DY)))
 sense_pts = [(X(sx), Y(sy)) for sx, sy in sense]
+tuners_px = list(tuner_pts)   # exported for the CAD views (tuner pin dots)
 # use the HAND-EDITED neck curves from Erand49.svg (same coordinate space);
 # fall back to the auto-fit only if the edited paths are not found
 import re

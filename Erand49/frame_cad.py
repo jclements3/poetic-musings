@@ -557,13 +557,24 @@ OFFD = 80
 front.linear(f2s(*va), f2s(*vb),
              f2s(va[0] + u[0]*OFFD, va[1] + u[1]*OFFD),
              f2s(vb[0] + u[0]*OFFD, vb[1] + u[1]*OFFD), f"{D_meas:.1f}")
-# flats reference (JC: 'just show only the flats dots'): one amber dot per
-# string at its flat-pin point — nothing else; bores stay drilled in the solid
-# but their tiny ellipses are filtered from the projection above
-for fx0, fz0 in [sv(px, py) for (px, py) in ns['flats_px']]:
-    fx, fz = f2s(fx0, fz0)
-    front._track(fx, fz)
-    front.el.append(f'<circle cx="{fx:.1f}" cy="{fz:.1f}" r="2.4" fill="#a8700f"/>')
+# neck hardware reference (JC): three dot families on the front view —
+# tuner pins (dark green), flat pins (amber), optical axes (blue); the same
+# points figure 1 draws, mirrored from gen. Bore ellipses stay filtered.
+for pts, col, r in ((ns['tuners_px'], '#2e7d32', 2.4),
+                    (ns['flats_px'],  '#a8700f', 2.4),
+                    (ns['sense_px'],  '#3b6fb5', 2.4)):
+    for px0, pz0 in [sv(px, py) for (px, py) in pts]:
+        fx, fz = f2s(px0, pz0)
+        front._track(fx, fz)
+        front.el.append(f'<circle cx="{fx:.1f}" cy="{fz:.1f}" r="{r}" fill="{col}"/>')
+front.el.append(
+    '<g font-size="13" font-family="ui-monospace,Consolas,monospace">'
+    f'<circle cx="{f2s(60, 1800)[0]:.0f}" cy="{f2s(60, 1800)[1]:.0f}" r="3.5" fill="#2e7d32"/>'
+    f'<text x="{f2s(72, 1806)[0]:.0f}" y="{f2s(72, 1806)[1]:.0f}" fill="#2e7d32">tuner pins</text>'
+    f'<circle cx="{f2s(60, 1760)[0]:.0f}" cy="{f2s(60, 1760)[1]:.0f}" r="3.5" fill="#a8700f"/>'
+    f'<text x="{f2s(72, 1766)[0]:.0f}" y="{f2s(72, 1766)[1]:.0f}" fill="#a8700f">flat pins</text>'
+    f'<circle cx="{f2s(60, 1720)[0]:.0f}" cy="{f2s(60, 1720)[1]:.0f}" r="3.5" fill="#3b6fb5"/>'
+    f'<text x="{f2s(72, 1726)[0]:.0f}" y="{f2s(72, 1726)[1]:.0f}" fill="#3b6fb5">optical axes</text></g>')
 add_dim_layer('cad-front.svg', front)
 
 # side view maps model (Y, Z): the leg stance width lives here — it is a Y
