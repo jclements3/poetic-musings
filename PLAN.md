@@ -73,7 +73,10 @@ elaborates in yosys). Remaining for the gate: scope/decoder verification on the 
 5. Clash port of H2 (`Oracle/clash-h2/`) replaces the VHDL as Lessons 12–14.
 
 **Demo:** a self-contained Forth computer — type on it, compute, load a game from SD,
-key CW and watch it decode.
+key CW and watch it decode. *(Desktop 2026-08-31: the whole ladder is pre-proven in
+simulation — eForth boots, personal card greets and `1 load`s, IRIG clock live and
+settable, keyer/decoder round-trips CW, text console renders pixel-exact — the bench
+work is wiring real pins to already-tested gateware.)*
 **Teaches:** soft CPUs, Forth, memory-mapped I/O, video timing.
 
 ## Phase 4 — T · Theremin 🎵
