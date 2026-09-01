@@ -48,8 +48,12 @@ export_edges(sec3, 'cad-sec-neckstack.svg', (x_lap + 3000, 0, 900))
 # Crown plan (JC): horizontal slice just below the pillar top — the pillar
 # tube between the two neck plates, showing the 6.35 mm side gaps that the
 # crown joint (saddle/spacer, TBD) must close
-y_crown = ns['y_crown']
-z_cr = (y_crown - y_floor) * IN - 30
+import re as _re
+_svg = open(os.path.join(HERE, 'Erand49.svg')).read()
+_p = [x for x in _re.findall(r'<path[^>]*>', _svg, _re.S) if '2e7d32' in x][0]
+_m = _re.search(r'\bd="[Mm]\s*([\d.eE+-]+)[, ]([\d.eE+-]+)', _p)
+_y_start = float(_m.group(2))                      # plate top corner, svg mm
+z_cr = ns['y1'] - _y_start - y_floor * IN - 25     # mid-collar / bolt zone
 slab4 = Pos(pilc*IN, 0, z_cr) * Box(320, 200, T)
 sec4 = asm & slab4
 export_edges(sec4, 'cad-sec-crown.svg', (pilc*IN, 0, z_cr + 3000))

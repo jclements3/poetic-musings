@@ -266,6 +266,29 @@ print("wrote sensor-stations.csv (PCB placement table)")
 plates = plates.cut(*beams)
 print("sensor beam bores drilled")
 
+# ---- ER-007 crown collar: a 60 mm length of the SAME midrib channel slid
+# over the pillar top, open side facing the strings. Outside faces 63.5 mm =
+# the plate gap (flat bearing on both plates); walls stand 54.0 mm apart
+# around the O50.8 tube (1.6 mm/side, fillet-welded); two M8 bolts through
+# plate-wall-wall-plate, clear of the tube (JC: 'two bolts with spacers /
+# c-channel leftover' -> the channel IS the spacer).
+COL_H, COL_DEPTH = 60.0, 90.0
+x_pc = pilc * IN
+x_w0 = x_pc - PIL_OD/2 - 4.76               # web outer face, web inner tangent to tube
+p_top = sv(*tuner_c[0][0])                  # plate front/top corner at the crown
+z_ct = p_top[1] - 5.0                       # collar top just under the plate edge
+col_out = Pos(x_w0 + COL_DEPTH/2, 0, z_ct - COL_H/2) * Box(COL_DEPTH, WEB_W, COL_H)
+col_in  = Pos(x_w0 + 4.76 + COL_DEPTH/2, 0, z_ct - COL_H/2) * Box(COL_DEPTH, WEB_W - 2*4.76, COL_H)
+collar = col_out - col_in
+x_bolt = x_pc + PIL_OD/2 + 21.0             # behind the tube, inside the plate edge
+for z_b in (z_ct - 15.0, z_ct - 45.0):
+    hole = Pos(x_bolt, 0, z_b) * Rot(90, 0, 0) * Cylinder(8.4/2, 2*WEB_W + 40)
+    collar = collar - hole
+    plates = plates - hole
+print(f"ER-007 crown collar: top z={z_ct:.0f}, web face x={x_w0:.1f}, bolts x={x_bolt:.0f} "
+      f"z={z_ct-15:.0f}/{z_ct-45:.0f} (M8, clear of the tube)")
+
+
 # note: Plane.XZ extrudes toward -Y in build123d; positions may need sign fixes on first run
 
 # ---- ER-006 hinged outrigger legs, modeled DEPLOYED (the standing configuration) ----
@@ -321,7 +344,7 @@ midrib = midrib - Pos(x_h, 0, z_h) * Rot(90, 0, 0) * Cylinder(BOLT_THREAD_CLR / 
 print(f"ER-006 legs: hinge at x={x_h:.1f} z={z_h:.1f} mm, wall holes O{BOLT_THREAD_CLR} "
       f"(M8 shoulder bolt, O10 shoulder in O{BOLT_SHOULDER_D} leg bore), deployed {LEG_ANG:.0f} deg")
 
-assembly = Compound([midrib, pillar, plates, legs, pads])
+assembly = Compound([midrib, pillar, plates, legs, pads, collar])
 
 export_step(assembly, os.path.join(HERE, 'frame.step'))
 print('frame.step written')
@@ -330,6 +353,7 @@ print('frame.step written')
 DENS_AL = 2700e-9    # kg/mm^3, 6061 — frame, plates, legs
 DENS_RUB = 1200e-9   # kg/mm^3, rubber pads
 mass_items = [('midrib', midrib, DENS_AL), ('pillar', pillar, DENS_AL),
+              ('collar', collar, DENS_AL),
               ('plates', plates, DENS_AL), ('legs', legs, DENS_AL), ('pads', pads, DENS_RUB)]
 M = Vector(0, 0, 0)
 m_tot = 0.0
