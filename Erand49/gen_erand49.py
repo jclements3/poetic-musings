@@ -380,6 +380,8 @@ open(os.path.join(HERE, 'Erand49-generated.svg'), 'w').write(svg_doc)
 
 # ---- standalone harp page: Erand49/LAYOUT.html ----
 BAND_STYLE = '<style>.nl{font-size:13px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}</style>'
+import datetime as _dt
+stampnow = _dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 html = f"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=6, user-scalable=yes">
 <title>Erand49 harp layout</title>
@@ -398,6 +400,7 @@ surface — connection, docking, and travel live in the PM's <code>../LAYOUT.htm
 the instrument itself: string band, sensors, and frame.</p>
 
 <h2>Figure 1 — harp side-view profile (ISO 128/129): strings on the frame</h2>
+<p style="font-size:11px;color:#999;margin:2px 0 6px">generated {stampnow} — if this stamp is old, the browser is showing a cached/old copy</p>
 <p class="sub">From <code>erard original stringband tutorial.dxf</code>: variable spacing
 (13.325→17.94 mm, ratio 1.025), sloped anchors, in mm — <b>each stroke width is the string's actual
 overall diameter</b>. Colors per harp convention: <span class="leg" style="color:#c0392b">C red</span> ·
