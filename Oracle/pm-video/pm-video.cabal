@@ -1,0 +1,60 @@
+cabal-version: 2.4
+name:          pm-video
+version:       0.1.0.0
+synopsis:      V0 text-console video core for the PM (1920x480 bar TFT, 240x30 text)
+build-type:    Simple
+extra-source-files: README.md
+
+common opts
+  default-language:   GHC2021
+  default-extensions: DataKinds
+                      DeriveAnyClass
+                      DerivingStrategies
+                      NoImplicitPrelude
+                      NoStarIsType
+                      RecordWildCards
+                      TemplateHaskell
+                      TypeFamilies
+  ghc-options: -Wall
+               -fplugin GHC.TypeLits.Extra.Solver
+               -fplugin GHC.TypeLits.Normalise
+               -fplugin GHC.TypeLits.KnownNat.Solver
+  build-depends: base
+               , clash-prelude ^>=1.8.1
+               , ghc-typelits-natnormalise
+               , ghc-typelits-extra
+               , ghc-typelits-knownnat
+
+library
+  import:          opts
+  hs-source-dirs:  src
+  exposed-modules: PM.Video.Timing
+                   PM.Video.Font
+                   PM.Video.FontData
+                   PM.Video.TextConsole
+                   PM.Video.Top
+
+-- `cabal exec -- clash -isrc PM.Video.Top --verilog` needs a clash
+-- binary built against THIS package's environment; same trick as
+-- Oracle/clash-h2 and IRIG/clash.
+executable clash
+  import:         opts
+  main-is:        Clash.hs
+  hs-source-dirs: bin
+  build-depends:  clash-ghc ^>=1.8.1, pm-video
+
+test-suite timing-test
+  import:         opts
+  type:           exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is:        TimingSpec.hs
+  ghc-options:    -O2
+  build-depends:  pm-video
+
+test-suite render-test
+  import:         opts
+  type:           exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is:        RenderSpec.hs
+  ghc-options:    -O2
+  build-depends:  pm-video

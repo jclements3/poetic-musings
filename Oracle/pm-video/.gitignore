@@ -1,0 +1,5 @@
+dist-newstyle/
+verilog/
+*.hi
+*.o
+.ghc.environment.*
