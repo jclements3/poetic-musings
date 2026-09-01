@@ -134,13 +134,17 @@ for n, note, fg, Lg, odg, tg, gx, glo in gpts:
 # point (a0/b0 synthesized at L like their sense points). Exported for the CAD
 # front view (JC: 'just show only the flats dots').
 flats = []
-for sx, sy in sense:
-    cand = [ (a[1]+b[1])/2 for a, b in marks
-             if abs((a[0]+b[0])/2 - sx) < 0.35 and (a[1]+b[1])/2 < sy ]
+for k, (sx, sy) in enumerate(sense):
+    cand = [ (a[1]+b[1])/2 for a, b in marks if abs((a[0]+b[0])/2 - sx) < 0.35 ]
     if cand:
-        flats.append((sx, max(cand)))          # nearest tick above = flat pin
+        # flat pin = the tick CLOSEST to the optical point: their gap is
+        # 0.056*L while the tuner sits a further 1.5 in beyond the flat
+        flats.append((sx, min(cand, key=lambda cy: abs(cy - sy))))
     else:
-        flats.append((sx, sy - 0.056*abs(sy))) # synthesized strings: keep the ratio
+        # synthesized a0/b0: flat pin sits 0.056*Lg from the optical point,
+        # on the tuner side (glo end)
+        n_, note_, fg_, Lg_, odg_, tg_, gx_, glo_ = [t for t in gpts if abs(t[6]-sx) < 0.35][0]
+        flats.append((sx, glo_ + Lg_))
 flats_px = [(X(fx), Y(fy)) for fx, fy in flats]
 
 
