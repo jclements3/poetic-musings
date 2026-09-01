@@ -1,0 +1,115 @@
+{
+    "components": [
+        "pm_adc"
+    ],
+    "dependencies": {
+        "transitive": []
+    },
+    "domains": {
+        "IntelSystem": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 10000,
+            "reset_kind": "Asynchronous",
+            "reset_polarity": "ActiveHigh"
+        },
+        "System": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 10000,
+            "reset_kind": "Asynchronous",
+            "reset_polarity": "ActiveHigh"
+        },
+        "Ulx25": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 40000,
+            "reset_kind": "Asynchronous",
+            "reset_polarity": "ActiveHigh"
+        },
+        "XilinxSystem": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 10000,
+            "reset_kind": "Synchronous",
+            "reset_polarity": "ActiveHigh"
+        }
+    },
+    "files": [
+        {
+            "name": "pm_adc_shim.cpp",
+            "sha256": "fa294c333b8779fe5bb4f0f8c6f3530a3d5e2ceeb2dcb052d0997548f1373e0c"
+        },
+        {
+            "name": "pm_adc.sdc",
+            "sha256": "40781da2747f3cf79058ce5a4d82f342b2c2f75724408518a280342d77f88e61"
+        },
+        {
+            "name": "pm_adc.v",
+            "sha256": "868a3079e3f354ab42031d9c926d95438e1d1b60fe17777e77d67ae581b9fd24"
+        }
+    ],
+    "flags": [
+        20,
+        20
+    ],
+    "hash": "aa1498d9d3a14bcc6eae2331fc981468ce7eb803f4d692b99af2867656848ce0",
+    "top_component": {
+        "name": "pm_adc",
+        "ports_flat": [
+            {
+                "direction": "in",
+                "domain": "Ulx25",
+                "is_clock": true,
+                "name": "clk",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "domain": "Ulx25",
+                "is_clock": false,
+                "name": "rst",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "domain": "Ulx25",
+                "is_clock": false,
+                "name": "en",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "is_clock": false,
+                "name": "half_period",
+                "type_name": "[7:0]",
+                "width": 8
+            },
+            {
+                "direction": "in",
+                "is_clock": false,
+                "name": "aux_sel",
+                "type_name": "[2:0]",
+                "width": 3
+            },
+            {
+                "direction": "in",
+                "is_clock": false,
+                "name": "miso",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "out",
+                "is_clock": false,
+                "name": "adc",
+                "type_name": "[51:0]",
+                "width": 52
+            }
+        ]
+    },
+    "version": "unstable"
+}

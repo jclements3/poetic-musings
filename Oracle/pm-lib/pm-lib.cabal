@@ -30,6 +30,7 @@ library
   exposed-modules: PM.Ulx25
                    PM.Matrix
                    PM.Zones
+    PM.Adc
     PM.Cdc
     PM.HarpLink
     PM.RegFile
@@ -84,3 +85,11 @@ test-suite regfile-test
   build-depends:  pm-lib
 
 
+
+test-suite adc-test
+  import:         opts
+  type:           exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is:        AdcSpec.hs
+  ghc-options:    -O2
+  build-depends:  pm-lib
