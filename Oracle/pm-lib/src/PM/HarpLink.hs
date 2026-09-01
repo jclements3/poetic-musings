@@ -1,3 +1,4 @@
+{-# LANGUAGE RecordWildCards #-}
 -- PM.HarpLink — the Erand49 event link (HANDOFF: "3 Mbaud 8-byte event
 -- frames"; eforth-pm.md 0x4036 oHarp; framing discipline per MAIDEN
 -- recorder PROTOCOL.md: sync byte + additive checksum, resync on the wire).

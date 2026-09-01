@@ -1,0 +1,108 @@
+{
+    "components": [
+        "pm_harplink"
+    ],
+    "dependencies": {
+        "transitive": []
+    },
+    "domains": {
+        "IntelSystem": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 10000,
+            "reset_kind": "Asynchronous",
+            "reset_polarity": "ActiveHigh"
+        },
+        "System": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 10000,
+            "reset_kind": "Asynchronous",
+            "reset_polarity": "ActiveHigh"
+        },
+        "XilinxSystem": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 10000,
+            "reset_kind": "Synchronous",
+            "reset_polarity": "ActiveHigh"
+        }
+    },
+    "files": [
+        {
+            "name": "pm_harplink_shim.cpp",
+            "sha256": "d742cd178b223b8bf43b9483fddedacd8bf843ca0069e4529fb0d4562ee9b087"
+        },
+        {
+            "name": "pm_harplink.sdc",
+            "sha256": "13d4c1aafcc09a84d81d3b60d513cb901384a10e27e5a5a16572a600f15895f3"
+        },
+        {
+            "name": "pm_harplink.v",
+            "sha256": "79b17a8430fc881205fae8cd0adae4e9f9f904d4f841581ff8cfdeb52f5a6a23"
+        }
+    ],
+    "flags": [
+        20,
+        20
+    ],
+    "hash": "795459e0bff6c3f1c96bbaea5c4f61d25799a3b6c61fc4be708059da480bba97",
+    "top_component": {
+        "name": "pm_harplink",
+        "ports_flat": [
+            {
+                "direction": "in",
+                "domain": "System",
+                "is_clock": true,
+                "name": "clk",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "domain": "System",
+                "is_clock": false,
+                "name": "rst",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "domain": "System",
+                "is_clock": false,
+                "name": "en",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "is_clock": false,
+                "name": "divisor",
+                "type_name": "[7:0]",
+                "width": 8
+            },
+            {
+                "direction": "in",
+                "is_clock": false,
+                "name": "tx_frame",
+                "type_name": "[48:0]",
+                "width": 49
+            },
+            {
+                "direction": "in",
+                "is_clock": false,
+                "name": "rx_line",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "out",
+                "is_clock": false,
+                "name": "out",
+                "type_name": "[50:0]",
+                "width": 51
+            }
+        ]
+    },
+    "version": "unstable"
+}
