@@ -208,17 +208,137 @@ print("sensor beam bores drilled")
 
 # note: Plane.XZ extrudes toward -Y in build123d; positions may need sign fixes on first run
 
-assembly = Compound(children=[
-    copy_it := midrib, pillar, plates
-]) if False else Compound([midrib, pillar, plates])
+# ---- ER-006 hinged outrigger legs, modeled DEPLOYED (the standing configuration) ----
+# Two 1" x 1/8" 6061 flat-bar legs, one per midrib side wall, near the floor foot.
+# Hinge: shoulder bolt per side — Ø10 h8 ground shoulder (M8 thread), leg eye and
+# boss bored Ø10.1 (running fit on the shoulder), thread passing through a Ø8.4
+# clearance hole in the side wall (ISO 273 medium fit for M8) into a flanged nut
+# inside the open channel. A single coaxial Ø8.4 cut makes both wall holes.
+LEG_W, LEG_T = 1.0 * IN, 0.125 * IN     # flat bar 25.4 x 3.175
+LEG_L = 325.0                           # bar length hinge-eye -> foot end (295 was the
+                                        # spec estimate; the measured CoM height 1088 mm
+                                        # needs 325 to clear the 15 deg sideways tip)
+LEG_ANG = 55.0                          # deployed angle from vertical, in the YZ plane
+LEG_TAIL = 6.0                          # bar continues past the hinge eye (boss cover)
+BOSS_D, BOSS_L = 22.0, 6.0              # hinge boss Ø and wall stand-off
+BOLT_SHOULDER_D, BOLT_THREAD_CLR = 10.1, 8.4
+PAD_D, PAD_H = 32.0, 8.0                # rubber foot pads (cylinders)
+PAD_CLR = 1.0                           # bar end floats this far above the pad top
+
+sa, ca = math.sin(math.radians(LEG_ANG)), math.cos(math.radians(LEG_ANG))
+z_h = PAD_H + PAD_CLR + LEG_L * ca                       # hinge height so the pad lands on the floor
+drop = DEPTH / h                                         # vertical height of the sloped side wall band
+# hinge at mid-depth of the side wall: anchor_z(x) - drop/2 = z_h
+x_h = (((z_h + drop / 2) / IN) - (cxi - y_floor)) / m_slope * IN   # mm
+wall_top_z = (m_slope * (x_h / IN) + cxi - y_floor) * IN
+assert wall_top_z - drop + BOSS_D / 2 < z_h < wall_top_z - BOSS_D / 2, "hinge boss must land on the side wall"
+y_wall = WEB_W / 2                                       # side wall outer face
+y_bar = y_wall + BOSS_L + LEG_T / 2                      # bar mid-plane stand-off
+
+legs_parts, pads_parts = [], []
+for sgn in (1, -1):
+    d = (0, sgn * sa, -ca)                               # deployed leg direction, hinge -> foot
+    p0 = (x_h, sgn * y_bar - d[1] * LEG_TAIL, z_h - d[2] * LEG_TAIL)
+    with BuildPart() as leg_bp:
+        with BuildSketch(Plane(origin=p0, x_dir=(1, 0, 0), z_dir=d)):
+            Rectangle(LEG_W, LEG_T)
+        extrude(amount=LEG_L + LEG_TAIL)
+    boss = Pos(x_h, sgn * (y_wall + (BOSS_L + LEG_T) / 2), z_h) * Rot(90, 0, 0) * \
+        Cylinder(BOSS_D / 2, BOSS_L + LEG_T)
+    leg = leg_bp.part + boss
+    leg -= Pos(x_h, sgn * y_bar, z_h) * Rot(90, 0, 0) * Cylinder(BOLT_SHOULDER_D / 2, 60)
+    legs_parts.append(leg)
+    foot_y = sgn * y_bar + d[1] * LEG_L                  # bar end centerline at the floor
+    pads_parts.append(Pos(x_h, foot_y, 0) * Cylinder(PAD_D / 2, PAD_H,
+                                                     align=(Align.CENTER, Align.CENTER, Align.MIN)))
+legs = legs_parts[0] + legs_parts[1]
+pads = pads_parts[0] + pads_parts[1]
+# hinge clearance holes through BOTH side walls (one coaxial cut)
+midrib = midrib - Pos(x_h, 0, z_h) * Rot(90, 0, 0) * Cylinder(BOLT_THREAD_CLR / 2, 2 * WEB_W)
+print(f"ER-006 legs: hinge at x={x_h:.1f} z={z_h:.1f} mm, wall holes O{BOLT_THREAD_CLR} "
+      f"(M8 shoulder bolt, O10 shoulder in O{BOLT_SHOULDER_D} leg bore), deployed {LEG_ANG:.0f} deg")
+
+assembly = Compound([midrib, pillar, plates, legs, pads])
 
 export_step(assembly, os.path.join(HERE, 'frame.step'))
 print('frame.step written')
 
+# ---- stability check from the solids (strings and plinth EXCLUDED) ----
+DENS_AL = 2700e-9    # kg/mm^3, 6061 — frame, plates, legs
+DENS_RUB = 1200e-9   # kg/mm^3, rubber pads
+mass_items = [('midrib', midrib, DENS_AL), ('pillar', pillar, DENS_AL),
+              ('plates', plates, DENS_AL), ('legs', legs, DENS_AL), ('pads', pads, DENS_RUB)]
+M = Vector(0, 0, 0)
+m_tot = 0.0
+for nm, sh, rho in mass_items:
+    mi = sh.volume * rho
+    ci = sh.center(CenterOf.MASS)
+    M += ci * mi
+    m_tot += mi
+    print(f"  {nm:7s} {mi:6.3f} kg  CoM ({ci.X:7.1f},{ci.Y:6.1f},{ci.Z:7.1f})")
+com = M / m_tot
+print(f"assembly mass {m_tot:.2f} kg (Al 2700, pads 1200 kg/m3; strings/plinth excluded)")
+print(f"assembly CoM  x={com.X:.1f}  y={com.Y:.1f}  z={com.Z:.1f} mm  (CoM height {com.Z:.0f} mm)")
+
+# support polygon: pillar foot + midrib floor foot + the two leg pads, from the solids
+floor_slab = Box(6000, 3000, 1.5, align=(Align.CENTER, Align.CENTER, Align.MIN))
+def circle_pts(bb2, n_=24):
+    cx_, cy_, r_ = bb2.center().X, bb2.center().Y, max(bb2.size.X, bb2.size.Y) / 2
+    return [(cx_ + r_ * math.cos(2 * math.pi * k / n_), cy_ + r_ * math.sin(2 * math.pi * k / n_))
+            for k in range(n_)]
+pil_f = (pillar & floor_slab).bounding_box()
+mid_f = (midrib & floor_slab).bounding_box()
+pad_bbs = [p.bounding_box() for p in pads_parts]
+support = circle_pts(pil_f) \
+    + [(mid_f.min.X, mid_f.min.Y), (mid_f.min.X, mid_f.max.Y),
+       (mid_f.max.X, mid_f.max.Y), (mid_f.max.X, mid_f.min.Y)] \
+    + sum((circle_pts(b) for b in pad_bbs), [])
+
+def hull2d(pts):
+    pts = sorted(set((round(x, 3), round(y, 3)) for x, y in pts))
+    def half(seq):
+        out = []
+        for p in seq:
+            while len(out) >= 2 and ((out[-1][0]-out[-2][0])*(p[1]-out[-2][1])
+                                     - (out[-1][1]-out[-2][1])*(p[0]-out[-2][0])) <= 0:
+                out.pop()
+            out.append(p)
+        return out
+    lo, hi = half(pts), half(pts[::-1])
+    return lo[:-1] + hi[:-1]           # CCW
+
+hull = hull2d(support)
+def edge_tip(P, Q):
+    "tip angle (deg) rotating over hull edge P->Q; negative = CoM already outside"
+    dx, dy = Q[0]-P[0], Q[1]-P[1]
+    ln = math.hypot(dx, dy)
+    nx, ny = dy/ln, -dx/ln                       # outward normal of the CCW hull
+    s = (com.X-P[0])*nx + (com.Y-P[1])*ny        # >0 means outside
+    return math.degrees(math.atan2(-s, com.Z)), (nx, ny)
+edge_info = [(edge_tip(hull[i], hull[(i+1) % len(hull)]), hull[i], hull[(i+1) % len(hull)])
+             for i in range(len(hull))]
+
+# task metrics: sideways over a leg-pad line (parallel to X through a pad center),
+# forward/back over the feet lines (parallel to Y through the extreme supports)
+stance = pad_bbs[0].center().Y - pad_bbs[1].center().Y
+tip_side = math.degrees(math.atan2(abs(stance) / 2 - abs(com.Y), com.Z))
+x_support_max = max(p[0] for p in support)
+x_support_min = min(p[0] for p in support)
+tip_fwd = math.degrees(math.atan2(x_support_max - com.X, com.Z))
+tip_back = math.degrees(math.atan2(com.X - x_support_min, com.Z))
+print(f"support polygon x [{x_support_min:.0f}..{x_support_max:.0f}]  leg stance {abs(stance):.0f} mm "
+      f"(pad centers), hull-edge tip angles: "
+      + ", ".join(f"{deg:+.1f}" for (deg, _), _, _ in edge_info) + " deg")
+print(f"tip angles: sideways {tip_side:.1f} deg over a leg-pad line | "
+      f"forward {tip_fwd:.1f} deg | back {tip_back:.1f} deg over the feet lines")
+if tip_fwd < 0:
+    print("NOTE: CoM sits treble-ward of every floor support — fore-aft the harp relies on"
+          " the plinth dock (excluded here); the legs solve the sideways (Y) footprint.")
+assert tip_side >= 15.0, f"sideways tip angle {tip_side:.1f} < 15 deg — widen the leg stance"
+
 # ---- projected views with hidden-line removal (ISO 128 line conventions) ----
 def view(shape, name, origin, up=(0, 0, 1)):
     visible, hidden = shape.project_to_viewport(origin, viewport_up=up)
-    mx = max(*Compound(visible + hidden).bounding_box().size)
     exp = ExportSVG(scale=1.0)
     exp.add_layer('visible', line_weight=0.5)
     exp.add_layer('hidden', line_weight=0.25, line_type=LineType.HIDDEN)
@@ -228,10 +348,155 @@ def view(shape, name, origin, up=(0, 0, 1)):
     out = os.path.join(HERE, name)
     exp.write(out)
     print('wrote', name)
+    return Compound(visible + hidden).bounding_box()        # projected (viewport) bbox
 
 bb = assembly.bounding_box()
 cx, cy, cz = bb.center().X, bb.center().Y, bb.center().Z
-view(assembly, 'cad-front.svg', (cx, -8000, cz))            # front: looking along +Y
-view(assembly, 'cad-side.svg',  (12000, cy, cz))            # side: along -X
-view(assembly, 'cad-top.svg',   (cx, cy, 12000))            # top: along -Z
+pbb_front = view(assembly, 'cad-front.svg', (cx, -8000, cz))   # front: looking along +Y
+pbb_side = view(assembly, 'cad-side.svg',  (12000, cy, cz))    # side: along -X
+view(assembly, 'cad-top.svg',   (cx, cy, 12000))               # top: along -Z
 print('bbox size (mm):', bb.size)
+
+# ---- ISO-129-style dimension layer, post-processed into the projected SVGs ----
+# The projections above are PARALLEL projections whose viewport axes align with the
+# model axes (front: x<-X y<-Z; side: x<-Y y<-Z) — asserted below by matching the
+# projected bbox extents against the model bbox. We derive the exact viewport
+# translation from that pair, then append a separate <g id="dimensions"> group
+# (extension lines, filled arrowheads, mm text) to the SVG file, expanding its
+# viewBox to fit. Every dimension VALUE is measured from the solids (bounding
+# boxes / thin-slab sections) — nothing is hardcoded.
+DIM_C = '#3b5a7a'
+ARROW_L, ARROW_W = 12.0, 4.2
+EXT_GAP, EXT_OVER, TEXT_H = 5.0, 8.0, 30.0
+
+class DimLayer:
+    def __init__(self):
+        self.el, self.xs, self.ys = [], [], []
+    def _track(self, x, y):
+        self.xs.append(x); self.ys.append(y)
+    def _arrow(self, tip, dirc):
+        (tx, ty), (dx, dy) = tip, dirc                    # dirc: unit, points INTO the line
+        px, py = -dy, dx
+        b1 = (tx + dx*ARROW_L + px*ARROW_W, ty + dy*ARROW_L + py*ARROW_W)
+        b2 = (tx + dx*ARROW_L - px*ARROW_W, ty + dy*ARROW_L - py*ARROW_W)
+        self.el.append(f'<path d="M {tx:.2f} {ty:.2f} L {b1[0]:.2f} {b1[1]:.2f} '
+                       f'L {b2[0]:.2f} {b2[1]:.2f} Z" fill="{DIM_C}" stroke="none"/>')
+        for x, y in (tip, b1, b2):
+            self._track(x, y)
+    def text(self, pos, label, ang=0.0, anchor='middle'):
+        x, y = pos
+        rot = f' transform="rotate({ang:.1f} {x:.2f} {y:.2f})"' if abs(ang) > 0.01 else ''
+        self.el.append(f'<text x="{x:.2f}" y="{y:.2f}" font-size="{TEXT_H}" fill="{DIM_C}" '
+                       f'text-anchor="{anchor}" font-family="ui-monospace,Consolas,monospace"'
+                       f'{rot}>{label}</text>')
+        w = 0.62 * TEXT_H * len(label)
+        c, s = math.cos(math.radians(ang)), math.sin(math.radians(ang))
+        for ddx in (-w/2, w/2):                 # text bbox corners, rotated
+            for ddy in (-TEXT_H, TEXT_H * 0.4):
+                self._track(x + ddx*c - ddy*s, y + ddx*s + ddy*c)
+    def linear(self, fa, fb, A, B, label, text_pos=None, text_anchor='middle'):
+        "extension lines fa->A, fb->B; dimension line A-B with arrows; label in mm"
+        for (px, py), (qx, qy) in ((fa, A), (fb, B)):
+            ln = math.hypot(qx-px, qy-py)
+            if ln > EXT_GAP:
+                ux, uy = (qx-px)/ln, (qy-py)/ln
+                self.el.append(f'<line x1="{px+ux*EXT_GAP:.2f}" y1="{py+uy*EXT_GAP:.2f}" '
+                               f'x2="{qx+ux*EXT_OVER:.2f}" y2="{qy+uy*EXT_OVER:.2f}" '
+                               f'stroke="{DIM_C}" stroke-width="0.7"/>')
+                self._track(qx+ux*EXT_OVER, qy+uy*EXT_OVER)
+        self.el.append(f'<line x1="{A[0]:.2f}" y1="{A[1]:.2f}" x2="{B[0]:.2f}" y2="{B[1]:.2f}" '
+                       f'stroke="{DIM_C}" stroke-width="0.9"/>')
+        L = math.hypot(B[0]-A[0], B[1]-A[1])
+        t = ((B[0]-A[0])/L, (B[1]-A[1])/L)
+        if L > 4 * ARROW_L:
+            self._arrow(A, t); self._arrow(B, (-t[0], -t[1]))
+        else:                                             # arrows outside a tight dimension
+            self._arrow(A, (-t[0], -t[1])); self._arrow(B, t)
+            for P, sgn_ in ((A, -1), (B, 1)):
+                self.el.append(f'<line x1="{P[0]:.2f}" y1="{P[1]:.2f}" '
+                               f'x2="{P[0]+sgn_*t[0]*2.2*ARROW_L:.2f}" '
+                               f'y2="{P[1]+sgn_*t[1]*2.2*ARROW_L:.2f}" '
+                               f'stroke="{DIM_C}" stroke-width="0.9"/>')
+                self._track(P[0]+sgn_*t[0]*2.2*ARROW_L, P[1]+sgn_*t[1]*2.2*ARROW_L)
+        ang = math.degrees(math.atan2(t[1], t[0]))
+        ang = ((ang + 90) % 180) - 90                     # keep text upright
+        if text_pos is None:
+            n = (math.sin(math.radians(ang)), -math.cos(math.radians(ang)))
+            text_pos = ((A[0]+B[0])/2 + n[0]*TEXT_H*0.45, (A[1]+B[1])/2 + n[1]*TEXT_H*0.45)
+        self.text(text_pos, label, ang, text_anchor)
+
+def add_dim_layer(name, layer):
+    path = os.path.join(HERE, name)
+    doc = open(path).read()
+    mvb = re.search(r'viewBox="([-\d.]+) ([-\d.]+) ([-\d.]+) ([-\d.]+)"', doc)
+    vx, vy, vw, vh = map(float, mvb.groups())
+    x0, y0 = min(vx, min(layer.xs) - 6), min(vy, min(layer.ys) - 6)
+    x1, y1 = max(vx + vw, max(layer.xs) + 6), max(vy + vh, max(layer.ys) + 6)
+    doc = doc.replace(mvb.group(0), f'viewBox="{x0:.2f} {y0:.2f} {x1-x0:.2f} {y1-y0:.2f}"')
+    doc = re.sub(r'width="[-\d.]+mm" height="[-\d.]+mm"',
+                 f'width="{x1-x0:.2f}mm" height="{y1-y0:.2f}mm"', doc, count=1)
+    doc = doc.replace('</svg>', '<g id="dimensions">\n' + '\n'.join(layer.el) + '\n</g>\n</svg>')
+    open(path, 'w').write(doc)
+    print(f'appended dimension layer to {name} ({len(layer.el)} elements)')
+
+def feature_bb(slab):
+    return (assembly & slab).bounding_box()
+
+big = 10000
+# front view maps model (X, Z). The projected extents match the model's up to
+# HLR arc/bezier tessellation noise (the plate top curves overshoot a few mm);
+# the MIN corner is formed by exactly-projected straight edges (midrib foot,
+# floor line), so anchor the translation there at scale 1:1 (parallel projection).
+assert abs(pbb_front.size.X - bb.size.X) < 10 and abs(pbb_front.size.Y - bb.size.Z) < 10
+TXf, TYf = pbb_front.min.X - bb.min.X, pbb_front.min.Y - bb.min.Z
+f2s = lambda x, z: (x + TXf, -(z + TYf))                  # ExportSVG writes y mirrored
+
+front = DimLayer()
+H, LX = bb.size.Z, bb.size.X
+# overall height, dimension line left of the frame
+top_f = feature_bb(Pos(0, 0, bb.max.Z) * Box(big, big, 3, align=(Align.CENTER, Align.CENTER, Align.MAX)))
+bot_f = feature_bb(floor_slab)
+xdim = bb.min.X - 70
+front.linear(f2s(top_f.center().X, bb.max.Z), f2s(bot_f.center().X, bb.min.Z),
+             f2s(xdim, bb.max.Z), f2s(xdim, bb.min.Z), f"{H:.0f}")
+# overall length, dimension line below the floor
+lx_f = feature_bb(Pos(bb.min.X, 0, 0) * Box(3, big, big, align=(Align.MIN, Align.CENTER, Align.MIN)))
+rx_f = feature_bb(Pos(bb.max.X, 0, 0) * Box(3, big, big, align=(Align.MAX, Align.CENTER, Align.MIN)))
+zdim = bb.min.Z - 70
+front.linear(f2s(bb.min.X, lx_f.min.Z), f2s(bb.max.X, rx_f.min.Z),
+             f2s(bb.min.X, zdim), f2s(bb.max.X, zdim), f"{LX:.0f}")
+# pillar OD, measured across the pillar solid
+pil_bb = pillar.bounding_box()
+z_pd = 0.62 * H
+front.linear(f2s(pil_bb.min.X, z_pd), f2s(pil_bb.max.X, z_pd),
+             f2s(pil_bb.min.X, z_pd), f2s(pil_bb.max.X, z_pd),
+             f"Ø{pil_bb.size.X:.1f}",
+             text_pos=f2s(pil_bb.max.X + 32, z_pd + 10), text_anchor='start')
+# midrib channel depth, aligned dimension perpendicular to the member at mid-span
+x_mid_ax = (x_base_in + xr_m) / 2
+Pmid = (x_mid_ax * IN, (m_slope * x_mid_ax + cxi - y_floor) * IN)
+sec_slab = Plane(origin=(Pmid[0], 0, Pmid[1]), z_dir=(u[0], 0, u[1])) * Box(300, 300, 0.8)
+mid_sec = midrib & sec_slab
+vts = [(v.X, v.Z) for v in mid_sec.vertices()]
+dots = [n[0]*vx + n[1]*vz for vx, vz in vts]
+D_meas = max(dots) - min(dots)
+va, vb = vts[dots.index(max(dots))], vts[dots.index(min(dots))]
+OFFD = 80
+front.linear(f2s(*va), f2s(*vb),
+             f2s(va[0] + u[0]*OFFD, va[1] + u[1]*OFFD),
+             f2s(vb[0] + u[0]*OFFD, vb[1] + u[1]*OFFD), f"{D_meas:.1f}")
+add_dim_layer('cad-front.svg', front)
+
+# side view maps model (Y, Z): the leg stance width lives here — it is a Y
+# dimension, invisible in the front (XZ) projection
+assert abs(pbb_side.size.X - bb.size.Y) < 10 and abs(pbb_side.size.Y - bb.size.Z) < 10
+TXs, TYs = pbb_side.min.X - bb.min.Y, pbb_side.min.Y - bb.min.Z
+s2s = lambda y, z: (y + TXs, -(z + TYs))
+side = DimLayer()
+padL_c, padR_c = pad_bbs[1].center().Y, pad_bbs[0].center().Y
+zdim2 = bb.min.Z - 60
+side.linear(s2s(padL_c, 0), s2s(padR_c, 0),
+            s2s(padL_c, zdim2), s2s(padR_c, zdim2), f"{abs(stance):.0f} stance")
+add_dim_layer('cad-side.svg', side)
+print(f"dims: H={H:.0f} L={LX:.0f} stance={abs(stance):.0f} pillar O{pil_bb.size.X:.1f} "
+      f"midrib depth={D_meas:.1f} (all measured from the solids)")

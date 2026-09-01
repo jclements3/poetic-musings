@@ -3,7 +3,10 @@
 **CAD master: `frame_cad.py` (build123d) → `frame.step`.** The solid model is the
 dimensional source of truth; the ER sheets and figure 1 are being migrated to
 projections from it (cad-front/side/top.svg are the first). Where a hand-drawn
-sheet disagrees with the STEP, the STEP wins.
+sheet disagrees with the STEP, the STEP wins. cad-front.svg carries an ISO-129-style
+dimension layer (overall height/length, pillar Ø, midrib depth) and cad-side.svg the
+leg stance — post-processed into the SVGs as a `<g id="dimensions">` group by
+frame_cad.py, every value measured from the solids.
 
 Material: 6061-T6 throughout. All strength checks use the **welded** (HAZ) allowable —
 ~140 MPa yield at 2x safety = 70 MPa working — because welding locally erases the T6
@@ -16,7 +19,7 @@ temper. Loads from `string-specs.md`: band pull 7.00 kN (49 strings), string ang
 | Pillar | **round tube, 2 in OD x 3/16 in wall**, crown to floor, passing through the midrib base | few kN compression + hung PM console + lean loads | Euler Pcr ~ 31 kN over ~2 m, ~6x margin; cleat on a saddle block |
 | Neck plates x2 | per `Erand49.svg` hand-edited outline | pin + sensor mounting (verified: min pin-edge 16.2 mm, min sensor-edge 7.1 mm) | lap OUTSIDE the side walls at the shoulder (**ER-005**) — no milling, plates stand 8 mm proud each side; joined by two weld systems: the top seam (channel top corners to both plates along the ~60 mm lap) and the horizontal fillet (each plate bottom tab to its side wall); the neck edge lands ON the channel top line at the shoulder corner (**plate gap = 63.5 mm**). Crown: 6.35 mm pads per side to the round pillar, crush-sleeved bolts |
 
-| Outrigger legs x2 | 1 in x 1/8 in flat bar, ~295 mm, shoulder-bolt hinges through the midrib side walls near the floor foot (**ER-006**) | sideways stability: frame footprint in Y is otherwise zero | deployed ~55 deg -> ~550 mm stance; tips only past ~19 deg lean; fold flat for travel; wing-bolt locks |
+| Outrigger legs x2 | 1 in x 1/8 in flat bar, 325 mm, shoulder-bolt hinges through the midrib side walls near the floor foot (**ER-006**): Ø10 h8 shoulder (M8 thread) bolt per side, Ø8.4 wall clearance hole, Ø10.1 leg/boss bore, flanged nut inside the open channel; hinge at x=228 z=195 mm | sideways stability: frame footprint in Y is otherwise zero | **CAD-measured** (frame_cad.py solids, Al 2700 kg/m3, strings/plinth excluded): assembly 14.47 kg, CoM height 1088 mm; deployed 55 deg -> 611 mm stance (pad centers); tip angles: sideways **15.7 deg** over a leg-pad line (asserted >= 15 in frame_cad.py), back 17.5 deg; forward -11.8 deg — the CoM sits treble-ward of all floor supports, so fore-aft the harp is held by the plinth dock, the legs solve the Y footprint. Fold flat for travel; wing-bolt locks |
 
 ## Build sequence
 
