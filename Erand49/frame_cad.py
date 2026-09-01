@@ -38,7 +38,11 @@ u = (1/h, m_slope/h)                        # axis unit in XZ (toward treble/sho
 n = (-m_slope/h, 1/h)                       # unit normal (toward the strings)
 # base point: on the centerline (web top is +0 offset -> centerline is web; the section
 # is built with the web top ON the anchor line, body hanging below)
-x_base_in = pilc - PW/ h - 2.0              # start beyond the pillar toward the floor
+# JC: no blunt end cut at the bass end — the channel runs out until the WEB
+# TOP line reaches the floor, so the z>=0 clip alone forms a sharp wedge tip
+# sitting flush on the floor (the perpendicular start face is entirely below
+# the floor and vanishes in the clip)
+x_base_in = (y_floor - cxi) / m_slope - 0.3
 P0 = ((x_base_in) * IN, (m_slope * x_base_in + cxi - y_floor) * IN)
 L_axis = (xr_m - x_base_in) * h * IN        # generous; floor/end cuts trim it
 

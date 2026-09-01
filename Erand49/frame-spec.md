@@ -28,7 +28,7 @@ temper. Loads from `string-specs.md`: band pull 7.00 kN (49 strings), string ang
    it — the open bottom and a O51 hole in the top web (string-free zone past a0)
    let the channel pass over the pillar and self-fixture. Weld the top-web rim
    and both side walls to the pillar. Both members
-   stand on the floor: pillar foot + the midrib horizontal end cut. No base plate.
+   stand on the floor: pillar foot + the midrib wedge tip — the channel runs out until the web top meets the floor (no end cut, sharp tip flush on the floor). No base plate.
 2. Drill the midrib +/-Y faces for the neck-plate through-bolts (crush sleeves
    inside); make the two 6.35 mm crown pads.
 3. Set the plates over the side walls at the shoulder lap (no milling): weld
