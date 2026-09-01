@@ -1,0 +1,118 @@
+{
+    "components": [
+        "pm_net_beacon"
+    ],
+    "dependencies": {
+        "transitive": []
+    },
+    "domains": {
+        "IntelSystem": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 10000,
+            "reset_kind": "Asynchronous",
+            "reset_polarity": "ActiveHigh"
+        },
+        "Rmii50": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 20000,
+            "reset_kind": "Asynchronous",
+            "reset_polarity": "ActiveHigh"
+        },
+        "System": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 10000,
+            "reset_kind": "Asynchronous",
+            "reset_polarity": "ActiveHigh"
+        },
+        "XilinxSystem": {
+            "active_edge": "Rising",
+            "init_behavior": "Defined",
+            "period": 10000,
+            "reset_kind": "Synchronous",
+            "reset_polarity": "ActiveHigh"
+        }
+    },
+    "files": [
+        {
+            "name": "pm_net_beacon.sdc",
+            "sha256": "684792a0a35833df47c5b4ef793bc38785d0ce182cbb421ac7ccac46cc32a336"
+        },
+        {
+            "name": "pm_net_beacon.v",
+            "sha256": "0a129a62a4bbb4b1cafca9cdef79533084b3f6a39fbe8c7f6bf6a890a4ea5b53"
+        }
+    ],
+    "flags": [
+        20,
+        20
+    ],
+    "hash": "a61299eb172b8b5b8f8fe2d9da25d8d567b1ce6d36b0427f74962fad254a33c7",
+    "top_component": {
+        "name": "pm_net_beacon",
+        "ports_flat": [
+            {
+                "direction": "in",
+                "domain": "Rmii50",
+                "is_clock": true,
+                "name": "clk",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "domain": "Rmii50",
+                "is_clock": false,
+                "name": "rst",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "domain": "Rmii50",
+                "is_clock": false,
+                "name": "en",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "is_clock": false,
+                "name": "go",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "in",
+                "is_clock": false,
+                "name": "mode",
+                "type_name": "[7:0]",
+                "width": 8
+            },
+            {
+                "direction": "out",
+                "is_clock": false,
+                "name": "txd",
+                "type_name": "[1:0]",
+                "width": 2
+            },
+            {
+                "direction": "out",
+                "is_clock": false,
+                "name": "tx_en",
+                "type_name": "",
+                "width": 1
+            },
+            {
+                "direction": "out",
+                "is_clock": false,
+                "name": "ready",
+                "type_name": "",
+                "width": 1
+            }
+        ]
+    },
+    "version": "unstable"
+}

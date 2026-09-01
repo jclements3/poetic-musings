@@ -32,7 +32,8 @@ copy"): for gateware harvesting, MAIDEN's embedded copy is the newer, load-beari
 | Clash lesson series | `MAIDEN/lessons/src/Lesson01–14.hs` (+`lessons.cabal`, verified per `MAIDEN/clash-lessons-prompt.md`: every FAILURE case actually compiled) · course layer `MAIDEN/course/` (CURRICULUM.md, lesson00–24, maiden00–67 sprint cards) | teaching assets, build-verified | **O** (H2 Clash port = Lessons 12–14 per PLAN Phase 3) · every letter's onboarding |
 
 Planned-only blocks (no artifact yet, SWAG-sized): Goertzel keyer/decoder (O/C mode),
-KS waveguide + ADSSR (E/P), RMII MAC/UDP (N — MAIDEN has **no** Ethernet anywhere; its
+KS waveguide + ADSSR (E/P), RMII MAC RX + general TX (N — the beacon TX seed now
+exists in `Oracle/pm-net`, see below; MAIDEN has **no** Ethernet anywhere; its
 Ch.10 transport is UART→Pi 5 SBC), DVP capture + centroid (Imaging — MAIDEN's video
 path is USB3→SBC H.264), TMDS/video text renderer (O; upstream vga.vhd reusable),
 SDRAM controller, async-FIFO/CDC library (load-bearing per SWAG clock-domain list).
@@ -82,3 +83,4 @@ first, Clash port as Lessons 12–14):
 | eForth-PM register file: H2 bus decode 0x4020–0x403F, binds zones+matrix, cmd ports for synth/keyer, HW TX interlock | `Oracle/pm-lib` (PM.RegFile) | 8 semantics: iPanel read, FIFO-popping 0x4024 read, reset-muted audio, single command pulses, arm-key + mode-C hardware gate |
 | 1920x480 text console (0x4026) | `Oracle/pm-video` | pixel-exact IBM-VGA glyph render, timing/polarity asserted both senses; ~200 LUT4, 5 BRAM |
 | SD block model + IRIG peripheral in the eForth sim | `Oracle/clash-h2` (SystemUart) | personal-card boot: owner greet from block 0, real `1 load` from block 1, live IRIG clock + TOD set — all from interactive Forth |
+| RMII 100BASE-TX UDP/IPv4 status beacon (0x40xx TBD) | `Oracle/pm-net` (PM.Net) | dibit stream reassembled in the test: FCS vs independent table CRC32, IP checksum sums 0xFFFF, 64-byte min frame incl. pad, >= 96-bit IFG, seq +1 across two frames |
