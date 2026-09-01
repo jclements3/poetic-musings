@@ -1679,7 +1679,7 @@
   </g>
   
   <path
-     d="M 138.21996,54.93472 C 182.63611,12.264078 408.32862,-20.833264 472.26137,32.301189 536.19411,85.435641 615.43736,477.80999 746.63448,457.58294 877.8316,437.35589 899.00459,380.96014 976.11185,329.78393 c 77.10725,-51.17620 145.38452,57.40125 118.88815,99.80340"
+     d="M 138.21996,54.93472 C 182.63611,12.264078 408.32862,-20.833264 472.26137,32.301189 536.19411,85.435641 615.43736,477.80999 746.63448,457.58294 877.8316,437.35589 899.00459,380.96014 976.11185,329.78393 c 77.10725,-51.17620 104.10100,39.06953 77.89897,81.65420"
      fill="none"
      stroke="#2e7d32"
      stroke-width="2.5"
@@ -1701,11 +1701,10 @@
        id="title296">sensor rail — Bezier fit through all 49 optical X/Y axes, 1 in below the nuts</title>
   </path>
   <g id="frame-members" sodipodi:insensitive="true">
-<line x1="208.7" y1="1848.0" x2="1106.9" y2="410.6" stroke="#1565c0" stroke-width="2"/>
+<path d="M 175.0 1901.8 L 198.3 1864.5 L 221.6 1827.3 L 244.9 1790.0 L 268.2 1752.7 L 291.5 1715.4 L 314.8 1678.1 L 338.1 1640.9 L 361.4 1603.6 L 384.7 1566.3 L 408.0 1529.0 L 431.3 1491.7 L 454.6 1454.4 L 477.7 1417.1 L 500.6 1379.5 L 523.3 1341.8 L 545.7 1304.0 L 567.9 1266.1 L 589.9 1228.0 L 611.8 1189.8 L 633.5 1151.5 L 655.1 1113.2 L 676.6 1074.8 L 698.0 1036.3 L 719.3 997.8 L 740.6 959.3 L 761.9 920.7 L 783.2 882.2 L 804.5 843.7 L 825.8 805.2 L 847.2 766.7 L 868.7 728.3 L 890.3 689.9 L 912.0 651.7 L 933.9 613.5 L 955.9 575.4 L 978.1 537.4 L 1000.5 499.6 L 1023.1 461.9 L 1046.0 424.4 L 1069.2 387.0" fill="none" stroke="#1565c0" stroke-width="2"/>
 <line x1="88.9" y1="1848.0" x2="982.6" y2="417.7" stroke="#1565c0" stroke-width="2"/>
 <line x1="982.6" y1="417.7" x2="1020.7" y2="356.7" stroke="#1565c0" stroke-width="2" stroke-dasharray="7 5"/>
-<line x1="88.9" y1="1848.0" x2="208.7" y2="1848.0" stroke="#1565c0" stroke-width="2"/>
-
+<line x1="88.9" y1="1848.0" x2="175.0" y2="1901.8" stroke="#1565c0" stroke-width="2"/>
 <line x1="139.6" y1="20.3" x2="139.6" y2="1766.7" stroke="#d32f2f" stroke-width="2"/>
 <line x1="139.6" y1="1766.7" x2="139.6" y2="1868.3" stroke="#d32f2f" stroke-width="2" stroke-dasharray="7 5"/>
 <line x1="139.6" y1="1868.3" x2="139.6" y2="1848.0" stroke="#d32f2f" stroke-width="2"/>
@@ -1713,7 +1712,7 @@
 <line x1="190.4" y1="1685.4" x2="190.4" y2="1787.0" stroke="#d32f2f" stroke-width="2" stroke-dasharray="7 5"/>
 <line x1="190.4" y1="1787.0" x2="190.4" y2="1848.0" stroke="#d32f2f" stroke-width="2"/>
 <line x1="139.6" y1="20.3" x2="190.4" y2="20.3" stroke="#d32f2f" stroke-width="2"/>
-<text x="366" y="1627" style="font:700 13px monospace" fill="#1565c0">midrib C 2.5x4x3/16 open-bottom — floor foot, shoulder lap welds (ER-005), legs (ER-006)</text>
+<text x="366" y="1627" style="font:700 13px monospace" fill="#1565c0">midrib C 2.5x4x3/16 open-bottom, walls taper to 2.25 at the shoulder — ER-005/006</text>
 <text x="203" y="934" style="font:700 13px monospace" fill="#d32f2f">pillar Ø2x3/16, through the midrib (ER-004)</text>
 </g>
   <g

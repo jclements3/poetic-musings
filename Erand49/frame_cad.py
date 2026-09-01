@@ -72,6 +72,50 @@ pillar = Pos(pilc * IN, 0, 0) * pillar
 midrib = midrib - Pos(pilc * IN, 0, 0) * Cylinder(PIL_OD/2 + 0.5, crownZ,
                                                   align=(Align.CENTER, Align.CENTER, Align.MIN))
 
+# ---- side-wall depth taper (gen_erand49.py taper_depth is the source of truth) ----
+taper_depth = ns['taper_depth']
+T0X_in, XR_in = ns['T0X'], ns['xr_m']
+h2 = math.hypot(1, m_slope)
+nrm = (-m_slope/h2, 1/h2)
+def edge_pt_model(t_in, depth_in):
+    x = (t_in - nrm[0]*0 ) * IN  # param t is x-position (inches)
+    px = (t_in + (-m_slope/h2) * (-depth_in)) * IN
+    pz = (m_slope*t_in + cxi + (1/h2) * (-depth_in) - y_floor) * IN
+    return (px, pz)
+cut_pts = []
+ts = [T0X_in + k*(XR_in - T0X_in)/60 for k in range(61)]
+for t in ts:
+    cut_pts.append(edge_pt_model(t, taper_depth(t)))
+for t in reversed(ts):
+    cut_pts.append(edge_pt_model(t, 4.3))          # below the full-depth edge
+with BuildPart() as taper_bp:
+    with BuildSketch(Plane.XZ):
+        with BuildLine():
+            Polyline(*(cut_pts + [cut_pts[0]]))
+        make_face()
+    extrude(amount=200, both=True)
+midrib = midrib - taper_bp.part
+print('side-wall taper applied (4 -> 2.25 in at the shoulder)')
+
+# analytic stress/deflection along the tapered member (walls dominate I)
+WALLt = 3/16*IN
+Lspan = (XR_in - T0X_in) * math.hypot(1, m_slope) * IN / 1000.0   # m, along axis
+qload = 3700.0 / Lspan                                            # N/m transverse
+Emod = 69e9
+xsN = 200
+worst = (0, 0)
+integ = 0.0
+for k in range(1, xsN):
+    xi = k / xsN
+    Mx = qload * (xi*Lspan) * (Lspan - xi*Lspan) / 2
+    d_mm = taper_depth(T0X_in + xi*(XR_in - T0X_in)) * IN
+    I_mm4 = 2 * (WALLt * d_mm**3 / 12) + (63.5 * 4.76**3/12 + 63.5*4.76*(d_mm/2)**2*0)
+    S_mm3 = I_mm4 / (d_mm/2)
+    sig = Mx*1000 / S_mm3
+    if sig > worst[0]:
+        worst = (sig, xi)
+print(f"tapered-midrib max bending stress {worst[0]:.1f} MPa at xi={worst[1]:.2f} (allow 138 parent)")
+
 # ---- neck plates from the hand-edited curves ----
 svg = open(os.path.join(HERE, 'Erand49.svg')).read()
 def path_d(colorhex):

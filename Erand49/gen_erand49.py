@@ -161,6 +161,22 @@ def mp(t, off):
 y_floor = y_base
 def t_at_y(yq, off):
     return (yq - cxi - py_*off) / m
+# side-wall depth taper (2026-09-01): full 4 in through the base half (pillar
+# welds, leg hinges), then a smoothstep ease to 2.25 in at the shoulder — the
+# moment falls parabolically toward the supports, and the open bottom makes the
+# taper two saw cuts on the free wall edges. Single source of truth here;
+# frame_cad.py and the SVG builder consume it via exec.
+T0X = t_at_y(y_floor, 0)
+TAPER_S0, D_MID, D_END = 0.30, 4.0, 2.25
+def taper_depth(t):
+    s = (t - T0X) / (xr_m - T0X)
+    s = min(max(s, 0.0), 1.0)
+    if s <= TAPER_S0:
+        return D_MID
+    u = (s - TAPER_S0) / (1.0 - TAPER_S0)
+    ss = 3*u*u - 2*u*u*u
+    return D_MID - (D_MID - D_END) * ss
+
 y_sh = m*(xr_m - 1.5) + cxi                 # start of the shoulder lap along the channel top
 for off in (0, -2*MHW):
     t0 = t_at_y(y_floor, off)
@@ -172,8 +188,11 @@ for off in (0, -2*MHW):
         (xc, yc), (xd, yd) = mp(xr_m - 1.5, 0), mp(xr_m, 0)
         band.append(f'<line x1="{xc:.1f}" y1="{yc:.1f}" x2="{xd:.1f}" y2="{yd:.1f}" stroke="#1565c0" stroke-width="2" stroke-dasharray="7 5"><title>channel top hidden behind the neck plates — welded to BOTH plates along this lap (ER-005)</title></line>')
     else:
-        (xa, ya), (xb, yb) = mp(t0, off), mp(xr_m, off)
-        band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#1565c0" stroke-width="2"/>')
+        # tapered lower edge: polyline mp(t, -taper_depth(t))
+        ts = [t0 + k*(xr_m - t0)/40 for k in range(41)]
+        pts = [mp(t, -taper_depth(t)) for t in ts]
+        d = 'M ' + ' L '.join(f'{x:.1f} {y:.1f}' for x, y in pts)
+        band.append(f'<path d="{d}" fill="none" stroke="#1565c0" stroke-width="2"><title>side-wall lower edge — tapered 4 in -> 2.25 in toward the shoulder (two saw cuts; moment falls toward the supports)</title></path>')
 # horizontal shoulder weld: plate bottom tab to midrib side wall, both plates.
 # mirrored from Erand49.svg (id="shoulder-weld") when present, else 12 mm below the lap start
 y_w = y_sh - 12/IN
@@ -357,7 +376,7 @@ overall diameter</b>. Colors per harp convention: <span class="leg" style="color
 <span class="leg" style="color:#2e5fa3">F blue</span> · others dark gray; hover any string for its
 spec. Dark ticks: nut and tuner pin; colored 12° top segments: tuner leads. Amber crosshairs:
 optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Green Beziers (dark = tuner rail, light = sensor rail) — the neck outline, hand-tuned in <code>Erand49.svg</code>. b0*/a0*: spec extrapolated from c1 physics
-(<code>string-specs.md</code>). Frame colors: <b style="color:#d32f2f">pillar red</b> · <b style="color:#1565c0">midrib blue</b> · <b style="color:#2e7d32">neck green</b>. Per <code>frame-spec.md</code>: midrib channel side profile (4" sides, top web on the string-anchor line, dash-dot centerline) from the pillar foot to the shoulder; pillar (Ø2" round tube) crown to floor through the open-bottom midrib; plates lap the midrib side walls at the shoulder, joined by the top seam and horizontal fillets (ER-005), crown pads on the pillar; ISO 129 dims in mm.</p>
+(<code>string-specs.md</code>). Frame colors: <b style="color:#d32f2f">pillar red</b> · <b style="color:#1565c0">midrib blue</b> · <b style="color:#2e7d32">neck green</b>. Per <code>frame-spec.md</code>: midrib channel side profile (4" sides through the base half, tapering to 2.25" at the shoulder; top web on the string-anchor line, dash-dot centerline) from the pillar foot to the shoulder; pillar (Ø2" round tube) crown to floor through the open-bottom midrib; plates lap the midrib side walls at the shoulder, joined by the top seam and horizontal fillets (ER-005), crown pads on the pillar; ISO 129 dims in mm.</p>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0v:.0f} 0 {x1v-x0v:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
 {BAND_STYLE}
 {chr(10).join(band)}
@@ -462,7 +481,9 @@ weld callouts until annotation is migrated.</p>
 <text x="1005" y="142" class="fs">in the top face ℄; knot rests</text>
 <text x="1005" y="154" class="fs">inside, concealed by the sides;</text>
 <text x="1005" y="166" class="fs">OPEN BOTTOM — knots and wiring</text>
-<text x="1005" y="178" class="fs">serviced directly, no access holes</text>
+<text x="1005" y="178" class="fs">serviced directly, no access holes;</text>
+<text x="1005" y="190" class="fs">section at mid-span — walls taper</text>
+<text x="1005" y="202" class="fs">to 2.25" at the shoulder (saw cuts)</text>
 <text x="810" y="400" class="fs">0.88 kN·m mid-span → ~40 MPa, SF ~3.5 (parent); bow ~3.5 mm</text>
 <text x="810" y="414" class="fs">section symmetric about the string plane ⇒ shear center on-plane, no string-load torsion</text>
 

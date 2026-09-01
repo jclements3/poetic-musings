@@ -15,7 +15,7 @@ temper. Loads from `string-specs.md`: band pull 7.00 kN (49 strings), string ang
 
 | Member | Section | Governing load | Result |
 |---|---|---|---|
-| Midrib | **C-channel: 2.5 in web on top (string face) + two 4 in side walls, 3/16 wall, OPEN BOTTOM** — strings through grommeted web holes; knots inside, covered by the sides, serviced from the open bottom | 5.9 kN axial + 3.7 kN transverse over ~1.9 m -> M ~ 0.88 kN-m mid-span | ~40 MPa, SF ~3.5 parent; bow ~3.5 mm; symmetric about the string plane -> shear center on-plane, no string-load torsion |
+| Midrib | **C-channel: 2.5 in web on top + two side walls, 3/16 wall, OPEN BOTTOM — walls full 4 in through the base half, smoothstep TAPER to 2.25 in at the shoulder** (two saw cuts on the free lower edges; moment falls toward the supports) | 5.9 kN axial + 3.7 kN transverse over ~1.9 m | tapered: max ~78 MPa at xi~0.74 (allow 138 = yield/2; 3.5x vs yield), bow ~7.5 mm mid-span, ~0.7 kg saved; base half untapered for the pillar welds and leg hinges; symmetric section -> no string-load torsion |
 | Pillar | **round tube, 2 in OD x 3/16 in wall**, crown to floor, passing through the midrib base | few kN compression + hung PM console + lean loads | Euler Pcr ~ 31 kN over ~2 m, ~6x margin; cleat on a saddle block |
 | Neck plates x2 | per `Erand49.svg` hand-edited outline | pin + sensor mounting (verified: min pin-edge 16.2 mm, min sensor-edge 7.1 mm) | lap OUTSIDE the side walls at the shoulder (**ER-005**) — no milling, plates stand 8 mm proud each side; joined by two weld systems: the top seam (channel top corners to both plates along the ~60 mm lap) and the horizontal fillet (each plate bottom tab to its side wall); the neck edge lands ON the channel top line at the shoulder corner (**plate gap = 63.5 mm**). Crown: 6.35 mm pads per side to the round pillar, crush-sleeved bolts |
 
@@ -57,8 +57,12 @@ temper. Loads from `string-specs.md`: band pull 7.00 kN (49 strings), string ang
 ## Midrib channel notes
 
 - Why 4 in deep: it is BENDING depth, not bulk — an unsupported 1.9 m beam under
-  3.7 kN transverse needs depth^2; at 1.75 in deep the welded-HAZ stress would be
-  ~4x over allowable. Walls stay 3/16 in — the section is skin and air.
+  3.7 kN transverse needs depth^2. Walls stay 3/16 in — the section is skin and air.
+- Taper (2026-09-01): depth is only needed where the moment is. Walls hold 4 in
+  through the base half (pillar pass-through, leg hinges), then smoothstep to
+  2.25 in at the shoulder. Fabrication is two saw cuts on the open channel's free
+  lower edges. Source of truth: taper_depth() in gen_erand49.py; consumed by
+  frame_cad.py and the drawings. Numbers: max 78 MPa @ xi=0.74, bow 7.5 mm.
 - String terminations: grommeted holes in the top web on the centerline; knot
   inside, covered by the 4 in sides; restringing and wiring serviced directly
   through the open bottom — no access holes.
