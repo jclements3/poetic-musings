@@ -275,10 +275,11 @@ print("sensor beam bores drilled")
 # clearance hole in the side wall (ISO 273 medium fit for M8) into a flanged nut
 # inside the open channel. A single coaxial Ø8.4 cut makes both wall holes.
 LEG_W, LEG_T = 1.0 * IN, 0.125 * IN     # flat bar 25.4 x 3.175
-LEG_L = 325.0                           # bar length hinge-eye -> foot end (295 was the
-                                        # spec estimate; the measured CoM height 1088 mm
-                                        # needs 325 to clear the 15 deg sideways tip)
-LEG_ANG = 55.0                          # deployed angle from vertical, in the YZ plane
+LEG_L = 550.0                           # bar length hinge-eye -> foot end (JC 2026-09-01:
+                                        # 550 mm swept 55 deg -- the straight +/-Y legs left
+                                        # the base statically unstable forward, -10.3 deg)
+LEG_ANG = 55.0                          # deployed angle from vertical
+LEG_SWEEP = 55.0                        # plan sweep toward the treble (+x): fore-aft footprint
 LEG_TAIL = 6.0                          # bar continues past the hinge eye (boss cover)
 BOSS_D, BOSS_L = 22.0, 6.0              # hinge boss Ø and wall stand-off
 BOLT_SHOULDER_D, BOLT_THREAD_CLR = 10.1, 8.4
@@ -286,6 +287,7 @@ PAD_D, PAD_H = 32.0, 8.0                # rubber foot pads (cylinders)
 PAD_CLR = 1.0                           # bar end floats this far above the pad top
 
 sa, ca = math.sin(math.radians(LEG_ANG)), math.cos(math.radians(LEG_ANG))
+sw_s, sw_c = math.sin(math.radians(LEG_SWEEP)), math.cos(math.radians(LEG_SWEEP))
 z_h = PAD_H + PAD_CLR + LEG_L * ca                       # hinge height so the pad lands on the floor
 drop = DEPTH / h                                         # vertical height of the sloped side wall band
 # hinge at mid-depth of the side wall: anchor_z(x) - drop/2 = z_h
@@ -297,7 +299,7 @@ y_bar = y_wall + BOSS_L + LEG_T / 2                      # bar mid-plane stand-o
 
 legs_parts, pads_parts = [], []
 for sgn in (1, -1):
-    d = (0, sgn * sa, -ca)                               # deployed leg direction, hinge -> foot
+    d = (sa * sw_s, sgn * sa * sw_c, -ca)                # deployed: tilted AND swept toward +x
     p0 = (x_h, sgn * y_bar - d[1] * LEG_TAIL, z_h - d[2] * LEG_TAIL)
     with BuildPart() as leg_bp:
         with BuildSketch(Plane(origin=p0, x_dir=(1, 0, 0), z_dir=d)):
@@ -308,8 +310,9 @@ for sgn in (1, -1):
     leg = leg_bp.part + boss
     leg -= Pos(x_h, sgn * y_bar, z_h) * Rot(90, 0, 0) * Cylinder(BOLT_SHOULDER_D / 2, 60)
     legs_parts.append(leg)
-    foot_y = sgn * y_bar + d[1] * LEG_L                  # bar end centerline at the floor
-    pads_parts.append(Pos(x_h, foot_y, 0) * Cylinder(PAD_D / 2, PAD_H,
+    foot_x = x_h + d[0] * LEG_L                          # bar end centerline at the floor
+    foot_y = sgn * y_bar + d[1] * LEG_L
+    pads_parts.append(Pos(foot_x, foot_y, 0) * Cylinder(PAD_D / 2, PAD_H,
                                                      align=(Align.CENTER, Align.CENTER, Align.MIN)))
 legs = legs_parts[0] + legs_parts[1]
 pads = pads_parts[0] + pads_parts[1]
