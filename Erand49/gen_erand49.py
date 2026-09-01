@@ -177,15 +177,43 @@ def taper_depth(t):
     ss = 3*u*u - 2*u*u*u
     return D_MID - (D_MID - D_END) * ss
 
+# the solid/dashed split on the channel top = where the neck's inner curve
+# actually touches it (read from the hand-edited SVG; fallback: xr_m - 1.5)
+def _svg_path_end(colorhex):
+    try:
+        import re as _re
+        _s = open(os.path.join(HERE, 'Erand49.svg')).read()
+        _d = _re.search(r'\bd="([^"]+)"',
+              [p for p in _re.findall(r'<path[^>]*>', _s, _re.S) if colorhex in p][0]).group(1)
+        toks = _re.findall(r'[mMcClLzZ]|-?\d+\.?\d*(?:e-?\d+)?', _d)
+        i = 0; cur = (0.0, 0.0); cmd = None
+        while i < len(toks):
+            if toks[i] in 'mMcClLzZ': cmd = toks[i]; i += 1; continue
+            v = float(toks[i]); w = float(toks[i+1]); i += 2
+            if cmd in 'mM':
+                cur = (v, w) if cmd == 'M' else (cur[0]+v, cur[1]+w)
+                cmd = 'l' if cmd == 'm' else 'L'
+            elif cmd in 'cC':
+                v2 = [float(toks[i+k]) for k in range(4)]; i += 4
+                e = (v2[2], v2[3]) if cmd == 'C' else (cur[0]+v2[2], cur[1]+v2[3])
+                cur = e
+            elif cmd in 'lL':
+                cur = (v, w) if cmd == 'L' else (cur[0]+v, cur[1]+w)
+        return cur
+    except Exception:
+        return None
+_send = _svg_path_end('66bb6a')
+t_lap = (_send[0] / IN) if _send else (xr_m - 1.5)
+
 y_sh = m*(xr_m - 1.5) + cxi                 # start of the shoulder lap along the channel top
 for off in (0, -2*MHW):
     t0 = t_at_y(y_floor, off)
     if off == 0:
         # channel top: solid to the shoulder lap, then DASHED behind the neck plates —
         # and that hidden run is a weld: channel top to both plates
-        (xa, ya), (xb, yb) = mp(t0, 0), mp(xr_m - 1.5, 0)
+        (xa, ya), (xb, yb) = mp(t0, 0), mp(t_lap, 0)
         band.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="#1565c0" stroke-width="2"/>')
-        (xc, yc), (xd, yd) = mp(xr_m - 1.5, 0), mp(xr_m, 0)
+        (xc, yc), (xd, yd) = mp(t_lap, 0), mp(xr_m, 0)
         band.append(f'<line x1="{xc:.1f}" y1="{yc:.1f}" x2="{xd:.1f}" y2="{yd:.1f}" stroke="#1565c0" stroke-width="2" stroke-dasharray="7 5"><title>channel top hidden behind the neck plates — welded to BOTH plates along this lap (ER-005)</title></line>')
     else:
         # tapered lower edge: polyline mp(t, -taper_depth(t))
@@ -207,7 +235,7 @@ try:
         wx1, wy1, wx2, wy2 = float(_g['x1']), float(_g['y1']), float(_g['x2']), float(_g['y2'])
 except OSError:
     pass
-band.append(f'<line x1="{wx1:.1f}" y1="{wy1:.1f}" x2="{wx2:.1f}" y2="{wy2:.1f}" stroke="#c9553a" stroke-width="2.5"><title>shoulder weld — horizontal fillet, plate bottom edge to midrib side wall, both plates (ER-005); position mirrors id=shoulder-weld in Erand49.svg</title></line>')
+band.append(f'<line x1="{wx1:.1f}" y1="{wy1:.1f}" x2="{wx2:.1f}" y2="{wy2:.1f}" stroke="#c9553a" stroke-width="2.5"><title>shoulder weld — plate bottom edge to midrib side wall between the two neck/member junctions, both plates (ER-005); position mirrors id=shoulder-weld in Erand49.svg</title></line>')
 band.append(f'<text x="{wx2+10:.0f}" y="{wy2+14:.0f}" class="nl" fill="#c9553a">shoulder weld</text>')
 
 (cx2, cy2) = mp(xr_m - 0.6, -2*MHW)
