@@ -498,6 +498,10 @@ def add_dim_layer(name, layer):
     doc = doc.replace(mvb.group(0), f'viewBox="{x0:.2f} {y0:.2f} {x1-x0:.2f} {y1-y0:.2f}"')
     doc = re.sub(r'width="[-\d.]+mm" height="[-\d.]+mm"',
                  f'width="{x1-x0:.2f}mm" height="{y1-y0:.2f}mm"', doc, count=1)
+    import datetime as _dt
+    _stamp = _dt.datetime.now().strftime('%Y-%m-%d %H:%M')
+    layer.el.append(f'<text x="{x0+8:.1f}" y="{y0+16:.1f}" font-size="11" fill="#999" '
+                    f'font-family="ui-monospace,Consolas,monospace">generated {_stamp} — stale if this date is old</text>')
     doc = doc.replace('</svg>', '<g id="dimensions">\n' + '\n'.join(layer.el) + '\n</g>\n</svg>')
     open(path, 'w').write(doc)
     print(f'appended dimension layer to {name} ({len(layer.el)} elements)')
