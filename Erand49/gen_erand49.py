@@ -397,6 +397,7 @@ open(os.path.join(HERE, 'Erand49-generated.svg'), 'w').write(svg_doc)
 BAND_STYLE = '<style>.nl{font-size:13px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}</style>'
 import datetime as _dt
 stampnow = _dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+stampv = _dt.datetime.now().strftime("%Y%m%d%H%M%S")
 html = f"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=6, user-scalable=yes">
 <title>Erand49 harp layout</title>
@@ -441,9 +442,9 @@ solid with true hidden-line removal (dashed = hidden), so intersections (the pil
 through the inclined web, the plate laps) are geometrically exact rather than hand-drawn. Regenerate:
 <code>LD_LIBRARY_PATH=$HOME/miniconda3/lib python3 frame_cad.py</code>.</p>
 <table><tr>
-<td style="width:44%"><b>Front (XZ)</b><br/><img src="cad-front.svg" style="max-width:100%"/></td>
-<td style="width:16%"><b>Side (YZ)</b><br/><img src="cad-side.svg" style="max-width:100%"/></td>
-<td style="width:40%"><b>Top (XY)</b><br/><img src="cad-top.svg" style="max-width:100%"/></td>
+<td style="width:44%"><b>Front (XZ)</b><br/><img src="cad-front.svg?v={stampv}" style="max-width:100%"/></td>
+<td style="width:16%"><b>Side (YZ)</b><br/><img src="cad-side.svg?v={stampv}" style="max-width:100%"/></td>
+<td style="width:40%"><b>Top (XY)</b><br/><img src="cad-top.svg?v={stampv}" style="max-width:100%"/></td>
 </tr></table>
 <table><tr>
 <td style="width:30%"><b>Midrib section ⊥ member (CAD slice)</b><br/><img src="cad-sec-midrib.svg" style="max-width:100%"/></td>
