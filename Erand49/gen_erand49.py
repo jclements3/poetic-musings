@@ -216,9 +216,22 @@ for off in (0, -2*MHW):
         (xc, yc), (xd, yd) = mp(t_lap, 0), mp(xr_m, 0)
         band.append(f'<line x1="{xc:.1f}" y1="{yc:.1f}" x2="{xd:.1f}" y2="{yd:.1f}" stroke="#1565c0" stroke-width="2" stroke-dasharray="7 5"><title>channel top hidden behind the neck plates — welded to BOTH plates along this lap (ER-005)</title></line>')
     else:
-        # tapered lower edge: polyline mp(t, -taper_depth(t))
-        ts = [t0 + k*(xr_m - t0)/40 for k in range(41)]
+        # tapered lower edge: polyline mp(t, -taper_depth(t)), ENDING exactly at
+        # the outer-shoulder junction (the hand-edited tuner rail's endpoint):
+        # green, red and blue share that point; the wall does not run past it
+        _tend = _svg_path_end('2e7d32')
+        t_tun = xr_m
+        if _tend:
+            lo, hi = t0, xr_m
+            for _ in range(60):
+                mid = (lo + hi) / 2
+                if mp(mid, -taper_depth(mid))[0] < _tend[0]: lo = mid
+                else: hi = mid
+            t_tun = (lo + hi) / 2
+        ts = [t0 + k*(t_tun - t0)/40 for k in range(41)]
         pts = [mp(t, -taper_depth(t)) for t in ts]
+        if _tend:
+            pts[-1] = (_tend[0], _tend[1])   # land on the junction, not near it
         d = 'M ' + ' L '.join(f'{x:.1f} {y:.1f}' for x, y in pts)
         band.append(f'<path d="{d}" fill="none" stroke="#1565c0" stroke-width="2"><title>side-wall lower edge — tapered 4 in -> 2.25 in toward the shoulder (two saw cuts; moment falls toward the supports)</title></path>')
 # horizontal shoulder weld: plate bottom tab to midrib side wall, both plates.
