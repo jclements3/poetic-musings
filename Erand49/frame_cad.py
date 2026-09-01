@@ -406,6 +406,7 @@ def view(shape, name, origin, up=(0, 0, 1)):
     # 2 beams x 2 plates of hidden hole edges read as a random dot cloud (JC:
     # 'the flats/optics dots are wrong'); hidden lines < 25 mm carry no info here
     hidden = [h for h in hidden if h.length >= 25.0]
+    visible = [v for v in visible if v.length >= 12.0]   # drop bore-hole ellipses (~10 mm)
     exp = ExportSVG(scale=1.0)
     exp.add_layer('visible', line_weight=0.5)
     exp.add_layer('hidden', line_weight=0.25, line_type=LineType.HIDDEN)
@@ -556,18 +557,13 @@ OFFD = 80
 front.linear(f2s(*va), f2s(*vb),
              f2s(va[0] + u[0]*OFFD, va[1] + u[1]*OFFD),
              f2s(vb[0] + u[0]*OFFD, vb[1] + u[1]*OFFD), f"{D_meas:.1f}")
-# flats/optics reference: draw each station's optical point as an amber cross
-# with a faint arc through all 49 — the same marks as figure 1, so the bore
-# pairs can be read against their stations
-_arc = ' '.join(f"{'M' if i == 0 else 'L'} {f2s(sx, sz)[0]:.1f} {f2s(sx, sz)[1]:.1f}"
-                for i, (_, sx, sz, _, _) in enumerate(stations))
-front.el.append(f'<path d="{_arc}" fill="none" stroke="#e0b96a" stroke-width="0.7" stroke-dasharray="3 3"/>')
-for _, sx, sz, _, _ in stations:
-    fx, fz = f2s(sx, sz)
+# flats reference (JC: 'just show only the flats dots'): one amber dot per
+# string at its flat-pin point — nothing else; bores stay drilled in the solid
+# but their tiny ellipses are filtered from the projection above
+for fx0, fz0 in [sv(px, py) for (px, py) in ns['flats_px']]:
+    fx, fz = f2s(fx0, fz0)
     front._track(fx, fz)
-    front.el.append(f'<g stroke="#a8700f" stroke-width="1.1">'
-                    f'<line x1="{fx-4:.1f}" y1="{fz:.1f}" x2="{fx+4:.1f}" y2="{fz:.1f}"/>'
-                    f'<line x1="{fx:.1f}" y1="{fz-4:.1f}" x2="{fx:.1f}" y2="{fz+4:.1f}"/></g>')
+    front.el.append(f'<circle cx="{fx:.1f}" cy="{fz:.1f}" r="2.4" fill="#a8700f"/>')
 add_dim_layer('cad-front.svg', front)
 
 # side view maps model (Y, Z): the leg stance width lives here — it is a Y

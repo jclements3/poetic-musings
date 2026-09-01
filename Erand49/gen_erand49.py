@@ -130,6 +130,20 @@ for a, b, L in frame:
 for n, note, fg, Lg, odg, tg, gx, glo in gpts:
     sense.append((gx, glo + Lg - Lg*SENSE_RATIO))
 
+# flat-pin points, one per string: the DXF middle tick just above each optical
+# point (a0/b0 synthesized at L like their sense points). Exported for the CAD
+# front view (JC: 'just show only the flats dots').
+flats = []
+for sx, sy in sense:
+    cand = [ (a[1]+b[1])/2 for a, b in marks
+             if abs((a[0]+b[0])/2 - sx) < 0.35 and (a[1]+b[1])/2 < sy ]
+    if cand:
+        flats.append((sx, max(cand)))          # nearest tick above = flat pin
+    else:
+        flats.append((sx, sy - 0.056*abs(sy))) # synthesized strings: keep the ratio
+flats_px = [(X(fx), Y(fy)) for fx, fy in flats]
+
+
 # figure 1 mirrors the hand-edited sensor-axes group in Erand49.svg when present
 # (same master-file rule as the neck rails); falls back to the computed DXF points
 sense_px = [(X(sx), Y(sy)) for sx, sy in sense]
