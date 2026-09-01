@@ -16,7 +16,7 @@ temper. Loads from `string-specs.md`: band pull 7.00 kN (49 strings), string ang
 | Member | Section | Governing load | Result |
 |---|---|---|---|
 | Midrib | **C-channel: 2.5 in web on top + two side walls, 3/16 wall, OPEN BOTTOM — walls full 4 in through the base half, smoothstep TAPER to 2.25 in at the shoulder** (two saw cuts on the free lower edges; moment falls toward the supports) | 5.9 kN axial + 3.7 kN transverse over ~1.9 m | tapered: max ~78 MPa at xi~0.74 (allow 138 = yield/2; 3.5x vs yield), bow ~7.5 mm mid-span, ~0.7 kg saved; base half untapered for the pillar welds and leg hinges; symmetric section -> no string-load torsion |
-| Pillar | **round tube, 2 in OD x 3/16 in wall**, crown to floor, passing through the midrib base | few kN compression + hung PM console + lean loads | Euler Pcr ~ 31 kN over ~2 m, ~6x margin; cleat on a saddle block |
+| Pillar | **round tube, 2 in OD x 3/16 in wall**, crown to floor, passing through the midrib base | few kN compression + lean loads | Euler Pcr ~ 31 kN over ~2 m, ~6x margin |
 | Neck plates x2 | per `Erand49.svg` hand-edited outline | pin + sensor mounting (verified: min pin-edge 16.2 mm, min sensor-edge 7.1 mm) | lap OUTSIDE the side walls at the shoulder (**ER-005**) — no milling, plates stand 8 mm proud each side; joined by two weld systems: the top seam (channel top corners to both plates along the ~60 mm lap) and the horizontal fillet (each plate bottom tab to its side wall); the neck edge lands ON the channel top line at the shoulder corner (**plate gap = 63.5 mm**). Crown: 6.35 mm pads per side to the round pillar, crush-sleeved bolts |
 
 | Outrigger legs x2 | 1 in x 1/8 in flat bar, 325 mm, shoulder-bolt hinges through the midrib side walls near the floor foot (**ER-006**): Ø10 h8 shoulder (M8 thread) bolt per side, Ø8.4 wall clearance hole, Ø10.1 leg/boss bore, flanged nut inside the open channel; hinge at x=228 z=195 mm | sideways stability: frame footprint in Y is otherwise zero | **CAD-measured** (frame_cad.py solids, Al 2700 kg/m3, strings/plinth excluded): assembly 14.47 kg, CoM height 1088 mm; deployed 55 deg -> 611 mm stance (pad centers); tip angles: sideways **15.7 deg** over a leg-pad line (asserted >= 15 in frame_cad.py), back 17.5 deg; forward -11.8 deg — the CoM sits treble-ward of all floor supports, so fore-aft the harp is held by the plinth dock, the legs solve the Y footprint. Fold flat for travel; wing-bolt locks |
@@ -34,7 +34,6 @@ temper. Loads from `string-specs.md`: band pull 7.00 kN (49 strings), string ang
    the top seam along the lap and the horizontal fillets along the plate bottom
    tabs (ER-005); at the crown, bolt via the 6.35 mm pads (crush sleeves
    through the round tube).
-4. Bolt the cleat saddle around the round pillar for the PM console.
 
 ## Neck stack at the 63.5 mm gap
 

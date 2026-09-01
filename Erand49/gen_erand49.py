@@ -457,7 +457,7 @@ weld callouts until annotation is migrated.</p>
 <table>
 <tr><th>Member</th><th>Section (6061-T6)</th><th>Check @ welded-HAZ allowable</th></tr>
 <tr><td class="k">Midrib</td><td>Rect tube 4" × 2" × 3/16" — strings through grommeted holes in the top face; knots concealed inside the sides; access holes in the bottom face; closed section, no torsion issue</td><td>0.88 kN·m mid-span → ~25 MPa, SF ~5.5</td></tr>
-<tr><td class="k">Pillar</td><td>Square tube 2" × 2" × 1/8", top rebated 8 mm/side for the plates — cleat bolts to the flat +Y face</td><td>Euler ~39 kN vs few kN, ~8× margin</td></tr>
+<tr><td class="k">Pillar</td><td>Square tube 2" × 2" × 1/8", top rebated 8 mm/side for the plates</td><td>Euler ~39 kN vs few kN, ~8× margin</td></tr>
 <tr><td class="k">Neck</td><td>2 plates per <code>Erand49.svg</code>, bolted flush onto the ±Y faces of pillar and midrib (both 50.8 mm wide → plate gap 50.8); no blocks; through-bolts with crush sleeves</td><td>pin-edge ≥ 16.2 mm, sensor-edge ≥ 7.1 mm verified</td></tr>
 </table>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 2130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 frame ISO 128 sections">
@@ -507,7 +507,7 @@ weld callouts until annotation is migrated.</p>
 <text x="540" y="270" class="fs">Euler ~31 kN over 2 m ⇒ ~6× margin</text>
 <text x="540" y="284" class="fs">incl. hung PM console + lean loads</text>
 <text x="540" y="304" class="fs">crown: 6.35 pads/side to the plates,</text>
-<text x="540" y="318" class="fs">crush-sleeved bolts; cleat on a saddle</text>
+<text x="540" y="318" class="fs">crush-sleeved bolts</text>
 
 <text x="810" y="20" class="fg">ER-003 — MIDRIB SECTION (C-channel: 2.5" web top + 4" sides × 3/16", open bottom)</text>
 <path d="M860 293.2 L860 90 L987 90 L987 293.2 L977.5 293.2 L977.5 99.5 L869.5 99.5 L869.5 293.2 Z" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
