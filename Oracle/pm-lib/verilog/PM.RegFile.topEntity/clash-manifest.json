@@ -1,6 +1,6 @@
 {
     "components": [
-        "pm_zones"
+        "pm_regfile"
     ],
     "dependencies": {
         "transitive": []
@@ -37,25 +37,25 @@
     },
     "files": [
         {
-            "name": "pm_zones_shim.cpp",
-            "sha256": "a6398c428472543dbf054dd754276a770b725b5dacec07e299374bb49e50a37a"
+            "name": "pm_regfile_shim.cpp",
+            "sha256": "2538dca803b81637f080300fed665bf0588626b183ff036b9cbcb32e8586cf9a"
         },
         {
-            "name": "pm_zones.sdc",
+            "name": "pm_regfile.sdc",
             "sha256": "40781da2747f3cf79058ce5a4d82f342b2c2f75724408518a280342d77f88e61"
         },
         {
-            "name": "pm_zones.v",
-            "sha256": "62c8bc4de514dfb9efeefc8e899cd555933e682cbf26bb1d42e1d38568a95acb"
+            "name": "pm_regfile.v",
+            "sha256": "d1b515c1793c78ba59ea400202ecc4638ed7b9305e4cb4bb5a727aff011e6a3a"
         }
     ],
     "flags": [
         20,
         20
     ],
-    "hash": "16e9818f3e03185674745ce335f3950f9078d80f4f60cf75dff3e63b7517425f",
+    "hash": "a8a91d548fcbc934ed7fb26149434645141f47c487d392f77e4b8b13558ca77c",
     "top_component": {
-        "name": "pm_zones",
+        "name": "pm_regfile",
         "ports_flat": [
             {
                 "direction": "in",
@@ -84,44 +84,51 @@
             {
                 "direction": "in",
                 "is_clock": false,
-                "name": "s2_adc",
+                "name": "bus",
+                "type_name": "[33:0]",
+                "width": 34
+            },
+            {
+                "direction": "in",
+                "is_clock": false,
+                "name": "s2",
                 "type_name": "[11:0]",
                 "width": 12
             },
             {
                 "direction": "in",
                 "is_clock": false,
-                "name": "s3_adc",
+                "name": "s3",
                 "type_name": "[11:0]",
                 "width": 12
             },
             {
                 "direction": "in",
                 "is_clock": false,
-                "name": "s4_adc",
+                "name": "s4",
                 "type_name": "[11:0]",
                 "width": 12
             },
             {
-                "direction": "out",
+                "direction": "in",
                 "is_clock": false,
-                "name": "ipanel",
-                "type_name": "[15:0]",
-                "width": 16
+                "name": "cols",
+                "type_name": "[7:0]",
+                "width": 8
+            },
+            {
+                "direction": "in",
+                "is_clock": false,
+                "name": "status",
+                "type_name": "[80:0]",
+                "width": 81
             },
             {
                 "direction": "out",
                 "is_clock": false,
-                "name": "mode",
-                "type_name": "[2:0]",
-                "width": 3
-            },
-            {
-                "direction": "out",
-                "is_clock": false,
-                "name": "mode_change",
-                "type_name": "",
-                "width": 1
+                "name": "regs",
+                "type_name": "[93:0]",
+                "width": 94
             }
         ]
     },

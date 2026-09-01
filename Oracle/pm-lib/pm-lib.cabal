@@ -32,6 +32,7 @@ library
                    PM.Zones
     PM.Cdc
     PM.HarpLink
+    PM.RegFile
 
 -- `cabal run clash -- -isrc PM.Matrix --verilog` needs a clash binary built
 -- against THIS package's environment; same trick as Oracle/clash-h2 and
@@ -71,6 +72,14 @@ test-suite harplink-test
   type:           exitcode-stdio-1.0
   hs-source-dirs: test
   main-is:        HarpLinkSpec.hs
+  ghc-options:    -O2
+  build-depends:  pm-lib
+
+test-suite regfile-test
+  import:         opts
+  type:           exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is:        RegFileSpec.hs
   ghc-options:    -O2
   build-depends:  pm-lib
 

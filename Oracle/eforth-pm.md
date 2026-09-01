@@ -59,6 +59,7 @@ PM peripherals extend from `0x4020`. **All PM addresses are provisional** until
 
 Status (2026-08-31): 0x4020 zone-decode gateware (S2/S3/S4 hysteresis, 1 s S3 dwell, iPanel packing) exists in `pm-lib` (`Oracle/pm-lib/src/PM/Zones.hs`), sim-verified by `cabal test zones-test`.
 Status (2026-08-31): 0x4024 matrix-scanner gateware (8×8 scan, 10 ms debounce, event FIFO, iKeys/oMatrixCtrl) exists in `pm-lib` (`Oracle/pm-lib/src/PM/Matrix.hs`), sim-verified by `cabal test matrix-test`.
+Status (2026-09-01): the register file itself — H2-bus decode for 0x4020–0x403F with the side-effecting 0x4024 read, reset-muted oAudio, synth/keyer command pulses, and the 0x4032 arm-key ∧ mode-C hardware interlock — exists in `pm-lib` (`Oracle/pm-lib/src/PM/RegFile.hs`), sim-verified by `cabal test regfile-test`; Verilog gen confirmed (`pm_regfile`).
 
 Interrupts (via the stock `oIrcMask` controller): matrix key event, SD transfer done,
 keyer decoder char, harp event, 1 ms timer. Everything else is polled.

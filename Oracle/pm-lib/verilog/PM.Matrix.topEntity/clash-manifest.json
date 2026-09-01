@@ -46,14 +46,14 @@
         },
         {
             "name": "pm_matrix.v",
-            "sha256": "cf70726301643d8f474486eb16eda8964871a3800082908d7a3060db9c7d5b71"
+            "sha256": "113f2cf75288b0015b765c1e66f65cf8b4530a39330618e4e4015d6c888945cf"
         }
     ],
     "flags": [
         20,
         20
     ],
-    "hash": "8fae09a4c05319fa17173d8daf597f01f7b9059c5b52682bbe58e299259d2a47",
+    "hash": "363248db857a633fbc39aa4c1bf169c29af3f9ed80d84dc355d9d3038efeef05",
     "top_component": {
         "name": "pm_matrix",
         "ports_flat": [

@@ -3,20 +3,38 @@
 */
 `default_nettype none
 `timescale 100fs/100fs
-module pm_matrix
+module pm_regfile
     ( // Inputs
       input wire  clk // clock
     , input wire  rst // reset
     , input wire  en // enable
-    , input wire [15:0] matrix_ctrl
-    , input wire  ikeys_re
-    , input wire [7:0] col_n
+    , input wire [33:0] bus
+    , input wire [11:0] s2
+    , input wire [11:0] s3
+    , input wire [11:0] s4
+    , input wire [7:0] cols
+    , input wire [80:0] status
 
       // Outputs
-    , output wire [7:0] row_n
-    , output wire [15:0] ikeys
+    , output wire [93:0] regs
     );
-  wire [7:0] c$ds_app_arg;
+  wire [16:0] result;
+  reg [16:0] result_0 = {1'b0,16'bxxxxxxxxxxxxxxxx};
+  wire [16:0] result_1;
+  reg [16:0] result_2 = {1'b0,16'bxxxxxxxxxxxxxxxx};
+  reg [15:0] result_3 = 16'b0000000000000000;
+  wire [15:0] c$ds1_case_alt;
+  wire [15:0] c$ds1_case_alt_0;
+  wire [15:0] c$ds1_case_alt_1;
+  wire [15:0] c$ds1_case_alt_2;
+  wire [15:0] c$ds1_case_alt_3;
+  wire [15:0] c$ds1_case_alt_4;
+  wire [15:0] c$ds1_case_alt_5;
+  wire [15:0] c$ds1_case_alt_6;
+  wire [0:0] c$ds1_app_arg;
+  wire  armed;
+  wire [0:0] c$ds1_app_arg_0;
+  wire [15:0] c$ds1_case_alt_7;
   wire  eta2;
   reg [619:0] s1 = {1'b0,   3'd0,   12'd0,   {1'b0,   1'b0,   1'b0,   1'b0,   1'b0,   1'b0,
                            1'b0,   1'b0},   3'd0,   3'd0,   1'b0,   {1'b0,
@@ -102,21 +120,21 @@ module pm_matrix
   wire [383:0] c$case_alt;
   wire [383:0] c$case_alt_0;
   wire [383:0] c$case_alt_1;
-  wire  result_0;
+  wire  result_4;
   wire [63:0] c$app_arg_3;
   wire [63:0] c$case_alt_2;
-  wire [136:0] result_1;
+  wire [136:0] result_5;
   wire  flips;
   wire [4:0] z;
-  wire [3:0] result_2;
+  wire [3:0] result_6;
   wire [127:0] c$ds10_case_alt;
   wire [0:0] c$ds10_app_arg;
   wire [3:0] wr0;
   wire [4:0] n1;
   wire  c$flips_app_arg;
   wire [6:0] r;
-  wire [5:0] result_3;
-  reg  result_4;
+  wire [5:0] result_7;
+  reg  result_8;
   wire signed [63:0] c$flips_case_scrut;
   wire signed [63:0] \b# ;
   wire signed [63:0] \a# ;
@@ -125,76 +143,176 @@ module pm_matrix
   wire signed [63:0] c$curSt_app_arg;
   wire [5:0] kIx;
   wire  c$sampl_case_alt;
-  wire [8:0] result_5;
+  wire [8:0] result_9;
   wire [3:0] c$ds9_app_arg;
   wire [4:0] z_0;
-  wire [3:0] result_6;
+  wire [3:0] result_10;
   wire [3:0] c$ds9_app_arg_0;
   wire [4:0] n0;
-  wire [29:0] result_7;
+  wire [29:0] result_11;
   wire [29:0] c$ds8_case_alt;
   wire  \procBusy' ;
   wire [7:0] c$ds8_app_arg;
   wire [3:0] z_1;
-  wire [2:0] result_8;
+  wire [2:0] result_12;
   wire [2:0] \c$procIx'_case_alt ;
   wire [3:0] z_2;
-  wire [2:0] result_9;
-  wire [7:0] c$app_arg_4;
-  wire [7:0] c$vec;
-  wire [15:0] c$bv;
-  wire [7:0] s1_1;
+  wire [2:0] result_13;
+  wire  c$ds_app_arg;
+  reg [15:0] result_14 = 16'b0000000000000000;
+  reg [15:0] result_15 = 16'b0000000000000001;
+  reg  c$armed_app_arg = 1'b0;
+  wire  c$armed_app_arg_0;
+  reg [2:0] s1_0 = 3'd0;
+  wire [15:0] y;
+  wire signed [63:0] result_16;
+  wire signed [63:0] c$case_alt_3;
+  wire [2:0] result_17;
+  wire [2:0] result_18;
+  wire [2:0] c$s1_case_alt;
+  wire [2:0] c$s1_case_alt_0;
+  wire [15:0] y_0;
+  wire signed [63:0] result_19;
+  wire signed [63:0] c$case_alt_4;
+  wire [12:0] r_0;
+  wire [11:0] result_20;
+  wire [15:0] y_1;
+  wire signed [63:0] result_21;
+  wire signed [63:0] c$case_alt_5;
+  wire [12:0] r_1;
+  wire [11:0] result_22;
+  reg [1:0] s1_1 = 2'd0;
+  wire [15:0] y_2;
+  wire signed [63:0] result_23;
+  wire signed [63:0] c$case_alt_6;
+  wire [1:0] result_24;
+  wire [1:0] result_25;
+  wire [1:0] c$s1_case_alt_1;
+  wire [1:0] c$s1_case_alt_2;
+  wire [15:0] y_3;
+  wire signed [63:0] result_26;
+  wire signed [63:0] c$case_alt_7;
+  wire [12:0] r_2;
+  wire [11:0] result_27;
+  wire [15:0] y_4;
+  wire signed [63:0] result_28;
+  wire signed [63:0] c$case_alt_8;
+  wire [12:0] r_3;
+  wire [11:0] result_29;
+  reg [1:0] s1_2 = 2'd0;
+  wire [15:0] y_5;
+  wire signed [63:0] result_30;
+  wire signed [63:0] c$case_alt_9;
+  wire [1:0] result_31;
+  wire [1:0] result_32;
+  wire [1:0] c$s1_case_alt_3;
+  wire [1:0] c$s1_case_alt_4;
+  wire [15:0] y_6;
+  wire signed [63:0] result_33;
+  wire signed [63:0] c$case_alt_10;
+  wire [12:0] r_4;
+  wire [11:0] result_34;
+  wire [15:0] y_7;
+  wire signed [63:0] result_35;
+  wire signed [63:0] c$case_alt_11;
+  wire [12:0] r_5;
+  wire [11:0] result_36;
+  wire [38:0] result_37;
+  wire [38:0] c$case_alt_12;
+  wire [32:0] r_6;
+  wire [31:0] result_38;
+  wire [0:0] c$app_arg_4;
+  wire  stable;
+  reg [38:0] s1_3 = {3'd0,   3'd0,   32'd0,   1'b0};
   wire [23:0] c$app_arg_res;
-  wire [3:0] c$i_177;
+  wire [3:0] c$i_199;
   wire [127:0] c$vecFlat;
+  wire [383:0] c$vec;
   wire [383:0] c$vec_0;
-  wire [383:0] c$vec_1;
-  wire [63:0] c$vec_2;
-  wire [4:0] c$bv_0;
-  wire [127:0] c$vec_3;
+  wire [63:0] c$vec_1;
+  wire [4:0] c$bv;
+  wire [127:0] c$vec_2;
+  wire [15:0] c$bv_0;
   wire [15:0] c$bv_1;
-  wire [7:0] wr0_selection_0;
-  wire [15:0] c$bv_2;
-  wire [7:0] c$flips_app_arg_selection_1;
-  wire [15:0] c$bv_3;
-  wire [7:0] c$flips_app_arg_sel_alt_f_1;
-  wire [6:0] c$bv_4;
+  wire [6:0] c$bv_2;
   wire [383:0] c$vecFlat_0;
   wire [63:0] c$vecFlat_1;
-  wire [2:0] c$i_194;
+  wire [2:0] c$i_216;
   wire [7:0] c$vecFlat_2;
-  wire [15:0] c$bv_5;
-  wire [7:0] c$ds9_app_arg_selection_0;
-  wire [4:0] c$bv_6;
-  wire [15:0] c$bv_7;
-  wire [7:0] c$ds9_app_arg_selection_2;
-  wire [15:0] c$bv_8;
-  wire [7:0] n0_selection_0;
-  wire [3:0] c$bv_9;
-  wire [3:0] c$bv_10;
-  wire [23:0] c$app_arg_4_14;
-  wire [7:0] c$vec_4;
-  wire [23:0] result_dc_arg_0;
-  wire [23:0] result;
+  wire [4:0] c$bv_3;
+  wire [3:0] c$bv_4;
+  wire [3:0] c$bv_5;
+  wire [12:0] c$bv_6;
+  wire [12:0] c$bv_7;
+  wire [12:0] c$bv_8;
+  wire [12:0] c$bv_9;
+  wire [12:0] c$bv_10;
+  wire [12:0] c$bv_11;
+  wire [32:0] c$bv_12;
 
-  assign c$vec = ((col_n));
+  assign regs = {c$ds1_case_alt,   c$app_arg,
+                 result_3,   result_15,   result_2,   result_0,
+                 armed,   s1_3[38:36]};
 
-  // reverse begin
-  genvar i;
-  generate
-  for (i = 0; i < 8; i = i + 1) begin : reverse
-    assign c$ds_app_arg[(8 - 1 - i)*1+:1] = c$vec[i*1+:1];
+  assign result = (bus[17:17] & (bus[33:18] == 16'b0100000000110000)) ? {1'b1,bus[15:0]} : {1'b0,16'bxxxxxxxxxxxxxxxx};
+
+  // register begin
+  always @(posedge clk or  posedge  rst) begin : result_0_register
+    if ( rst) begin
+      result_0 <= {1'b0,16'bxxxxxxxxxxxxxxxx};
+    end else if (en) begin
+      result_0 <= result;
+    end
   end
-  endgenerate
-  // reverse end
+  // register end
 
-  assign eta2 = ((ikeys_re)) == 1'b1;
+  assign result_1 = (bus[17:17] & (bus[33:18] == 16'b0100000000101110)) ? {1'b1,bus[15:0]} : {1'b0,16'bxxxxxxxxxxxxxxxx};
 
-  assign c$bv = (matrix_ctrl);
+  // register begin
+  always @(posedge clk or  posedge  rst) begin : result_2_register
+    if ( rst) begin
+      result_2 <= {1'b0,16'bxxxxxxxxxxxxxxxx};
+    end else if (en) begin
+      result_2 <= result_1;
+    end
+  end
+  // register end
 
-  assign s1_1 = {(matrix_ctrl[(64'sd0)]) == (1'b1),
-                 (matrix_ctrl[(64'sd1)]) == (1'b1),
-                 (c$bv[9 : 4])};
+  // register begin
+  always @(posedge clk or  posedge  rst) begin : result_3_register
+    if ( rst) begin
+      result_3 <= 16'b0000000000000000;
+    end else if (en & (bus[17:17] & (bus[33:18] == 16'b0100000000100000))) begin
+      result_3 <= bus[15:0];
+    end
+  end
+  // register end
+
+  assign c$ds1_case_alt = (bus[33:18] == 16'b0100000000100000) ? ({({({({({(c$app_arg_4),7'b0000000}),((s1_1))}),((s1_2))}),1'b0}),((s1_0))}) : c$ds1_case_alt_0;
+
+  assign c$ds1_case_alt_0 = (bus[33:18] == 16'b0100000000100010) ? status[80:65] : c$ds1_case_alt_1;
+
+  assign c$ds1_case_alt_1 = c$ds_app_arg ? ({({(c$app_arg_0),7'b0000000}),c$app_arg_1}) : c$ds1_case_alt_2;
+
+  assign c$ds1_case_alt_2 = (bus[33:18] == 16'b0100000000101100) ? result_15 : c$ds1_case_alt_3;
+
+  assign c$ds1_case_alt_3 = (bus[33:18] == 16'b0100000000101110) ? status[64:49] : c$ds1_case_alt_4;
+
+  assign c$ds1_case_alt_4 = (bus[33:18] == 16'b0100000000110000) ? status[48:33] : c$ds1_case_alt_5;
+
+  assign c$ds1_case_alt_5 = c$armed_app_arg_0 ? ((({15'b000000000000000,(c$ds1_app_arg_0)}) << (64'sd1)) | ({15'b000000000000000,(c$ds1_app_arg)})) : c$ds1_case_alt_6;
+
+  assign c$ds1_case_alt_6 = (bus[33:18] == 16'b0100000000110100) ? status[31:16] : c$ds1_case_alt_7;
+
+  assign c$ds1_app_arg = armed ? 1'b1 : 1'b0;
+
+  assign armed = c$armed_app_arg & (s1_3[38:36] == 3'd5);
+
+  assign c$ds1_app_arg_0 = status[32:32] ? 1'b1 : 1'b0;
+
+  assign c$ds1_case_alt_7 = (bus[33:18] == 16'b0100000000110110) ? status[15:0] : 16'b0000000000000000;
+
+  assign eta2 = bus[16:16] & c$ds_app_arg;
 
   // register begin
   always @(posedge clk or  posedge  rst) begin : s1_register
@@ -277,164 +395,151 @@ module pm_matrix
                                       8'b00000000,   8'b00000000,   8'b00000000,
                                       8'b00000000},   4'd0,   4'd0,   5'd0};
     end else if (en) begin
-      s1 <= {s1_1[7:7],   result_7[29:27],   result_7[26:15],   result_7[14:7],
-   result_7[6:4],   result_7[3:1],   result_7[0:0],   c$app_arg_3,   c$app_arg_2,
-   result_1[136:9],   result_5[8:5],   result_1[8:5],   result_1[4:0]};
+      s1 <= {(result_14[(64'sd0)]) == (1'b1),   result_11[29:27],   result_11[26:15],
+   result_11[14:7],   result_11[6:4],   result_11[3:1],   result_11[0:0],
+   c$app_arg_3,   c$app_arg_2,   result_5[136:9],   result_9[8:5],
+   result_5[8:5],   result_5[4:0]};
     end
   end
   // register end
 
   // imap begin
-  genvar i_0;
+  genvar i;
   generate
-  for (i_0=0; i_0 < 8; i_0 = i_0 + 1) begin : imap
+  for (i=0; i < 8; i = i + 1) begin : imap
     wire [3-1:0] map_index;
     wire [2:0] map_out;
 
-    assign map_index = 3'd7 - i_0[0+:3];
+    assign map_index = 3'd7 - i[0+:3];
     assign map_out = map_index;
 
 
-    assign c$app_arg_res[i_0*3+:3] = map_out;
+    assign c$app_arg_res[i*3+:3] = map_out;
   end
   endgenerate
   // imap end
 
   // map begin
-  genvar i_1;
+  genvar i_0;
   generate
-  for (i_1=0; i_1 < 8; i_1 = i_1 + 1) begin : map
+  for (i_0=0; i_0 < 8; i_0 = i_0 + 1) begin : map
     wire [2:0] map_in_0;
-    assign map_in_0 = c$app_arg_res[i_1*3+:3];
+    assign map_in_0 = c$app_arg_res[i_0*3+:3];
     wire  map_out_0;
-    wire  result_10;
-    assign map_out_0 = result_10;
+    wire  result_42;
+    assign map_out_0 = result_42;
 
-    assign result_10 = (s1[619:619] & (map_in_0 == s1[618:616])) ? (1'b0) : (1'b1);
+    assign result_42 = (s1[619:619] & (map_in_0 == s1[618:616])) ? (1'b0) : (1'b1);
 
 
-    assign c$app_arg[i_1*1+:1] = map_out_0;
+    assign c$app_arg[i_0*1+:1] = map_out_0;
   end
   endgenerate
   // map end
 
   assign c$app_arg_0 = (s1[4:0] != 5'd0) ? 1'b1 : 1'b0;
 
-  assign c$i_177 = s1[12:9];
+  assign c$i_199 = s1[12:9];
 
   assign c$vecFlat = s1[140:13];
 
   // index begin
   wire [7:0] vecArray [0:16-1];
-  genvar i_2;
+  genvar i_1;
   generate
-  for (i_2=0; i_2 < 16; i_2=i_2+1) begin : mk_array
-    assign vecArray[(16-1)-i_2] = c$vecFlat[i_2*8+:8];
+  for (i_1=0; i_1 < 16; i_1=i_1+1) begin : mk_array
+    assign vecArray[(16-1)-i_1] = c$vecFlat[i_1*8+:8];
   end
   endgenerate
-  assign c$app_arg_1 = vecArray[($unsigned({{(64-4) {1'b0}},c$i_177}))];
+  assign c$app_arg_1 = vecArray[($unsigned({{(64-4) {1'b0}},c$i_199}))];
   // index end
 
   assign c$app_arg_2 = (~ s1[589:589]) ? s1[524:141] : c$case_alt;
 
-  assign c$case_alt = (result_0 | flips) ? c$case_alt_0 : c$case_alt_1;
+  assign c$case_alt = (result_4 | flips) ? c$case_alt_0 : c$case_alt_1;
+
+  assign c$vec = s1[524:141];
+
+  // vector replace begin
+  genvar i_2;
+  generate
+  for (i_2=0;i_2<64;i_2=i_2+1) begin : vector_replace
+    assign c$case_alt_0[(63-i_2)*6+:6] = c$curSt_app_arg == i_2 ? 6'd0 : c$vec[(63-i_2)*6+:6];
+  end
+  endgenerate
+  // vector replace end
 
   assign c$vec_0 = s1[524:141];
 
   // vector replace begin
   genvar i_3;
   generate
-  for (i_3=0;i_3<64;i_3=i_3+1) begin : vector_replace
-    assign c$case_alt_0[(63-i_3)*6+:6] = c$curSt_app_arg == i_3 ? 6'd0 : c$vec_0[(63-i_3)*6+:6];
+  for (i_3=0;i_3<64;i_3=i_3+1) begin : vector_replace_0
+    assign c$case_alt_1[(63-i_3)*6+:6] = c$curSt_app_arg == i_3 ? result_7 : c$vec_0[(63-i_3)*6+:6];
   end
   endgenerate
   // vector replace end
 
-  assign c$vec_1 = s1[524:141];
+  assign result_4 = c$flips_case_scrut[0];
+
+  assign c$app_arg_3 = flips ? c$case_alt_2 : s1[588:525];
+
+  assign c$vec_1 = s1[588:525];
 
   // vector replace begin
   genvar i_4;
   generate
-  for (i_4=0;i_4<64;i_4=i_4+1) begin : vector_replace_0
-    assign c$case_alt_1[(63-i_4)*6+:6] = c$curSt_app_arg == i_4 ? result_3 : c$vec_1[(63-i_4)*6+:6];
+  for (i_4=0;i_4<64;i_4=i_4+1) begin : vector_replace_1
+    assign c$case_alt_2[(63-i_4)*1+:1] = c$curSt_app_arg == i_4 ? c$sampl_case_alt : c$vec_1[(63-i_4)*1+:1];
   end
   endgenerate
   // vector replace end
 
-  assign result_0 = c$flips_case_scrut[0];
+  assign result_5 = (flips & (n1 != 5'd16)) ? {c$ds10_case_alt,
+                                               result_6,   n1 + 5'd1} : {s1[140:13],   wr0,
+                                                                         n1};
 
-  assign c$app_arg_3 = flips ? c$case_alt_2 : s1[588:525];
+  assign flips = s1[589:589] & (result_8 & c$flips_app_arg);
 
-  assign c$vec_2 = s1[588:525];
+  assign z = wr0 + 4'd1;
+
+  assign c$bv = (z - 5'd16);
+
+  assign result_6 = (z >= 5'd16) ? (c$bv[0+:4]) : (z[0+:4]);
+
+  assign c$vec_2 = s1[140:13];
 
   // vector replace begin
   genvar i_5;
   generate
-  for (i_5=0;i_5<64;i_5=i_5+1) begin : vector_replace_1
-    assign c$case_alt_2[(63-i_5)*1+:1] = c$curSt_app_arg == i_5 ? c$sampl_case_alt : c$vec_2[(63-i_5)*1+:1];
-  end
-  endgenerate
-  // vector replace end
-
-  assign result_1 = (flips & (n1 != 5'd16)) ? {c$ds10_case_alt,
-                                               result_2,   n1 + 5'd1} : {s1[140:13],   wr0,
-                                                                         n1};
-
-  assign flips = s1[589:589] & (result_4 & c$flips_app_arg);
-
-  assign z = wr0 + 4'd1;
-
-  assign c$bv_0 = (z - 5'd16);
-
-  assign result_2 = (z >= 5'd16) ? (c$bv_0[0+:4]) : (z[0+:4]);
-
-  assign c$vec_3 = s1[140:13];
-
-  // vector replace begin
-  genvar i_6;
-  generate
-  for (i_6=0;i_6<16;i_6=i_6+1) begin : vector_replace_2
-    assign c$ds10_case_alt[(15-i_6)*8+:8] = ($unsigned({{(64-4) {1'b0}},wr0})) == i_6 ? ({({(c$ds10_app_arg),1'b0}),(((((kIx)))))}) : c$vec_3[(15-i_6)*8+:8];
+  for (i_5=0;i_5<16;i_5=i_5+1) begin : vector_replace_2
+    assign c$ds10_case_alt[(15-i_5)*8+:8] = ($unsigned({{(64-4) {1'b0}},wr0})) == i_5 ? ({({(c$ds10_app_arg),1'b0}),(((((kIx)))))}) : c$vec_2[(15-i_5)*8+:8];
   end
   endgenerate
   // vector replace end
 
   assign c$ds10_app_arg = c$sampl_case_alt ? 1'b1 : 1'b0;
 
-  assign c$bv_1 = (matrix_ctrl);
+  assign wr0 = ((result_14[(64'sd1)]) == (1'b1)) ? 4'd0 : s1[8:5];
 
-  assign wr0_selection_0 = {(matrix_ctrl[(64'sd0)]) == (1'b1),
-                            (matrix_ctrl[(64'sd1)]) == (1'b1),
-                            (c$bv_1[9 : 4])};
+  assign n1 = result_9[4:0];
 
-  assign wr0 = wr0_selection_0[6:6] ? 4'd0 : s1[8:5];
+  assign c$bv_0 = (result_14);
 
-  assign n1 = result_5[4:0];
+  assign c$bv_1 = (result_14);
 
-  assign c$bv_2 = (matrix_ctrl);
-
-  assign c$flips_app_arg_selection_1 = {(matrix_ctrl[(64'sd0)]) == (1'b1),
-                                        (matrix_ctrl[(64'sd1)]) == (1'b1),
-                                        (c$bv_2[9 : 4])};
-
-  assign c$bv_3 = (matrix_ctrl);
-
-  assign c$flips_app_arg_sel_alt_f_1 = {(matrix_ctrl[(64'sd0)]) == (1'b1),
-                                        (matrix_ctrl[(64'sd1)]) == (1'b1),
-                                        (c$bv_3[9 : 4])};
-
-  assign c$flips_app_arg = (c$flips_app_arg_selection_1[5:0] == 6'd0) ? (result_3 >= 6'd10) : (result_3 >= c$flips_app_arg_sel_alt_f_1[5:0]);
+  assign c$flips_app_arg = (((c$bv_0[9 : 4])) == 6'd0) ? (result_7 >= 6'd10) : (result_7 >= ((c$bv_1[9 : 4])));
 
   assign r = c$hits_case_alt + 6'd1;
 
-  assign c$bv_4 = ((r));
+  assign c$bv_2 = ((r));
 
-  assign result_3 = (( c$bv_4[7-1] ) == 1'b0) ? (r[0+:6]) : 6'd63;
+  assign result_7 = (( c$bv_2[7-1] ) == 1'b0) ? (r[0+:6]) : 6'd63;
 
   always @(*) begin
     case(c$flips_case_scrut)
-      64'sd1 : result_4 = 1'b0;
-      default : result_4 = 1'b1;
+      64'sd1 : result_8 = 1'b0;
+      default : result_8 = 1'b1;
     endcase
   end
 
@@ -450,10 +555,10 @@ module pm_matrix
 
   // index begin
   wire [5:0] vecArray_0 [0:64-1];
-  genvar i_7;
+  genvar i_6;
   generate
-  for (i_7=0; i_7 < 64; i_7=i_7+1) begin : mk_array_0
-    assign vecArray_0[(64-1)-i_7] = c$vecFlat_0[i_7*6+:6];
+  for (i_6=0; i_6 < 64; i_6=i_6+1) begin : mk_array_0
+    assign vecArray_0[(64-1)-i_6] = c$vecFlat_0[i_6*6+:6];
   end
   endgenerate
   assign c$hits_case_alt = vecArray_0[c$curSt_app_arg];
@@ -463,10 +568,10 @@ module pm_matrix
 
   // index begin
   wire  vecArray_1 [0:64-1];
-  genvar i_8;
+  genvar i_7;
   generate
-  for (i_8=0; i_8 < 64; i_8=i_8+1) begin : mk_array_1
-    assign vecArray_1[(64-1)-i_8] = c$vecFlat_1[i_8*1+:1];
+  for (i_7=0; i_7 < 64; i_7=i_7+1) begin : mk_array_1
+    assign vecArray_1[(64-1)-i_7] = c$vecFlat_1[i_7*1+:1];
   end
   endgenerate
   assign c$curSt_case_alt = vecArray_1[c$curSt_app_arg];
@@ -476,60 +581,42 @@ module pm_matrix
 
   assign kIx = ({((s1[595:593])),((s1[592:590]))});
 
-  assign c$i_194 = s1[592:590];
+  assign c$i_216 = s1[592:590];
 
   assign c$vecFlat_2 = s1[603:596];
 
   // index begin
   wire  vecArray_2 [0:8-1];
-  genvar i_9;
+  genvar i_8;
   generate
-  for (i_9=0; i_9 < 8; i_9=i_9+1) begin : mk_array_2
-    assign vecArray_2[(8-1)-i_9] = c$vecFlat_2[i_9*1+:1];
+  for (i_8=0; i_8 < 8; i_8=i_8+1) begin : mk_array_2
+    assign vecArray_2[(8-1)-i_8] = c$vecFlat_2[i_8*1+:1];
   end
   endgenerate
-  assign c$sampl_case_alt = vecArray_2[($unsigned({{(64-3) {1'b0}},c$i_194}))];
+  assign c$sampl_case_alt = vecArray_2[($unsigned({{(64-3) {1'b0}},c$i_216}))];
   // index end
 
-  assign result_5 = (eta2 & (n0 != 5'd0)) ? {c$ds9_app_arg,
+  assign result_9 = (eta2 & (n0 != 5'd0)) ? {c$ds9_app_arg,
                                              n0 - 5'd1} : {c$ds9_app_arg_0,   n0};
 
-  assign c$bv_5 = (matrix_ctrl);
-
-  assign c$ds9_app_arg_selection_0 = {(matrix_ctrl[(64'sd0)]) == (1'b1),
-                                      (matrix_ctrl[(64'sd1)]) == (1'b1),
-                                      (c$bv_5[9 : 4])};
-
-  assign c$ds9_app_arg = c$ds9_app_arg_selection_0[6:6] ? 4'd1 : result_6;
+  assign c$ds9_app_arg = ((result_14[(64'sd1)]) == (1'b1)) ? 4'd1 : result_10;
 
   assign z_0 = s1[12:9] + 4'd1;
 
-  assign c$bv_6 = (z_0 - 5'd16);
+  assign c$bv_3 = (z_0 - 5'd16);
 
-  assign result_6 = (z_0 >= 5'd16) ? (c$bv_6[0+:4]) : (z_0[0+:4]);
+  assign result_10 = (z_0 >= 5'd16) ? (c$bv_3[0+:4]) : (z_0[0+:4]);
 
-  assign c$bv_7 = (matrix_ctrl);
+  assign c$ds9_app_arg_0 = ((result_14[(64'sd1)]) == (1'b1)) ? 4'd0 : s1[12:9];
 
-  assign c$ds9_app_arg_selection_2 = {(matrix_ctrl[(64'sd0)]) == (1'b1),
-                                      (matrix_ctrl[(64'sd1)]) == (1'b1),
-                                      (c$bv_7[9 : 4])};
+  assign n0 = ((result_14[(64'sd1)]) == (1'b1)) ? 5'd0 : s1[4:0];
 
-  assign c$ds9_app_arg_0 = c$ds9_app_arg_selection_2[6:6] ? 4'd0 : s1[12:9];
+  assign result_11 = (~ s1[619:619]) ? {s1[618:616],
+                                        12'd0,   s1[603:596],   s1[595:593],
+                                        \c$procIx'_case_alt ,
+                                        \procBusy' } : c$ds8_case_alt;
 
-  assign c$bv_8 = (matrix_ctrl);
-
-  assign n0_selection_0 = {(matrix_ctrl[(64'sd0)]) == (1'b1),
-                           (matrix_ctrl[(64'sd1)]) == (1'b1),
-                           (c$bv_8[9 : 4])};
-
-  assign n0 = n0_selection_0[6:6] ? 5'd0 : s1[4:0];
-
-  assign result_7 = (~ s1[619:619]) ? {s1[618:616],
-                                       12'd0,   s1[603:596],   s1[595:593],
-                                       \c$procIx'_case_alt ,
-                                       \procBusy' } : c$ds8_case_alt;
-
-  assign c$ds8_case_alt = (s1[619:619] & (s1[615:604] == 12'd3124)) ? {result_8,
+  assign c$ds8_case_alt = (s1[619:619] & (s1[615:604] == 12'd3124)) ? {result_12,
                                                                        12'd0,   c$ds8_app_arg,   s1[618:616],   3'd0,
                                                                        1'b1} : {s1[618:616],   s1[615:604] + 12'd1,
                                                                                 s1[603:596],   s1[595:593],
@@ -538,57 +625,239 @@ module pm_matrix
   assign \procBusy'  = s1[589:589] & (s1[592:590] != 3'd7);
 
   // map begin
-  genvar i_10;
+  genvar i_9;
   generate
-  for (i_10=0; i_10 < 8; i_10 = i_10 + 1) begin : map_0
+  for (i_9=0; i_9 < 8; i_9 = i_9 + 1) begin : map_0
     wire  map_in_1;
-    assign map_in_1 = c$ds_app_arg[i_10*1+:1];
+    assign map_in_1 = cols[i_9*1+:1];
     wire  map_out_1;
     assign map_out_1 = map_in_1 == (1'b0);
 
 
-    assign c$ds8_app_arg[i_10*1+:1] = map_out_1;
+    assign c$ds8_app_arg[i_9*1+:1] = map_out_1;
   end
   endgenerate
   // map end
 
   assign z_1 = s1[618:616] + 3'd1;
 
-  assign c$bv_9 = (z_1 - 4'd8);
+  assign c$bv_4 = (z_1 - 4'd8);
 
-  assign result_8 = (z_1 >= 4'd8) ? (c$bv_9[0+:3]) : (z_1[0+:3]);
+  assign result_12 = (z_1 >= 4'd8) ? (c$bv_4[0+:3]) : (z_1[0+:3]);
 
-  assign \c$procIx'_case_alt  = s1[589:589] ? result_9 : s1[592:590];
+  assign \c$procIx'_case_alt  = s1[589:589] ? result_13 : s1[592:590];
 
   assign z_2 = s1[592:590] + 3'd1;
 
-  assign c$bv_10 = (z_2 - 4'd8);
+  assign c$bv_5 = (z_2 - 4'd8);
 
-  assign result_9 = (z_2 >= 4'd8) ? (c$bv_10[0+:3]) : (z_2[0+:3]);
+  assign result_13 = (z_2 >= 4'd8) ? (c$bv_5[0+:3]) : (z_2[0+:3]);
 
-  assign c$app_arg_4_14 = {c$app_arg,
-                           {({(c$app_arg_0),7'b0000000}),c$app_arg_1}};
+  assign c$ds_app_arg = bus[33:18] == 16'b0100000000100100;
 
-  assign c$vec_4 = c$app_arg_4_14[23:16];
-
-  // reverse begin
-  genvar i_11;
-  generate
-  for (i_11 = 0; i_11 < 8; i_11 = i_11 + 1) begin : reverse_0
-    assign c$app_arg_4[(8 - 1 - i_11)*1+:1] = c$vec_4[i_11*1+:1];
+  // register begin
+  always @(posedge clk or  posedge  rst) begin : result_14_register
+    if ( rst) begin
+      result_14 <= 16'b0000000000000000;
+    end else if (en & (bus[17:17] & (bus[33:18] == 16'b0100000000100100))) begin
+      result_14 <= bus[15:0];
+    end
   end
-  endgenerate
-  // reverse end
+  // register end
 
-  assign result_dc_arg_0 = {c$app_arg,
-                            {({(c$app_arg_0),7'b0000000}),c$app_arg_1}};
+  // register begin
+  always @(posedge clk or  posedge  rst) begin : result_15_register
+    if ( rst) begin
+      result_15 <= 16'b0000000000000001;
+    end else if (en & (bus[17:17] & (bus[33:18] == 16'b0100000000101100))) begin
+      result_15 <= bus[15:0];
+    end
+  end
+  // register end
 
-  assign result = {((c$app_arg_4)),
-                   result_dc_arg_0[15:0]};
+  // register begin
+  always @(posedge clk or  posedge  rst) begin : c$armed_app_arg_register
+    if ( rst) begin
+      c$armed_app_arg <= 1'b0;
+    end else if (en & (bus[17:17] & c$armed_app_arg_0)) begin
+      c$armed_app_arg <= (bus[15:0] == 16'b0000110000011101);
+    end
+  end
+  // register end
 
-  assign row_n = result[23:16];
+  assign c$armed_app_arg_0 = bus[33:18] == 16'b0100000000110010;
 
-  assign ikeys = result[15:0];
+  // register begin
+  always @(posedge clk or  posedge  rst) begin : s1_0_register
+    if ( rst) begin
+      s1_0 <= 3'd0;
+    end else if (en) begin
+      s1_0 <= result_18;
+    end
+  end
+  // register end
+
+  assign y = (({{(16-12) {1'b0}},s3}) * 16'd6) >> (64'sd12);
+
+  assign result_16 = (16'd5 <= y) ? 64'sd5 : c$case_alt_3;
+
+  assign c$case_alt_3 = $unsigned({{(64-16) {1'b0}},y});
+
+  assign result_17 = $unsigned(result_16[0+:3]);
+
+  assign result_18 = (result_17 == s1_0) ? s1_0 : c$s1_case_alt;
+
+  assign c$s1_case_alt = ((result_17 > s1_0) & (($unsigned(result_21[0+:3])) > s1_0)) ? result_17 : c$s1_case_alt_0;
+
+  assign c$s1_case_alt_0 = ((result_17 < s1_0) & (($unsigned(result_19[0+:3])) < s1_0)) ? result_17 : s1_0;
+
+  assign y_0 = (({{(16-12) {1'b0}},result_20}) * 16'd6) >> (64'sd12);
+
+  assign result_19 = (16'd5 <= y_0) ? 64'sd5 : c$case_alt_4;
+
+  assign c$case_alt_4 = $unsigned({{(64-16) {1'b0}},y_0});
+
+  assign r_0 = s3 + 12'd128;
+
+  assign c$bv_6 = ((r_0));
+
+  assign result_20 = (( c$bv_6[13-1] ) == 1'b0) ? (r_0[0+:12]) : 12'd4095;
+
+  assign y_1 = (({{(16-12) {1'b0}},result_22}) * 16'd6) >> (64'sd12);
+
+  assign result_21 = (16'd5 <= y_1) ? 64'sd5 : c$case_alt_5;
+
+  assign c$case_alt_5 = $unsigned({{(64-16) {1'b0}},y_1});
+
+  assign r_1 =  s3 - 12'd128;
+
+  assign c$bv_7 = ((r_1));
+
+  assign result_22 = (( c$bv_7[13-1] ) == 1'b0) ? (r_1[0+:12]) : (12'd0);
+
+  // register begin
+  always @(posedge clk or  posedge  rst) begin : s1_1_register
+    if ( rst) begin
+      s1_1 <= 2'd0;
+    end else if (en) begin
+      s1_1 <= result_25;
+    end
+  end
+  // register end
+
+  assign y_2 = (({{(16-12) {1'b0}},s2}) * 16'd3) >> (64'sd12);
+
+  assign result_23 = (16'd2 <= y_2) ? 64'sd2 : c$case_alt_6;
+
+  assign c$case_alt_6 = $unsigned({{(64-16) {1'b0}},y_2});
+
+  assign result_24 = $unsigned(result_23[0+:2]);
+
+  assign result_25 = (result_24 == s1_1) ? s1_1 : c$s1_case_alt_1;
+
+  assign c$s1_case_alt_1 = ((result_24 > s1_1) & (($unsigned(result_28[0+:2])) > s1_1)) ? result_24 : c$s1_case_alt_2;
+
+  assign c$s1_case_alt_2 = ((result_24 < s1_1) & (($unsigned(result_26[0+:2])) < s1_1)) ? result_24 : s1_1;
+
+  assign y_3 = (({{(16-12) {1'b0}},result_27}) * 16'd3) >> (64'sd12);
+
+  assign result_26 = (16'd2 <= y_3) ? 64'sd2 : c$case_alt_7;
+
+  assign c$case_alt_7 = $unsigned({{(64-16) {1'b0}},y_3});
+
+  assign r_2 = s2 + 12'd128;
+
+  assign c$bv_8 = ((r_2));
+
+  assign result_27 = (( c$bv_8[13-1] ) == 1'b0) ? (r_2[0+:12]) : 12'd4095;
+
+  assign y_4 = (({{(16-12) {1'b0}},result_29}) * 16'd3) >> (64'sd12);
+
+  assign result_28 = (16'd2 <= y_4) ? 64'sd2 : c$case_alt_8;
+
+  assign c$case_alt_8 = $unsigned({{(64-16) {1'b0}},y_4});
+
+  assign r_3 =  s2 - 12'd128;
+
+  assign c$bv_9 = ((r_3));
+
+  assign result_29 = (( c$bv_9[13-1] ) == 1'b0) ? (r_3[0+:12]) : (12'd0);
+
+  // register begin
+  always @(posedge clk or  posedge  rst) begin : s1_2_register
+    if ( rst) begin
+      s1_2 <= 2'd0;
+    end else if (en) begin
+      s1_2 <= result_32;
+    end
+  end
+  // register end
+
+  assign y_5 = (({{(16-12) {1'b0}},s4}) * 16'd4) >> (64'sd12);
+
+  assign result_30 = (16'd3 <= y_5) ? 64'sd3 : c$case_alt_9;
+
+  assign c$case_alt_9 = $unsigned({{(64-16) {1'b0}},y_5});
+
+  assign result_31 = $unsigned(result_30[0+:2]);
+
+  assign result_32 = (result_31 == s1_2) ? s1_2 : c$s1_case_alt_3;
+
+  assign c$s1_case_alt_3 = ((result_31 > s1_2) & (($unsigned(result_35[0+:2])) > s1_2)) ? result_31 : c$s1_case_alt_4;
+
+  assign c$s1_case_alt_4 = ((result_31 < s1_2) & (($unsigned(result_33[0+:2])) < s1_2)) ? result_31 : s1_2;
+
+  assign y_6 = (({{(16-12) {1'b0}},result_34}) * 16'd4) >> (64'sd12);
+
+  assign result_33 = (16'd3 <= y_6) ? 64'sd3 : c$case_alt_10;
+
+  assign c$case_alt_10 = $unsigned({{(64-16) {1'b0}},y_6});
+
+  assign r_4 = s4 + 12'd128;
+
+  assign c$bv_10 = ((r_4));
+
+  assign result_34 = (( c$bv_10[13-1] ) == 1'b0) ? (r_4[0+:12]) : 12'd4095;
+
+  assign y_7 = (({{(16-12) {1'b0}},result_36}) * 16'd4) >> (64'sd12);
+
+  assign result_35 = (16'd3 <= y_7) ? 64'sd3 : c$case_alt_11;
+
+  assign c$case_alt_11 = $unsigned({{(64-16) {1'b0}},y_7});
+
+  assign r_5 =  s4 - 12'd128;
+
+  assign c$bv_11 = ((r_5));
+
+  assign result_36 = (( c$bv_11[13-1] ) == 1'b0) ? (r_5[0+:12]) : (12'd0);
+
+  assign result_37 = ((result_38 >= 32'd25000000) & (s1_3[38:36] != s1_0)) ? {s1_0,
+                                                                              s1_0,   result_38,
+                                                                              1'b1} : {s1_3[38:36],   s1_0,
+                                                                                       result_38,   1'b0};
+
+  assign c$case_alt_12 = (s1_0 != s1_3[35:33]) ? {s1_3[38:36],
+                                                  s1_0,   32'd0,   1'b0} : result_37;
+
+  assign r_6 = s1_3[32:1] + 32'd1;
+
+  assign c$bv_12 = ((r_6));
+
+  assign result_38 = (( c$bv_12[33-1] ) == 1'b0) ? (r_6[0+:32]) : 32'd4294967295;
+
+  assign c$app_arg_4 = stable ? 1'b1 : 1'b0;
+
+  assign stable = s1_3[32:1] >= 32'd25000000;
+
+  // register begin
+  always @(posedge clk or  posedge  rst) begin : s1_3_register
+    if ( rst) begin
+      s1_3 <= {3'd0,   3'd0,   32'd0,   1'b0};
+    end else if (en) begin
+      s1_3 <= c$case_alt_12;
+    end
+  end
+  // register end
 
 
 endmodule
