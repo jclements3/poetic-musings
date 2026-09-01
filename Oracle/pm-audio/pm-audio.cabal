@@ -1,0 +1,34 @@
+cabal-version: 2.4
+name: pm-audio
+version: 0.1.0.0
+synopsis: PM audio path - sigma-delta DAC, NCO, mixer
+build-type: Simple
+
+common shared
+  default-language: Haskell2010
+  ghc-options: -Wall -fplugin GHC.TypeLits.Extra.Solver -fplugin GHC.TypeLits.Normalise -fplugin GHC.TypeLits.KnownNat.Solver
+  build-depends: base, Cabal, clash-prelude >= 1.8, ghc-typelits-natnormalise, ghc-typelits-extra, ghc-typelits-knownnat
+  default-extensions:
+    BangPatterns BinaryLiterals ConstraintKinds DataKinds DefaultSignatures
+    DeriveAnyClass DeriveGeneric DerivingStrategies FlexibleContexts
+    KindSignatures MagicHash NoStarIsType NumericUnderscores
+    ScopedTypeVariables TemplateHaskell TypeApplications TypeFamilies
+    TypeOperators NoImplicitPrelude
+
+library
+  import: shared
+  hs-source-dirs: src
+  exposed-modules: PM.Audio
+
+test-suite audio-test
+  import: shared
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: Spec.hs
+  build-depends: pm-audio
+  ghc-options: -threaded
+
+executable clash
+  import: shared
+  main-is: bin/Clash.hs
+  build-depends: clash-ghc
