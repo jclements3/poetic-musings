@@ -66,3 +66,11 @@ first, Clash port as Lessons 12–14):
   `Oracle/eforth-pm.md`'s 0x4036 oHarp. Flagged in `GPS/DESIGN.md`; GPS takes 0x4040+.
 - ULX3S 85F: ordered → canceled (MAIDEN BOM line 7); `fpga-resource-swag.md` verdict
   is re-order. Lessons' Lesson14 was rewritten against the Alchitry Cu meanwhile.
+
+## PM gateware written this session (Clash, sim-verified, Verilog generated)
+
+| block | where | proof |
+|---|---|---|
+| CW keyer + Morse decoder | `Oracle/pm-keyer` (PM.Keyer) | PARIS 73 keyer->decoder round trip asserted; runtime WPM |
+| Sigma-delta DAC, sine NCO, 4-ch saturating mixer | `Oracle/pm-audio` (PM.Audio) | DAC density 1% across codes; NCO freq + full-scale; mixer unity/-12dB/sat/mute |
+| VL-1 voice: note table, 10-pattern pulse osc, ADSSR | `Oracle/pm-synth` (PM.Synth) | A4 within 0.01 cent; exact octaves; square duty; full ADSSR envelope trace incl. release |
