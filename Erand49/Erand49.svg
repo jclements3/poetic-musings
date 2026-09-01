@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.089602705"
-     inkscape:cx="-4854.7642"
-     inkscape:cy="775.64623"
+     inkscape:zoom="1.4336433"
+     inkscape:cx="2974.2406"
+     inkscape:cy="1649.992"
      inkscape:window-width="2560"
      inkscape:window-height="1009"
      inkscape:window-x="-8"
@@ -34,8 +34,6 @@
      inkscape:current-layer="svg296" />
   <style
      id="style1">.nl{font-size:13px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace}</style>
-  
-  
   <g
      stroke="#555"
      stroke-width="1.0"
@@ -1640,7 +1638,6 @@
        y2="36.4"
        id="line291" />
   </g>
-  
   <line
      x1="215.8"
      y1="1644.8"
@@ -1677,7 +1674,6 @@
        y2="42.1"
        id="line295" />
   </g>
-  
   <path
      d="M 138.21996,54.93472 C 182.63611,12.264078 408.32862,-20.833264 472.26137,32.301189 536.19411,85.435641 615.43736,477.80999 746.63448,457.58294 877.8316,437.35589 899.00459,380.96014 976.11185,329.78393 c 77.10725,-51.17620 104.10100,39.06953 77.89897,81.65420"
      fill="none"
@@ -1690,7 +1686,7 @@
        id="title295">tuner rail — Bezier fit through all 49 tuner pins (the neck)</title>
   </path>
   <path
-     d="m 140.74593,240.41583 c 46.26637,-33.24776 127.6104,-109.93822 249.2482,-76.92464 121.6378,33.01357 183.85728,382.8277 336.29284,377.19423 129.22755,-4.77578 251.78871,-169.06257 258.53871,-155.71257 3.60,7.12 0.43,28.53 5.2,20.9"
+     d="m 140.74593,240.41583 c 46.26637,-33.24776 127.6104,-109.93822 249.2482,-76.92464 121.6378,33.01357 183.85728,382.8277 336.29284,377.19423 129.22755,-4.77578 240.91267,-142.16262 249.1265,-152.02151 8.21383,-9.85888 22.20727,4.72265 14.61221,17.20894"
      fill="none"
      stroke="#66bb6a"
      stroke-width="2"
@@ -1700,21 +1696,111 @@
     <title
        id="title296">sensor rail — Bezier fit through all 49 optical X/Y axes, 1 in below the nuts</title>
   </path>
-  <g id="frame-members" sodipodi:insensitive="true">
-<path d="M 175.0 1901.8 L 198.3 1864.5 L 221.6 1827.3 L 244.9 1790.0 L 268.2 1752.7 L 291.5 1715.4 L 314.8 1678.1 L 338.1 1640.9 L 361.4 1603.6 L 384.7 1566.3 L 408.0 1529.0 L 431.3 1491.7 L 454.6 1454.4 L 477.7 1417.1 L 500.6 1379.5 L 523.3 1341.8 L 545.7 1304.0 L 567.9 1266.1 L 589.9 1228.0 L 611.8 1189.8 L 633.5 1151.5 L 655.1 1113.2 L 676.6 1074.8 L 698.0 1036.3 L 719.3 997.8 L 740.6 959.3 L 761.9 920.7 L 783.2 882.2 L 804.5 843.7 L 825.8 805.2 L 847.2 766.7 L 868.7 728.3 L 890.3 689.9 L 912.0 651.7 L 933.9 613.5 L 955.9 575.4 L 978.1 537.4 L 1000.5 499.6 L 1023.1 461.9 L 1046.0 424.4 L 1069.2 387.0" fill="none" stroke="#1565c0" stroke-width="2"/>
-<line x1="88.9" y1="1848.0" x2="990.0" y2="405.9" stroke="#1565c0" stroke-width="2"/>
-<line x1="990.0" y1="405.9" x2="1020.7" y2="356.7" stroke="#1565c0" stroke-width="2" stroke-dasharray="7 5"/>
-<line x1="88.9" y1="1848.0" x2="175.0" y2="1901.8" stroke="#1565c0" stroke-width="2"/>
-<line x1="139.6" y1="20.3" x2="139.6" y2="1766.7" stroke="#d32f2f" stroke-width="2"/>
-<line x1="139.6" y1="1766.7" x2="139.6" y2="1868.3" stroke="#d32f2f" stroke-width="2" stroke-dasharray="7 5"/>
-<line x1="139.6" y1="1868.3" x2="139.6" y2="1848.0" stroke="#d32f2f" stroke-width="2"/>
-<line x1="190.4" y1="20.3" x2="190.4" y2="1685.4" stroke="#d32f2f" stroke-width="2"/>
-<line x1="190.4" y1="1685.4" x2="190.4" y2="1787.0" stroke="#d32f2f" stroke-width="2" stroke-dasharray="7 5"/>
-<line x1="190.4" y1="1787.0" x2="190.4" y2="1848.0" stroke="#d32f2f" stroke-width="2"/>
-<line x1="139.6" y1="20.3" x2="190.4" y2="20.3" stroke="#d32f2f" stroke-width="2"/>
-<text x="366" y="1627" style="font:700 13px monospace" fill="#1565c0">midrib C 2.5x4x3/16 open-bottom, walls taper to 2.25 at the shoulder — ER-005/006</text>
-<text x="203" y="934" style="font:700 13px monospace" fill="#d32f2f">pillar Ø2x3/16, through the midrib (ER-004)</text>
-</g>
+  <g
+     id="frame-members"
+     sodipodi:insensitive="true">
+    <path
+       d="M 175.0 1901.8 L 198.3 1864.5 L 221.6 1827.3 L 244.9 1790.0 L 268.2 1752.7 L 291.5 1715.4 L 314.8 1678.1 L 338.1 1640.9 L 361.4 1603.6 L 384.7 1566.3 L 408.0 1529.0 L 431.3 1491.7 L 454.6 1454.4 L 477.7 1417.1 L 500.6 1379.5 L 523.3 1341.8 L 545.7 1304.0 L 567.9 1266.1 L 589.9 1228.0 L 611.8 1189.8 L 633.5 1151.5 L 655.1 1113.2 L 676.6 1074.8 L 698.0 1036.3 L 719.3 997.8 L 740.6 959.3 L 761.9 920.7 L 783.2 882.2 L 804.5 843.7 L 825.8 805.2 L 847.2 766.7 L 868.7 728.3 L 890.3 689.9 L 912.0 651.7 L 933.9 613.5 L 955.9 575.4 L 978.1 537.4 L 1000.5 499.6 L 1023.1 461.9 L 1046.0 424.4 L 1069.2 387.0"
+       fill="none"
+       stroke="#1565c0"
+       stroke-width="2"
+       id="path1" />
+    <line
+       x1="88.9"
+       y1="1848.0"
+       x2="990.0"
+       y2="405.9"
+       stroke="#1565c0"
+       stroke-width="2"
+       id="line1" />
+    <line
+       x1="990.0"
+       y1="405.9"
+       x2="1020.7"
+       y2="356.7"
+       stroke="#1565c0"
+       stroke-width="2"
+       stroke-dasharray="7 5"
+       id="line143" />
+    <line
+       x1="88.9"
+       y1="1848.0"
+       x2="175.0"
+       y2="1901.8"
+       stroke="#1565c0"
+       stroke-width="2"
+       id="line144" />
+    <line
+       x1="139.6"
+       y1="20.3"
+       x2="139.6"
+       y2="1766.7"
+       stroke="#d32f2f"
+       stroke-width="2"
+       id="line145" />
+    <line
+       x1="139.6"
+       y1="1766.7"
+       x2="139.6"
+       y2="1868.3"
+       stroke="#d32f2f"
+       stroke-width="2"
+       stroke-dasharray="7 5"
+       id="line146" />
+    <line
+       x1="139.6"
+       y1="1868.3"
+       x2="139.6"
+       y2="1848.0"
+       stroke="#d32f2f"
+       stroke-width="2"
+       id="line147" />
+    <line
+       x1="190.4"
+       y1="20.3"
+       x2="190.4"
+       y2="1685.4"
+       stroke="#d32f2f"
+       stroke-width="2"
+       id="line148" />
+    <line
+       x1="190.4"
+       y1="1685.4"
+       x2="190.4"
+       y2="1787.0"
+       stroke="#d32f2f"
+       stroke-width="2"
+       stroke-dasharray="7 5"
+       id="line149" />
+    <line
+       x1="190.4"
+       y1="1787.0"
+       x2="190.4"
+       y2="1848.0"
+       stroke="#d32f2f"
+       stroke-width="2"
+       id="line150" />
+    <line
+       x1="139.6"
+       y1="20.3"
+       x2="190.4"
+       y2="20.3"
+       stroke="#d32f2f"
+       stroke-width="2"
+       id="line151" />
+    <text
+       x="366"
+       y="1627"
+       style="font:700 13px monospace"
+       fill="#1565c0"
+       id="text151">midrib C 2.5x4x3/16 open-bottom, walls taper to 2.25 at the shoulder — ER-005/006</text>
+    <text
+       x="203"
+       y="934"
+       style="font:700 13px monospace"
+       fill="#d32f2f"
+       id="text152">pillar Ø2x3/16, through the midrib (ER-004)</text>
+  </g>
   <g
      id="cross-sections"
      sodipodi:insensitive="true">
@@ -2659,7 +2745,26 @@
        fill="#a8700f"
        id="text322">DESIGN PLACEHOLDER: final fraction set at Gate 1 on the bench (L/18..L/12)</text>
   </g>
-<line id="shoulder-weld" x1="990.0" y1="405.9" x2="1054.0" y2="411.4" stroke="#c9553a" stroke-width="2.5"/>
-<text x="235.2" y="1637.9" class="nl" fill="#8d877a" text-anchor="middle" id="text291">b0*</text>
-<text x="215.8" y="1668.8" class="nl" fill="#8d877a" text-anchor="middle" id="text295">a0*</text>
+  <line
+     id="shoulder-weld"
+     x1="990.0"
+     y1="405.9"
+     x2="1054.0"
+     y2="411.4"
+     stroke="#c9553a"
+     stroke-width="2.5" />
+  <text
+     x="235.2"
+     y="1637.9"
+     class="nl"
+     fill="#8d877a"
+     text-anchor="middle"
+     id="text291">b0*</text>
+  <text
+     x="215.8"
+     y="1668.8"
+     class="nl"
+     fill="#8d877a"
+     text-anchor="middle"
+     id="text295">a0*</text>
 </svg>
