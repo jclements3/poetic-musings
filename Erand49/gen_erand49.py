@@ -461,8 +461,8 @@ solid with true hidden-line removal (dashed = hidden), so intersections (the pil
 through the inclined web, the plate laps) are geometrically exact rather than hand-drawn. Regenerate:
 <code>LD_LIBRARY_PATH=$HOME/miniconda3/lib python3 frame_cad.py</code>.</p>
 <table><tr>
-<td style="width:44%"><b>Front (XZ)</b><br/><img src="cad-front.svg?v={stampv}" style="max-width:100%"/></td>
-<td style="width:16%"><b>Side (YZ)</b><br/><img src="cad-side.svg?v={stampv}" style="max-width:100%"/></td>
+<td style="width:44%"><b>Side (XZ) — string-plane profile</b><br/><img src="cad-front.svg?v={stampv}" style="max-width:100%"/></td>
+<td style="width:16%"><b>Front (YZ) — down the pillar</b><br/><img src="cad-side.svg?v={stampv}" style="max-width:100%"/></td>
 <td style="width:40%"><b>Top (XY)</b><br/><img src="cad-top.svg?v={stampv}" style="max-width:100%"/></td>
 </tr></table>
 <table><tr>

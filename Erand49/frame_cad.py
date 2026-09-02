@@ -270,27 +270,35 @@ print("wrote sensor-stations.csv (PCB placement table)")
 plates = plates.cut(*beams)
 print("sensor beam bores drilled")
 
-# ---- ER-007 crown collar: a 60 mm length of the SAME midrib channel slid
-# over the pillar top, open side facing the strings. Outside faces 63.5 mm =
-# the plate gap (flat bearing on both plates); walls stand 54.0 mm apart
-# around the O50.8 tube (1.6 mm/side, fillet-welded); two M8 bolts through
-# plate-wall-wall-plate, clear of the tube (JC: 'two bolts with spacers /
-# c-channel leftover' -> the channel IS the spacer).
-COL_H, COL_DEPTH = 60.0, 90.0
+# ---- ER-007 v2 (JC): crown channel INFILL, profile-cut to the neck curves.
+# A vertical run of the same channel at the pillar: web facing FORWARD (-x),
+# spanning the plate gap (63.5 outside, flat on both plates; walls 54 mm
+# around the O50.8 tube). Its top and bottom are trimmed to the neck rails
+# by intersecting with the band-profile prism, so the piece fills the crown
+# between the curves instead of clamping a 60 mm strip; looking at the harp
+# from the front (YZ), the web blocks the optics/strings at the crown.
+COL_DEPTH = 90.0
 x_pc = pilc * IN
-x_w0 = x_pc - PIL_OD/2 - 4.76               # web outer face, web inner tangent to tube
-p_top = sv(*tuner_c[0][0])                  # plate front/top corner at the crown
-z_ct = p_top[1] - 5.0                       # collar top just under the plate edge
-col_out = Pos(x_w0 + COL_DEPTH/2, 0, z_ct - COL_H/2) * Box(COL_DEPTH, WEB_W, COL_H)
-col_in  = Pos(x_w0 + 4.76 + COL_DEPTH/2, 0, z_ct - COL_H/2) * Box(COL_DEPTH, WEB_W - 2*4.76, COL_H)
-collar = col_out - col_in
-x_bolt = x_pc + PIL_OD/2 + 21.0             # behind the tube, inside the plate edge
+x_w0 = x_pc - PIL_OD/2 - 4.76
+p_top = sv(*tuner_c[0][0])                  # plate front corner, outer rail start
+p_bot = sv(*sense_c[0][0])                  # plate front corner, inner rail start
+z_ct, z_cb = p_top[1], p_bot[1]
+col_out = Pos(x_w0 + COL_DEPTH/2, 0, 900) * Box(COL_DEPTH, WEB_W, 1800)
+col_in  = Pos(x_w0 + 4.76 + COL_DEPTH/2 + 1, 0, 900) * Box(COL_DEPTH, WEB_W - 2*4.76, 1800)
+collar_full = col_out - col_in
+# band-profile prism (the plate outline swept across Y) + a forward slab for
+# the web ahead of the plates' front edge
+_sk = plate_bp.part.faces().sort_by(Axis.Y)[0]
+band_prism = extrude(_sk, amount=60, both=True)
+front_slab = Pos((x_w0 + p_top[0] + 2)/2, 0, (z_ct + z_cb)/2) *     Box(p_top[0] + 2 - x_w0, WEB_W + 20, abs(z_ct - z_cb))
+collar = collar_full & (band_prism + front_slab)
+x_bolt = x_pc + PIL_OD/2 + 21.0
 for z_b in (z_ct - 15.0, z_ct - 45.0):
     hole = Pos(x_bolt, 0, z_b) * Rot(90, 0, 0) * Cylinder(8.4/2, 2*WEB_W + 40)
     collar = collar - hole
     plates = plates - hole
-print(f"ER-007 crown collar: top z={z_ct:.0f}, web face x={x_w0:.1f}, bolts x={x_bolt:.0f} "
-      f"z={z_ct-15:.0f}/{z_ct-45:.0f} (M8, clear of the tube)")
+print(f"ER-007 v2 crown infill: web face x={x_w0:.1f}, profile-cut to the rails, "
+      f"front edge z {z_cb:.0f}..{z_ct:.0f}, bolts x={x_bolt:.0f} z={z_ct-15:.0f}/{z_ct-45:.0f}")
 
 
 # note: Plane.XZ extrudes toward -Y in build123d; positions may need sign fixes on first run
