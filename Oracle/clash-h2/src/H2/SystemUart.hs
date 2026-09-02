@@ -41,15 +41,16 @@
 --   has nothing; both must see sane status bits.  Writes to @oVT100@ are
 --   accepted and dropped.
 --
---   [@iPanel@ (read 0x4020)] the first PM capability register
---   (@Oracle/eforth-pm.md@ section 1): mode-slider zones, post-hysteresis.
---   Layout here: bits 2:0 = S3 zone 0–5 (P·O·E·T·I·C), bits 5:4 = S4 zone
---   (0 OFF · 1 CAL · 2 PLAY · 3 REC), all other bits 0.  On hardware the
---   gateware digitizes the sliders and compares against zone thresholds
---   with hysteresis; the sim scripts the clean zone numbers as a constant
---   (S3 = 2 \"E\", S4 = 2 PLAY, so the register reads @0x0022@).  Read-only
---   from Forth; writes (oPanelCtrl) are accepted and ignored like the other
---   unmodelled peripherals.
+--   [@iPanel@ (read 0x4020) and the PM file] since PM.RegFile exists, the
+--   0x4020\/0x4022\/0x4024\/0x402C…0x4036 range is no stub: the REAL
+--   register file from @pm-lib@ is on the bus, with the real zone decoder
+--   (constant slider samples put S3 in zone 2 \"E\", S4 in zone 2 PLAY;
+--   after the shortened mode dwell the register reads @0x8022@ — stable
+--   flag + the old @0x0022@) and the real matrix scanner at hardware scan
+--   timing with one key wired down (row 2\/col 3 → keycode 19), whose
+--   press event Forth pops with a 0x4024 read.  The audio\/synth\/keyer\/
+--   TX-interlock semantics live in the file too (proven register-level by
+--   @pm-lib@'s @regfile-test@; not revisited in the boot transcript).
 --
 --   [@iSdStat@ \/ @oSdCtrl@ (0x4028)] SD\/SPI block interface status\/
 --   control.  Read layout here: bit 0 busy (always 0 — the modelled
@@ -109,6 +110,8 @@ import qualified Prelude as P
 import H2 hiding (topEntity)
 import H2.System (Memory)
 import Irig (Rtc (..), SetVal (..), framePos, rtc, tick1k)
+import PM.Matrix (MatrixCfg (..))
+import PM.RegFile (PmBus (..), PmRegs (..), PmStatus (..), regFile)
 
 -- | UART model state: bytes not yet offered to the CPU, and the rx holding
 --   register (last byte popped by the @UART_RX_RE@ strobe).
@@ -279,16 +282,29 @@ h2SystemSim instrMem dataMem script card = txS
     -- iVT100: no keyboard char pending (bit 8), VT100 never busy (bit 11).
     iVT100 = 0x0900 :: Cell
 
-    -- iPanel: scripted mode-slider zones (see module header) —
-    -- {s4zone[5:4] = 2 PLAY, s3zone[2:0] = 2 "E"}.
-    iPanel = 0x0022 :: Cell
+    -- The REAL PM register file (PM.RegFile: zones + matrix + held regs +
+    -- TX interlock) on the H2 bus.  Slider samples are constants placing
+    -- S3 in zone 2 "E" and S4 in zone 2 PLAY, so iPanel reads
+    -- 0x8022 once the (shortened, 10 000-cycle) mode dwell sets the stable
+    -- bit — the old scripted constant 0x0022 plus the stable flag.  The
+    -- matrix runs at hardware scan timing with one key held: column 3
+    -- pulls low whenever row 2 is strobed, so after debounce the event
+    -- FIFO holds exactly one press of keycode 19 for Forth to pop through
+    -- a 0x4024 read.  The IRIG status word enters as the file's stIrig so
+    -- 0x4034 keeps its contract (the TOD-set write block below stays here).
+    pmBus = PmBus <$> ioAddrS <*> ioWrS <*> (ioRe <$> core) <*> dOutS
+    pmCols = fmap (\rws -> if rws !! (2 :: Index 8) == low
+                             then replace (3 :: Index 8) low (repeat high)
+                             else repeat high)
+                  (prRows <$> pmRegs)
+    pmStatus = (\ir -> PmStatus 0 0 0 True ir 0) <$> iIrigS
+    pmRegs = regFile 64 10000 (MatrixCfg 3125 10)
+               pmBus (pure 0) (pure 1700) (pure 2560) pmCols pmStatus
 
-    ioDinS = decode <$> ioAddrS <*> iUartS <*> iSdRxS <*> iIrigS
-    decode a u sd irig
+    ioDinS = decode <$> ioAddrS <*> iUartS <*> iSdRxS <*> (prDin <$> pmRegs)
+    decode a u sd pm
       | a == 0x4000 = u
       | a == 0x4002 = iVT100
-      | a == 0x4020 = iPanel
       | a == 0x4028 = iSdStat
       | a == 0x402A = sd
-      | a == 0x4034 = irig
-      | otherwise   = 0
+      | otherwise   = pm   -- 0x4020/22/24/2C/2E/30/32/34/36 + 0 elsewhere

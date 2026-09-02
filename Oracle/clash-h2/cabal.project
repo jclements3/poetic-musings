@@ -1,7 +1,7 @@
 -- The irig package is the sim-verified IRIG-B core (IRIG/clash); the
 -- SystemUart model instantiates its time engine for the 0x4034/0x4040
 -- registers.
-packages: . ../../IRIG/clash
+packages: . ../../IRIG/clash ../pm-lib
 
 write-ghc-environment-files: always
 
@@ -12,4 +12,7 @@ package clash-h2
   optimization: 2
 
 package irig
+  optimization: 2
+
+package pm-lib
   optimization: 2

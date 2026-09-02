@@ -38,7 +38,7 @@ common common-options
 library
   import: common-options
   hs-source-dirs: src
-  build-depends: irig
+  build-depends: irig, pm-lib
   exposed-modules:
     H2
     H2.System

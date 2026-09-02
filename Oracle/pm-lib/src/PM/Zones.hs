@@ -99,10 +99,10 @@ zoneTrack h = moore go id 0
 ------------------------------------------------------------------------------------------------
 
 data DwellSt = DwellSt
-  { dwMode :: Index 6        -- ^ the dwell-qualified mode (what a demo runs)
-  , dwLast :: Index 6        -- ^ last observed post-hysteresis S3 zone
-  , dwCnt  :: Unsigned 32    -- ^ ticks the zone has been stable (saturating)
-  , dwChg  :: Bool           -- ^ one-cycle pulse: dwMode just updated
+  { dwMode :: !(Index 6)        -- ^ the dwell-qualified mode (what a demo runs)
+  , dwLast :: !(Index 6)        -- ^ last observed post-hysteresis S3 zone
+  , dwCnt  :: !(Unsigned 32)    -- ^ ticks the zone has been stable (saturating)
+  , dwChg  :: !Bool           -- ^ one-cycle pulse: dwMode just updated
   } deriving (Generic, NFDataX, Eq, Show)
 
 dwellStep :: Unsigned 32 -> DwellSt -> Index 6 -> DwellSt
@@ -117,13 +117,13 @@ dwellStep dwellT DwellSt{..} z
 ------------------------------------------------------------------------------------------------
 
 data ZonesOut = ZonesOut
-  { zoS2         :: Index 3         -- ^ S2 zone, post-hysteresis
-  , zoS3         :: Index 6         -- ^ S3 zone, post-hysteresis (pre-dwell)
-  , zoS4         :: Index 4         -- ^ S4 zone, post-hysteresis
-  , zoStable     :: Bool            -- ^ S3 unchanged for a full dwell period
-  , zoMode       :: Index 6         -- ^ dwell-qualified S3 zone
-  , zoModeChange :: Bool            -- ^ one-cycle pulse when zoMode updates
-  , zoIPanel     :: BitVector 16    -- ^ the packed iPanel word (module header)
+  { zoS2         :: !(Index 3)         -- ^ S2 zone, post-hysteresis
+  , zoS3         :: !(Index 6)         -- ^ S3 zone, post-hysteresis (pre-dwell)
+  , zoS4         :: !(Index 4)         -- ^ S4 zone, post-hysteresis
+  , zoStable     :: !Bool            -- ^ S3 unchanged for a full dwell period
+  , zoMode       :: !(Index 6)         -- ^ dwell-qualified S3 zone
+  , zoModeChange :: !Bool            -- ^ one-cycle pulse when zoMode updates
+  , zoIPanel     :: !(BitVector 16)    -- ^ the packed iPanel word (module header)
   } deriving (Generic, NFDataX, Eq, Show)
 
 -- | Pack the iPanel register word (0x4020 read; layout in the module header).

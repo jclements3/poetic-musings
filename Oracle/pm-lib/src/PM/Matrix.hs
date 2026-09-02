@@ -94,18 +94,18 @@ decodeMatrixCtrl w = MatrixCtrl (testBit w 0) (testBit w 1) (unpack (slice d9 d4
 type Event = BitVector 8
 
 data MState = MState
-  { msEnabled  :: Bool                 -- ^ registered copy of ctlScanEn (keeps outputs Moore)
-  , msRow      :: Index 8              -- ^ row currently strobed
-  , msDwell    :: Unsigned 12          -- ^ tick within the current row dwell
-  , msSampled  :: Vec 8 Bool           -- ^ columns latched at the previous sample tick (True = pressed)
-  , msPrevRow  :: Index 8              -- ^ which row msSampled belongs to
-  , msProcIx   :: Index 8              -- ^ which latched key is being processed
-  , msProcBusy :: Bool                 -- ^ processing ticks remain this row
-  , msKeySt    :: Vec 64 Bool          -- ^ debounced state per key (True = down)
-  , msCnt      :: Vec 64 (Unsigned 6)  -- ^ integrating debounce counter per key
-  , msFifo     :: Vec 16 Event         -- ^ the event FIFO
-  , msRd, msWr :: Index 16
-  , msCount    :: Index 17             -- ^ FIFO fill 0..16
+  { msEnabled  :: !Bool                 -- ^ registered copy of ctlScanEn (keeps outputs Moore)
+  , msRow      :: !(Index 8)              -- ^ row currently strobed
+  , msDwell    :: !(Unsigned 12)          -- ^ tick within the current row dwell
+  , msSampled  :: !(Vec 8 Bool)           -- ^ columns latched at the previous sample tick (True = pressed)
+  , msPrevRow  :: !(Index 8)              -- ^ which row msSampled belongs to
+  , msProcIx   :: !(Index 8)              -- ^ which latched key is being processed
+  , msProcBusy :: !Bool                 -- ^ processing ticks remain this row
+  , msKeySt    :: !(Vec 64 Bool)          -- ^ debounced state per key (True = down)
+  , msCnt      :: !(Vec 64 (Unsigned 6))  -- ^ integrating debounce counter per key
+  , msFifo     :: !(Vec 16 Event)         -- ^ the event FIFO
+  , msRd, msWr :: !(Index 16)
+  , msCount    :: !(Index 17)             -- ^ FIFO fill 0..16
   } deriving (Generic, NFDataX)
 
 initMState :: MState

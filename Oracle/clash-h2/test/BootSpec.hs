@@ -43,7 +43,8 @@
 --   > loading... ok           (transfer from empty flash "succeeds"...)
 --   > failed                  (...but block 1 holds no ASCII: no nvram here)
 --   > 2 3 + . cr 5
---   > : mode? $4020 @ ; decimal mode? . cr 34
+--   > : mode? $4020 @ $7F and ; decimal mode? . cr 34
+--   > ... stable ... 147 press ... fifo empty      (the REAL PM.RegFile)
 --   > ... owner: JC ... PM card ok ... irig live ... tod ok
 --
 --   The line terminator is a bare CR (0x0D): eForth's @ktap@ ends a line
@@ -82,7 +83,16 @@ cardImagePath = "dist-newstyle/card.img"
 consoleInput :: String
 consoleInput =
      "2 3 + . cr\r"
-  P.++ ": mode? $4020 @ ; decimal mode? . cr\r"
+  P.++ ": mode? $4020 @ $7F and ; decimal mode? . cr\r"
+  -- The stable flag (bit 15) is only set by the real zone decoder after
+  -- its mode dwell — the old scripted constant could never satisfy this.
+  -- 0< is the signed test; split literals so the echo can't match.
+  P.++ ": st? $4020 @ 0< if .\" sta\" .\" ble\" then cr ; st?\r"
+  -- The real matrix scanner has row2/col3 wired down: pop the debounced
+  -- press event (keycode 19 = 0x13, press bit 7, valid bit 15) and then
+  -- show the FIFO is empty.  The 0x4024 @ itself is the pop.
+  P.++ ": key? $4024 @ dup $FF and . 0< if .\" pre\" .\" ss\" then cr ;\r"
+  P.++ "key? : nk? $4024 @ 0= if .\" fifo \" .\" empty\" then cr ; nk?\r"
   -- SD command layer over the 0x402A shifter (eforth-pm.md: "Forth
   -- implements the SD command layer; gateware is just the shifter").
   P.++ ": spi $402A ! $402A @ ;\r"
@@ -136,6 +146,9 @@ bootedOk :: String -> Bool
 bootedOk t = "eFORTH" `L.isInfixOf` t
           && "5"  `L.isInfixOf` after "cr" (after "eFORTH" t)
           && "34" `L.isInfixOf` after "decimal mode? . cr" t
+          && "stable" `L.isInfixOf` t          -- zone decoder's dwell flag
+          && "147 press" `L.isInfixOf` t       -- matrix event: keycode 19 + press
+          && "fifo empty" `L.isInfixOf` t      -- the 0x4024 read popped it
           && "owner: JC" `L.isInfixOf` t
           && "PM card ok" `L.isInfixOf` after "1 rblk 1 load" t
           && "irig live" `L.isInfixOf` t

@@ -35,32 +35,32 @@ type Word16 = BitVector 16
 
 -- | The H2 I/O bus, CPU side (field-for-field H2Out's io* group).
 data PmBus = PmBus
-  { pbAddr :: Word16   -- ^ ioDaddr
-  , pbWr   :: Bool     -- ^ ioWr — write strobe
-  , pbRe   :: Bool     -- ^ ioRe — read strobe (reads may have side effects)
-  , pbDout :: Word16   -- ^ ioDout — write data
+  { pbAddr :: !Word16   -- ^ ioDaddr
+  , pbWr   :: !Bool     -- ^ ioWr — write strobe
+  , pbRe   :: !Bool     -- ^ ioRe — read strobe (reads may have side effects)
+  , pbDout :: !Word16   -- ^ ioDout — write data
   } deriving (Generic, NFDataX)
 
 -- | Status words owned by out-of-package blocks, read back through the file.
 data PmStatus = PmStatus
-  { stAdc    :: Word16   -- ^ iAdc     0x4022 (raw 12-bit, mux per oPanelCtrl)
-  , stSynth  :: Word16   -- ^ iSynth   0x402E (voice-busy mask, seq position)
-  , stKeyer  :: Word16   -- ^ iKeyer   0x4030 (decoder FIFO head, paddle state)
-  , stPaOk   :: Bool     -- ^ iTxGate  0x4032 bit 1 — PA fuse-branch OK
-  , stIrig   :: Word16   -- ^ iIrig    0x4034
-  , stHarp   :: Word16   -- ^ iHarp    0x4036 (pluck FIFO head)
+  { stAdc    :: !Word16   -- ^ iAdc     0x4022 (raw 12-bit, mux per oPanelCtrl)
+  , stSynth  :: !Word16   -- ^ iSynth   0x402E (voice-busy mask, seq position)
+  , stKeyer  :: !Word16   -- ^ iKeyer   0x4030 (decoder FIFO head, paddle state)
+  , stPaOk   :: !Bool     -- ^ iTxGate  0x4032 bit 1 — PA fuse-branch OK
+  , stIrig   :: !Word16   -- ^ iIrig    0x4034
+  , stHarp   :: !Word16   -- ^ iHarp    0x4036 (pluck FIFO head)
   } deriving (Generic, NFDataX)
 
 -- | Everything the file drives outward.
 data PmRegs = PmRegs
-  { prDin       :: Word16        -- ^ ioDin back to the core (combinational mux)
-  , prRows      :: Vec 8 Bit     -- ^ matrix row strobes (one-hot, active low)
-  , prPanelCtrl :: Word16        -- ^ oPanelCtrl held register (ADC mux, backlight)
-  , prAudio     :: Word16        -- ^ oAudio held register; bit 0 = mute (resets 1)
-  , prSynthCmd  :: Maybe Word16  -- ^ one-cycle synth command pulse (0x402E write)
-  , prKeyerCmd  :: Maybe Word16  -- ^ one-cycle keyer command pulse (0x4030 write)
-  , prTxArmed   :: Bool          -- ^ interlocked PA arm: key written AND mode == C
-  , prMode      :: Index 6       -- ^ dwell-qualified S3 mode, for non-Forth consumers
+  { prDin       :: !Word16        -- ^ ioDin back to the core (combinational mux)
+  , prRows      :: !(Vec 8 Bit)     -- ^ matrix row strobes (one-hot, active low)
+  , prPanelCtrl :: !Word16        -- ^ oPanelCtrl held register (ADC mux, backlight)
+  , prAudio     :: !Word16        -- ^ oAudio held register; bit 0 = mute (resets 1)
+  , prSynthCmd  :: !(Maybe Word16)  -- ^ one-cycle synth command pulse (0x402E write)
+  , prKeyerCmd  :: !(Maybe Word16)  -- ^ one-cycle keyer command pulse (0x4030 write)
+  , prTxArmed   :: !Bool          -- ^ interlocked PA arm: key written AND mode == C
+  , prMode      :: !(Index 6)       -- ^ dwell-qualified S3 mode, for non-Forth consumers
   } deriving (Generic, NFDataX)
 
 -- | One held 16-bit write register at an address.
