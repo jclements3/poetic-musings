@@ -519,17 +519,20 @@ weld callouts until annotation is migrated.</p>
 <pattern id="hat" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="7" stroke="#8d877a" stroke-width="1"/></pattern>
 <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3b5a7a"/></marker>
 </defs>
-<text x="20" y="20" class="fg">ER-001 — NECK, SECTION A–A AT A PIN STATION (first angle, dims mm, 2 px/mm)</text>
+<text x="20" y="20" class="fg">ER-001 — NECK, SECTION A–A AT AN AXLE STATION (first angle, dims mm, 2 px/mm)</text>
 <!-- plates -->
 <rect x="240.5" y="60" width="16" height="330" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
 <rect x="383.5" y="60" width="16" height="330" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
 <!-- through pin -->
-<rect x="226" y="90" width="178" height="11" rx="2" fill="#6a6d74" stroke="#111"/>
-<rect x="404" y="84" width="16" height="23" rx="2" fill="#6a6d74" stroke="#111"/>
-<text x="426" y="100" class="fs">tuning head (alternates ±Y)</text>
-<text x="245" y="82" class="fs">through-pin Ø5.5 — bears in BOTH plates</text>
+<rect x="240.5" y="83.5" width="159" height="24" rx="2" fill="#dde3ea" stroke="#111"/>
+<rect x="248" y="89.5" width="144" height="12" fill="#b9c6d4" stroke="#445"/>
+<rect x="316" y="103.5" width="8" height="4" fill="#fff" stroke="#111"/>
+<rect x="388" y="90.5" width="8" height="10" fill="#fff" stroke="#223"/>
+<text x="245" y="76" class="fs">ER-008 axle tube Ø12×2 (6061) — rung + tuner housing, pressed in BOTH plates</text>
+<text x="408" y="98" class="fs">3 mm hex, RECESSED — all 49 on this side</text>
+<text x="330" y="114" class="fs">3 mm slot: string in, 90° over the radiused lip (= flat pin, y=0)</text>
 <!-- string centerline -->
-<line x1="320" y1="60" x2="320" y2="470" class="cl"/>
+<line x1="320" y1="107.5" x2="320" y2="470" class="cl"/>
 <circle cx="320" cy="300" r="2.6" fill="#111"/>
 <text x="328" y="296" class="fs">string (XZ plane)</text>
 <!-- sensors: crossed 45deg beams -->
@@ -539,7 +542,7 @@ weld callouts until annotation is migrated.</p>
 <line x1="266.5" y1="331" x2="373.5" y2="269" stroke="#c58a1f" stroke-width="1.2" stroke-dasharray="5 4"/>
 <text x="180" y="252" class="fs" text-anchor="end">IR emit ×2</text>
 <text x="415" y="352" class="fs">detect ×2 — beams cross at ±30°</text>
-<text x="415" y="364" class="fs">(60° pair, per-station yaw — see sensor-stations.csv)</text>
+<text x="415" y="364" class="fs">(60° pair, yaw 0 at all 49 — see sensor-stations.csv)</text>
 <!-- dims -->
 <line x1="256.5" y1="430" x2="383.5" y2="430" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
 <line x1="256.5" y1="395" x2="256.5" y2="435" class="dim"/><line x1="383.5" y1="395" x2="383.5" y2="435" class="dim"/>
@@ -548,7 +551,7 @@ weld callouts until annotation is migrated.</p>
 <text x="248" y="40" class="dmt" text-anchor="middle">8</text>
 <line x1="256.5" y1="470" x2="320" y2="470" class="dim" marker-start="url(#ar)" marker-end="url(#ar)"/>
 <text x="288" y="484" class="dmt" text-anchor="middle">31.75</text>
-<text x="20" y="505" class="fs">Plates bolt flush onto the midrib ±Y faces (63.5 wide → gap 63.5). Crown: 6.35 pads per side between the Ø50.8 round pillar and the plates, through-bolts with crush sleeves through the tube.</text>
+<text x="20" y="505" class="fs">Plates lap the midrib walls (gap 63.5 = channel width). Crown: ER-007 channel cap, web 1.5 root gap off the pillar, 2× M8 crush-sleeved through the tube. Optical plane sits 0.056·L below this section.</text>
 
 <text x="540" y="20" class="fg">ER-002 — PILLAR SECTION (Ø2" × 3/16" round tube)</text>
 <circle cx="610.8" cy="170.8" r="50.8" fill="url(#hat)" stroke="#111" stroke-width="1.5"/>
