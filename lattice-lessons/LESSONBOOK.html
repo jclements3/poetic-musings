@@ -1,0 +1,1301 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<title>Lattice + HackerRank Lesson Book</title>
+<style>
+body{font-family:Georgia,serif;max-width:900px;margin:24px auto;padding:0 16px;
+     color:#222;line-height:1.45}
+h1{border-bottom:3px solid #3b5a7a;color:#3b5a7a;padding-bottom:4px}
+h2{color:#3b5a7a} h3{margin-top:36px;border-top:1px solid #ddd;padding-top:18px}
+pre{background:#f6f4ee;border:1px solid #ddd;padding:10px;overflow-x:auto;
+    font-size:13px;line-height:1.35}
+code{font-family:ui-monospace,Menlo,Consolas,monospace}
+table{border-collapse:collapse;margin:10px 0} td,th{border:1px solid #ccc;
+    padding:5px 10px;font-size:14px} th{background:#eef1f5}
+.file{color:#888;font-family:ui-monospace,monospace;font-size:12px;margin:2px 0}
+.doc pre{background:#fffbe8;border-color:#e6d9a8}
+details summary{cursor:pointer;color:#3b5a7a;font-family:ui-monospace,monospace}
+.stamp{color:#999;font-size:12px}
+nav ul{line-height:1.7}
+@media print{details{display:block} details>summary{display:none}}
+</style></head><body>
+<h1>Lattice SDK + HackerRank — the Lesson Book</h1>
+<p class="stamp">compiled 2026-09-02 14:00 from lattice-lessons/ — regenerate with
+make_lessonbook.py; the .py files stay the runnable source of truth</p>
+<p>How to study: read a chapter here, then RUN its file and do the exercises
+in the file before opening the solutions. Yellow blocks are the teaching
+notes; collapsible blocks are the full code, solutions included — so do the
+exercises at the keyboard first, and treat this book as the review pass.</p>
+<nav><h2>Contents</h2><ul><li><b>Part I — Lattice SDK track</b><ul><li><a href="#harness.py">harness.py</a></li><li><a href="#lesson01_client_and_config.py">lesson01_client_and_config.py</a></li><li><a href="#lesson02_models.py">lesson02_models.py</a></li><li><a href="#lesson03_publishing.py">lesson03_publishing.py</a></li><li><a href="#lesson04_worldmodel.py">lesson04_worldmodel.py</a></li><li><a href="#lesson05_python_drills.py">lesson05_python_drills.py</a></li><li><a href="#lesson06_tasks_agent.py">lesson06_tasks_agent.py</a></li><li><a href="#lesson07_robustness.py">lesson07_robustness.py</a></li><li><a href="#test_lesson08.py">test_lesson08.py</a></li></ul></li><li><b>Part II — HackerRank on Zoom</b><ul><li><a href="#hackerrank/drill01_stdlib_weapons.py">drill01_stdlib_weapons.py</a></li><li><a href="#hackerrank/drill02_io_formats.py">drill02_io_formats.py</a></li><li><a href="#hackerrank/problems.py">problems.py</a></li><li><a href="#hackerrank/mock_test.py">mock_test.py</a></li></ul></li></ul></nav>
+<h1>Part I — Lattice SDK track</h1><h2>Lattice SDK coding-test bootcamp</h2>
+<p>Eight hands-on lessons that use the real <code>anduril-lattice-sdk</code> (v4.29.x, import</p>
+<p>name <code>anduril</code>) against an <b>offline mock environment</b>, so every lesson runs on</p>
+<p>this machine with no credentials and no network. The data set is this project:</p>
+<p>the Erand49 harp&#x27;s 49 sensor stations become your entity fleet.</p>
+<h3>How to run</h3>
+<p>The SDK is installed under the system Python 3.10 (not the conda 3.13):</p>
+<pre><code>/usr/bin/python3 lattice-lessons/lesson01_client_and_config.py</code></pre>
+<p>Every lesson file has three parts: a WORKED EXAMPLE (runs immediately), numbered</p>
+<p>EXERCISES (do them before peeking), and SOLUTIONS at the bottom (run with</p>
+<p><code>SOLUTIONS=1</code> in the environment to execute them).</p>
+<pre><code>SOLUTIONS=1 /usr/bin/python3 lattice-lessons/lesson03_publishing.py</code></pre>
+<h3>Curriculum</h3>
+<table>
+<tr><th>#</th><th>File</th><th>You practice</th></tr>
+<tr><td>1</td><td>lesson01_client_and_config.py</td><td>client construction, env-var config, twelve-factor defaults</td></tr>
+<tr><td>2</td><td>lesson02_models.py</td><td>pydantic models, Literal enums, validation errors, serialization</td></tr>
+<tr><td>3</td><td>lesson03_publishing.py</td><td>publish_entity, idempotent IDs (uuid5), batch + error collection</td></tr>
+<tr><td>4</td><td>lesson04_worldmodel.py</td><td>iterators/generators, event folding into a world model dict</td></tr>
+<tr><td>5</td><td>lesson05_python_drills.py</td><td>comprehensions, sorted/key, groupby, csv — pure-Python test muscles</td></tr>
+<tr><td>6</td><td>lesson06_tasks_agent.py</td><td>task lifecycle, a polling agent as a state machine</td></tr>
+<tr><td>7</td><td>lesson07_robustness.py</td><td>ApiError handling, retries with backoff, timeouts</td></tr>
+<tr><td>8</td><td>test_lesson08.py</td><td>pytest + httpx.MockTransport fixtures, asserting request bodies</td></tr>
+</table>
+<p>Lesson 8 runs with: <code>/usr/bin/python3 -m pytest lattice-lessons/test_lesson08.py -q</code></p>
+<h3>The mock environment (harness.py)</h3>
+<p><code>harness.make_client()</code> returns a real <code>Lattice</code> client whose HTTP transport is</p>
+<p>an in-memory fake: <code>PUT /api/v1/entities</code> stores and echoes, `GET</p>
+<p>/api/v1/entities/{id}<code> returns stored or 404, </code>POST /api/v1/tasks` creates,</p>
+<p><code>POST /api/v1/tasks/query</code> lists. Everything you learn transfers 1:1 to a live</p>
+<p>environment — swap <code>make_client()</code> for <code>Lattice(token=..., base_url=...)</code>.</p>
+<h3>Test-day tips</h3>
+<li>Read method signatures with <code>inspect.signature</code> / <code>help()</code> — this SDK is</li>
+<p>  keyword-only everywhere, and guessing positionals wastes minutes.</p>
+<li>Literal enums hide in <code>Model.model_fields[name].annotation</code></li>
+<p>  (<code>typing.get_args</code> them) — lesson 2 drills this.</p>
+<li><code>model_dump(exclude_none=True)</code> is how you diff/print entities sanely.</li>
+<li>When a test gives you no server, build the httpx.MockTransport harness from</li>
+<p>  lesson 8 from memory — it is ~15 lines and turns every API question into a</p>
+<p>  pure-Python question.</p>
+<li>State machines (lesson 6) and event folding (lesson 4) are the two patterns</li>
+<p>  Lattice-flavored tests love most.</p><h3 id="harness.py">In-memory mock Lattice environment.</h3><p class="file">harness.py</p><div class="doc"><pre>make_client() returns a REAL anduril.client.Lattice wired to an httpx
+MockTransport, plus the backing store so lessons/tests can assert on it.
+
+Routes implemented (paths captured from the real SDK v4.29.1):
+    PUT  /api/v1/entities            -&gt; store entity json, echo it back
+    GET  /api/v1/entities/{id}       -&gt; stored json or 404
+    POST /api/v1/tasks               -&gt; create task, assign taskId, store
+    GET  /api/v1/tasks/{id}          -&gt; stored json or 404
+    POST /api/v1/tasks/query         -&gt; {&quot;tasks&quot;: [...]}
+    PUT/PATCH/POST ...{id}/status    -&gt; merge status into stored task</pre></div><details open><summary>code</summary><pre><code>import json
+import re
+import uuid
+
+import httpx
+from anduril.client import Lattice
+
+
+class FakeLattice:
+    def __init__(self):
+        self.entities = {}   # entity_id -&gt; dict (as sent by the SDK)
+        self.tasks = {}      # task_id -&gt; dict
+        self.requests = []   # (method, path, body) log for assertions
+
+    def handler(self, request: httpx.Request) -&gt; httpx.Response:
+        path = request.url.path
+        body = json.loads(request.content.decode()) if request.content else {}
+        self.requests.append((request.method, path, body))
+
+        if request.method == &quot;PUT&quot; and path == &quot;/api/v1/entities&quot;:
+            eid = body.get(&quot;entityId&quot;) or str(uuid.uuid4())
+            body[&quot;entityId&quot;] = eid
+            self.entities[eid] = body
+            return httpx.Response(200, json=body)
+
+        m = re.fullmatch(r&quot;/api/v1/entities/([^/]+)&quot;, path)
+        if m and request.method == &quot;GET&quot;:
+            e = self.entities.get(m.group(1))
+            return httpx.Response(200, json=e) if e else httpx.Response(
+                404, json={&quot;message&quot;: f&quot;no entity {m.group(1)}&quot;})
+
+        if request.method == &quot;POST&quot; and path == &quot;/api/v1/tasks&quot;:
+            tid = str(uuid.uuid4())
+            body.setdefault(&quot;version&quot;, {})[&quot;taskId&quot;] = tid
+            body.setdefault(&quot;status&quot;, {&quot;status&quot;: &quot;STATUS_CREATED&quot;})
+            self.tasks[tid] = body
+            return httpx.Response(200, json=body)
+
+        if request.method == &quot;POST&quot; and path == &quot;/api/v1/tasks/query&quot;:
+            return httpx.Response(200, json={&quot;tasks&quot;: list(self.tasks.values())})
+
+        m = re.fullmatch(r&quot;/api/v1/tasks/([^/]+)/status&quot;, path)
+        if m:
+            t = self.tasks.get(m.group(1))
+            if not t:
+                return httpx.Response(404, json={&quot;message&quot;: &quot;no task&quot;})
+            t[&quot;status&quot;] = {**t.get(&quot;status&quot;, {}), **body.get(&quot;statusUpdate&quot;, body)}
+            return httpx.Response(200, json=t)
+
+        m = re.fullmatch(r&quot;/api/v1/tasks/([^/]+)&quot;, path)
+        if m and request.method == &quot;GET&quot;:
+            t = self.tasks.get(m.group(1))
+            return httpx.Response(200, json=t) if t else httpx.Response(
+                404, json={&quot;message&quot;: &quot;no task&quot;})
+
+        return httpx.Response(404, json={&quot;message&quot;: f&quot;unrouted {request.method} {path}&quot;})
+
+
+def make_client():
+    &quot;&quot;&quot;-&gt; (Lattice, FakeLattice). A real SDK client against the in-memory fake.&quot;&quot;&quot;
+    fake = FakeLattice()
+    client = Lattice(
+        base_url=&quot;https://mock.lattice.local&quot;,
+        token=&quot;offline-lesson-token&quot;,
+        httpx_client=httpx.Client(transport=httpx.MockTransport(fake.handler)),
+    )
+    return client, fake
+
+
+# --- shared data: the Erand49 sensor stations as a &quot;fleet&quot; -------------------
+HOME = (34.5031, -86.6153)  # Laceys Spring, AL — the harp&#x27;s home dock
+
+def stations(csv_path=None):
+    &quot;&quot;&quot;Yield dicts: station, x_mm, z_mm, lat, lon (harp mm -&gt; ~micro-degrees).&quot;&quot;&quot;
+    import csv, os
+    here = os.path.dirname(os.path.abspath(__file__))
+    csv_path = csv_path or os.path.join(here, &quot;..&quot;, &quot;Erand49&quot;, &quot;sensor-stations.csv&quot;)
+    with open(csv_path) as f:
+        for row in csv.DictReader(f):
+            x, z = float(row[&quot;x_mm&quot;]), float(row[&quot;z_mm&quot;])
+            yield {
+                &quot;station&quot;: int(row[&quot;station&quot;]),
+                &quot;x_mm&quot;: x,
+                &quot;z_mm&quot;: z,
+                &quot;yaw_deg&quot;: float(row[&quot;pair_yaw_deg&quot;]),
+                &quot;lat&quot;: HOME[0] + z * 1e-6,
+                &quot;lon&quot;: HOME[1] + x * 1e-6,
+            }
+
+
+if __name__ == &quot;__main__&quot;:
+    client, fake = make_client()
+    e = client.entities.publish_entity(entity_id=&quot;smoke&quot;, description=&quot;harness ok&quot;,
+                                       is_live=True)
+    assert e.entity_id == &quot;smoke&quot; and &quot;smoke&quot; in fake.entities
+    got = client.entities.get_entity(entity_id=&quot;smoke&quot;)
+    assert got.description == &quot;harness ok&quot;
+    n = sum(1 for _ in stations())
+    print(f&quot;harness OK: entity round-trip good, {n} stations loaded&quot;)</code></pre></details><h3 id="lesson01_client_and_config.py">LESSON 1 — the client and twelve-factor configuration.</h3><p class="file">lesson01_client_and_config.py</p><div class="doc"><pre>Goal: construct a Lattice client from environment variables with sane
+defaults, the way a coding test expects config to be handled.
+
+Key facts about this SDK (v4.29.x):
+  * import name is `anduril`; the client class is anduril.client.Lattice
+  * EVERYTHING is keyword-only: Lattice(token=..., base_url=...)
+  * auth is a bearer token: token= a string OR a zero-arg callable (rotation!)
+  * you can inject an httpx.Client — that is the door to offline testing</pre></div><details open><summary>code</summary><pre><code>import os
+import inspect
+
+from anduril.client import Lattice
+import harness
+
+# --- WORKED EXAMPLE ---------------------------------------------------------
+# 1. Discover a signature instead of guessing (do this in the test!):
+sig = inspect.signature(Lattice.__init__)
+print(&quot;Lattice takes:&quot;, &quot;, &quot;.join(list(sig.parameters)[1:8]), &quot;...&quot;)
+
+# 2. Config precedence: explicit arg &gt; env var &gt; default.
+def make_lattice_from_env(**overrides):
+    cfg = {
+        &quot;base_url&quot;: os.environ.get(&quot;LATTICE_URL&quot;, &quot;https://mock.lattice.local&quot;),
+        &quot;token&quot;: os.environ.get(&quot;LATTICE_TOKEN&quot;, &quot;offline-lesson-token&quot;),
+        &quot;timeout&quot;: float(os.environ.get(&quot;LATTICE_TIMEOUT&quot;, &quot;10&quot;)),
+    }
+    cfg.update(overrides)
+    return Lattice(**cfg)
+
+client = make_lattice_from_env()
+print(&quot;client resources:&quot;, [a for a in dir(client) if not a.startswith(&quot;_&quot;)])
+
+# 3. A token CALLABLE lets you rotate credentials without rebuilding the client:
+tokens = iter([&quot;tok-1&quot;, &quot;tok-2&quot;, &quot;tok-3&quot;])
+rotating = make_lattice_from_env(token=lambda: next(tokens))
+print(&quot;token-callable client built OK:&quot;, rotating is not None)
+
+# --- EXERCISES --------------------------------------------------------------
+# E1. Write env_flag(name, default) -&gt; bool that treats &quot;1/true/yes/on&quot;
+#     (any case) as True and everything else as False; use it to add a
+#     LATTICE_VERBOSE flag to make_lattice_from_env (print cfg when set).
+# E2. make_lattice_from_env silently produces a broken client if
+#     LATTICE_TIMEOUT is &quot;ten&quot;. Fix it: fall back to the default AND collect a
+#     warning string; return (client, warnings).
+# E3. Using inspect.signature only (no docs), list every Lattice.__init__
+#     parameter whose default is None.
+
+# --- SOLUTIONS (run with SOLUTIONS=1) ---------------------------------------
+if os.environ.get(&quot;SOLUTIONS&quot;) == &quot;1&quot;:
+    def env_flag(name, default=False):
+        raw = os.environ.get(name)
+        if raw is None:
+            return default
+        return raw.strip().lower() in (&quot;1&quot;, &quot;true&quot;, &quot;yes&quot;, &quot;on&quot;)
+
+    def make_lattice_from_env2(**overrides):
+        warnings = []
+        raw_t = os.environ.get(&quot;LATTICE_TIMEOUT&quot;, &quot;10&quot;)
+        try:
+            timeout = float(raw_t)
+        except ValueError:
+            warnings.append(f&quot;LATTICE_TIMEOUT={raw_t!r} is not a number; using 10&quot;)
+            timeout = 10.0
+        cfg = {
+            &quot;base_url&quot;: os.environ.get(&quot;LATTICE_URL&quot;, &quot;https://mock.lattice.local&quot;),
+            &quot;token&quot;: os.environ.get(&quot;LATTICE_TOKEN&quot;, &quot;offline-lesson-token&quot;),
+            &quot;timeout&quot;: timeout,
+        }
+        cfg.update(overrides)
+        if env_flag(&quot;LATTICE_VERBOSE&quot;):
+            print(&quot;cfg:&quot;, {k: v for k, v in cfg.items() if k != &quot;token&quot;})
+        return Lattice(**cfg), warnings
+
+    os.environ[&quot;LATTICE_TIMEOUT&quot;] = &quot;ten&quot;
+    _, warns = make_lattice_from_env2()
+    print(&quot;E2 warnings:&quot;, warns)
+    del os.environ[&quot;LATTICE_TIMEOUT&quot;]
+
+    none_defaults = [n for n, p in sig.parameters.items()
+                     if p.default is None]
+    print(&quot;E3 None-default params:&quot;, none_defaults)
+    print(&quot;lesson01 solutions OK&quot;)</code></pre></details><h3 id="lesson02_models.py">LESSON 2 — pydantic models: build, validate, introspect, serialize.</h3><p class="file">lesson02_models.py</p><div class="doc"><pre>The SDK&#x27;s 238 types (anduril.types) are pydantic v2 models. Coding tests love:
+  * building nested models correctly (keyword-only, snake_case)
+  * finding the legal values of Literal enum fields WITHOUT the docs
+  * catching ValidationError and reporting which field failed
+  * model_dump(exclude_none=True) for clean output/diffing</pre></div><details open><summary>code</summary><pre><code>import os
+import typing
+
+from pydantic import ValidationError
+from anduril.types import (Position, Location, MilView, Ontology, Aliases,
+                           Provenance)
+
+# --- WORKED EXAMPLE ---------------------------------------------------------
+# 1. Nested build — the harp&#x27;s home dock as a Location:
+loc = Location(position=Position(latitude_degrees=34.5031,
+                                 longitude_degrees=-86.6153,
+                                 altitude_hae_meters=180.0))
+print(&quot;location:&quot;, loc.model_dump(exclude_none=True))
+
+# 2. Literal enums live in the field annotation. Memorize this move:
+def literal_values(model_cls, field):
+    # annotations here are Union[Literal[...], Any, None] — walk one level down
+    ann = model_cls.model_fields[field].annotation
+    out = []
+    for arg in typing.get_args(ann):
+        out += [a for a in typing.get_args(arg) if isinstance(a, str)]
+    return out
+
+print(&quot;dispositions:&quot;, literal_values(MilView, &quot;disposition&quot;)[:4], &quot;...&quot;)
+
+mv = MilView(disposition=&quot;DISPOSITION_FRIENDLY&quot;, environment=&quot;ENVIRONMENT_LAND&quot;)
+
+# 3. Validation errors tell you the exact field path:
+try:
+    Position(latitude_degrees=&quot;north-ish&quot;)
+except ValidationError as err:
+    first = err.errors()[0]
+    print(&quot;validation failed at:&quot;, first[&quot;loc&quot;], &quot;-&quot;, first[&quot;msg&quot;][:40])
+
+# --- EXERCISES --------------------------------------------------------------
+# E1. Write describe_model(cls) -&gt; dict {field: &quot;type-ish string&quot;} using
+#     model_fields; run it on Ontology and Provenance.
+# E2. Write safe_build(cls, **kw) that returns (instance, None) or
+#     (None, &quot;field.path: message&quot;) for the FIRST validation error.
+# E3. Round-trip: dump `loc` with model_dump(), rebuild with
+#     Location(**dumped[&quot;...&quot;]) — prove equality with ==. Careful: nested
+#     models dump to dicts; pydantic re-validates them on construction.
+# E4. Which MilView environments could describe the harp standing on the
+#     floor of a living room? Answer with code, not opinion (filter the
+#     literals for &#x27;LAND&#x27; or &#x27;SURFACE&#x27;).
+
+# --- SOLUTIONS --------------------------------------------------------------
+if os.environ.get(&quot;SOLUTIONS&quot;) == &quot;1&quot;:
+    def describe_model(cls):
+        return {name: str(f.annotation).replace(&quot;typing.&quot;, &quot;&quot;)[:60]
+                for name, f in cls.model_fields.items()}
+    print(&quot;E1 Ontology:&quot;, describe_model(Ontology))
+
+    def safe_build(cls, **kw):
+        try:
+            return cls(**kw), None
+        except ValidationError as err:
+            e = err.errors()[0]
+            return None, f&quot;{&#x27;.&#x27;.join(str(p) for p in e[&#x27;loc&#x27;])}: {e[&#x27;msg&#x27;]}&quot;
+    ok, msg = safe_build(Position, latitude_degrees=91.0)  # may or may not bound-check
+    print(&quot;E2:&quot;, (ok is not None) or msg)
+    _, msg = safe_build(Position, latitude_degrees=&quot;north-ish&quot;)
+    print(&quot;E2 first error:&quot;, msg)
+
+    dumped = loc.model_dump()
+    rebuilt = Location(**dumped)
+    print(&quot;E3 round-trip equal:&quot;, rebuilt == loc)
+
+    envs = [v for v in literal_values(MilView, &quot;environment&quot;)
+            if &quot;LAND&quot; in v or &quot;SURFACE&quot; in v]
+    print(&quot;E4:&quot;, envs)
+    print(&quot;lesson02 solutions OK&quot;)</code></pre></details><h3 id="lesson03_publishing.py">LESSON 3 — publishing entities: idempotent IDs, expiry, batches.</h3><p class="file">lesson03_publishing.py</p><div class="doc"><pre>publish_entity is a flat keyword call (every Entity component is a kwarg).
+Coding-test staples here:
+  * DETERMINISTIC entity IDs (uuid5 on a namespace) so re-runs update
+    instead of duplicating
+  * is_live + expiry_time hygiene (entities that die when your feed does)
+  * batch publishing that collects failures instead of dying on the first</pre></div><details open><summary>code</summary><pre><code>import os
+import uuid
+from datetime import datetime, timedelta, timezone
+
+from anduril.types import (Position, Location, Aliases, MilView, Ontology,
+                           Provenance)
+import harness
+
+NS = uuid.uuid5(uuid.NAMESPACE_DNS, &quot;erand49.poetic-musings.local&quot;)
+
+def station_entity_kwargs(st):
+    &quot;&quot;&quot;One sensor station -&gt; publish_entity kwargs. Deterministic ID!&quot;&quot;&quot;
+    now = datetime.now(timezone.utc)
+    return dict(
+        entity_id=str(uuid.uuid5(NS, f&quot;station-{st[&#x27;station&#x27;]:02d}&quot;)),
+        description=f&quot;Erand49 string sensor station {st[&#x27;station&#x27;]:02d}&quot;,
+        is_live=True,
+        expiry_time=now + timedelta(minutes=10),
+        location=Location(position=Position(latitude_degrees=st[&quot;lat&quot;],
+                                            longitude_degrees=st[&quot;lon&quot;])),
+        aliases=Aliases(name=f&quot;ER49-S{st[&#x27;station&#x27;]:02d}&quot;),
+        mil_view=MilView(disposition=&quot;DISPOSITION_FRIENDLY&quot;,
+                         environment=&quot;ENVIRONMENT_LAND&quot;),
+        ontology=Ontology(platform_type=&quot;Sensor&quot;,
+                          specific_type=&quot;IR string-vibration station&quot;),
+        provenance=Provenance(integration_name=&quot;erand49-harp&quot;,
+                              data_type=&quot;sensor-station&quot;,
+                              source_update_time=now),
+    )
+
+# --- WORKED EXAMPLE ---------------------------------------------------------
+client, fake = harness.make_client()
+first = next(harness.stations())
+e = client.entities.publish_entity(**station_entity_kwargs(first))
+print(&quot;published:&quot;, e.aliases.name, &quot;-&gt;&quot;, e.entity_id[:13], &quot;...&quot;)
+
+# same station again -&gt; same ID -&gt; the mock stores ONE entity, not two:
+client.entities.publish_entity(**station_entity_kwargs(first))
+print(&quot;store size after republish:&quot;, len(fake.entities), &quot;(idempotent)&quot;)
+
+# --- EXERCISES --------------------------------------------------------------
+# E1. publish_fleet(client, sts) -&gt; (ok_count, failures) where failures is
+#     [(station, error_string)]; it must attempt EVERY station even if some
+#     raise. Test it by monkeypatching fake.handler? Easier: temporarily
+#     corrupt one station dict (lat=&quot;x&quot;) so model construction fails.
+# E2. The demo ends at a known time. Republish the fleet with expiry_time =
+#     top of the next hour (datetime gymnastics; no external libs).
+# E3. Prove idempotency at scale: publish the full fleet twice and assert
+#     len(fake.entities) == 49.
+
+# --- SOLUTIONS --------------------------------------------------------------
+if os.environ.get(&quot;SOLUTIONS&quot;) == &quot;1&quot;:
+    def publish_fleet(client, sts):
+        ok, failures = 0, []
+        for st in sts:
+            try:
+                client.entities.publish_entity(**station_entity_kwargs(st))
+                ok += 1
+            except Exception as err:            # noqa: BLE001 — collect, don&#x27;t die
+                failures.append((st.get(&quot;station&quot;), str(err)[:60]))
+        return ok, failures
+
+    sts = list(harness.stations())
+    bad = dict(sts[3]); bad[&quot;lat&quot;] = &quot;x&quot;        # poison one
+    ok, failures = publish_fleet(client, sts[:3] + [bad] + sts[4:])
+    print(f&quot;E1: ok={ok} failures={failures}&quot;)
+
+    now = datetime.now(timezone.utc)
+    top_of_next_hour = (now.replace(minute=0, second=0, microsecond=0)
+                        + timedelta(hours=1))
+    kw = station_entity_kwargs(sts[0]); kw[&quot;expiry_time&quot;] = top_of_next_hour
+    client.entities.publish_entity(**kw)
+    print(&quot;E2 expiry:&quot;, top_of_next_hour.isoformat())
+
+    publish_fleet(client, sts); publish_fleet(client, sts)
+    print(&quot;E3 store size:&quot;, len(fake.entities), &quot;(expect 49)&quot;)
+    assert len(fake.entities) == 49
+    print(&quot;lesson03 solutions OK&quot;)</code></pre></details><h3 id="lesson04_worldmodel.py">LESSON 4 — folding an event stream into a world model.</h3><p class="file">lesson04_worldmodel.py</p><div class="doc"><pre>Live code uses client.entities.stream_entities() / long_poll_entity_events()
+— an infinite iterator of events. Tests simulate that with a finite list.
+The PATTERN is what matters and it is pure Python:
+
+    world = {}
+    for event in events:           # each event: (kind, entity)
+        fold(world, event)         # mutate/replace/delete
+    ...answer questions about `world`
+
+Practice muscles: generators, dict folding, max/min with keys, defaultdict.</pre></div><details open><summary>code</summary><pre><code>import os
+import random
+from collections import defaultdict
+
+from anduril.types import Position, Location, Aliases
+import harness
+
+# --- WORKED EXAMPLE ---------------------------------------------------------
+def synthetic_events(n_ticks=200, seed=49):
+    &quot;&quot;&quot;A finite fake of stream_entities(): yields (kind, payload) tuples.
+    kinds: &#x27;created&#x27; | &#x27;moved&#x27; | &#x27;expired&#x27;.&quot;&quot;&quot;
+    rng = random.Random(seed)
+    sts = list(harness.stations())
+    live = {}
+    for st in sts[:10]:
+        eid = f&quot;S{st[&#x27;station&#x27;]:02d}&quot;
+        live[eid] = (st[&quot;lat&quot;], st[&quot;lon&quot;])
+        yield &quot;created&quot;, {&quot;id&quot;: eid, &quot;lat&quot;: st[&quot;lat&quot;], &quot;lon&quot;: st[&quot;lon&quot;]}
+    for _ in range(n_ticks):
+        eid = rng.choice(list(live))
+        kind = rng.choices([&quot;moved&quot;, &quot;expired&quot;, &quot;created&quot;], [8, 1, 1])[0]
+        if kind == &quot;moved&quot;:
+            lat, lon = live[eid]
+            lat += rng.uniform(-1e-6, 1e-6); lon += rng.uniform(-1e-6, 1e-6)
+            live[eid] = (lat, lon)
+            yield &quot;moved&quot;, {&quot;id&quot;: eid, &quot;lat&quot;: lat, &quot;lon&quot;: lon}
+        elif kind == &quot;expired&quot; and len(live) &gt; 2:
+            del live[eid]
+            yield &quot;expired&quot;, {&quot;id&quot;: eid}
+        else:
+            new = f&quot;S{rng.randint(50, 99)}&quot;
+            live[new] = harness.HOME
+            yield &quot;created&quot;, {&quot;id&quot;: new, &quot;lat&quot;: harness.HOME[0], &quot;lon&quot;: harness.HOME[1]}
+
+def fold(world, event):
+    kind, p = event
+    if kind in (&quot;created&quot;, &quot;moved&quot;):
+        w = world.setdefault(p[&quot;id&quot;], {&quot;updates&quot;: 0})
+        w.update(lat=p[&quot;lat&quot;], lon=p[&quot;lon&quot;])
+        w[&quot;updates&quot;] += 1
+    elif kind == &quot;expired&quot;:
+        world.pop(p[&quot;id&quot;], None)
+
+world = {}
+for ev in synthetic_events():
+    fold(world, ev)
+print(f&quot;world holds {len(world)} live entities&quot;)
+busiest = max(world.items(), key=lambda kv: kv[1][&quot;updates&quot;])
+print(&quot;busiest entity:&quot;, busiest[0], &quot;with&quot;, busiest[1][&quot;updates&quot;], &quot;updates&quot;)
+
+# --- EXERCISES --------------------------------------------------------------
+# E1. Rewrite the consumption as a single function
+#     replay(events) -&gt; (world, counters) where counters is a
+#     defaultdict(int) of event kinds seen. No globals.
+# E2. Add tombstones: expired entities go to world[&quot;__dead__&quot;] (a set) and a
+#     &#x27;created&#x27; for a dead id must RESURRECT it (remove from the set).
+# E3. Generator chain: write take_until(events, pred) yielding events until
+#     pred(event) is True (inclusive), and use it to replay only until the
+#     first &#x27;expired&#x27;.
+# E4. (SDK bridge) Convert one folded world entry back into SDK models:
+#     Location(position=Position(...)) — prove types with isinstance.
+
+# --- SOLUTIONS --------------------------------------------------------------
+if os.environ.get(&quot;SOLUTIONS&quot;) == &quot;1&quot;:
+    def replay(events):
+        world, counters = {}, defaultdict(int)
+        dead = world.setdefault(&quot;__dead__&quot;, set())
+        for kind, p in events:
+            counters[kind] += 1
+            if kind in (&quot;created&quot;, &quot;moved&quot;):
+                dead.discard(p[&quot;id&quot;])
+                w = world.setdefault(p[&quot;id&quot;], {&quot;updates&quot;: 0})
+                w.update(lat=p[&quot;lat&quot;], lon=p[&quot;lon&quot;]); w[&quot;updates&quot;] += 1
+            elif kind == &quot;expired&quot;:
+                world.pop(p[&quot;id&quot;], None); dead.add(p[&quot;id&quot;])
+        return world, counters
+
+    w2, counts = replay(synthetic_events())
+    print(&quot;E1/E2:&quot;, dict(counts), &quot;| dead:&quot;, len(w2[&quot;__dead__&quot;]))
+
+    def take_until(events, pred):
+        for ev in events:
+            yield ev
+            if pred(ev):
+                return
+    upto = list(take_until(synthetic_events(), lambda ev: ev[0] == &quot;expired&quot;))
+    print(&quot;E3: replayed&quot;, len(upto), &quot;events until first expiry&quot;)
+
+    some_id, rec = next((k, v) for k, v in w2.items() if k != &quot;__dead__&quot;)
+    loc = Location(position=Position(latitude_degrees=rec[&quot;lat&quot;],
+                                     longitude_degrees=rec[&quot;lon&quot;]))
+    print(&quot;E4:&quot;, isinstance(loc.position, Position), some_id)
+    print(&quot;lesson04 solutions OK&quot;)</code></pre></details><h3 id="lesson05_python_drills.py">LESSON 5 — pure-Python drills on real project data.</h3><p class="file">lesson05_python_drills.py</p><div class="doc"><pre>No SDK in this one on purpose: half of any coding test is plain Python over
+structured data. The data is Erand49/sensor-stations.csv (49 rows).
+
+Muscles: comprehensions, sorted(key=), itertools.groupby, min/max with keys,
+zip, enumerate, f-strings, dict pipelines.</pre></div><details open><summary>code</summary><pre><code>import os
+import math
+from itertools import groupby
+
+import harness
+
+STS = list(harness.stations())
+
+# --- WORKED EXAMPLE ---------------------------------------------------------
+# nearest-neighbor spacing along the neck (the classic &quot;adjacent pairs&quot; drill)
+pairs = list(zip(STS, STS[1:]))
+gaps = [math.hypot(b[&quot;x_mm&quot;] - a[&quot;x_mm&quot;], b[&quot;z_mm&quot;] - a[&quot;z_mm&quot;]) for a, b in pairs]
+i_min = min(range(len(gaps)), key=gaps.__getitem__)
+print(f&quot;tightest neighbors: stations {STS[i_min][&#x27;station&#x27;]}-{STS[i_min+1][&#x27;station&#x27;]}&quot;
+      f&quot; at {gaps[i_min]:.1f} mm; widest {max(gaps):.1f} mm; mean {sum(gaps)/len(gaps):.1f} mm&quot;)
+
+# groupby needs SORTED input by the same key — the #1 groupby gotcha:
+def octave(st):   # stations 0.. -&gt; rough 7-per-octave bins
+    return (st[&quot;station&quot;] - 1) // 7
+for oct_, grp in groupby(sorted(STS, key=octave), key=octave):
+    grp = list(grp)
+    if oct_ &lt; 2:
+        print(f&quot;octave bin {oct_}: {len(grp)} stations, &quot;
+              f&quot;x {grp[0][&#x27;x_mm&#x27;]:.0f}..{grp[-1][&#x27;x_mm&#x27;]:.0f} mm&quot;)
+
+# --- EXERCISES --------------------------------------------------------------
+# E1. Top-3 stations by |yaw| (they were once nonzero...) — return
+#     [(station, yaw)] sorted descending, ties by station ascending.
+# E2. Build {octave_bin: mean gap within the bin} using ONLY comprehensions
+#     and the helpers above (no explicit for-loops except inside them).
+# E3. The &quot;two-pointer&quot; classic: find the pair of stations (not necessarily
+#     adjacent) whose x_mm difference is closest to exactly 100 mm.
+# E4. Write as_rows(sts, cols) -&gt; list[tuple] and a matching header, i.e. a
+#     mini dataframe without pandas; print the first 3 rows aligned.
+
+# --- SOLUTIONS --------------------------------------------------------------
+if os.environ.get(&quot;SOLUTIONS&quot;) == &quot;1&quot;:
+    top3 = sorted(((s[&quot;station&quot;], s[&quot;yaw_deg&quot;]) for s in STS),
+                  key=lambda t: (-abs(t[1]), t[0]))[:3]
+    print(&quot;E1:&quot;, top3)
+
+    def octave_of(i):
+        return (STS[i][&quot;station&quot;] - 1) // 7
+    bin_gaps = {}
+    for b in sorted({octave(s) for s in STS}):
+        sel = [g for (a, _), g in zip(pairs, gaps) if octave(a) == b]
+        if sel:
+            bin_gaps[b] = round(sum(sel) / len(sel), 1)
+    print(&quot;E2:&quot;, bin_gaps)
+
+    xs = sorted(s[&quot;x_mm&quot;] for s in STS)
+    lo, hi, best = 0, 1, (float(&quot;inf&quot;), None)
+    while hi &lt; len(xs):
+        d = xs[hi] - xs[lo]
+        best = min(best, (abs(d - 100.0), (round(xs[lo]), round(xs[hi]))))
+        if d &lt; 100.0:
+            hi += 1
+        else:
+            lo += 1
+            hi = max(hi, lo + 1)
+    print(f&quot;E3: closest-to-100mm pair {best[1]} (off by {best[0]:.1f} mm)&quot;)
+
+    def as_rows(sts, cols):
+        return [tuple(s[c] for c in cols) for s in sts]
+    cols = (&quot;station&quot;, &quot;x_mm&quot;, &quot;z_mm&quot;)
+    rows = as_rows(STS, cols)
+    print(&quot;E4:&quot;)
+    print(&quot; | &quot;.join(f&quot;{c:&gt;8}&quot; for c in cols))
+    for r in rows[:3]:
+        print(&quot; | &quot;.join(f&quot;{v:&gt;8.1f}&quot; if isinstance(v, float) else f&quot;{v:&gt;8}&quot; for v in r))
+    print(&quot;lesson05 solutions OK&quot;)</code></pre></details><h3 id="lesson06_tasks_agent.py">LESSON 6 — the Tasks API and an agent as a state machine.</h3><p class="file">lesson06_tasks_agent.py</p><div class="doc"><pre>Task lifecycle: create_task -&gt; (an agent receives it) -&gt; update_task_status
+through a legal state sequence -&gt; done/failed. Live agents use
+listen_as_agent()/stream_as_agent(); tests fake the inbox with a queue.
+
+Muscles: enums as data, dict-driven state machines, while-loop agents with
+explicit termination, defensive transitions.</pre></div><details open><summary>code</summary><pre><code>import os
+from collections import deque
+
+import harness
+
+# Legal transitions (a subset of Lattice&#x27;s STATUS_* space, enough for tests):
+TRANSITIONS = {
+    &quot;STATUS_CREATED&quot;:   {&quot;STATUS_ACK&quot;},
+    &quot;STATUS_ACK&quot;:       {&quot;STATUS_WILCO&quot;, &quot;STATUS_DECLINED&quot;},
+    &quot;STATUS_WILCO&quot;:     {&quot;STATUS_EXECUTING&quot;},
+    &quot;STATUS_EXECUTING&quot;: {&quot;STATUS_DONE_OK&quot;, &quot;STATUS_DONE_NOT_OK&quot;},
+    &quot;STATUS_DONE_OK&quot;: set(), &quot;STATUS_DONE_NOT_OK&quot;: set(), &quot;STATUS_DECLINED&quot;: set(),
+}
+
+def advance(task, new_status):
+    cur = task[&quot;status&quot;]
+    if new_status not in TRANSITIONS[cur]:
+        raise ValueError(f&quot;illegal {cur} -&gt; {new_status}&quot;)
+    task[&quot;status&quot;] = new_status
+    return task
+
+# --- WORKED EXAMPLE ---------------------------------------------------------
+client, fake = harness.make_client()
+created = client.tasks.create_task(display_name=&quot;Tune string 07&quot;,
+                                   description=&quot;bring c2 to 65.4 Hz&quot;)
+tid = created.version.task_id
+print(&quot;created task:&quot;, tid[:8], &quot;…&quot;)
+
+# a tiny agent: pull work from an inbox, walk it through the machine
+def run_agent(inbox, worker):
+    &quot;&quot;&quot;inbox: deque of task dicts; worker(task) -&gt; True (ok) / False.&quot;&quot;&quot;
+    done = []
+    while inbox:
+        task = inbox.popleft()
+        advance(task, &quot;STATUS_ACK&quot;)
+        advance(task, &quot;STATUS_WILCO&quot;)
+        advance(task, &quot;STATUS_EXECUTING&quot;)
+        advance(task, &quot;STATUS_DONE_OK&quot; if worker(task) else &quot;STATUS_DONE_NOT_OK&quot;)
+        done.append(task)
+    return done
+
+inbox = deque([{&quot;id&quot;: f&quot;tune-{n:02d}&quot;, &quot;status&quot;: &quot;STATUS_CREATED&quot;} for n in (1, 2, 3)])
+out = run_agent(inbox, worker=lambda t: not t[&quot;id&quot;].endswith(&quot;2&quot;))
+print(&quot;agent results:&quot;, [(t[&quot;id&quot;], t[&quot;status&quot;]) for t in out])
+
+# --- EXERCISES --------------------------------------------------------------
+# E1. advance() should be forgiving in one specific way tests like:
+#     make repeating the CURRENT state a no-op instead of an error.
+# E2. Write walk(task, *statuses) that applies advance() over a list and
+#     rolls the task back to its original status if ANY step is illegal
+#     (all-or-nothing semantics).
+# E3. Add a &#x27;declines&#x27; policy to run_agent: worker may return None meaning
+#     &quot;decline&quot; -&gt; ACK then DECLINED (legal per the table!).
+# E4. (SDK bridge) create 3 tasks via client.tasks.create_task, then
+#     query_tasks() and print each task&#x27;s display name from the response.
+#     Introspect the returned model with model_dump to find where the name
+#     lives — that discovery IS the exercise.
+
+# --- SOLUTIONS --------------------------------------------------------------
+if os.environ.get(&quot;SOLUTIONS&quot;) == &quot;1&quot;:
+    def advance2(task, new_status):
+        cur = task[&quot;status&quot;]
+        if new_status == cur:
+            return task
+        if new_status not in TRANSITIONS[cur]:
+            raise ValueError(f&quot;illegal {cur} -&gt; {new_status}&quot;)
+        task[&quot;status&quot;] = new_status
+        return task
+    t = {&quot;id&quot;: &quot;x&quot;, &quot;status&quot;: &quot;STATUS_ACK&quot;}
+    advance2(t, &quot;STATUS_ACK&quot;)
+    print(&quot;E1 idempotent repeat OK:&quot;, t[&quot;status&quot;])
+
+    def walk(task, *statuses):
+        original = task[&quot;status&quot;]
+        try:
+            for s in statuses:
+                advance2(task, s)
+        except ValueError as err:
+            task[&quot;status&quot;] = original
+            return False, str(err)
+        return True, task[&quot;status&quot;]
+    print(&quot;E2 legal:&quot;, walk({&quot;id&quot;: &quot;y&quot;, &quot;status&quot;: &quot;STATUS_CREATED&quot;},
+                            &quot;STATUS_ACK&quot;, &quot;STATUS_WILCO&quot;))
+    print(&quot;E2 rollback:&quot;, walk({&quot;id&quot;: &quot;z&quot;, &quot;status&quot;: &quot;STATUS_CREATED&quot;},
+                               &quot;STATUS_ACK&quot;, &quot;STATUS_EXECUTING&quot;))
+
+    def run_agent2(inbox, worker):
+        done = []
+        while inbox:
+            task = inbox.popleft()
+            advance2(task, &quot;STATUS_ACK&quot;)
+            verdict = worker(task)
+            if verdict is None:
+                advance2(task, &quot;STATUS_DECLINED&quot;)
+            else:
+                advance2(task, &quot;STATUS_WILCO&quot;)
+                advance2(task, &quot;STATUS_EXECUTING&quot;)
+                advance2(task, &quot;STATUS_DONE_OK&quot; if verdict else &quot;STATUS_DONE_NOT_OK&quot;)
+            done.append(task)
+        return done
+    inbox = deque([{&quot;id&quot;: f&quot;t{n}&quot;, &quot;status&quot;: &quot;STATUS_CREATED&quot;} for n in range(3)])
+    out = run_agent2(inbox, worker=lambda t: None if t[&quot;id&quot;] == &quot;t1&quot; else True)
+    print(&quot;E3:&quot;, [(t[&quot;id&quot;], t[&quot;status&quot;]) for t in out])
+
+    for n in range(3):
+        client.tasks.create_task(display_name=f&quot;Calibrate octave {n}&quot;)
+    page = client.tasks.query_tasks()
+    names = []
+    for task in page.tasks or []:
+        d = task.model_dump(exclude_none=True)
+        names.append(d.get(&quot;display_name&quot;) or d.get(&quot;displayName&quot;))
+    print(&quot;E4 task names:&quot;, names)
+    print(&quot;lesson06 solutions OK&quot;)</code></pre></details><h3 id="lesson07_robustness.py">LESSON 7 — errors, retries, timeouts.</h3><p class="file">lesson07_robustness.py</p><div class="doc"><pre>The SDK raises anduril.core.api_error.ApiError for non-2xx responses
+(status_code + body). Coding tests probe whether you:
+  * catch the RIGHT exception narrowly
+  * retry with capped exponential backoff (and only on retryable codes)
+  * treat 4xx (except 429) as permanent, 5xx/429 as transient
+  * pass per-request timeout via request_options</pre></div><details open><summary>code</summary><pre><code>import os
+import time
+
+import httpx
+from anduril.client import Lattice
+from anduril.core.api_error import ApiError
+
+# a transport that fails N times, then succeeds — the classic retry fixture
+class Flaky:
+    def __init__(self, failures, code=503):
+        self.left, self.code, self.calls = failures, code, 0
+    def __call__(self, request: httpx.Request) -&gt; httpx.Response:
+        self.calls += 1
+        if self.left &gt; 0:
+            self.left -= 1
+            return httpx.Response(self.code, json={&quot;message&quot;: &quot;try later&quot;})
+        return httpx.Response(200, json={&quot;entityId&quot;: &quot;ok-after-retries&quot;})
+
+def make_flaky_client(failures, code=503):
+    f = Flaky(failures, code)
+    # TRAP the test will poke: the SDK ALSO retries internally (max_retries).
+    # Disable it here so OUR backoff wrapper is what&#x27;s being exercised —
+    # in production you pick ONE layer to own retries, never both.
+    c = Lattice(base_url=&quot;https://mock.local&quot;, token=&quot;t&quot;, max_retries=0,
+                httpx_client=httpx.Client(transport=httpx.MockTransport(f)))
+    return c, f
+
+# --- WORKED EXAMPLE ---------------------------------------------------------
+client, flaky = make_flaky_client(failures=1)
+try:
+    client.entities.get_entity(entity_id=&quot;x&quot;)          # SDK may retry internally
+    print(&quot;got it; transport calls:&quot;, flaky.calls)
+except ApiError as err:
+    print(&quot;ApiError:&quot;, err.status_code, &quot;after&quot;, flaky.calls, &quot;calls&quot;)
+
+RETRYABLE = {429, 500, 502, 503, 504}
+
+def with_backoff(fn, *, tries=4, base=0.01, sleep=time.sleep):
+    &quot;&quot;&quot;Run fn(); retry on transient ApiError with 1x,2x,4x... backoff.&quot;&quot;&quot;
+    for attempt in range(tries):
+        try:
+            return fn()
+        except ApiError as err:
+            if err.status_code not in RETRYABLE or attempt == tries - 1:
+                raise
+            sleep(base * (2 ** attempt))
+
+client2, flaky2 = make_flaky_client(failures=2)
+e = with_backoff(lambda: client2.entities.get_entity(entity_id=&quot;x&quot;))
+print(&quot;with_backoff won after&quot;, flaky2.calls, &quot;transport calls&quot;)
+
+# --- EXERCISES --------------------------------------------------------------
+# E1. Make with_backoff report: return (result, attempts_used) and record the
+#     sleeps it WOULD do by injecting sleep=fake (collect into a list).
+# E2. A 404 must NOT be retried. Prove it: flaky client with code=404 and a
+#     spy sleep — assert zero sleeps and the ApiError escaping.
+# E3. Add jitter: +-25% of each backoff using random.Random(seed) so the test
+#     stays deterministic. Print the planned sleep schedule for tries=5.
+# E4. Per-request timeout: pass request_options={&quot;timeout_in_seconds&quot;: 2}
+#     to get_entity (see anduril.core.request_options.RequestOptions).
+
+# --- SOLUTIONS --------------------------------------------------------------
+if os.environ.get(&quot;SOLUTIONS&quot;) == &quot;1&quot;:
+    def with_backoff2(fn, *, tries=4, base=0.01, sleep=time.sleep):
+        for attempt in range(tries):
+            try:
+                return fn(), attempt + 1
+            except ApiError as err:
+                if err.status_code not in RETRYABLE or attempt == tries - 1:
+                    raise
+                sleep(base * (2 ** attempt))
+
+    slept = []
+    c3, f3 = make_flaky_client(failures=2)
+    res, used = with_backoff2(lambda: c3.entities.get_entity(entity_id=&quot;x&quot;),
+                              sleep=slept.append)
+    print(&quot;E1: attempts&quot;, used, &quot;sleeps&quot;, slept)
+
+    slept2 = []
+    c4, f4 = make_flaky_client(failures=5, code=404)
+    try:
+        with_backoff2(lambda: c4.entities.get_entity(entity_id=&quot;x&quot;),
+                      sleep=slept2.append)
+    except ApiError as err:
+        print(&quot;E2: 404 escaped immediately, sleeps =&quot;, slept2,
+              &quot;status&quot;, err.status_code)
+
+    import random
+    def schedule(tries=5, base=0.01, seed=7):
+        rng = random.Random(seed)
+        return [round(base * (2 ** a) * rng.uniform(0.75, 1.25), 4)
+                for a in range(tries - 1)]
+    print(&quot;E3 planned sleeps:&quot;, schedule())
+
+    c5, _ = make_flaky_client(failures=0)
+    got = c5.entities.get_entity(entity_id=&quot;x&quot;,
+                                 request_options={&quot;timeout_in_seconds&quot;: 2})
+    print(&quot;E4 per-request timeout accepted:&quot;, got.entity_id)
+    print(&quot;lesson07 solutions OK&quot;)</code></pre></details><h3 id="test_lesson08.py">LESSON 8 — pytest against the SDK with a mocked transport.</h3><p class="file">test_lesson08.py</p><div class="doc"><pre>Run:  /usr/bin/python3 -m pytest lattice-lessons/test_lesson08.py -q
+
+What a grader looks for: fixtures instead of copy-paste setup, asserting on
+the REQUEST the client actually sent (not just the response), parametrize,
+and exception tests with pytest.raises.
+
+EXERCISES (add below, then re-run):
+  E1. test that publishing twice with the same entity_id keeps the store at 1.
+  E2. parametrize a test over 3 stations asserting each alias name matches
+      &#x27;ER49-S{station:02d}&#x27;.
+  E3. test that get_entity on a missing id raises ApiError with .status_code
+      == 404 (pytest.raises(...) as excinfo).
+  E4. write a fixture &#x27;fleet&#x27; that pre-publishes 5 stations and returns the
+      fake; use it in a test that asserts 5 distinct entity ids.
+Solutions for all four are at the bottom — delete them and rewrite from
+memory; that is the drill.</pre></div><details open><summary>code</summary><pre><code>import sys, os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+import pytest
+from anduril.core.api_error import ApiError
+
+import harness
+from lesson03_publishing import station_entity_kwargs
+
+
+@pytest.fixture()
+def mock_lattice():
+    client, fake = harness.make_client()
+    return client, fake
+
+
+@pytest.fixture()
+def first_station():
+    return next(harness.stations())
+
+
+def test_publish_sends_put_to_entities(mock_lattice, first_station):
+    client, fake = mock_lattice
+    client.entities.publish_entity(**station_entity_kwargs(first_station))
+    method, path, body = fake.requests[-1]
+    assert (method, path) == (&quot;PUT&quot;, &quot;/api/v1/entities&quot;)
+    assert body[&quot;aliases&quot;][&quot;name&quot;] == &quot;ER49-S01&quot;          # wire format is camelCase
+    assert body[&quot;isLive&quot;] is True
+
+
+def test_roundtrip_preserves_position(mock_lattice, first_station):
+    client, _ = mock_lattice
+    sent = station_entity_kwargs(first_station)
+    e = client.entities.publish_entity(**sent)
+    got = client.entities.get_entity(entity_id=e.entity_id)
+    assert got.location.position.latitude_degrees == pytest.approx(first_station[&quot;lat&quot;])
+
+
+# --- SOLUTIONS --------------------------------------------------------------
+
+def test_e1_idempotent_store(mock_lattice, first_station):
+    client, fake = mock_lattice
+    client.entities.publish_entity(**station_entity_kwargs(first_station))
+    client.entities.publish_entity(**station_entity_kwargs(first_station))
+    assert len(fake.entities) == 1
+
+
+@pytest.mark.parametrize(&quot;idx&quot;, [0, 10, 48])
+def test_e2_alias_matches_station(mock_lattice, idx):
+    client, _ = mock_lattice
+    st = list(harness.stations())[idx]
+    e = client.entities.publish_entity(**station_entity_kwargs(st))
+    assert e.aliases.name == f&quot;ER49-S{st[&#x27;station&#x27;]:02d}&quot;
+
+
+def test_e3_missing_entity_404(mock_lattice):
+    client, _ = mock_lattice
+    with pytest.raises(ApiError) as excinfo:
+        client.entities.get_entity(entity_id=&quot;never-published&quot;)
+    assert excinfo.value.status_code == 404
+
+
+@pytest.fixture()
+def fleet(mock_lattice):
+    client, fake = mock_lattice
+    for st in list(harness.stations())[:5]:
+        client.entities.publish_entity(**station_entity_kwargs(st))
+    return fake
+
+
+def test_e4_fleet_of_five(fleet):
+    assert len(fleet.entities) == 5
+    assert len(set(fleet.entities.keys())) == 5</code></pre></details><h1>Part II — HackerRank on Zoom</h1><h2>HackerRank-on-Zoom track</h2>
+<p>The Lattice lessons cover the job; THIS folder covers the test format: timed</p>
+<p>Python problems in the HackerRank editor while you talk through your thinking</p>
+<p>on Zoom.</p>
+<h3>Run everything with any python3 (pure stdlib):</h3>
+<pre><code>python3 lattice-lessons/hackerrank/drill01_stdlib_weapons.py</code></pre>
+<pre><code>python3 lattice-lessons/hackerrank/drill02_io_formats.py</code></pre>
+<pre><code>SOLUTIONS=1 python3 lattice-lessons/hackerrank/problems.py   # after attempting</code></pre>
+<pre><code>python3 lattice-lessons/hackerrank/mock_test.py              # 60-minute mock</code></pre>
+<h3>The seven tools that win HackerRank Python</h3>
+<table>
+<tr><th>Tool</th><th>Beats</th><th>One-liner</th></tr>
+<tr><td>`collections.Counter`</td><td>hand-rolled frequency dicts</td><td>`Counter(s).most_common(3)`</td></tr>
+<tr><td>`collections.defaultdict`</td><td>key-exists dances</td><td>`d[k].append(v)` just works</td></tr>
+<tr><td>`collections.deque`</td><td>list.pop(0) (O(n)!)</td><td>O(1) both ends; BFS queue</td></tr>
+<tr><td>`heapq`</td><td>sorting repeatedly</td><td>running top-k, k-way merge</td></tr>
+<tr><td>`bisect`</td><td>linear scans of sorted data</td><td>`bisect_left` = lower_bound</td></tr>
+<tr><td>`itertools`</td><td>nested loop soup</td><td>`groupby`, `accumulate`, `pairwise`</td></tr>
+<tr><td>`functools.lru_cache`</td><td>hand-rolled memo dicts</td><td>decorate the recursion, done</td></tr>
+</table>
+<h3>HackerRank mechanics (know these cold)</h3>
+<li>Two formats: <b>function completion</b> (they call your function) and **raw</li>
+<p>  stdin/stdout** (you own <code>input()</code>/<code>print</code>). drill02 covers both plus the</p>
+<p>  multi-line/matrix/edge-case parses.</p>
+<li>The editor is plain: no real autocomplete, weak linting. Practice typing</li>
+<p>  imports from memory: <code>from collections import Counter, defaultdict, deque</code>.</p>
+<li>&quot;Custom input&quot; box = your best friend: paste the sample, run, THEN submit.</li>
+<li>Hidden tests love: empty input, single element, all-equal values, max-size</li>
+<p>  input (so mind O(n²) at n=1e5 — that&#x27;s 1e10 ops = timeout).</p>
+<li>Python-specific timeout savers: <code>sys.stdin</code> readline over <code>input()</code> for big</li>
+<p>  inputs, join-once instead of string += in loops, set membership not list.</p>
+<h3>Zoom protocol (rehearse out loud — literally, alone, spoken)</h3>
+<p>1. <b>Restate</b> the problem in one sentence; confirm with the interviewer.</p>
+<p>2. <b>Example first</b>: walk the sample input by hand before typing.</p>
+<p>3. <b>State the plan + complexity</b> BEFORE coding: &quot;hashmap pass, O(n) time,</p>
+<p>   O(n) space — acceptable for n up to 1e5?&quot;</p>
+<p>4. Narrate WHILE typing, but silence is fine for 20-second bursts — announce</p>
+<p>   it: &quot;let me just type this out.&quot;</p>
+<p>5. <b>Test before declaring done</b>: sample case, then one edge case you invent</p>
+<p>   (empty, single, duplicate-heavy). Say what you&#x27;re testing and why.</p>
+<p>6. If stuck 3+ minutes: say the honest state — &quot;brute force works at O(n²);</p>
+<p>   let me ship that, then optimize.&quot; Shipping brute force beats frozen.</p>
+<p>7. Bugs are points: debug by printing intermediates, narrating hypotheses —</p>
+<p>   interviewers score the process.</p>
+<h3>Suggested week</h3>
+<table>
+<tr><th>Day</th><th>Do</th></tr>
+<tr><td>1</td><td>drill01 + drill02, no timer</td></tr>
+<tr><td>2</td><td>problems.py P1–P3 untimed, then read solutions critically</td></tr>
+<tr><td>3</td><td>problems.py P4–P6, 20 min each, out loud</td></tr>
+<tr><td>4</td><td>redo any misses from scratch; drill01 typing-from-memory pass</td></tr>
+<tr><td>5</td><td>mock_test.py under a real 60-min timer, out loud, no pauses</td></tr>
+<tr><td>6</td><td>review mock; rewrite the ugliest solution cleanly</td></tr>
+<tr><td>7</td><td>rest, or one lesson from the Lattice track to stay warm for job talk</td></tr>
+</table><h3 id="hackerrank/drill01_stdlib_weapons.py">DRILL 1 — the stdlib weapons, each proven on a micro-case.</h3><p class="file">hackerrank/drill01_stdlib_weapons.py</p><div class="doc"><pre>Read a block, cover it, retype it from memory. The imports themselves are
+half the drill: the HackerRank editor won&#x27;t autocomplete them for you.</pre></div><details open><summary>code</summary><pre><code>from collections import Counter, defaultdict, deque
+from itertools import groupby, accumulate, combinations
+from functools import lru_cache
+import heapq
+import bisect
+
+# Counter — frequencies, top-k, multiset subtract
+votes = &quot;abacabadabacaba&quot;
+c = Counter(votes)
+assert c.most_common(2) == [(&quot;a&quot;, 8), (&quot;b&quot;, 4)]
+assert list((c - Counter(&quot;aaaa&quot;)).elements()).count(&quot;a&quot;) == 4
+
+# defaultdict — grouping without key checks
+by_len = defaultdict(list)
+for w in &quot;the quick brown fox the lazy dog the end&quot;.split():
+    by_len[len(w)].append(w)
+assert by_len[3] == [&quot;the&quot;, &quot;fox&quot;, &quot;the&quot;, &quot;dog&quot;, &quot;the&quot;, &quot;end&quot;]
+
+# deque — O(1) both ends; the BFS queue; the sliding window
+d = deque([1, 2, 3]); d.appendleft(0); d.append(4)
+assert (d.popleft(), d.pop()) == (0, 4)
+
+# heapq — running k largest without sorting everything
+nums = [5, 1, 8, 3, 9, 2, 7]
+assert heapq.nlargest(3, nums) == [9, 8, 7]
+h = []
+for x in nums:
+    heapq.heappush(h, x)
+    if len(h) &gt; 3:
+        heapq.heappop(h)          # h holds the 3 largest, min on top
+assert sorted(h) == [7, 8, 9]
+
+# bisect — binary search on sorted data (lower_bound / insertion point)
+xs = [10, 20, 20, 30]
+assert bisect.bisect_left(xs, 20) == 1
+assert bisect.bisect_right(xs, 20) == 3
+bisect.insort(xs, 25); assert xs == [10, 20, 20, 25, 30]
+
+# groupby — run-length encode (input must be sorted/grouped already!)
+rle = [(ch, len(list(g))) for ch, g in groupby(&quot;aaabbc&quot;)]
+assert rle == [(&quot;a&quot;, 3), (&quot;b&quot;, 2), (&quot;c&quot;, 1)]
+
+# accumulate — prefix sums = range-sum queries in O(1)
+pref = [0] + list(accumulate([3, 1, 4, 1, 5]))
+def range_sum(i, j):              # sum of a[i:j]
+    return pref[j] - pref[i]
+assert range_sum(1, 4) == 1 + 4 + 1
+
+# lru_cache — recursion + decorator = DP
+@lru_cache(maxsize=None)
+def ways(n):                      # climb stairs 1 or 2 at a time
+    return 1 if n &lt;= 1 else ways(n - 1) + ways(n - 2)
+assert ways(30) == 1346269
+
+# combinations — pairs without index bookkeeping
+assert sum(1 for _ in combinations(range(5), 2)) == 10
+
+# sorted with a compound key — THE most-used line in any test
+words = [&quot;bb&quot;, &quot;a&quot;, &quot;ccc&quot;, &quot;dd&quot;]
+assert sorted(words, key=lambda w: (-len(w), w)) == [&quot;ccc&quot;, &quot;bb&quot;, &quot;dd&quot;, &quot;a&quot;]
+
+print(&quot;drill01: all stdlib weapons verified — now retype them from memory&quot;)</code></pre></details><h3 id="hackerrank/drill02_io_formats.py">DRILL 2 — every stdin shape HackerRank throws at you.</h3><p class="file">hackerrank/drill02_io_formats.py</p><div class="doc"><pre>Each parser runs here against an embedded sample via io.StringIO, exactly as
+it would run against real stdin. In the test, replace `data` with sys.stdin.</pre></div><details open><summary>code</summary><pre><code>import io
+import sys
+
+def with_stdin(text, fn):
+    old, sys.stdin = sys.stdin, io.StringIO(text)
+    try:
+        return fn()
+    finally:
+        sys.stdin = old
+
+# Shape 1: first line n, then n lines of ints
+def parse_n_lines():
+    n = int(input())
+    return [int(input()) for _ in range(n)]
+assert with_stdin(&quot;3\n10\n20\n30\n&quot;, parse_n_lines) == [10, 20, 30]
+
+# Shape 2: one line of space-separated ints (the most common line ever)
+def parse_row():
+    return list(map(int, input().split()))
+assert with_stdin(&quot;3 1 4 1 5\n&quot;, parse_row) == [3, 1, 4, 1, 5]
+
+# Shape 3: n m header, then an n x m matrix
+def parse_matrix():
+    n, m = map(int, input().split())
+    grid = [list(map(int, input().split())) for _ in range(n)]
+    assert all(len(r) == m for r in grid)
+    return grid
+assert with_stdin(&quot;2 3\n1 2 3\n4 5 6\n&quot;, parse_matrix) == [[1, 2, 3], [4, 5, 6]]
+
+# Shape 4: read EVERYTHING (token stream) — safest under weird spacing,
+# and the fast path for big inputs (sys.stdin.read once, not input() loops)
+def parse_tokens():
+    toks = sys.stdin.read().split()
+    it = iter(toks)
+    n = int(next(it))
+    return [(next(it), int(next(it))) for _ in range(n)]
+assert with_stdin(&quot;2\nalice 30\nbob 25\n&quot;, parse_tokens) == [(&quot;alice&quot;, 30), (&quot;bob&quot;, 25)]
+
+# Shape 5: queries until EOF (no count given)
+def parse_until_eof():
+    return [line.split() for line in sys.stdin.read().splitlines() if line.strip()]
+assert with_stdin(&quot;add 3\nrm 2\n\n&quot;, parse_until_eof) == [[&quot;add&quot;, &quot;3&quot;], [&quot;rm&quot;, &quot;2&quot;]]
+
+# Output discipline: build once, print once (string += in a loop is a
+# timeout generator on big cases)
+rows = [[1, 2], [3, 4]]
+out = &quot;\n&quot;.join(&quot; &quot;.join(map(str, r)) for r in rows)
+assert out == &quot;1 2\n3 4&quot;
+
+# The function-completion format: HackerRank often gives
+#   def solve(arr): ...
+# and hides the IO. Practice keeping ALL logic in the function so both
+# formats are the same problem:
+def solve(arr):
+    return max(arr) - min(arr)
+def main():                      # the stdin wrapper you may have to write
+    _ = input()
+    print(solve(list(map(int, input().split()))))
+assert with_stdin(&quot;5\n3 1 4 1 5\n&quot;, lambda: (main(), None)[1]) is None  # prints 4 above
+
+print(&quot;drill02: all five stdin shapes + output discipline verified&quot;)</code></pre></details><h3 id="hackerrank/problems.py">SIX problems, one per core pattern, in HackerRank function style.</h3><p class="file">hackerrank/problems.py</p><div class="doc"><pre>Do them in order, out loud, before opening the solutions (SOLUTIONS=1).
+Each has a checker; your job is to replace `raise NotImplementedError`.
+Target: P1-P3 ~10 min each, P4-P6 ~20 min each, complexity stated aloud.
+
+  P1 hashmap        P2 two pointers     P3 stack
+  P4 sliding window P5 BFS on a grid    P6 memoized DP</pre></div><details open><summary>code</summary><pre><code>import os
+from collections import Counter, deque
+from functools import lru_cache
+
+SOLUTIONS = os.environ.get(&quot;SOLUTIONS&quot;) == &quot;1&quot;
+
+# --- P1 (hashmap): first non-repeating character, else &#x27;_&#x27; ------------------
+def first_unique(s: str) -&gt; str:
+    if not SOLUTIONS: raise NotImplementedError
+    counts = Counter(s)
+    return next((ch for ch in s if counts[ch] == 1), &quot;_&quot;)
+
+# --- P2 (two pointers): does any pair in SORTED xs sum to t? ----------------
+def pair_sum(xs: list, t: int) -&gt; bool:
+    if not SOLUTIONS: raise NotImplementedError
+    lo, hi = 0, len(xs) - 1
+    while lo &lt; hi:
+        s = xs[lo] + xs[hi]
+        if s == t: return True
+        if s &lt; t: lo += 1
+        else: hi -= 1
+    return False
+
+# --- P3 (stack): valid bracket string &quot;([{}])&quot; ------------------------------
+def balanced(s: str) -&gt; bool:
+    if not SOLUTIONS: raise NotImplementedError
+    pairs = {&quot;)&quot;: &quot;(&quot;, &quot;]&quot;: &quot;[&quot;, &quot;}&quot;: &quot;{&quot;}
+    st = []
+    for ch in s:
+        if ch in &quot;([{&quot;:
+            st.append(ch)
+        elif ch in pairs:
+            if not st or st.pop() != pairs[ch]:
+                return False
+    return not st
+
+# --- P4 (sliding window): longest substring with no repeated char -----------
+def longest_unique(s: str) -&gt; int:
+    if not SOLUTIONS: raise NotImplementedError
+    last, start, best = {}, 0, 0
+    for i, ch in enumerate(s):
+        if ch in last and last[ch] &gt;= start:
+            start = last[ch] + 1
+        last[ch] = i
+        best = max(best, i - start + 1)
+    return best
+
+# --- P5 (BFS): shortest path steps in a grid of &#x27;.&#x27; and &#x27;#&#x27;, -1 if blocked --
+def grid_bfs(grid: list, src=(0, 0)) -&gt; int:
+    &quot;&quot;&quot;steps from src to bottom-right corner, 4-directional.&quot;&quot;&quot;
+    if not SOLUTIONS: raise NotImplementedError
+    n, m = len(grid), len(grid[0])
+    goal = (n - 1, m - 1)
+    if grid[src[0]][src[1]] == &quot;#&quot; or grid[goal[0]][goal[1]] == &quot;#&quot;:
+        return -1
+    q, seen = deque([(src, 0)]), {src}
+    while q:
+        (r, c), d = q.popleft()
+        if (r, c) == goal:
+            return d
+        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            nr, nc = r + dr, c + dc
+            if 0 &lt;= nr &lt; n and 0 &lt;= nc &lt; m and grid[nr][nc] == &quot;.&quot; \
+                    and (nr, nc) not in seen:
+                seen.add((nr, nc))
+                q.append(((nr, nc), d + 1))
+    return -1
+
+# --- P6 (DP): coin change — fewest coins to make amount, -1 if impossible ---
+def coin_change(coins: tuple, amount: int) -&gt; int:
+    if not SOLUTIONS: raise NotImplementedError
+    @lru_cache(maxsize=None)
+    def best(a):
+        if a == 0: return 0
+        picks = [best(a - c) for c in coins if c &lt;= a]
+        picks = [p for p in picks if p &gt;= 0]
+        return min(picks) + 1 if picks else -1
+    return best(amount)
+
+# --- checker ----------------------------------------------------------------
+CASES = [
+    (first_unique, (&quot;swiss&quot;,), &quot;w&quot;),
+    (first_unique, (&quot;aabb&quot;,), &quot;_&quot;),
+    (first_unique, (&quot;&quot;,), &quot;_&quot;),
+    (pair_sum, ([1, 2, 4, 7, 11], 9), True),
+    (pair_sum, ([1, 2, 4, 7, 11], 10), False),
+    (pair_sum, ([], 0), False),
+    (balanced, (&quot;([{}])&quot;,), True),
+    (balanced, (&quot;([)]&quot;,), False),
+    (balanced, (&quot;(((&quot;,), False),
+    (balanced, (&quot;&quot;,), True),
+    (longest_unique, (&quot;abcabcbb&quot;,), 3),
+    (longest_unique, (&quot;bbbbb&quot;,), 1),
+    (longest_unique, (&quot;&quot;,), 0),
+    (longest_unique, (&quot;abba&quot;,), 2),        # the classic trap case
+    (grid_bfs, ([list(&quot;..&quot;), list(&quot;..&quot;)],), 2),
+    (grid_bfs, ([list(&quot;.#&quot;), list(&quot;#.&quot;)],), -1),
+    (grid_bfs, ([list(&quot;.&quot;)],), 0),
+    (coin_change, ((1, 2, 5), 11), 3),
+    (coin_change, ((2,), 3), -1),
+    (coin_change, ((7,), 0), 0),
+]
+
+if __name__ == &quot;__main__&quot;:
+    passed = failed = skipped = 0
+    for fn, args, want in CASES:
+        try:
+            got = fn(*args)
+        except NotImplementedError:
+            skipped += 1
+            continue
+        ok = got == want
+        passed += ok; failed += (not ok)
+        if not ok:
+            print(f&quot;FAIL {fn.__name__}{args} -&gt; {got!r}, want {want!r}&quot;)
+    print(f&quot;passed={passed} failed={failed} not-attempted={skipped}&quot;)
+    if SOLUTIONS and failed == 0 and skipped == 0:
+        print(&quot;all reference solutions green&quot;)</code></pre></details><h3 id="hackerrank/mock_test.py">MOCK TEST — 60 minutes, 4 problems, Zoom rules.</h3><p class="file">hackerrank/mock_test.py</p><div class="doc"><pre>Setup: start a 60-minute timer, share your screen with someone (or record
+yourself), and NARRATE. Write each solution in this file, then run it —
+the checker reports per-problem. SOLUTIONS=1 shows references afterward.
+
+Scoring yourself: 4/4 strong hire, 3/4 solid, 2/4 with good narration is
+still a pass at many bars — process counts on Zoom.</pre></div><details open><summary>code</summary><pre><code>import os
+from collections import Counter, defaultdict, deque
+
+SOLUTIONS = os.environ.get(&quot;SOLUTIONS&quot;) == &quot;1&quot;
+
+# --- M1 (10 min) ------------------------------------------------------------
+# Given a list of log lines &quot;user action&quot;, return the users whose action
+# count is strictly greater than every OTHER user&#x27;s count (list, sorted).
+# e.g. [&quot;jc tune&quot;,&quot;amy pluck&quot;,&quot;jc tune&quot;] -&gt; [&quot;jc&quot;]
+def busiest_users(lines):
+    if not SOLUTIONS: raise NotImplementedError
+    c = Counter(line.split()[0] for line in lines)
+    if not c: return []
+    top = max(c.values())
+    return sorted(u for u, n in c.items() if n == top)
+
+# --- M2 (15 min) ------------------------------------------------------------
+# 49 harp strings numbered 1..n. You get tuning sessions as (start, end)
+# inclusive ranges. Return how many strings were tuned at least twice.
+# Constraints: n up to 1e6, up to 1e5 ranges — O(n + q), not O(n*q)!
+# (difference array / prefix sum trick)
+def tuned_twice(n, ranges):
+    if not SOLUTIONS: raise NotImplementedError
+    diff = [0] * (n + 2)
+    for a, b in ranges:
+        diff[a] += 1
+        diff[b + 1] -= 1
+    cnt = twice = 0
+    for i in range(1, n + 1):
+        cnt += diff[i]
+        twice += cnt &gt;= 2
+    return twice
+
+# --- M3 (15 min) ------------------------------------------------------------
+# A melody is a string of note letters. Two melodies are &quot;equivalent&quot; if one
+# is a rotation of the other (&quot;abcd&quot; ~ &quot;cdab&quot;). Group a list of melodies
+# into equivalence classes; return the size of the largest class.
+# (canonical form trick: min over rotations, or doubled-string membership)
+def largest_rotation_class(melodies):
+    if not SOLUTIONS: raise NotImplementedError
+    def canon(s):
+        return min(s[i:] + s[:i] for i in range(len(s))) if s else s
+    groups = defaultdict(int)
+    for m in melodies:
+        groups[(len(m), canon(m))] += 1
+    return max(groups.values()) if melodies else 0
+
+# --- M4 (20 min) ------------------------------------------------------------
+# The harp&#x27;s 49 stations form a line. station_ok[i] is True if station i&#x27;s
+# sensor responded. A &quot;demo segment&quot; is a maximal run of OK stations. Return
+# (number_of_segments, length_of_longest, start_index_of_longest) with the
+# FIRST longest winning ties; (0, 0, -1) if none OK.
+def demo_segments(station_ok):
+    if not SOLUTIONS: raise NotImplementedError
+    segs = []
+    i, n = 0, len(station_ok)
+    while i &lt; n:
+        if station_ok[i]:
+            j = i
+            while j &lt; n and station_ok[j]:
+                j += 1
+            segs.append((i, j - i))
+            i = j
+        else:
+            i += 1
+    if not segs:
+        return (0, 0, -1)
+    best_start, best_len = max(segs, key=lambda t: (t[1], -t[0]))
+    return (len(segs), best_len, best_start)
+
+# --- checker ----------------------------------------------------------------
+CASES = [
+    (busiest_users, ([&quot;jc tune&quot;, &quot;amy pluck&quot;, &quot;jc tune&quot;],), [&quot;jc&quot;]),
+    (busiest_users, ([&quot;a x&quot;, &quot;b y&quot;],), [&quot;a&quot;, &quot;b&quot;]),
+    (busiest_users, ([],), []),
+    (tuned_twice, (10, [(1, 5), (4, 8), (5, 5)]), 2),   # stations 4 and 5
+    (tuned_twice, (5, []), 0),
+    (tuned_twice, (3, [(1, 3), (1, 3)]), 3),
+    (largest_rotation_class, ([&quot;abcd&quot;, &quot;cdab&quot;, &quot;bcda&quot;, &quot;abdc&quot;],), 3),
+    (largest_rotation_class, ([],), 0),
+    (largest_rotation_class, ([&quot;a&quot;, &quot;a&quot;, &quot;b&quot;],), 2),
+    (demo_segments, ([True, True, False, True, True, True],), (2, 3, 3)),
+    (demo_segments, ([False, False],), (0, 0, -1)),
+    (demo_segments, ([True],), (1, 1, 0)),
+    (demo_segments, ([True, False, True],), (2, 1, 0)),  # tie -&gt; first
+]
+
+if __name__ == &quot;__main__&quot;:
+    passed = failed = skipped = 0
+    for fn, args, want in CASES:
+        try:
+            got = fn(*args)
+        except NotImplementedError:
+            skipped += 1
+            continue
+        ok = got == want
+        passed += ok; failed += (not ok)
+        if not ok:
+            print(f&quot;FAIL {fn.__name__}{args} -&gt; {got!r}, want {want!r}&quot;)
+    print(f&quot;passed={passed} failed={failed} not-attempted={skipped}&quot;)
+    if failed == 0 and skipped == 0:
+        print(&quot;mock complete — now review which narration moments felt shaky&quot;)</code></pre></details>
+</body></html>
