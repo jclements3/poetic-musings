@@ -277,8 +277,8 @@ print("sensor beam bores drilled")
 # by intersecting with the band-profile prism, so the piece fills the crown
 # between the curves instead of clamping a 60 mm strip; looking at the harp
 # from the front (YZ), the web blocks the optics/strings at the crown.
-COL_DEPTH = 90.0
 x_pc = pilc * IN
+COL_DEPTH = 4.76 + 0.625 * PIL_OD          # JC: walls wrap 5/8 of the pillar dia
 x_w0 = x_pc - PIL_OD/2 - 4.76
 p_top = sv(*tuner_c[0][0])                  # plate front corner, outer rail start
 p_bot = sv(*sense_c[0][0])                  # plate front corner, inner rail start
@@ -292,12 +292,15 @@ _sk = plate_bp.part.faces().sort_by(Axis.Y)[0]
 band_prism = extrude(_sk, amount=60, both=True)
 front_slab = Pos((x_w0 + p_top[0] + 2)/2, 0, (z_ct + z_cb)/2) *     Box(p_top[0] + 2 - x_w0, WEB_W + 20, abs(z_ct - z_cb))
 collar = collar_full & (band_prism + front_slab)
-x_bolt = x_pc + PIL_OD/2 + 21.0
+# shallow walls end 5/8 around the tube -> bolts go THROUGH the pillar with
+# crush sleeves (same detail as the base pillar bolts): plate-wall-tube-wall-plate
+x_bolt = x_pc
 for z_b in (z_ct - 15.0, z_ct - 45.0):
     hole = Pos(x_bolt, 0, z_b) * Rot(90, 0, 0) * Cylinder(8.4/2, 2*WEB_W + 40)
     collar = collar - hole
     plates = plates - hole
-print(f"ER-007 v2 crown infill: web face x={x_w0:.1f}, profile-cut to the rails, "
+    pillar = pillar - hole
+print(f"ER-007 v3 crown cap: 5/8-dia wrap (depth {COL_DEPTH:.1f}), web face x={x_w0:.1f}, "
       f"front edge z {z_cb:.0f}..{z_ct:.0f}, bolts x={x_bolt:.0f} z={z_ct-15:.0f}/{z_ct-45:.0f}")
 
 
