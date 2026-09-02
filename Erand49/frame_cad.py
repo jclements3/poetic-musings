@@ -368,6 +368,44 @@ midrib = midrib - Pos(x_h, 0, z_h) * Rot(90, 0, 0) * Cylinder(BOLT_THREAD_CLR / 
 print(f"ER-006 legs: hinge at x={x_h:.1f} z={z_h:.1f} mm, wall holes O{BOLT_THREAD_CLR} "
       f"(M8 shoulder bolt, O10 shoulder in O{BOLT_SHOULDER_D} leg bore), deployed {LEG_ANG:.0f} deg")
 
+# ---- ER-008: hidden linear-pull tuners, 49x, alternating plates ----
+# Per station: O6.5 access bore along the tuner-lead axis (enters at the
+# plate's top edge, Allen key inserts INTO the plate), a 4.5x6x18 slider
+# channel on the inner face, and (hardware, not modeled per-station) an O9
+# steel threaded bushing + M6 set screw (3 mm hex) + stainless slider.
+flats_s = sorted(ns['flats_px'])
+tuners_s = sorted(ns['tuners_px'])
+er8_cuts = []
+for idx8, (tx8, ty8) in enumerate(tuners_s):
+    fx8, fy8 = min(flats_s, key=lambda p: abs(p[0] - tx8))
+    tp8 = sv(tx8, ty8); fp8 = sv(fx8, fy8)
+    dx8, dz8 = tp8[0] - fp8[0], tp8[1] - fp8[1]
+    L8 = math.hypot(dx8, dz8) or 1.0
+    d8 = (dx8 / L8, dz8 / L8)
+    sgn8 = 1 if idx8 % 2 == 0 else -1                  # alternate plates
+    ypl = sgn8 * (GAP/2 + PLATE_T/2)
+    ang8 = math.degrees(math.atan2(d8[0], d8[1]))      # about Y: +z toward +x
+    c08 = (tp8[0] - d8[0]*10, tp8[1] - d8[1]*10)
+    er8_cuts.append(Pos(c08[0], ypl, c08[1]) * Rot(0, ang8, 0) *
+                    Cylinder(6.5/2, 100, align=(Align.CENTER, Align.CENTER, Align.MIN)))
+    ysl = sgn8 * (GAP/2 + 3.0)                         # channel from the inner face
+    csl = (tp8[0] - d8[0]*19, tp8[1] - d8[1]*19)
+    er8_cuts.append(Pos(csl[0], ysl, csl[1]) * Rot(0, ang8, 0) * Box(4.5, 6.0, 18.0))
+plates = plates.cut(*er8_cuts)
+# bushing edge margin: O9 bushing at each tuner point vs the rails
+def _rail_pts(segs):
+    pts = []
+    for a, c1, c2, b in segs:
+        for k in range(40):
+            t = k/39; mt = 1-t
+            pts.append((mt**3*a[0]+3*mt*mt*t*c1[0]+3*mt*t*t*c2[0]+t**3*b[0],
+                        mt**3*a[1]+3*mt*mt*t*c1[1]+3*mt*t*t*c2[1]+t**3*b[1]))
+    return pts
+_rp = _rail_pts(tuner_c) + _rail_pts(sense_c)
+_margin = min(min(math.hypot(px-tx8, py-ty8) for px, py in _rp) for tx8, ty8 in tuners_s) - 4.5
+print(f"ER-008 tuners: 49 access bores O6.5 + channels cut (alternating plates); "
+      f"O9 bushing edge margin {_margin:.1f} mm (>=4 needed)")
+
 assembly = Compound([midrib, pillar, plates, legs, pads, collar])
 
 export_step(assembly, os.path.join(HERE, 'frame.step'))
