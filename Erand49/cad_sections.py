@@ -57,4 +57,33 @@ z_cr = ns['y1'] - _y_start - y_floor * IN - 25     # mid-collar / bolt zone
 slab4 = Pos(pilc*IN, 0, z_cr) * Box(150, 110, T)   # tight crop: mm gaps visible
 sec4 = asm & slab4
 export_edges(sec4, 'cad-sec-crown.svg', (pilc*IN, 0, z_cr + 3000))
+
+# annotate the joint gaps on the crown plan (root-gap detail, JC)
+import re as _re2
+_doc = open(os.path.join(HERE, 'cad-sec-crown.svg')).read()
+_best, _cx, _cy = 0, 0, 0
+for _d in _re2.findall(r'<path[^>]*d="([^"]+)"', _doc):
+    _pts = [(float(a), float(b)) for a, b in _re2.findall(r'(-?\d+\.?\d*)[, ](-?\d+\.?\d*)', _d)]
+    if not _pts: continue
+    _xs = [p[0] for p in _pts]; _ys = [p[1] for p in _pts]
+    _w = max(_xs) - min(_xs)
+    if abs(_w - 50.8) < 0.5 and _w > _best:
+        _best, _cx, _cy = _w, (min(_xs)+max(_xs))/2, (min(_ys)+max(_ys))/2
+assert _best, 'tube circle not found in crown slice'
+_ann = f'''<g font-family="ui-monospace,Consolas,monospace" font-size="4.2" fill="#3b5a7a" stroke="none">
+<line x1="{_cx+8:.1f}" y1="{_cy+26.2:.1f}" x2="{_cx+34:.1f}" y2="{_cy+40:.1f}" stroke="#3b5a7a" stroke-width="0.3"/>
+<text x="{_cx+35:.1f}" y="{_cy+41.5:.1f}">1.5 root gap, weld both verticals</text>
+<line x1="{_cx+26.2:.1f}" y1="{_cy-6:.1f}" x2="{_cx+44:.1f}" y2="{_cy-16:.1f}" stroke="#3b5a7a" stroke-width="0.3"/>
+<text x="{_cx+45:.1f}" y="{_cy-15:.1f}">1.6/side</text>
+<text x="{_cx-12:.1f}" y="{_cy-30:.1f}">&#216;50.8</text>
+</g>'''
+_mvb = _re2.search(r'viewBox="([-\d. ]+)"', _doc)
+_vx, _vy, _vw, _vh = map(float, _mvb.group(1).split())
+_x1 = max(_vx + _vw, _cx + 110); _y1 = max(_vy + _vh, _cy + 46)
+_doc = _doc.replace(_mvb.group(0), f'viewBox="{_vx:.1f} {_vy:.1f} {_x1-_vx:.1f} {_y1-_vy:.1f}"')
+_doc = _re2.sub(r'width="[-\d.]+mm" height="[-\d.]+mm"',
+                f'width="{_x1-_vx:.1f}mm" height="{_y1-_vy:.1f}mm"', _doc, count=1)
+_doc = _doc.replace('</svg>', _ann + '</svg>')
+open(os.path.join(HERE, 'cad-sec-crown.svg'), 'w').write(_doc)
+print('crown plan annotated with the gap detail')
 print('done')

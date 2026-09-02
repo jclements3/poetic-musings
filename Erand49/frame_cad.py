@@ -660,7 +660,7 @@ er7._track(_cap[0] + 320, _cap[1] + 14)
 er7.el.append(
     f'<text x="{_cap[0]:.0f}" y="{_cap[1]:.0f}" '
     'font-size="9" fill="#333" font-family="ui-monospace,Consolas,monospace">'
-    'ER-007 crown infill: 2.5in x 3/16 channel offcut, profile-cut to the neck rails; web forward; 2x M8</text>')
+    'ER-007 crown cap: 2.5in x 3/16 channel offcut, profile-cut to the rails; web fwd, 1.5 root gap at tube; 2x M8 + crush sleeves</text>')
 add_dim_layer('cad-er007.svg', er7)
 # part-scale lettering for this small sheet
 _d7 = open(os.path.join(HERE, 'cad-er007.svg')).read()
