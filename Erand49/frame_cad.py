@@ -279,9 +279,9 @@ print("sensor beam bores drilled")
 # from the front (YZ), the web blocks the optics/strings at the crown.
 x_pc = pilc * IN
 COL_DEPTH = 4.76 + 0.625 * PIL_OD          # JC: walls wrap 5/8 of the pillar dia
-FLAT_D = 2.0                               # JC: file/mill the tube front flat where
-                                           # the cap lands, so the web RESTS on it
-x_w0 = x_pc - PIL_OD/2 - 4.76 + FLAT_D     # web inner face flush on the flat
+x_w0 = x_pc - PIL_OD/2 - 4.76              # JC v5: web inner face TANGENT to the
+                                           # tube (no flat, no filing) — line contact
+                                           # + vertical fillet welds
 p_top = sv(*tuner_c[0][0])                  # plate front corner, outer rail start
 p_bot = sv(*sense_c[0][0])                  # plate front corner, inner rail start
 z_ct, z_cb = p_top[1], p_bot[1]
@@ -302,10 +302,13 @@ for z_b in (z_ct - 15.0, z_ct - 45.0):
     collar = collar - hole
     plates = plates - hole
     pillar = pillar - hole
-# the milled flat on the tube front, over the cap height only (~20 mm wide chord)
-pillar = pillar - Pos(x_pc - PIL_OD/2 + FLAT_D/2 - 3, 0, (z_ct + z_cb)/2) * \
-    Box(FLAT_D + 6, WEB_W, abs(z_ct - z_cb))
-print(f"ER-007 v4 crown cap: 5/8 wrap, web seated on a {FLAT_D:.0f} mm milled flat, "
+# JC v5: extend the plates forward at the crown to sit FLUSH with the cap's
+# front face — a strip per side from the drawn front edge to the web outer face
+for sgn_p in (1, -1):
+    ext = Pos((x_w0 + p_top[0] + 1)/2, sgn_p * (GAP/2 + PLATE_T/2), (z_ct + z_cb)/2) * \
+        Box(p_top[0] + 1 - x_w0, PLATE_T, abs(z_ct - z_cb))
+    plates = plates + ext
+print(f"ER-007 v5 crown cap: web tangent to the tube, plates extended flush with the cap face, "
       f"front edge z {z_cb:.0f}..{z_ct:.0f}, bolts x={x_bolt:.0f} z={z_ct-15:.0f}/{z_ct-45:.0f}")
 
 

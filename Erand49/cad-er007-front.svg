@@ -1,52 +1,48 @@
 <?xml version='1.0' encoding='utf-8'?>
-<svg width="138.95mm" height="286.54mm" viewBox="-43.20 -167.77 138.95 286.54" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<svg width="138.95mm" height="285.37mm" viewBox="-43.20 -167.41 138.95 285.37" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <g transform="scale(1,-1)" stroke-linecap="round">
     <g fill="none" stroke="rgb(0,0,0)" stroke-width="0.5" id="visible">
-      <line x1="-31.75" y1="-58.409805" x2="-31.75" y2="92.253876" />
-      <path d="M -31.75,-78.097746 C -31.75,-71.449285 -31.75,-64.761326 -31.75,-58.409805" />
-      <line x1="31.75" y1="-58.409805" x2="31.75" y2="92.253876" />
-      <path d="M 31.75,-78.097746 C 31.75,-71.449285 31.75,-64.761326 31.75,-58.409805" />
-      <line x1="-31.75" y1="-78.770754" x2="31.75" y2="-78.770754" />
-      <line x1="-26.99" y1="-58.409805" x2="-26.99" y2="92.253876" />
-      <path d="M -31.75,-78.097746 L -7.999998,-78.097746" />
-      <path d="M -26.99,-77.564475 C -26.99,-71.090953 -26.99,-64.591833 -26.99,-58.409805" />
-      <path d="M -26.99,-77.564475 L -7.999997,-77.564475" />
-      <path d="M -26.99,70.424776 L -7.999999,70.424776" />
-      <path d="M 31.75,-78.097746 L -8.0,-78.097746" />
-      <path d="M 26.99,70.424776 L -8.0,70.424776" />
-      <line x1="26.99" y1="-58.409805" x2="26.99" y2="92.253876" />
-      <path d="M 26.99,-77.564475 C 26.99,-71.090953 26.99,-64.591833 26.99,-58.409805" />
-      <path d="M 26.99,-77.564475 L -8.0,-77.564475" />
+      <line x1="-31.75" y1="-58.796377" x2="-31.75" y2="91.890549" />
+      <path d="M -31.75,-77.286002 C -31.75,-71.054882 -31.75,-64.786149 -31.75,-58.796377" />
+      <line x1="31.75" y1="-58.796377" x2="31.75" y2="91.890549" />
+      <path d="M 31.75,-77.286002 C 31.75,-71.054882 31.75,-64.786149 31.75,-58.796377" />
+      <line x1="26.99" y1="-77.958328" x2="-26.99" y2="-77.958328" />
+      <line x1="-26.99" y1="-58.796377" x2="-26.99" y2="91.890549" />
+      <path d="M -26.99,-77.286002 C -26.99,-71.054882 -26.99,-64.786149 -26.99,-58.796377" />
+      <path d="M -26.99,69.397428 L -7.999999,69.397428" />
+      <path d="M 26.99,69.397428 L -8.0,69.397428" />
+      <line x1="26.99" y1="-58.796377" x2="26.99" y2="91.890549" />
+      <path d="M 26.99,-77.286002 C 26.99,-71.054882 26.99,-64.786149 26.99,-58.796377" />
     </g>
     <g fill="none" stroke="rgb(0,0,0)" stroke-width="0.25" id="hidden" stroke-dasharray="1.5875 0.79375">
-      <line x1="-31.75" y1="-78.767954" x2="-31.75" y2="67.788026" />
-      <line x1="-31.75" y1="67.788026" x2="31.75" y2="67.788026" />
-      <line x1="31.75" y1="-78.767954" x2="31.75" y2="67.788026" />
-      <line x1="-31.75" y1="-78.767954" x2="31.75" y2="-78.767954" />
-      <line x1="-8.0" y1="67.786364" x2="31.75" y2="67.786364" />
-      <line x1="-26.99" y1="-77.564475" x2="-26.99" y2="70.424776" />
-      <line x1="26.99" y1="-77.564475" x2="26.99" y2="70.424776" />
+      <line x1="-31.75" y1="-77.95494" x2="-31.75" y2="68.601038" />
+      <line x1="-31.75" y1="68.601038" x2="31.75" y2="68.601038" />
+      <line x1="31.75" y1="-77.95494" x2="31.75" y2="68.601038" />
+      <line x1="-31.75" y1="-77.95494" x2="31.75" y2="-77.95494" />
+      <line x1="-8.0" y1="68.598145" x2="31.75" y2="68.598145" />
+      <line x1="26.99" y1="-77.958328" x2="26.99" y2="69.397428" />
+      <line x1="-26.99" y1="-77.958328" x2="-26.99" y2="69.397428" />
     </g>
   </g>
 <g id="dimensions">
-<line x1="-31.75" y1="-97.27" x2="-31.75" y2="-126.27" stroke="#3b5a7a" stroke-width="0.7"/>
-<line x1="31.75" y1="-97.27" x2="31.75" y2="-126.27" stroke="#3b5a7a" stroke-width="0.7"/>
-<line x1="-31.75" y1="-118.27" x2="31.75" y2="-118.27" stroke="#3b5a7a" stroke-width="0.9"/>
-<path d="M -31.75 -118.27 L -19.75 -114.07 L -19.75 -122.47 Z" fill="#3b5a7a" stroke="none"/>
-<path d="M 31.75 -118.27 L 19.75 -122.47 L 19.75 -114.07 Z" fill="#3b5a7a" stroke="none"/>
-<text x="-0.00" y="-131.77" font-size="30.0" fill="#3b5a7a" text-anchor="middle" font-family="ui-monospace,Consolas,monospace">63.5</text>
-<line x1="-26.99" y1="83.77" x2="-26.99" y2="112.77" stroke="#3b5a7a" stroke-width="0.7"/>
-<line x1="26.99" y1="83.77" x2="26.99" y2="112.77" stroke="#3b5a7a" stroke-width="0.7"/>
-<line x1="-26.99" y1="104.77" x2="26.99" y2="104.77" stroke="#3b5a7a" stroke-width="0.9"/>
-<path d="M -26.99 104.77 L -14.99 108.97 L -14.99 100.57 Z" fill="#3b5a7a" stroke="none"/>
-<path d="M 26.99 104.77 L 14.99 100.57 L 14.99 108.97 Z" fill="#3b5a7a" stroke="none"/>
-<text x="-0.00" y="91.27" font-size="30.0" fill="#3b5a7a" text-anchor="middle" font-family="ui-monospace,Consolas,monospace">54.0</text>
-<line x1="26.99" y1="-6.75" x2="31.75" y2="-6.75" stroke="#3b5a7a" stroke-width="0.9"/>
-<path d="M 26.99 -6.75 L 14.99 -10.95 L 14.99 -2.55 Z" fill="#3b5a7a" stroke="none"/>
-<path d="M 31.75 -6.75 L 43.75 -2.55 L 43.75 -10.95 Z" fill="#3b5a7a" stroke="none"/>
-<line x1="26.99" y1="-6.75" x2="0.59" y2="-6.75" stroke="#3b5a7a" stroke-width="0.9"/>
-<line x1="31.75" y1="-6.75" x2="58.15" y2="-6.75" stroke="#3b5a7a" stroke-width="0.9"/>
-<text x="43.75" y="-12.75" font-size="30.0" fill="#3b5a7a" text-anchor="start" font-family="ui-monospace,Consolas,monospace">4.8</text>
-<text x="-35.2" y="-151.8" font-size="11" fill="#999" font-family="ui-monospace,Consolas,monospace">generated 2026-09-02 10:55 — stale if this date is old</text>
+<line x1="-31.75" y1="-96.91" x2="-31.75" y2="-125.91" stroke="#3b5a7a" stroke-width="0.7"/>
+<line x1="31.75" y1="-96.91" x2="31.75" y2="-125.91" stroke="#3b5a7a" stroke-width="0.7"/>
+<line x1="-31.75" y1="-117.91" x2="31.75" y2="-117.91" stroke="#3b5a7a" stroke-width="0.9"/>
+<path d="M -31.75 -117.91 L -19.75 -113.71 L -19.75 -122.11 Z" fill="#3b5a7a" stroke="none"/>
+<path d="M 31.75 -117.91 L 19.75 -122.11 L 19.75 -113.71 Z" fill="#3b5a7a" stroke="none"/>
+<text x="-0.00" y="-131.41" font-size="30.0" fill="#3b5a7a" text-anchor="middle" font-family="ui-monospace,Consolas,monospace">63.5</text>
+<line x1="-26.99" y1="82.96" x2="-26.99" y2="111.96" stroke="#3b5a7a" stroke-width="0.7"/>
+<line x1="26.99" y1="82.96" x2="26.99" y2="111.96" stroke="#3b5a7a" stroke-width="0.7"/>
+<line x1="-26.99" y1="103.96" x2="26.99" y2="103.96" stroke="#3b5a7a" stroke-width="0.9"/>
+<path d="M -26.99 103.96 L -14.99 108.16 L -14.99 99.76 Z" fill="#3b5a7a" stroke="none"/>
+<path d="M 26.99 103.96 L 14.99 99.76 L 14.99 108.16 Z" fill="#3b5a7a" stroke="none"/>
+<text x="-0.00" y="90.46" font-size="30.0" fill="#3b5a7a" text-anchor="middle" font-family="ui-monospace,Consolas,monospace">54.0</text>
+<line x1="26.99" y1="-6.98" x2="31.75" y2="-6.98" stroke="#3b5a7a" stroke-width="0.9"/>
+<path d="M 26.99 -6.98 L 14.99 -11.18 L 14.99 -2.78 Z" fill="#3b5a7a" stroke="none"/>
+<path d="M 31.75 -6.98 L 43.75 -2.78 L 43.75 -11.18 Z" fill="#3b5a7a" stroke="none"/>
+<line x1="26.99" y1="-6.98" x2="0.59" y2="-6.98" stroke="#3b5a7a" stroke-width="0.9"/>
+<line x1="31.75" y1="-6.98" x2="58.15" y2="-6.98" stroke="#3b5a7a" stroke-width="0.9"/>
+<text x="43.75" y="-12.98" font-size="30.0" fill="#3b5a7a" text-anchor="start" font-family="ui-monospace,Consolas,monospace">4.8</text>
+<text x="-35.2" y="-151.4" font-size="11" fill="#999" font-family="ui-monospace,Consolas,monospace">generated 2026-09-02 11:00 — stale if this date is old</text>
 </g>
 </svg>
