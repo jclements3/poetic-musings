@@ -470,6 +470,7 @@ through the inclined web, the plate laps) are geometrically exact rather than ha
 <td style="width:25%"><b>Pillar section (CAD slice)</b><br/><img src="cad-sec-pillar.svg" style="max-width:100%"/></td>
 <td style="width:25%"><b>Neck stack at the shoulder lap (CAD slice)</b><br/><img src="cad-sec-neckstack.svg" style="max-width:90%"/></td>
 <td style="width:20%"><b>Crown plan — top view at the crown (CAD slice)</b><br/><img src="cad-sec-crown.svg?v={stampv}" style="max-width:100%"/></td>
+<td style="width:30%"><b>ER-007 crown infill — side elevation (CAD)</b><br/><img src="cad-er007.svg?v={stampv}" style="max-width:100%"/></td>
 </tr></table>
 <p class="sub">Section slices cut from <code>frame.step</code> by <code>cad_sections.py</code> — these are the
 CAD-truth versions of ER-003 / ER-002 / ER-005; the hand-drawn sheets below remain for dimensions and

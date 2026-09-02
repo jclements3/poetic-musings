@@ -624,5 +624,35 @@ zdim2 = bb.min.Z - 60
 side.linear(s2s(padL_c, 0), s2s(padR_c, 0),
             s2s(padL_c, zdim2), s2s(padR_c, zdim2), f"{abs(stance):.0f} stance")
 add_dim_layer('cad-side.svg', side)
+
+# ---- ER-007 sheet: the crown infill alone, dimensioned side elevation ----
+bbc = collar.bounding_box()
+pbb_er7 = view(collar, 'cad-er007.svg',
+               (bbc.center().X, -8000, bbc.center().Z))
+assert abs(pbb_er7.size.X - bbc.size.X) < 5 and abs(pbb_er7.size.Y - bbc.size.Z) < 5
+TX7, TY7 = pbb_er7.min.X - bbc.min.X, pbb_er7.min.Y - bbc.min.Z
+f7 = lambda x, z: (x + TX7, -(z + TY7))
+er7 = DimLayer()
+# overall wall depth and height, measured from the solid
+er7.linear(f7(bbc.min.X, bbc.max.Z), f7(bbc.max.X, bbc.max.Z),
+           f7(bbc.min.X, bbc.max.Z + 28), f7(bbc.max.X, bbc.max.Z + 28),
+           f"{bbc.size.X:.0f}")
+er7.linear(f7(bbc.max.X, bbc.max.Z), f7(bbc.max.X, bbc.min.Z),
+           f7(bbc.max.X + 30, bbc.max.Z), f7(bbc.max.X + 30, bbc.min.Z),
+           f"{bbc.size.Z:.0f}")
+# bolt spacing off the top edge
+er7.linear(f7(x_bolt, z_ct - 15), f7(x_bolt, z_ct - 45),
+           f7(bbc.min.X - 26, z_ct - 15), f7(bbc.min.X - 26, z_ct - 45), "30")
+_cap = f7(bbc.min.X, bbc.min.Z - 30)
+er7._track(_cap[0] + 320, _cap[1] + 14)
+er7.el.append(
+    f'<text x="{_cap[0]:.0f}" y="{_cap[1]:.0f}" '
+    'font-size="9" fill="#333" font-family="ui-monospace,Consolas,monospace">'
+    'ER-007 crown infill: 2.5in x 3/16 channel offcut, profile-cut to the neck rails; web forward; 2x M8</text>')
+add_dim_layer('cad-er007.svg', er7)
+# part-scale lettering for this small sheet
+_d7 = open(os.path.join(HERE, 'cad-er007.svg')).read()
+_d7 = _d7.replace('font-size="30"', 'font-size="12"')
+open(os.path.join(HERE, 'cad-er007.svg'), 'w').write(_d7)
 print(f"dims: H={H:.0f} L={LX:.0f} stance={abs(stance):.0f} pillar O{pil_bb.size.X:.1f} "
       f"midrib depth={D_meas:.1f} (all measured from the solids)")
