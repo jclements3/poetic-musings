@@ -298,10 +298,13 @@ band.append(f'<text x="{dx0-12:.0f}" y="{midy:.0f}" class="nl" fill="#3b5a7a" te
 band.append(f'<g stroke="#3b5a7a" stroke-width="1" fill="none"><line x1="{X(pilc-PW):.1f}" y1="{Y(y_base)+26:.1f}" x2="{X(pilc+PW):.1f}" y2="{Y(y_base)+26:.1f}" marker-start="url(#arr)" marker-end="url(#arr)"/></g>')
 band.append(f'<text x="{X(pilc):.0f}" y="{Y(y_base)+44:.0f}" class="nl" fill="#3b5a7a" text-anchor="middle">50.8</text>')
 band.append('<g stroke="#555" stroke-width="1.0" fill="none">')
-band += [f'<line x1="{X(a[0]):.1f}" y1="{Y(a[1]):.1f}" x2="{X(b[0]):.1f}" y2="{Y(b[1]):.1f}"/>' for a, b in marks]
+# flat-pin ticks ONLY — tuner ticks/leads are superseded by the ER-008
+# axle tubes, which sit AT the flat points
+band += [f'<line x1="{X(a[0]):.1f}" y1="{Y(a[1]):.1f}" x2="{X(b[0]):.1f}" y2="{Y(b[1]):.1f}"/>'
+         for a, b in marks
+         if any(abs((a[0]+b[0])/2 - sxf) < 0.05 and abs((a[1]+b[1])/2 - syf) < 0.05
+                for sxf, syf in flats)]
 band.append('</g>')
-for a, b, c, w in keys:
-    band.append(f'<line x1="{X(a[0]):.1f}" y1="{Y(a[1]):.1f}" x2="{X(b[0]):.1f}" y2="{Y(b[1]):.1f}" stroke="{c}" stroke-width="{w:.3f}"/>')
 for cxp, cyp in sense_px:
     band.append(f'<g stroke="#a8700f" stroke-width="1.4"><line x1="{cxp-3.2:.1f}" y1="{cyp:.1f}" x2="{cxp+3.2:.1f}" y2="{cyp:.1f}"/><line x1="{cxp:.1f}" y1="{cyp-3.2:.1f}" x2="{cxp:.1f}" y2="{cyp+3.2:.1f}"/><title>optical X/Y sensor axis — mirrors the sensor-axes group in Erand49.svg (0.056·L below the flat pin; Gate 1 placeholder, final fraction set on the bench)</title></g>')
 for (n, note, f, Lin, cm, wm, od, t), (x, ylo, yhi) in strings:
@@ -315,8 +318,7 @@ for n, note, fg, Lg, odg, tg, gx, glo in gpts:
     tip = f"#{n} {note} · {fg:g} Hz · {Lg:.3f} in / {Lg*IN:.1f} mm · Ø {odg:.4f} in / {odg*IN:.2f} mm · {tg:.1f} lbf — EXTRAPOLATED from c1 (see string-specs.md)"
     top = glo + Lg
     band.append(f'<line x1="{X(gx):.1f}" y1="{Y(glo):.1f}" x2="{X(gx):.1f}" y2="{Y(top):.1f}" stroke="{color(note)}" stroke-width="{odg*IN:.3f}"><title>{tip}</title></line>')
-    band.append(f'<line x1="{X(gx):.1f}" y1="{Y(top):.1f}" x2="{X(gx+KEY_DX):.1f}" y2="{Y(top+KEY_DY):.1f}" stroke="{color(note)}" stroke-width="{odg*IN:.3f}"/>')
-    band.append(f'<g stroke="#555" stroke-width="1.0"><line x1="{X(gx)-3.2:.1f}" y1="{Y(top):.1f}" x2="{X(gx)+3.2:.1f}" y2="{Y(top):.1f}"/><line x1="{X(gx+KEY_DX)-3.2:.1f}" y1="{Y(top+KEY_DY):.1f}" x2="{X(gx+KEY_DX)+3.2:.1f}" y2="{Y(top+KEY_DY):.1f}"/></g>')
+    band.append(f'<g stroke="#555" stroke-width="1.0"><line x1="{X(gx)-3.2:.1f}" y1="{Y(top):.1f}" x2="{X(gx)+3.2:.1f}" y2="{Y(top):.1f}"/></g>')
     band.append(f'<text x="{X(gx):.1f}" y="{Y(glo)+24:.1f}" class="nl" fill="#8d877a" text-anchor="middle">{note}*</text>')
 
 # Bezier rails: Catmull-Rom smooth curves through the 49 tuner pins (the neck's
@@ -440,7 +442,7 @@ the instrument itself: string band, sensors, and frame.</p>
 (13.325→17.94 mm, ratio 1.025), sloped anchors, in mm — <b>each stroke width is the string's actual
 overall diameter</b>. Colors per harp convention: <span class="leg" style="color:#c0392b">C red</span> ·
 <span class="leg" style="color:#2e5fa3">F blue</span> · others dark gray; hover any string for its
-spec. Dark ticks: nut and tuner pin; colored 12° top segments: tuner leads. Amber crosshairs:
+spec. Dark ticks: flat pins (= ER-008 axle-tube positions; tuner posts/leads superseded). Amber crosshairs:
 optical X/Y sensor axes, 1.0 in below each nut on the neck rail. Green Beziers (dark = tuner rail, light = sensor rail) — the neck outline, hand-tuned in <code>Erand49.svg</code>. b0*/a0*: spec extrapolated from c1 physics
 (<code>string-specs.md</code>). Frame colors: <b style="color:#d32f2f">pillar red</b> · <b style="color:#1565c0">midrib blue</b> · <b style="color:#2e7d32">neck green</b>. Per <code>frame-spec.md</code>: midrib channel side profile (4" sides through the base half, tapering to 2.25" at the shoulder; top web on the string-anchor line, dash-dot centerline) from the pillar foot to the shoulder; pillar (Ø2" round tube) crown to floor through the open-bottom midrib; plates lap the midrib side walls at the shoulder, joined by the top seam and horizontal fillets (ER-005), crown pads on the pillar; ISO 129 dims in mm.</p>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="{x0v:.0f} 0 {x1v-x0v:.0f} {y1-y0:.0f}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Erand49 string band, Erard DXF geometry, true scale">
