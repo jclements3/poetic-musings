@@ -514,6 +514,6 @@
 <circle cx="517.2" cy="-364.1" r="2.4" fill="#3b6fb5"/>
 <circle cx="530.6" cy="-375.9" r="2.4" fill="#3b6fb5"/>
 <g font-size="13" font-family="ui-monospace,Consolas,monospace"><circle cx="-374" cy="-717" r="3.5" fill="#2e7d32"/><text x="-362" y="-723" fill="#2e7d32">tuner pins</text><circle cx="-374" cy="-677" r="3.5" fill="#a8700f"/><text x="-362" y="-683" fill="#a8700f">flat pins</text><circle cx="-374" cy="-637" r="3.5" fill="#3b6fb5"/><text x="-362" y="-643" fill="#3b6fb5">optical axes</text></g>
-<text x="-456.9" y="-752.5" font-size="11" fill="#999" font-family="ui-monospace,Consolas,monospace">generated 2026-09-02 10:41 — stale if this date is old</text>
+<text x="-456.9" y="-752.5" font-size="11" fill="#999" font-family="ui-monospace,Consolas,monospace">generated 2026-09-02 10:44 — stale if this date is old</text>
 </g>
 </svg>

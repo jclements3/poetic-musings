@@ -654,5 +654,30 @@ add_dim_layer('cad-er007.svg', er7)
 _d7 = open(os.path.join(HERE, 'cad-er007.svg')).read()
 _d7 = _d7.replace('font-size="30"', 'font-size="12"')
 open(os.path.join(HERE, 'cad-er007.svg'), 'w').write(_d7)
+
+# ER-007 second view: front (YZ) projection of the piece — the width dims
+pbb_er7f = view(collar, 'cad-er007-front.svg',
+                (12000, 0, bbc.center().Z))
+assert abs(pbb_er7f.size.X - bbc.size.Y) < 5 and abs(pbb_er7f.size.Y - bbc.size.Z) < 5
+TX7f, TY7f = pbb_er7f.min.X - bbc.min.Y, pbb_er7f.min.Y - bbc.min.Z
+f7f = lambda y, z: (y + TX7f, -(z + TY7f))
+er7f = DimLayer()
+# outside width across the web (bears on the plate inner faces)
+er7f.linear(f7f(-WEB_W/2, bbc.max.Z), f7f(WEB_W/2, bbc.max.Z),
+            f7f(-WEB_W/2, bbc.max.Z + 26), f7f(WEB_W/2, bbc.max.Z + 26),
+            f"{WEB_W:.1f}")
+# clear width between the walls (around the O50.8 tube)
+er7f.linear(f7f(-(WEB_W/2 - 4.76), bbc.min.Z), f7f(WEB_W/2 - 4.76, bbc.min.Z),
+            f7f(-(WEB_W/2 - 4.76), bbc.min.Z - 26), f7f(WEB_W/2 - 4.76, bbc.min.Z - 26),
+            f"{WEB_W - 2*4.76:.1f}")
+# wall thickness
+er7f.linear(f7f(WEB_W/2 - 4.76, bbc.center().Z), f7f(WEB_W/2, bbc.center().Z),
+            f7f(WEB_W/2 - 4.76, bbc.center().Z), f7f(WEB_W/2, bbc.center().Z),
+            "4.8", text_pos=f7f(WEB_W/2 + 12, bbc.center().Z + 6), text_anchor='start')
+er7f._track(*f7f(WEB_W/2 + 58, bbc.center().Z))
+add_dim_layer('cad-er007-front.svg', er7f)
+_d7f = open(os.path.join(HERE, 'cad-er007-front.svg')).read()
+_d7f = _d7f.replace('font-size="30"', 'font-size="12"')
+open(os.path.join(HERE, 'cad-er007-front.svg'), 'w').write(_d7f)
 print(f"dims: H={H:.0f} L={LX:.0f} stance={abs(stance):.0f} pillar O{pil_bb.size.X:.1f} "
       f"midrib depth={D_meas:.1f} (all measured from the solids)")
