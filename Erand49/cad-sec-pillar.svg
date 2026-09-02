@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<svg width="51.5mm" height="51.5mm" viewBox="-25.75 -25.75 51.5 51.5" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<svg width="51.15mm" height="51.15mm" viewBox="-25.575 -25.575 51.15 51.15" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <g transform="scale(1,-1)" stroke-linecap="round">
-    <g fill="none" stroke="rgb(0,0,0)" stroke-width="0.7" id="cut">
+    <g fill="none" stroke="rgb(0,0,0)" stroke-width="0.35" id="cut">
       <circle cx="-0.0" cy="-0.0" r="25.4" />
       <circle cx="-0.0" cy="-0.0" r="20.6375" />
     </g>

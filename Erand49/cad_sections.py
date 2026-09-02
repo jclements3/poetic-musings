@@ -18,7 +18,7 @@ T = 0.6   # slab thickness for sections, mm
 def export_edges(shape, name, origin, up=(0, 0, 1)):
     visible, hidden = shape.project_to_viewport(origin, viewport_up=up)
     exp = ExportSVG(scale=1.0)
-    exp.add_layer('cut', line_weight=0.7)
+    exp.add_layer('cut', line_weight=0.35)
     exp.add_shape(visible, layer='cut')
     exp.write(os.path.join(HERE, name))
     print('wrote', name)
@@ -54,7 +54,7 @@ _p = [x for x in _re.findall(r'<path[^>]*>', _svg, _re.S) if '2e7d32' in x][0]
 _m = _re.search(r'\bd="[Mm]\s*([\d.eE+-]+)[, ]([\d.eE+-]+)', _p)
 _y_start = float(_m.group(2))                      # plate top corner, svg mm
 z_cr = ns['y1'] - _y_start - y_floor * IN - 25     # mid-collar / bolt zone
-slab4 = Pos(pilc*IN, 0, z_cr) * Box(320, 200, T)
+slab4 = Pos(pilc*IN, 0, z_cr) * Box(150, 110, T)   # tight crop: mm gaps visible
 sec4 = asm & slab4
 export_edges(sec4, 'cad-sec-crown.svg', (pilc*IN, 0, z_cr + 3000))
 print('done')
