@@ -368,31 +368,24 @@ midrib = midrib - Pos(x_h, 0, z_h) * Rot(90, 0, 0) * Cylinder(BOLT_THREAD_CLR / 
 print(f"ER-006 legs: hinge at x={x_h:.1f} z={z_h:.1f} mm, wall holes O{BOLT_THREAD_CLR} "
       f"(M8 shoulder bolt, O10 shoulder in O{BOLT_SHOULDER_D} leg bore), deployed {LEG_ANG:.0f} deg")
 
-# ---- ER-008: hidden linear-pull tuners, 49x, alternating plates ----
-# Per station: O6.5 access bore along the tuner-lead axis (enters at the
-# plate's top edge, Allen key inserts INTO the plate), a 4.5x6x18 slider
-# channel on the inner face, and (hardware, not modeled per-station) an O9
-# steel threaded bushing + M6 set screw (3 mm hex) + stainless slider.
+# ---- ER-008 v2: AXLE-TUBE tuners, 49x — rung and tuner in one part ----
+# Each station: an O12x2 6061 tube pressed through BOTH plates at the FLAT
+# PIN point (the tube bottom slot at y=0 IS the speaking-length reference;
+# the old tuner posts/leads are superseded). Inside: M6x0.75 lead screw the
+# tube's length, slider-nut, string in through the center slot with a 90-deg
+# radiused bend. All 49 hex sockets recessed in the RIGHT tube ends —
+# one-side tuning like a regular harp. The tubes make the plate pair a
+# ladder truss and self-jig the 63.5 gap.
 flats_s = sorted(ns['flats_px'])
-tuners_s = sorted(ns['tuners_px'])
-er8_cuts = []
-for idx8, (tx8, ty8) in enumerate(tuners_s):
-    fx8, fy8 = min(flats_s, key=lambda p: abs(p[0] - tx8))
-    tp8 = sv(tx8, ty8); fp8 = sv(fx8, fy8)
-    dx8, dz8 = tp8[0] - fp8[0], tp8[1] - fp8[1]
-    L8 = math.hypot(dx8, dz8) or 1.0
-    d8 = (dx8 / L8, dz8 / L8)
-    sgn8 = 1 if idx8 % 2 == 0 else -1                  # alternate plates
-    ypl = sgn8 * (GAP/2 + PLATE_T/2)
-    ang8 = math.degrees(math.atan2(d8[0], d8[1]))      # about Y: +z toward +x
-    c08 = (tp8[0] - d8[0]*10, tp8[1] - d8[1]*10)
-    er8_cuts.append(Pos(c08[0], ypl, c08[1]) * Rot(0, ang8, 0) *
-                    Cylinder(6.5/2, 100, align=(Align.CENTER, Align.CENTER, Align.MIN)))
-    ysl = sgn8 * (GAP/2 + 3.0)                         # channel from the inner face
-    csl = (tp8[0] - d8[0]*19, tp8[1] - d8[1]*19)
-    er8_cuts.append(Pos(csl[0], ysl, csl[1]) * Rot(0, ang8, 0) * Box(4.5, 6.0, 18.0))
+span8 = GAP + 2 * PLATE_T
+er8_cuts, axles = [], []
+for fx8, fy8 in flats_s:
+    fp8 = sv(fx8, fy8)
+    er8_cuts.append(Pos(fp8[0], 0, fp8[1]) * Rot(90, 0, 0) * Cylinder(12.1/2, span8 + 10))
+    axles.append(Pos(fp8[0], 0, fp8[1]) * Rot(90, 0, 0) *
+                 (Cylinder(6.0, span8) - Cylinder(4.0, span8)))
 plates = plates.cut(*er8_cuts)
-# bushing edge margin: O9 bushing at each tuner point vs the rails
+axle_rungs = Compound(axles)
 def _rail_pts(segs):
     pts = []
     for a, c1, c2, b in segs:
@@ -402,11 +395,11 @@ def _rail_pts(segs):
                         mt**3*a[1]+3*mt*mt*t*c1[1]+3*mt*t*t*c2[1]+t**3*b[1]))
     return pts
 _rp = _rail_pts(tuner_c) + _rail_pts(sense_c)
-_margin = min(min(math.hypot(px-tx8, py-ty8) for px, py in _rp) for tx8, ty8 in tuners_s) - 4.5
-print(f"ER-008 tuners: 49 access bores O6.5 + channels cut (alternating plates); "
-      f"O9 bushing edge margin {_margin:.1f} mm (>=4 needed)")
+_margin = min(min(math.hypot(px-fx8, py-fy8) for px, py in _rp) for fx8, fy8 in flats_s) - 6.0
+print(f"ER-008 v2 axle tuners: 49 O12 through-bores both plates at the flat pins; "
+      f"tube edge margin {_margin:.1f} mm (>=4 needed); sockets all on the RIGHT ends")
 
-assembly = Compound([midrib, pillar, plates, legs, pads, collar])
+assembly = Compound([midrib, pillar, plates, legs, pads, collar, axle_rungs])
 
 export_step(assembly, os.path.join(HERE, 'frame.step'))
 print('frame.step written')
@@ -415,7 +408,7 @@ print('frame.step written')
 DENS_AL = 2700e-9    # kg/mm^3, 6061 — frame, plates, legs
 DENS_RUB = 1200e-9   # kg/mm^3, rubber pads
 mass_items = [('midrib', midrib, DENS_AL), ('pillar', pillar, DENS_AL),
-              ('collar', collar, DENS_AL),
+              ('collar', collar, DENS_AL), ('axles', axle_rungs, DENS_AL),   # 6061 tubes; steel nut inserts only
               ('plates', plates, DENS_AL), ('legs', legs, DENS_AL), ('pads', pads, DENS_RUB)]
 M = Vector(0, 0, 0)
 m_tot = 0.0

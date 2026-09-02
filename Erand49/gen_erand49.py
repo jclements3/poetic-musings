@@ -473,29 +473,29 @@ through the inclined web, the plate laps) are geometrically exact rather than ha
 <td style="width:30%"><b>ER-007 crown infill — side elevation (CAD)</b><br/><img src="cad-er007.svg?v={stampv}" style="max-width:100%"/></td>
 <td style="width:22%"><b>ER-007 — front (YZ), width dims</b><br/><img src="cad-er007-front.svg?v={stampv}" style="max-width:100%"/></td>
 </tr></table>
-<h3 style="font-size:15px;margin:20px 0 6px">ER-008 — hidden linear-pull tuner, one of 49 (section along the lead axis; schematic, dims true)</h3>
-<div class="wrap"><svg viewBox="0 0 640 190" xmlns="http://www.w3.org/2000/svg" style="max-width:640px;height:auto;display:block">
+<h3 style="font-size:15px;margin:20px 0 6px">ER-008 — axle-tube tuner, one of 49 (section along the tube; schematic, dims true)</h3>
+<div class="wrap"><svg viewBox="0 0 680 210" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;height:auto;display:block">
 <style>.e8{{font-size:11px;font-family:ui-monospace,Menlo,Consolas,monospace;fill:#333}}</style>
-<rect x="30" y="55" width="380" height="80" fill="#eceae4" stroke="#888"/>
-<text x="34" y="50" class="e8">8 mm neck plate (section along the tuner-lead axis) — top edge at left</text>
-<rect x="30" y="85" width="70" height="20" fill="#fff" stroke="#555"/>
-<text x="34" y="80" class="e8">&#216;6.5 access bore</text>
-<rect x="100" y="81" width="46" height="28" fill="#cfd6de" stroke="#333"/>
-<text x="36" y="155" class="e8">&#216;9 steel bushing, M6&#215;0.75 tapped, knurled, pressed + bonded</text>
-
-<rect x="104" y="86" width="38" height="18" fill="#9fb3c8" stroke="#223"/>
-<path d="M 104 90 l 7 0 l 0 10 l -7 0 z" fill="#fff" stroke="#223"/>
-<text x="215" y="76" class="e8">M6 set screw, 3 mm hex socket</text>
-<rect x="146" y="88" width="26" height="14" fill="#b8b8b8" stroke="#333"/>
-<text x="420" y="155" class="e8">slider 4&#215;4&#215;12 SS, string hole in tail</text>
-<line x1="172" y1="95" x2="410" y2="95" stroke="#444" stroke-width="1.6"/>
-<text x="300" y="90" class="e8">string &#8594; flat pin</text>
-<rect x="100" y="105" width="90" height="8" fill="none" stroke="#777" stroke-dasharray="3 2"/>
-<text x="196" y="122" class="e8">4.5&#215;6&#215;18 channel, opened from the inner face</text>
-<circle cx="14" cy="95" r="7" fill="none" stroke="#a8700f" stroke-width="2"/>
-<line x1="21" y1="95" x2="30" y2="95" stroke="#a8700f" stroke-width="2"/>
-<text x="4" y="43" class="e8" fill="#a8700f">3 mm ball-end key inserts INTO the plate</text>
-<text x="34" y="180" class="e8">self-locking fine thread (cannot back-drive) &#183; 0.75 mm/turn &#8776; cents &#183; nylon plug caps the bore</text>
+<rect x="40" y="60" width="24" height="110" fill="#eceae4" stroke="#888"/>
+<rect x="586" y="60" width="24" height="110" fill="#eceae4" stroke="#888"/>
+<text x="34" y="54" class="e8">left plate</text><text x="560" y="54" class="e8">right plate</text>
+<rect x="40" y="97" width="570" height="36" fill="#dde3ea" stroke="#333"/>
+<rect x="70" y="106" width="516" height="18" fill="#b9c6d4" stroke="#445"/>
+<text x="110" y="90" class="e8">&#216;12&#215;2 6061 tube — rung + tuner housing through BOTH plates (ladder truss &#215;49, self-jigs the 63.5 gap)</text>
+<rect x="300" y="103" width="30" height="24" fill="#8fa3b8" stroke="#223"/>
+<text x="90" y="152" class="e8">slider-nut on the M6&#215;0.75 lead screw</text><line x1="305" y1="148" x2="312" y2="128" stroke="#a8700f" stroke-width="0.8"/>
+<rect x="592" y="108" width="12" height="14" fill="#fff" stroke="#223"/>
+<text x="235" y="45" class="e8">3 mm hex RECESSED in the right tube end — all 49 tune from the right side</text>
+<line x1="598" y1="108" x2="590" y2="50" stroke="#a8700f" stroke-width="0.8"/>
+<rect x="36" y="103" width="8" height="24" fill="#cfd6de" stroke="#333"/>
+<text x="6" y="190" class="e8">press cap, left end</text>
+<line x1="40" y1="184" x2="40" y2="130" stroke="#a8700f" stroke-width="0.8"/>
+<line x1="322" y1="133" x2="322" y2="200" stroke="#444" stroke-width="1.6"/>
+<path d="M 330 127 Q 322 133 322 143" fill="none" stroke="#444" stroke-width="1.6"/>
+<text x="340" y="172" class="e8">string: in through the 3 mm center slot, 90&#176; radiused bend</text>
+<text x="340" y="185" class="e8">slot edge at y=0 = flat pin / speaking-length reference</text>
+<text x="230" y="205" class="e8">&#8595; vibrating length to the midrib</text>
+<text x="40" y="22" class="e8">self-locking: string tension loads the screw AXIALLY after the bend — cannot back-drive; 0.75 mm/turn &#8776; cents</text>
 </svg></div>
 <table><tr>
 </tr></table>
