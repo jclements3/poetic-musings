@@ -91,6 +91,10 @@ consoleInput =
   -- The real matrix scanner has row2/col3 wired down: pop the debounced
   -- press event (keycode 19 = 0x13, press bit 7, valid bit 15) and then
   -- show the FIFO is empty.  The 0x4024 @ itself is the pop.
+  -- ENABLE the scanner first (bit0 scan, debounce 2 passes) and let it run
+  -- long enough to debounce the wired-down key (2 passes ~ 50k cycles)
+  P.++ ": w8 $FFFF for next ;\r"
+  P.++ "$21 $4024 ! w8 w8 w8\r"
   P.++ ": key? $4024 @ dup $FF and . 0< if .\" pre\" .\" ss\" then cr ;\r"
   P.++ "key? : nk? $4024 @ 0= if .\" fifo \" .\" empty\" then cr ; nk?\r"
   -- SD command layer over the 0x402A shifter (eforth-pm.md: "Forth
@@ -147,7 +151,8 @@ bootedOk t = "eFORTH" `L.isInfixOf` t
           && "5"  `L.isInfixOf` after "cr" (after "eFORTH" t)
           && "34" `L.isInfixOf` after "decimal mode? . cr" t
           && "stable" `L.isInfixOf` t          -- zone decoder's dwell flag
-          && "147 press" `L.isInfixOf` t       -- matrix event: keycode 19 + press
+          && "147press" `L.isInfixOf` t        -- matrix event: keycode 19 + press
+                                               -- (eForth's . prints a LEADING space)
           && "fifo empty" `L.isInfixOf` t      -- the 0x4024 read popped it
           && "owner: JC" `L.isInfixOf` t
           && "PM card ok" `L.isInfixOf` after "1 rblk 1 load" t
