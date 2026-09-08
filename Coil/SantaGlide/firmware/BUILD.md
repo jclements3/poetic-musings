@@ -110,3 +110,22 @@ clashi at the FSM level: ParkA holds while `rest>0`; GlideFwd advances the coil
 exactly at `t = dwellTicks i`; coil 7 → ParkB reloads `rest = 125,000,000`
 (= 2.5 s at 50 MHz, confirming the tick base); `showOn=False` freezes `t`/`coil`
 and sets `paused`. Ready for first power-up per HANDOFF §7 step 3.
+
+## Rev C — theremin speed control (SS-005)
+
+The sleigh's speed is now driven by the One Box theremin: pitch maps to
+speed 1..255, volume off (or cable out, or sender dead — 250 ms watchdog)
+parks Santa at Hold duty. `PM.SleighSpeed` on the ULX3S sends (0xA5, speed)
+frames at 250 kbaud, 50/s; this firmware receives on `sleigh_rx`.
+
+Wiring: one wire from the ULX3S `sleigh_tx` GPIO to Br bank A pin A15
+(ball B1 — VERIFY against CuPin.kt before first power), plus common ground
+between the boards. The pin has a pullup: unplugged = idle line = watchdog
+parks the sleigh. Show switch behavior is unchanged and still overrides.
+
+Speed scaling is a virtual-tick pacer (rate speed/256): the SS-004 dwell
+table is untouched, speed 255 is Rev B timing (-0.4 %), no multipliers were
+added, and the Rev C bitstream closes timing at 59.1 MHz (PASS at 50).
+Sim proof: `SleighSim.hs` (see header for the runghc invocation) — UART
+decode at divisor 200, watchdog decay, exact pacer rates, FSM hold/step
+semantics. The PM side is proven by pm-lib's `sleighspeed-test`.

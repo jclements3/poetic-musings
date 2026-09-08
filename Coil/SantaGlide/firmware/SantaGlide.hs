@@ -1,6 +1,22 @@
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE NumericUnderscores #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveAnyClass #-}
+-- (the clash CLI enables these by default; spelled out so plain GHC tools
+-- like the SleighSim runghc harness can load this file too)
 
--- SantaGlide.hs  --  Rev B: pure Moore machine per SS-004
+-- SantaGlide.hs  --  Rev C: theremin speed control per SS-005
+--   (Rev B: pure Moore machine per SS-004)
+--
+-- Rev C adds the sleigh_rx serial input: the One Box theremin sends
+-- (0xA5, speed) frames at 250 kbaud (PM.SleighSpeed). Pitch = speed,
+-- volume off = speed 0 = dead-man stop (Hold duty, Santa parked).
+-- A 250 ms watchdog forces speed 0 when the cable is unplugged. Speed
+-- scales the WHOLE dwell table without multipliers: an accumulator
+-- passes 'virtual ticks' to the FSM at rate speed/256, so speed 255 is
+-- Rev B timing and speed 0 freezes the machine at Hold.
 --
 -- Fixes vs Rev A:
 --   * built with `moore`: output depends on STATE ONLY (no Mealy leak
@@ -59,6 +75,69 @@ holdDuty = 13                        -- ~5 %   keeps Santa parked
 runDuty  = 51                        -- ~20 %  start point, tune on bench
 
 ------------------------------------------------------------------------
+-- Rev C: theremin speed link (SS-005) — RX, framing, watchdog, pacer
+------------------------------------------------------------------------
+
+rxDiv :: Unsigned 8
+rxDiv = 200                          -- 250 kbaud @ 50 MHz (ULX3S: div 100 @ 25 MHz)
+
+divW :: Unsigned 10
+divW = resize rxDiv                   -- divisor widened for the 1.5-bit wait
+
+watchdogTicks :: Unsigned 24
+watchdogTicks = 12_500_000           -- 250 ms @ 50 MHz
+
+-- 8N1 receiver, explicit timing (the PM.HarpLink receiver, inlined so the
+-- Cu firmware stays a single self-contained file for build.sh): start edge
+-- after idle, 1.5 bits to mid-data0, 8 samples, true mid-stop check.
+-- rCnt is Unsigned 10: the 1.5-bit start wait is 1.5*rxDiv-1 = 299 ticks at
+-- divisor 200, which overflows the Unsigned 8 counter HarpLink uses at its
+-- 3 Mbaud divisors (a latent width bug at any divisor > 170)
+data RxSt = RxSt { rActive :: !Bool, rIdle :: !Bool, rSh :: !(BitVector 8)
+                 , rBit :: !(Unsigned 4), rCnt :: !(Unsigned 10) }
+  deriving (Generic, NFDataX)
+
+rxT :: RxSt -> Bit -> (RxSt, Maybe (BitVector 8))
+rxT s@RxSt{..} l
+  | not rActive
+  = if l == 1 then (s { rIdle = True }, Nothing)
+    else if rIdle
+      then (RxSt True False 0 8 (divW + (divW `shiftR` 1) - 1), Nothing)
+      else (s, Nothing)
+  | rCnt /= 0 = (s { rCnt = rCnt - 1 }, Nothing)
+  | rBit /= 0
+  = ( s { rSh = pack l ++# slice d7 d1 rSh, rBit = rBit - 1, rCnt = divW - 1 }
+    , Nothing )
+  | otherwise
+  = ( s { rActive = False }
+    , if l == 1 then Just rSh else Nothing )
+
+-- (0xA5, speed) parser with the fail-safe watchdog. Any byte after a sync
+-- is the speed; anything else re-arms the sync hunt. No frame for 250 ms
+-- (cable out, sender dead, noise) => speed 0.
+data LinkSt = LinkSt { lSpeed :: !(Unsigned 8), lSync :: !Bool
+                     , lWd :: !(Unsigned 24) }
+  deriving (Generic, NFDataX)
+
+linkT :: LinkSt -> Maybe (BitVector 8) -> (LinkSt, Unsigned 8)
+linkT s mb = (s', lSpeed s')            -- no wildcards: selectors stay usable
+ where
+  timed = if lWd s == 0 then s { lSpeed = 0 } else s { lWd = lWd s - 1 }
+  s' = case mb of
+    Nothing -> timed
+    Just b
+      | lSync s   -> LinkSt (unpack b) False watchdogTicks
+      | b == 0xA5 -> timed { lSync = True }
+      | otherwise -> timed { lSync = False }
+
+-- Virtual-tick pacer: fire at rate speed/256 of the clock. speed 255 ~
+-- Rev B full rate (0.4 % slow, invisible); speed 0 never fires.
+paceT :: Unsigned 9 -> Unsigned 8 -> (Unsigned 9, Bool)
+paceT acc spd =
+  let a = acc + resize spd
+  in if a >= 256 then (a - 256, True) else (a, False)
+
+------------------------------------------------------------------------
 -- State
 ------------------------------------------------------------------------
 
@@ -80,10 +159,13 @@ initSt = St ParkA 0 0 (restMs * msTicks) True
 -- Transition function  (s -> i -> s)
 ------------------------------------------------------------------------
 
-next :: St -> Bool -> St
-next s showOn
-  | not showOn = s { paused = True }                  -- freeze everything
-  | otherwise  = step s { paused = False }
+-- showOn off OR speed 0 (dead-man / watchdog) => paused: freeze at Hold.
+-- Otherwise advance only on pacer fires — that is the speed control.
+next :: St -> (Bool, Bool, Bool) -> St
+next s (showOn, go, fire)
+  | not (showOn && go) = s { paused = True }
+  | not fire           = s { paused = False }         -- hold state this tick
+  | otherwise          = step s { paused = False }
 
 step :: St -> St
 step s@St{..} = case phase of
@@ -121,7 +203,7 @@ output St{..} = replace coil level (repeat Off)
       | otherwise                       = Run
 
 controller :: HiddenClockResetEnable dom
-           => Signal dom Bool -> Signal dom (Vec 8 Drive)
+           => Signal dom (Bool, Bool, Bool) -> Signal dom (Vec 8 Drive)
 controller = moore next output initSt
 
 ------------------------------------------------------------------------
@@ -157,15 +239,26 @@ pwm drives = register (repeat 0) (map <$> (toGate <$> carrier) <*> drives)
 -- Top entity
 ------------------------------------------------------------------------
 
+glide :: HiddenClockResetEnable dom
+      => Signal dom Bool -> Signal dom Bit -> Signal dom (Vec 8 Bit)
+glide showRaw rxLine = pwm (controller (bundle (showD, go, fire)))
+ where
+  showD = debounce showRaw
+  rxB   = mealy rxT (RxSt False False 0 0 0) (register 1 rxLine)
+  spd   = mealy linkT (LinkSt 0 False watchdogTicks) rxB
+  go    = (/= 0) <$> spd
+  fire  = mealy paceT 0 spd
+
 topEntity
   :: Clock System -> Reset System -> Enable System
   -> Signal System Bool            -- ^ show switch (raw)
+  -> Signal System Bit             -- ^ sleigh_rx — theremin speed link (SS-005)
   -> Signal System (Vec 8 Bit)     -- ^ gates[0..7] -> IRLZ44N, C0 nearest house A
-topEntity = exposeClockResetEnable (pwm . controller . debounce)
+topEntity = exposeClockResetEnable glide
 {-# NOINLINE topEntity #-}
 {-# ANN topEntity
   (Synthesize
     { t_name   = "santa_glide"
-    , t_inputs = [PortName "clk", PortName "rst", PortName "en", PortName "show_on"]
+    , t_inputs = [PortName "clk", PortName "rst", PortName "en", PortName "show_on", PortName "sleigh_rx"]
     , t_output = PortName "gates"
     }) #-}

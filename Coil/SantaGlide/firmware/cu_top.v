@@ -18,6 +18,7 @@ module cu_top (
     input  wire       clk,     // 100 MHz on-board oscillator (ball P7)
     input  wire       rst_n,   // Cu reset button (ball P8), LOW while pressed
     input  wire       show_on, // show switch, Br bank A pin A14 (ball C1)
+    input  wire       sleigh_rx,// theremin speed link, 250 kbaud (SS-005)
     output wire [7:0] gates    // MOSFET gate drives, Br bank A pins A2..A12
 );
 
@@ -48,6 +49,7 @@ module cu_top (
         .rst     (rst_sync[1]),
         .en      (1'b1),
         .show_on (show_on),
+        .sleigh_rx (sleigh_rx),
         .gates   (gates)
     );
 

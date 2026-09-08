@@ -28,3 +28,9 @@ set_io gates[4] G1    # Br A8  -> Q4
 set_io gates[5] G3    # Br A9  -> Q5
 set_io gates[6] E1    # Br A11 -> Q6
 set_io gates[7] D1    # Br A12 -> Q7
+
+# Theremin speed link (SS-005) — 250 kbaud serial from the ULX3S
+# (PM.SleighSpeed). Br bank A pin A15 (ball B1 — VERIFY against CuPin.kt on
+# the bench before wiring). Pullup keeps the line idle-high when unplugged;
+# the firmware watchdog then parks Santa within 250 ms.
+set_io -pullup yes sleigh_rx B1
