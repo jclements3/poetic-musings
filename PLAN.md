@@ -8,7 +8,11 @@ grandkids, and nothing is started until the previous demo passes its gate
 (finish-before-start rule).
 
 Scope/cost/difficulty per project: `fpga-development-plan.md`. This file is the
-execution order and the demo that closes each phase.
+execution order and the demo that closes each phase. The deliverable each phase leaves
+behind is a set of measured Clash modules — `CLASH-LIBRARY-MAP.md` § Module list tracks
+them by family (✓ verified · ◐ VHDL awaiting port · ○ to write); each directory's
+`DESIGN.md` names which entries that phase moves. Everything lives in one unified repo
+(github.com/jclements3/poetic-musings, since 2026-09-15).
 
 Milestones: **Basic Plan Sep 2026 · Prototype Dec 2026 · Field Demo Feb 2027.**
 December critical path: Phases 0–2, then 3, 7, 8, 12a. Everything else has slack.
@@ -34,6 +38,10 @@ forth-cpu with plain gcc — no gforth) boots in the reference C simulator
 **boots end-to-end in Clash simulation** (`cabal test h2-boot`: banner + arithmetic
 in ~15.4M cycles / ~60 s wall; functional UART model; zero semantic core fixes
 needed vs h2.vhd). The Clash port of the H2 is proven against real software.
+**Repo hygiene closed 2026-09-15:** one self-contained repo — `MAIDEN/` (library
+source archive) and `Theremin/` absorbed as plain directories, nested histories
+archived outside the tree, private material and build outputs ignored by rule; every
+root/spoke directory carries a `DESIGN.md`; Panel and Erand49 carry `ORDERS.md`.
 
 ## Phase 1 — C · Santa Glide 🛷 (first demo, standalone)
 
@@ -193,7 +201,8 @@ half exercised on one shot.
 
 - Finish before start; a phase closes only when its demo passes in front of a person.
 - Theremin suite = regression gate for every shared-library change after Phase 4.
-- Two boards only: ULX3S in the box, Alchitry Cu in Santa Glide.
+- Two boards only: ULX3S in the box, Alchitry Cu in Santa Glide. *(Open: Erand49 may
+  need a third board inside the harp — decided after gate 1; `Erand49/ORDERS.md`.)*
 - Ledgers never commingle (P personal, W work; U is ham/personal). Bookkeeping only;
   it does not shape the build order.
 - Buy late: 1 ADC eval before 13; 5 IR pairs before 98; rib only after bore check;
