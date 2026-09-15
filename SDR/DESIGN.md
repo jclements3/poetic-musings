@@ -6,6 +6,14 @@ Oracle. IRAD ledger, ~$30 hardware (fpga-development-plan.md row 10). Prereqs T 
 Gate: **decode a broadcast or WSPR signal.** Demo: the theremin's antennas become a
 radio receiver — same box, new mode, entered from the O-mode script menu.
 
+**Spoke framing (PROGRAM.md):** S adds exactly one piece of hardware to the
+Panel+Oracle root — the AD9226 ADC board plus the antenna relay — and exercises the
+library's DDC set: `Theremin.Nco`, `Maiden.Cic`, `Maiden.Fir`, `Theremin.Fft`, CORDIC
+magnitude for AM. The `MAIDEN/…` paths below are the library source archive, not a
+dependency on another program; blocks are consumed in place or ported per LIBRARY.md.
+The Fft instance is shared with M (Motion radar) and the O spectrum view — one
+arbitered copy (fpga-resource-swag.md).
+
 ## Signal path
 
 ```
