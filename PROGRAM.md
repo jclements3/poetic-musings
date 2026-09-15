@@ -59,7 +59,7 @@ Execution plan with the demo that closes each phase: `PLAN.md`.
 - `CLASH-LIBRARY-MAP.md` — every hardware part mapped to the Clash component it demonstrates
 - `LIBRARY.md` — shared-block inventory: what exists (measured VHDL/Clash), where, and which spokes consume it
 - `PLAN.md` — phased execution plan: each phase ends in a demo
-- `HANDOFF.md` — 2026-08-29 mobile session handoff (historical; predates the spoke model)
+- `HANDOFF.md` — session handoffs: 2026-09-15 reorientation (current) over the 2026-08-29 mobile session (historical)
 - `fpga-development-plan.md` — per-spoke difficulty/cost/gates and legacy letter map
 - `fpga-pert-cpm.md` — risks R1–R10, purchase timing
 - `one-box-overview.html` — single-page overview with embedded panel SVG

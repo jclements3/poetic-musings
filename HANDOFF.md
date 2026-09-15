@@ -1,10 +1,71 @@
-# Handoff — VL-1 / POETIC MUSING session (mobile, 2026-08-29)
+# Handoff — POETIC MUSINGS
+
+Two sessions, newest first. The 2026-09-15 section supersedes the 2026-08-29 one
+wherever they disagree; the older section is kept as the record of how the letters
+were chosen.
+
+---
+
+# 2026-09-15 desktop session — reorientation to a Clash library on a Panel+Oracle root
+
+## Decisions
+- **The deliverable is a Clash FPGA signal-processing library.** The box is the
+  demonstrator / test fixture, not the product. `CLASH-LIBRARY-MAP.md` maps every
+  hardware part to the block it exercises; `LIBRARY.md` is the catalogue.
+- **Root + spokes replaces POETIC/MUSING as structure.** Root = **Panel** (body: keys,
+  sliders, TFT, speaker, case, antenna studs) + **Oracle** (brains: H2 Forth, 0x40xx
+  bus, SD, console). Ten spokes each add one piece of hardware to the root and depend
+  only on the root. POETIC / MUSING survive as group labels and as the ledger split
+  (bookkeeping only). Tree in `PROGRAM.md` reads P O E T I C / M U S I N G.
+- **Piano → Panel.** The VL-1 was the visual inspiration, not the goal. VL-1 synthesis
+  is one mode; VL-1 A/B accuracy is no longer a gate. Phase 5 gates are now about
+  matrix events, flicker-free zones, the console + spectrum strip, and every
+  `PM.Synth`/`PM.Audio` block driven from the keys and re-measured on ECP5.
+- **Oracle is the runtime, not a demo.** It owns the CPU, bus, storage and console;
+  the keyer/decoder blocks belong to U (housed in `Oracle/pm-keyer` because the bus
+  lives there).
+- **MAIDEN as a program is gone from this repo.** `MAIDEN/` stays as the *library
+  source archive* (measured `Maiden.{Cic,Fir,Cordic,Cfar}`, theremin port, doppler
+  and timebase VHDL). The 3-station fusion program is out of scope. **M = Motion
+  radar** (the Doppler front end on the root). Imaging keeps letter **I**.
+- **Snooker ball tracking is the I + M demo.** Overhead OV9281 (640×400, 200 fps)
+  gives per-ball centroids, IRIG-stamped, over N; 24 GHz Doppler gives cue-ball
+  departure speed. Gate: gap-free track at 200 fps (I); radar speed within 5 % of
+  the camera speed, timestamps aligned (M). The snow village / Santa Glide sits on
+  the same 5×10 ft table — a known-trajectory calibration target.
+- **Build rule:** root first — **O → P → T** (T is the regression gate) — then any
+  spoke as its hardware arrives. Funding sets timing, not dependency.
+- **Every directory has a `DESIGN.md` in one shape** (plan summary · spoke/root
+  framing · signal path · registers/Forth · verification gates · out of scope):
+  Panel, Oracle, Erand49, Theremin (in its sub-repo), IRIG, Coil, GPS, SDR, UHF,
+  Network, Imaging. `MAIDEN/…` paths inside them mean "archive", not a dependency.
+
+## Doc changes this session (all committed on `main`, nothing pushed)
+PROGRAM.md (rewritten) · CLASH-LIBRARY-MAP.md (new) · PLAN.md · fpga-development-plan.md
+· fpga-resource-swag.md · LIBRARY.md · one-box-overview.html · LAYOUT.html ·
+README.html/gen.py · vl1-clash-module-tree.md · fpga-pert-cpm.md · every DESIGN.md.
+Theremin sub-repo: `DESIGN.md` + CLAUDE.md role note (one unpushed commit there).
+
+## Open items
+- **No git remote** on this repo; the Theremin sub-repo has github.com/jclements3/theremin.
+- Migrate the measured Clash blocks out of `MAIDEN/…` into a top-level `lib/` so the
+  archive can eventually go; `Oracle/pm-*` packages are the interim home.
+- Move `Oracle/pm-keyer` under `UHF/` when cabal paths are next touched.
+- M and S register groups are unassigned until their phase starts (0x4060 Imaging is
+  provisional).
+- Panel silk still VL-1-flavoured; mode-neutral layer decision in `Panel/DESIGN.md`.
+- fpga-venn diagrams and `vl1-clash-module-tree.md` still count modules by the old
+  three-way split; regenerate when the `lib/` migration lands.
+
+---
+
+# 2026-08-29 mobile session (historical — letters, panel, PERT)
 
 ## Decisions
 - Program name: POETIC (personal) + MUSING (IRAD). Six letters each.
   - POETIC: Panel (VL-49 surface) · Oracle console (Forth H2, bar TFT, SD, CW keyer/decoder) · Erand49 harp · Theremin · IRIG clock · Coil launcher/catcher
   - MUSING: MAIDEN (incl. unit integration, solver) · UHF beacon (GPS-disciplined CW/WSPR, personal ledger, ham) · SDR (direct-sampling HF on theremin antennas, AD9226-class ADC) · Imaging (camera capture, timestamp, centroid) · Network (RMII/MAC/UDP/Ch.10) · GPS (station clock copies)
-- Serial build rule, finish before start: C → I → O → T → P → E (updated on desktop 2026-08-31; was C → T → O → P → E). U/S after E if funding delayed.
+- ~~Serial build rule, finish before start: C → I → O → T → P → E~~ Superseded 2026-09-15: root first O → P → T, then spokes as hardware arrives.
 - Panel box is the platform demo (One Box). Not a MAIDEN dependency.
 - Display: 8.8" 1920x480 bar TFT over ULX3S GPDI; 55 mm band; verify active area before cutting.
 - Keyboard: 49 keys C2–C6, gold harp labels A0–G7 one per key, two-layer ASCII (SHIFT = One Key Play L). ~~Buy a used 49-key MIDI controller keybed, not membrane.~~ Superseded 2026-08-31: VL-1-authentic flat buttons — MX-class switches under 3D-printed white/black caps set in a printed keyboard graphic.
@@ -32,7 +93,7 @@
 - one-box-overview.html — single-page overview (POETIC + MUSING naming)
 
 ## Open items for desktop
-- ~~Update overview/plan to POETIC + MUSING letters and C-first order.~~ Done 2026-08-31 (Oracle naming, C → I → O → T → P → E, P = 3D-printed keyboard with Oracle as UI brains).
+- ~~Update overview/plan to POETIC + MUSING letters and C-first order.~~ Done 2026-08-31; restructured again 2026-09-15 (see above).
 - Add antennas + THEREMIN/SDR mode to panel drawing when P starts.
-- Imaging weak points: global-shutter sensor, external trigger, FOV/range study — put in Sep Basic Plan.
+- Imaging weak points: global-shutter sensor, external trigger, FOV/range study — put in Sep Basic Plan. *(2026-09-15: target fixed as the snooker table; numbers in `Imaging/DESIGN.md`.)*
 - Metrology reference for I: used GS-101B or Thunderbolt-class GPSDO.
