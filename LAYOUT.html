@@ -16,6 +16,10 @@ table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;
 Oracle as the brains. Boots to a mode menu on the bar TFT; every demonstration reachable in under a
 minute, no laptop. Santa Glide travels alongside on its own Alchitry Cu; the Erand49 harp is a separate
 instrument that plugs into the rear port.</p>
+<p class="sub"><b>Root + spokes (PROGRAM.md):</b> this box is the <b>root</b> of the Clash library — Panel is the body,
+Oracle the brains. Each spoke adds one piece of hardware to it: antennas (T, U), AD9226 + relay (S), GPS (G),
+PHY (N), harp (E), sleigh link (C), and for the snooker demo an overhead camera (I) and a 24 GHz Doppler module (M).
+Every spoke takes its knobs from S0–S4 and the keys and shows its output on V0.</p>
 
 <h2>Top — player's view</h2>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="49-key VL-1 derivative panel layout"><style>.t{font-size:8px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}.tt{font-size:6px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}.tw{font-size:7px;font-weight:700;fill:#ffffff;font-family:ui-monospace,Menlo,Consolas,monospace}.lbl{font-size:6px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}.sh{font-size:6px;fill:#555;font-family:ui-monospace,Menlo,Consolas,monospace}.bk{font-size:8px;font-weight:700;fill:#fff;font-family:ui-monospace,Menlo,Consolas,monospace}.bks{font-size:7px;font-weight:700;fill:#ffffff;font-family:ui-monospace,Menlo,Consolas,monospace}.hp{font-size:6px;font-weight:700;fill:#a8700f;font-family:ui-monospace,Menlo,Consolas,monospace}.hpb{font-size:6px;font-weight:700;fill:#f2c14e;font-family:ui-monospace,Menlo,Consolas,monospace}.id{font-size:6px;fill:#b3341c;font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700}</style>
@@ -136,7 +140,7 @@ underside, rear-ported. Silk legends shown are VL-1 mode; final silk gets a mode
 <!-- SPEAKER PORT -->
 <text x="1205" y="14" class="rg">SPKR</text>
 <g fill="#2a2c30"><rect x="1170" y="55" width="70" height="4" rx="2"/><rect x="1170" y="63" width="70" height="4" rx="2"/><rect x="1170" y="71" width="70" height="4" rx="2"/><rect x="1170" y="79" width="70" height="4" rx="2"/></g><text x="1205" y="105" class="rs" text-anchor="middle">rear port</text>
-<text x="10" y="150" class="rs">Rear panel, viewed from behind. HDMI to V0 is internal (matched TFT + driver kit). RF connections live on the left and right end panels below.</text>
+<text x="10" y="150" class="rs">Rear panel, viewed from behind. HDMI to V0 is internal (matched TFT + driver kit). RF connections live on the left and right end panels below. NOT YET DRAWN (2026-09-15; land in the NET/TIME group at rear-right): SLEIGH (C) ⅛" TRS — 250 kbaud TX + ground to the Cu; SNOOKER (I·M) — camera DVP ribbon + strobe/trigger ⅛" TRS, and the Doppler module SPI/ADC header. Redraw the SVG when P starts.</text>
 </svg></div>
 
 
@@ -265,6 +269,9 @@ underside, rear-ported. Silk legends shown are VL-1 mode; final silk gets a mode
 <tr><td>u-blox GPS + PPS</td><td>rear, at SMA</td><td>disciplines IRIG clock (G→I)</td></tr>
 <tr><td>RMII PHY PMOD</td><td>rear, at RJ45</td><td>N: UDP/Ch.10</td></tr>
 <tr><td>UHF beacon PA (U)</td><td>rear, shielded corner</td><td>GPS-disciplined CW/WSPR → TX SMA</td></tr>
+<tr><td>Sleigh link (C)</td><td>rear, TIME/NET group</td><td>one GPIO TX at 250 kbaud + ground → Alchitry Cu <code>sleigh_rx</code>; unplugged = Santa parks (watchdog)</td></tr>
+<tr><td>Snooker camera (I) — OV9281 on an overhead mount</td><td>external; DVP ribbon + strobe/trigger line to rear</td><td>DVP capture + <code>strobe_latch</code> IRIG stamp; per-ball centroids over N</td></tr>
+<tr><td>Snooker Doppler module (M) — CDM324-class 24 GHz + SPI ADC</td><td>external, aimed down the table; header at rear</td><td>CIC → FFT → CFAR → velocity records on V0 and over N</td></tr>
 </table>
 
 
@@ -284,7 +291,7 @@ brick; Santa Glide's 24 V coil supply is a different rig and never travels in th
 <table>
 <tr><th>Where</th><th>What lives there</th></tr>
 <tr><td class="k">ULX3S config flash (not removable)</td><td>The golden bitstream — all modes resident (the 85F fits everything, see SWAG). Box always powers up into PM even with no card.</td></tr>
-<tr><td class="k">microSD, rear slot</td><td>Content, as raw Forth blocks — no filesystem: Forth system + extensions · games · VL-1 patches · sequencer recordings (a block range per grandkid — "take your song home" = hand them a card) · IRAD demo scripts · logs (CW transcripts, WSPR spots, IRIG captures)</td></tr>
+<tr><td class="k">microSD, rear slot</td><td>Content, as raw Forth blocks — no filesystem: Forth system + extensions · games · VL-1 patches · sequencer recordings (a block range per grandkid — "take your song home" = hand them a card) · spoke demo scripts (snooker, SDR, beacon, net) · logs (CW transcripts, WSPR spots, IRIG captures)</td></tr>
 <tr><td class="k">Spare "demo card" microSD, lid pocket</td><td>A known-good clone of the card above, games preloaded, recording area blank. Card trouble mid-demo = swap, not debug — same philosophy as the spare battery bank.</td></tr>
 </table>
 <p class="sub">One card is enough for every mode — block ranges partition it (system / games / recordings /
@@ -346,6 +353,7 @@ keyboard instead.</p>
 <tr><td>Santa Glide</td><td>own case: Alchitry Cu + driver board + coil tube, rolled</td><td>standalone; 24 V supply stays home unless the village travels</td></tr>
 <tr><td>Erand49 harp</td><td>rigid column case, strings stay tensioned, sensors potted in the neck rail</td><td>one locking cable to HARP port; CAL re-baselines sensors on site</td></tr>
 <tr><td>Antenna rods</td><td>unscrew, clip inside lid</td><td>binding posts</td></tr>
+<tr><td>Snooker kit (I·M)</td><td>camera + lens + clamp mount, Doppler module, two cables — small pouch</td><td>DVP ribbon + strobe TRS, SPI header; the table itself stays home (Santa Glide's village sits on it)</td></tr>
 <tr><td>Cue card (paper)</td><td>lid pocket</td><td>per-mode checklist: what to say, what to show, how to reset</td></tr>
 <tr><td>Spare demo microSD</td><td>lid pocket</td><td>known-good clone — swap, not debug, mid-demo</td></tr>
 <tr><td>Spare battery bank</td><td>lid pocket</td><td>charged; this is the "battery swap"</td></tr>
