@@ -1,10 +1,10 @@
 # CLASH LIBRARY MAP — the One Box as a Clash signal-processing library build-up
 
 **Reorientation (2026-09-15):** the program is a Clash FPGA signal-processing library.
-The tabletop keyboard controller (One Box: ULX3S ECP5-85F, 49-key Panel, Oracle
-Forth console) is the *demonstrator* — every piece of hardware bolted to it exists to
-exercise, measure and regression-test one or more library components. The instrument is
-the test fixture; the library is the deliverable.
+The root is **Panel + Oracle** (49-key control surface + H2 Forth brains on the ULX3S
+ECP5-85F). Each spoke adds one piece of special hardware to that root and exercises the
+library components listed here. The box is the test fixture; the library is the
+deliverable.
 
 Legend — status: ✓ measured/sim-verified Clash · ◐ measured VHDL, Clash port pending ·
 ○ planned (SWAG-sized, no artifact). Location per `LIBRARY.md`; register map per
@@ -87,15 +87,15 @@ Legend — status: ✓ measured/sim-verified Clash · ◐ measured VHDL, Clash p
 | HDMI connector | TMDS encoder + DDR serializer | TMDS block | ○ |
 | Envelope/spectrum strip | Overlay framebuffer fed by FFT tap | Overlay + `Theremin.Fft` | ○ overlay · ✓ FFT |
 
-## 9. Links to other boxes (letters C, N, M)
+## 9. Network, Imaging, Radar, Coil spokes (letters N, V, R, C)
 
 | Hardware part | Clash capability demonstrated | Library component | Status |
 |---|---|---|---|
 | Santa Glide sleigh tube (Alchitry Cu, 8 coils) | 250 kbaud speed frames, dead-man, 250 ms watchdog, coil pacer FSM | `PM.SleighSpeed` + `Coil/SantaGlide/firmware` Rev C (Cu 59.1 MHz PASS) | ✓ |
 | RMII PHY / RJ45 | 100BASE-TX dibit stream, CRC32 FCS, IPv4 checksum, 64-byte pad, IFG | `PM.Net` (`Oracle/pm-net`) TX ✓ · MAC RX ○ | ✓ / ○ |
-| Ch.10 recorder link | Tagged-record UART framing, TMATS payloads | `MAIDEN/firmware/recorder/PROTOCOL.md` | ◐ (Python + wire spec) |
-| OV9281 global-shutter camera (Imaging) | DVP capture, external trigger, centroid | DVP + centroid | ○ |
-| Doppler radar (MAIDEN) | CIC → FFT → CFAR → velocity records | `doppler_core.vhd` reference wiring | ◐ |
+| Ch.10 recorder link (N) | Tagged-record UART framing, TMATS payloads | `MAIDEN/firmware/recorder/PROTOCOL.md` | ◐ (Python + wire spec) |
+| OV9281 global-shutter camera + strobe line (V) | DVP capture, external trigger, centroid | DVP + centroid | ○ |
+| Doppler radar front end (R) | CIC → FFT → CFAR → velocity records | `MAIDEN/firmware/doppler/doppler_core.vhd` | ◐ |
 
 ## Library roll-up
 

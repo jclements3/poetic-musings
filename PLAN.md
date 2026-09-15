@@ -2,7 +2,7 @@
 
 The end state: **one portable controller** — the 3D-printed 49-key Panel with the
 Oracle Forth console as its brains on a single ULX3S ECP5-85F — that boots to a mode
-menu and can demonstrate every POETIC MUSING project on demand. Every phase below ends
+menu and can demonstrate every spoke of the Clash library on demand. Every phase below ends
 with a **working demo someone can watch**, so there is always something to show the
 grandkids, and nothing is started until the previous demo passes its gate
 (finish-before-start rule).
@@ -118,9 +118,9 @@ the Panel synth over MIDI-style events.
 
 ---
 
-## IRAD track (MUSING) — interleave after Phase 3 as funding allows
+## Remaining spokes — any order once the root (O, P) and T are up
 
-U and S slip after Phase 6 if IRAD funding is delayed.
+Each adds one piece of hardware to Panel+Oracle. Funding sets timing, not dependency.
 
 ## Phase 7 — G · GPS 🛰
 
@@ -150,24 +150,21 @@ waterfall on Oracle; decode a broadcast or WSPR signal.
 
 **Demo:** the theremin's antennas become a radio receiver — same box, new mode.
 
-## Phase 11 — I · Imaging 📷
+## Phase 11 — V · Imaging 📷
 
 Global-shutter sensor per the Sep study; external trigger; IRIG timestamp; centroid
 extraction; stream over N.
 
 **Demo:** wave something in front of the camera, watch timestamped centroids stream.
 
-## Phase 12 — M · MAIDEN 🎯 (capstone)
+## Phase 12 — R · Radar 📡
 
-a. **Single station (Dec Prototype gate):** tabletop testbed (elastic draw-stop rig,
-   range mat, ArUco, wire truth model); one station records IRIG-stamped Doppler +
-   video into Ch.10.
-b. **Fusion (Feb Field Demo gate):** 4 cameras + 2 radars fused into one AI data
-   stream; three-station fusion at RCRC.
+Doppler front end (SPI ADC) plugged into the root; CIC → FFT → CFAR → velocity
+records, IRIG-stamped, plotted on V0, streamed over N. Start with the measured
+`MAIDEN/firmware/doppler` VHDL as a black box, port to Clash, re-measure on ECP5.
 
-**Demo:** launch on the tabletop range; replay the fused, time-aligned data stream.
-**Consumes:** every phase above — G time, N transport, Imaging, SDR/ADC skills,
-Oracle as operator console.
+**Demo:** walk toward the box; the velocity trace on V0 follows you.
+**Teaches:** the full detection chain on one screen — the same blocks E used for plucks.
 
 ---
 
@@ -175,7 +172,7 @@ Oracle as operator console.
 
 - One case: Panel + Oracle, ULX3S inside; Santa Glide packs alongside on its Cu.
 - Power on → the **S3 MODE slider selects the demonstration: P · O · E · T · I · C**
-  (Panel · VL-1 mode · Oracle/Forth/games/IRAD scripts · Erand49 · Theremin · IRIG clock · CW);
+  (Panel · Oracle/Forth/games/spoke scripts · Erand49 · Theremin · IRIG clock · CW);
   V0 shows the mode screen, deeper choices via keys.
 - Every mode reachable in under a minute, no laptop, no internet.
 - A demo-day checklist per mode (what to say, what to show, reset procedure) lives in
@@ -186,7 +183,7 @@ Oracle as operator console.
 - Finish before start; a phase closes only when its demo passes in front of a person.
 - Theremin suite = regression gate for every shared-library change after Phase 4.
 - Two boards only: ULX3S in the box, Alchitry Cu in Santa Glide.
-- Ledgers never commingle (P personal, I IRAD; U is ham/personal). Personal hardware
-  can be re-bought on IRAD when M needs its own copies.
+- Ledgers never commingle (P personal, I IRAD; U is ham/personal). Bookkeeping only;
+  it does not shape the build order.
 - Buy late: 1 ADC eval before 13; 5 IR pairs before 98; rib only after bore check;
   case last; TFT + HDMI as a matched kit.

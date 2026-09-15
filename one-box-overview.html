@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=6, user-scalable=yes">
-<title>One box — POETIC + MUSING program overview</title>
+<title>One box — Panel+Oracle root and spokes</title>
 <style>
 html,body{margin:0;background:#fff !important;color:#111 !important;font:16px/1.5 ui-monospace,Menlo,Consolas,monospace}
 main{max-width:1100px;margin:0 auto;padding:16px}
@@ -11,11 +11,11 @@ table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;
 .chain{font-size:18px;font-weight:700;letter-spacing:.05em;padding:10px;background:#f4f1e8;border-left:6px solid #a8700f}
 .k{font-weight:700}
 </style></head><body><main>
-<h1>ONE BOX — POETIC + MUSING PROGRAM OVERVIEW</h1>
-<p class="sub">POETIC (personal) + MUSING (IRAD). One library, one Forth console (Oracle), one case. The Panel — the 3D-printed control surface below, with Oracle as the brains behind its user interface — is the demonstrator for the Clash library; theremin, harp, HWIL, radar, games all plug into it. ULX3S ECP5-85F is the only board in the box; Santa Glide (C) runs standalone on an Alchitry Cu.</p>
+<h1>ONE BOX — PANEL+ORACLE ROOT AND ITS SPOKES</h1>
+<p class="sub">One Clash library, one root (Panel body + Oracle brains), one case; every other assembly is a spoke that adds hardware to the root. The Panel — the 3D-printed control surface below, with Oracle as the brains behind its user interface — is the demonstrator for the Clash library; theremin, harp, HWIL, radar, games all plug into it. ULX3S ECP5-85F is the only board in the box; Santa Glide (C) runs standalone on an Alchitry Cu.</p>
 
 <h2>Build order (serial, finish before starting)</h2>
-<p class="chain">C → I → O → T → P → E &nbsp;&nbsp;·&nbsp;&nbsp; MUSING (IRAD): G → N → U → S → I → M</p>
+<p class="chain">Root O → P → T &nbsp;&nbsp;·&nbsp;&nbsp; spokes C · I · E · G · N · U · S · V · R in any order</p>
 <table>
 <tr><th>#</th><th>Proj</th><th>Finish line</th><th>Cost</th></tr>
 <tr><td>1</td><td class="k">C coil — Santa Glide</td><td>Slug glides house A→B→A continuously while the show switch is on, parks on pause; dwell profile tuned. Standalone on Alchitry Cu</td><td>$0 left (all parts ordered)</td></tr>
@@ -194,7 +194,7 @@ table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;
 <tr><td>T</td><td>LC oscillator, antenna sense, freq counter, pitch quantizer, CIC/FIR, NCO, envelope, vibrato, ΣΔ DAC</td></tr>
 <tr><td>I</td><td>IRIG-B generator/decoder, DC-level + modulated out; free-running crystal, disciplined by G; time shown on Oracle</td></tr>
 <tr><td>C</td><td>Santa Glide: 8-coil linear reluctance glide, steel slug in 10 ft silicone tube over the snow village; Alchitry Cu, Moore FSM, PWM Hold/Run, IRLZ44N + 1N5408 flyback, show switch</td></tr>
-<tr><td>M</td><td>MAIDEN: tabletop testbed (elastic draw-stop rig, range mat, ArUco, wire truth model), unit integration, solver; I/Q Doppler, CFAR, camera, IRIG-B, Ch.10/TMATS, 3-station fusion at RCRC (old S absorbed)</td></tr>
+<tr><td>R</td><td>Radar: Doppler front end on the root — CIC, FFT, CFAR, velocity records, IRIG-stamped; the 3-station fusion program is out of scope</td></tr>
 <tr><td>U</td><td>UHF beacon: GPS-disciplined CW/WSPR, ham — personal ledger</td></tr>
 <tr><td>S</td><td>SDR: direct-sampling HF on theremin antennas, AD9226-class ADC, DDC (CIC/FIR), waterfall on Oracle</td></tr>
 <tr><td>I</td><td>Imaging: global-shutter camera capture, external trigger, IRIG timestamp, centroid</td></tr>

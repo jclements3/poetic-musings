@@ -1,12 +1,12 @@
-# FPGA project development plan — POETIC + MUSING
+# FPGA project development plan — Panel+Oracle root and its spokes
 
 Supersedes the pre-merge lettering (F/A/D/L/H/old S/old G). Legacy letter map at the bottom. Ledger: P = personal, I = IRAD.
 
-Build rule: serial, finish before start. Personal: **C → I → O → T → P → E**. IRAD: **G → N → U → S → I → M**, interleaved as funding allows; U/S slip after E if IRAD funding is delayed.
+Build rule: root first, then spokes as hardware arrives. **O → P → T** (T is the regression gate), then C, I, E, G, N, U, S, V, R in any order; funding decides timing, not dependency. Ledger column is bookkeeping only.
 
 Milestones: Basic Plan Sep 2026 · Prototype Dec 2026 · Field Demo Feb 2027. Items marked ▲ must be pulled forward regardless of rank because December depends on them.
 
-## POETIC (personal)
+## Root
 
 | # | Proj | Difficulty | Cost | Ledger | Prereqs | Gate |
 |---|---|---|---|---|---|---|
@@ -17,7 +17,7 @@ Milestones: Basic Plan Sep 2026 · Prototype Dec 2026 · Field Demo Feb 2027. It
 | 5 | **P** Panel (control surface) | 3 | ~$130 quality BOM (see Panel BOM below) | P | O, T | The 3D-printed keyboard per `README.html` (panel map) — VL-1-style flat button keys in a printed keyboard graphic, sliders, buttons, display band. Oracle is the brains behind its UI. Gates: 59 switches deliver clean press/release events (0x4024) and the ASCII layer types into Forth; S2–S4 zones never flicker across a boundary, S3 mode dwell hands off cleanly; V0 shows console + envelope/spectrum strip; every PM.Synth block (NCO, pulse osc, ADSSR, mixer, DAC) is driven from the keys and measured on ECP5; antennas + theremin source select. VL-1 synth mode plays but is not A/B-gated. |
 | 6 | **E** Erand49 harp | 5 | ~$1,200 (13× ADC, 98 IR pairs, CNC rib, strings) | P | P, O | Gate 1: one string, one ADC eval, pluck on display. Gate 2: 49 strings, I²S 24/96 harp-master into the box, playable. |
 
-## MUSING (IRAD)
+## Spokes (continued)
 
 | # | Proj | Difficulty | Cost | Ledger | Prereqs | Gate |
 |---|---|---|---|---|---|---|
@@ -25,8 +25,8 @@ Milestones: Basic Plan Sep 2026 · Prototype Dec 2026 · Field Demo Feb 2027. It
 | 8 | **N** Network | 3 | $25 (RMII PHY PMOD) | I | O | UDP stream of ADC samples to laptop, zero drops over 10 min; Ch.10 transport. ▲ |
 | 9 | **U** UHF beacon | 3 | TBD | P (ham — personal ledger) | G | GPS-disciplined CW + WSPR on air; spot appears on wsprnet. |
 | 10 | **S** SDR | 4 | ~$30 (AD9226-class ADC) | I | T, O | Direct-sampling HF on the theremin antennas; DDC (CIC/FIR) waterfall on O; decode a broadcast or WSPR signal. |
-| 11 | **I** Imaging | 4 | TBD — global-shutter sensor / trigger / FOV-range study first (Sep Basic Plan) | I | N, G | External-trigger capture, IRIG-timestamped, centroid stream over N. |
-| 12 | **M** MAIDEN | 5 | ~$400/station × 3 | I | everything above | Tabletop testbed (elastic draw-stop rig) first; one station records IRIG-stamped Doppler + video into Ch.10; three-station fusion at RCRC. ▲ |
+| 11 | **V** Imaging | 4 | TBD — global-shutter sensor / trigger / FOV-range study first (Sep Basic Plan) | I | N, G | External-trigger capture, IRIG-timestamped, centroid stream over N. |
+| 12 | **R** Radar | 4 | ~$60 (Doppler module + SPI ADC) | I | O, G | Doppler front end on the root: CIC → FFT → CFAR → velocity records, IRIG-stamped, visible on V0 and streamed over N. Reuses `MAIDEN/firmware/doppler` VHDL as black box, then Clash port. |
 
 ## Panel quality BOM (demo-grade, decided 2026-08-31)
 
@@ -64,7 +64,7 @@ T after O: the Clash port already passes; what remains is bench work on the LC o
 
 P then E close out personal, per the handoff: P is the platform demo — the 3D-printed 49-key keyboard from the panel drawing, with Oracle as the brains behind its user interface. E consumes everything (ADC front end, DSP blocks, event link) and is the expensive one with no deadline.
 
-On the IRAD side, G goes first because trusted time unblocks U, Imaging, and M — and closes I's free-running caveat. N before Imaging because Imaging needs the transport. The old standalone L (logic analyzer) is no longer a letter: its skills (SDRAM capture, async FIFO/CDC, trigger) get built as O bring-up tooling and MAIDEN unit integration — Ethernet without capture on the bench is still a bad afternoon, so N's gate assumes that tooling exists.
+Among the spokes, G goes first because trusted time unblocks U, V and R — and closes I's free-running caveat. N before Imaging because Imaging needs the transport. The old standalone L (logic analyzer) is no longer a letter: its skills (SDRAM capture, async FIFO/CDC, trigger) get built as O bring-up tooling — Ethernet without capture on the bench is still a bad afternoon, so N's gate assumes that tooling exists.
 
 ## December path (pull-forward)
 
