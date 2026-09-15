@@ -19,7 +19,7 @@ Layout:
 
 ## Two-machine workflow
 
-Development toggles between two machines, synced **only through this git repo** (github.com/jclements3/theremin):
+Development toggles between two machines, synced **only through git** — since 2026-09-15 this directory lives inside the unified poetic-musings repo (github.com/jclements3/poetic-musings); the old standalone theremin repo is archived:
 
 - **Home laptop** (WSL2 Ubuntu 22.04 on Windows host "VALKYRIE"): simulation and synthesis only. The Windows account has no admin rights, so usbipd-win cannot be installed — **never attempt board flashing or elevated Windows installs here**; surface any admin-requiring step to Jim instead.
 - **Lab machine** (native Ubuntu): hardware work — board flashing (`make prog`) and anything needing USB. Setup steps are in `fpga/ROADMAP.md` Phase 0; everything needed travels in `fpga/setup/`.

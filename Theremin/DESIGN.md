@@ -17,15 +17,17 @@ wave sine LUT, the volume curve, `Pwm`/ΣΔ DAC, and `ThereminTop` (1,816 LUT4 /
 / 2 BRAM measured). Its antennas are shared with S (SDR) through the internal relay;
 its NCO is shared with S's DDC; its output is a Panel voice via `t>synth`.
 
-## Where the code is (two repos, one spoke)
+## Where the code is (two directories, one spoke — unified repo since 2026-09-15)
 
 | What | Where | Status |
 |---|---|---|
 | **Measured Clash port** — the load-bearing gateware | `../MAIDEN/theremin/clash/src/Theremin/` + `Maiden/{Cic,Fir,Cordic,Cfar}` and hedgehog specs in `test/` | ✓ sim-verified, area measured on ECP5; volume curve ported, NoteMap A0..G7 (2026-09 lab days) |
-| This repo (`Theremin/`, github.com/jclements3/theremin) | `fpga/phase1/` VHDL NCO + testbench, `fpga/ROADMAP.md`, explainer artifacts, D-Lev reference files | older VHDL/iCE40-era learning path; **reference only** for the spoke — no `clash/` here |
+| This directory (`Theremin/`; formerly its own repo at github.com/jclements3/theremin, now archived) | `fpga/phase1/` VHDL NCO + testbench, `fpga/ROADMAP.md`, explainer artifacts, D-Lev reference files | older VHDL/iCE40-era learning path; **reference only** for the spoke — no `clash/` here |
 | Explainers | `theremin.html`, `diagrams/`, `floorplan.txt`, `tutorial/`, `course/` | teaching assets; keep the physics accurate (see CLAUDE.md) |
 
-`../LIBRARY.md` owns the block catalogue; do not fork blocks between the two repos.
+`../LIBRARY.md` owns the block catalogue; do not fork blocks between the two directories.
+The per-family module list is `../CLASH-LIBRARY-MAP.md` § Module list — T contributes the
+sensor chain, IIR, NCO/LUT, DAC/PWM and the measured `ThereminTop`.
 
 ## Signal path
 
