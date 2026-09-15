@@ -1,6 +1,8 @@
 # LIBRARY — PM shared-block inventory (harvested from the `MAIDEN/` source archive, 2026-08-31)
 
-What already exists, where it lives, and which PM letters consume it. Consumers per
+What already exists, where it lives, and which PM letters consume it. The I + M pair
+is the snooker-table demo (PLAN.md Phases 11–12): camera centroids + radar speed,
+IRIG-aligned. Consumers per
 `fpga-development-plan.md` gates and the per-module SWAG in `fpga-resource-swag.md`.
 Everything under `MAIDEN/` is read-only source material (its own git repo); blocks are
 consumed in place or ported, never edited there.
@@ -24,18 +26,18 @@ copy"): for gateware harvesting, MAIDEN's embedded copy is the newer, load-beari
 | UART TX | `MAIDEN/firmware/doppler/rtl/uart_tx.vhd` (requirement-tagged R1–R4, tb-verified) · `Oracle/clash-h2/src/H2/SystemUart.hs` (full UART + FIFO, boots eForth) | measured VHDL + working Clash | **O** · **N** · **E** (event link) · **M** (recorder link) — stock everywhere |
 | Timebase: PPS + RTC | `MAIDEN/firmware/timebase/rtl/pps_discipline.vhd` | measured VHDL (maiden37, sim green: nominal/±ppm/holdover; free-running 48-bit Ch.10-width RTC, offset/lock report, 1.5 s watchdog) | **G** · **N** (TIME_MARK source) · **Imaging** · **M** · **U** |
 | IRIG-B generator | `MAIDEN/firmware/timebase/rtl/irigb_gen.vhd` (bit-for-bit DCLS framer; fixes a lesson-18 SBS/P9 erratum — P9 at cell 89, SBS split 80–88/90–97) | measured VHDL (maiden38, decoder-verified in `tb/timebase_tb.vhd`) | **I** (Phase 2 is largely *already written*) · **G** · **M** |
-| Strobe/trigger timestamp latch | `MAIDEN/firmware/timebase/rtl/strobe_latch.vhd` (async→2FF→(rtc,seq) FIFO, sticky loud overflow) | measured VHDL (maiden38) | **Imaging** · **M** |
+| Strobe/trigger timestamp latch | `MAIDEN/firmware/timebase/rtl/strobe_latch.vhd` (async→2FF→(rtc,seq) FIFO, sticky loud overflow) | measured VHDL (maiden38) | **Imaging** (IRIG-stamps every snooker camera frame) · **M** (stamps radar velocity records) |
 | Recorder + Ch.10 protocol | `MAIDEN/firmware/recorder/` — `PROTOCOL.md` (tagged-record UART framing, single owner), `protocol.py/sources.py/rings.py/writer.py/record.py`; Ch.10 payload structs in `MAIDEN/software/` (`maiden.ch10.payloads`); ICD = `MAIDEN/docs/MAIDEN_D4_ICD.html` IF-1 (Ch 0–6) | working Python + pinned wire spec | **N** (transport payloads) · **M** · **Imaging** (STROBE_STAMP/centroid records) |
 | Theremin DSP suite | `MAIDEN/theremin/clash/src/Theremin/` — NCO, SineLut/Quarter, DsmDac, Pwm, EdgeSampler, DelayDiffFilter, IirNStage, SensorTop, ThereminTop (+bringup/) | measured Clash: theremin_top **1,816 LUT4 / 452 FF / 2 BRAM** (20× from the Vec→blockRam rewrite); IirNStage **175 LUT4 @ 132 MHz** | **T** (regression target) · **S** (NCO/DDC, antennas) · **P** (voice source) |
 | H2 Forth SoC | `Oracle/clash-h2/` (CPU + UART + reg bus; real eForth image boots in Clash sim, reads 0x4020) · black-box VHDL in `Oracle/forth-cpu-upstream/` | Clash, compile + boot-test green (Phase 0 gate met) | **O** — and every letter, via the 0x40xx register bus (`Oracle/eforth-pm.md`) |
-| Doppler chain integration | `MAIDEN/firmware/doppler/rtl/doppler_core.vhd`, `doppler_top.vhd` (CIC→FFT→CFAR→DOPPLER_V records; SPI ADC front end; v_cm Q8 scaling) | measured VHDL (sim green vs golden model) | **M** (reference wiring for the S DDC and E detect chains) |
+| Doppler chain integration | `MAIDEN/firmware/doppler/rtl/doppler_core.vhd`, `doppler_top.vhd` (CIC→FFT→CFAR→DOPPLER_V records; SPI ADC front end; v_cm Q8 scaling) | measured VHDL (sim green vs golden model) | **M** Motion radar — the snooker cue-ball speed chain, used as a black box first then ported; also reference wiring for the S DDC and E detect chains |
 | Clash lesson series | `MAIDEN/lessons/src/Lesson01–14.hs` (+`lessons.cabal`, verified per `MAIDEN/clash-lessons-prompt.md`: every FAILURE case actually compiled) · course layer `MAIDEN/course/` (CURRICULUM.md, lesson00–24, maiden00–67 sprint cards) | teaching assets, build-verified | **O** (H2 Clash port = Lessons 12–14 per PLAN Phase 3) · every letter's onboarding |
 
 Planned-only blocks (no artifact yet, SWAG-sized): Goertzel keyer/decoder (O/C mode),
 KS waveguide + ADSSR (E/P), RMII MAC RX + general TX (N — the beacon TX seed now
 exists in `Oracle/pm-net`, see below; MAIDEN has **no** Ethernet anywhere; its
-Ch.10 transport is UART→Pi 5 SBC), DVP capture + centroid (Imaging — MAIDEN's video
-path is USB3→SBC H.264), TMDS/video text renderer (O; upstream vga.vhd reusable),
+Ch.10 transport is UART→Pi 5 SBC), DVP capture + run-length blob labeller + ≤32 per-ball centroids (Imaging — snooker
+table; MAIDEN's video path was USB3→SBC H.264, no fabric vision to harvest), TMDS/video text renderer (O; upstream vga.vhd reusable),
 SDRAM controller, async-FIFO/CDC library (load-bearing per SWAG clock-domain list).
 
 ## Porting rule
