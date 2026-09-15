@@ -1,10 +1,18 @@
 # GPS — Phase 7 design (G · PPS-disciplined time for the One Box)
 
 PLAN.md Phase 7: u-blox PPS in → PPS-locked 10 MHz → discipline the Phase 2 IRIG
-clock → station clock copies as a stock module. Gate/demo: the Phase 2 clock stops
+clock → disciplined clock copies as a stock module. Gate/demo: the Phase 2 clock stops
 drifting — holdover vs. locked, verified against the GPSDO metrology reference
 (used GS-101B or Thunderbolt-class, per HANDOFF and fpga-development-plan #7, ~$30
 u-blox + reference). Ledger: IRAD.
+
+**Spoke framing (PROGRAM.md):** G adds one piece of hardware to the Panel+Oracle root
+— the u-blox module (PPS + NMEA) and a 10 MHz BNC out — and exercises `PM.Gps`
+(NMEA parser, ✓), `pps_discipline.vhd` (measurement layer, measured VHDL) and the
+planned DPLL. Its main customer inside the box is the snooker demo: I stamps every
+camera frame and M every radar velocity record from the RTC this letter disciplines,
+so the 5 % speed-match gate in PLAN Phase 12 depends on G. The `MAIDEN/…` paths below
+are the library source archive, not a dependency on another program.
 
 ## What is already built (harvest from MAIDEN/firmware/timebase)
 
@@ -27,7 +35,7 @@ letter, since G is the letter that needs them on the ULX3S.
 
 MAIDEN took lesson 18's **option 2**: the RTC is *never* steered; Ch 1 time packets
 publish the RTC↔UTC mapping and drift becomes a slope in ingest. That contract is
-correct for everything **recorded** (N's Ch.10 stream, M stations) and PM keeps it
+correct for everything **recorded** (N's Ch.10 stream, I centroids, M velocity records) and PM keeps it
 verbatim — `pps_discipline` is reused unmodified as the measurement layer.
 
 PLAN's "10 MHz DPLL" is the second, *physical* layer PM adds on top: instruments
@@ -52,7 +60,7 @@ slew-limited so a wild PPS cannot yank the output; on holdover the accumulator
 freezes at its last correction (best-known crystal trim) — exactly the IRIG
 free-run-with-trim behavior IRIG/DESIGN.md already specifies at CAL.
 
-Station clock copy (stock module, consumed by M stations, U, Imaging): disciplined
+Disciplined clock copy (stock module, consumed by I, M, N, U): disciplined
 10 MHz + 1 PPS + IRIG-B DCLS + the two status record types. One entity, N copies.
 
 ## Register block (Oracle/eforth-pm.md conventions — 16-bit, even addresses, PM
@@ -92,4 +100,4 @@ specified) plus `trim!` `offset@` `tod!`. NMEA parsing (second *label*; PPS give
 
 Position/velocity output (U takes NMEA directly), IEEE-1588/NTP, multi-GNSS timing
 survey-in tuning (u-blox defaults first), OCXO holdover upgrades (crystal + trim is
-enough until M's field demo says otherwise).
+enough until a longer-than-10-minute snooker session says otherwise).
