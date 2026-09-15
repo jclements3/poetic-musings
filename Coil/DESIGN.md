@@ -18,7 +18,11 @@ library components it exercises: the sleigh speed link (✓ both ends, `sleighsp
 + `SleighSim`), the 250 ms dead-man watchdog, the virtual-tick coil pacer, the Moore
 FSM / dwell table (SS-004), PWM coil drive, and the iCE40 build flow (PLL from the
 Cu's 100 MHz, 59.1 MHz closure). It is the library's second target device: the same
-Clash blocks synthesised for iCE40 and ECP5.
+Clash blocks synthesised for iCE40 and ECP5. In `../CLASH-LIBRARY-MAP.md` § Module
+list, C contributes the sleigh speed link with watchdog and pacer (I/O and links, ✓);
+the Moore FSM / PWM drive stay in `SantaGlide/firmware` as the Cu-side consumer.
+Everything C needs is inside this unified repo — `SantaGlide/` holds the handoff,
+drawings, firmware and order screenshots.
 
 **Shared fixture with I and M:** the snow village sits on the 5×10 ft American snooker
 table (`HANDOFF.md` §1) — the same table the overhead camera and Doppler radar watch
