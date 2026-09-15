@@ -95,7 +95,7 @@ load from SD blocks and are `VOCABULARY`-separated so mode words never collide.
 
 ### Per-letter vocabularies (from SD; one block range each)
 
-**`PIANO` (P)** — `voice! ( n -- )` select VL-1 voice 0–9 · `patch! ( d -- )` install
+**`PANEL` (P; VL-1 synth mode)** — `voice! ( n -- )` select VL-1 voice 0–9 · `patch! ( d -- )` install
 an 8-digit ADSSR patch (`90099914 patch!`) · `rhythm! ( n -- )` · `tempo! ( n -- )` ·
 `note-on ( k -- )` / `note-off ( k -- )` keycode→synth command · `seq-rec` / `seq-play`
 100-note sequencer control (notes stored to card REC blocks) · `okp` One Key Play from
@@ -120,7 +120,7 @@ interlock) · `tx-off ( -- )` disarm · `cw-log ( -- )` `spot` the QSO transcrip
 `.pluck ( vel str -- )` show on V0 (gate-1 demo) · `harp>synth ( -- )` events drive KS
 voices · `harp>midi ( -- )` re-emit as MIDI-style events out the link.
 
-**`MENU` (O)** — `menu ( -- )` list card contents (games, IRAD scripts) on V0 ·
+**`MENU` (O)** — `menu ( -- )` list card contents (games, spoke demo scripts — snooker, SDR, beacon, net) on V0 ·
 `run ( blk -- )` load and run an entry · `games` / `scripts` filtered menus · plus the
 whole eForth interpreter itself: O mode *is* the ok prompt on glass.
 
@@ -159,7 +159,7 @@ deserializer · the TX interlock AND-gate.
 **Forth, because it is control/UI/sequencing:** mode dispatch and dwell logic · menus,
 banners, greetings, views on V0 · SD command layer and the block system · sequencer
 record/playback and One Key Play · patch/voice/tempo state · calibration procedures ·
-keyer text queue and QSO logging · calculator · IRAD demo scripts · everything typed at
+keyer text queue and QSO logging · calculator · spoke demo scripts (snooker ball association and table drawing, SDR tuning, beacon schedule) · everything typed at
 `ok`. Rule of thumb: if it must happen every sample or every scan tick, it is gateware;
 if a human notices the latency, it is Forth.
 
@@ -174,4 +174,6 @@ if a human notices the latency, it is Forth.
 
 Each stage is demoable on its own; the Phase 3 gate is all four. The matrix (0x4024),
 synth (0x402E), and harp (0x4036) registers are specified now but first exercised in
-Phases 5–6 — the map is laid out so no address moves when they arrive.
+Phases 5–6 — the map is laid out so no address moves when they arrive. Later groups:
+0x4040 GPS/TOD (`../GPS/DESIGN.md`), 0x4060 Imaging provisional (`../Imaging/DESIGN.md`);
+M (Motion radar) and S (SDR) groups are assigned at their phase start.
