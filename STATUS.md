@@ -33,7 +33,8 @@ board is on backorder, so nothing runs on silicon until October.
 | 12 Motion radar | M | design done (snooker) | radar speed within 5 % of camera | after Imaging + G |
 
 Build order: **O → P → T**, then spokes as hardware arrives. December path: O → P →
-I → G → N → snooker demo; C ships for Christmas standalone.
+I → G → N → snooker demo; C (Sleigh Glide) ships for Christmas driven from the box —
+coils and driver board built before the ULX3S lands, glide tuned after.
 
 ## Library (CLASH-LIBRARY-MAP.md § Status)
 
@@ -71,6 +72,9 @@ Fft512 4,620 LUT4, IirNStage 175 LUT4, text console ~200 LUT4.
 
 ## Recent changes
 
+- 09-15 (late): sleigh project renamed **Sleigh Glide** (`Coil/SleighGlide/`, firmware
+  `SleighGlide.hs`); history rewritten and force-pushed so no commit message carries
+  the old name — any other clone must hard-reset to origin/main.
 - 09-15: one-FPGA rule (ULX3S only; Sleigh Glide Rev D in the box, Cu retired; no harp board);
   reorientation to library + root/spokes; Piano → Panel; MAIDEN capstone
   dropped, M = Motion radar; snooker tracking as the I/M demo; DESIGN.md in every
