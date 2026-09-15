@@ -71,6 +71,22 @@ Execution plan with the demo that closes each phase: `PLAN.md`.
 - `vl1-clash-module-tree.md` — 36 Clash modules for the root
 - `fpga-venn*.svg/.png`, `venn4.py` — component-overlap diagrams
 
+## Working on this — from the desktop, the web, or a phone
+
+The GitHub repo is the sync point; every session starts cold and the docs carry the
+context. Protocol for any session (terminal here, Claude Code on the web, or the
+mobile app connected to `jclements3/poetic-musings`):
+
+1. `git pull` (or start the web session from GitHub) and **read `STATUS.md` then
+   `HANDOFF.md`** — that is the whole current state.
+2. Work in the directory that owns it; keep each `DESIGN.md` and the `ORDERS.md`
+   files truthful as decisions land.
+3. Before stopping: **update `STATUS.md`** (phase table, counts, orders, recent
+   changes), commit, push. Then pull on the other machine before touching anything.
+
+History note: main was rewritten and force-pushed on 2026-09-15 (project rename).
+Any clone made before that must `git fetch && git reset --hard origin/main`.
+
 ## Notes / open items
 
 - **One unified repo (since 2026-09-15):** github.com/jclements3/poetic-musings is
