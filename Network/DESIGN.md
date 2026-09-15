@@ -5,9 +5,17 @@ over 10 min**; Ch.10 transport framing on top. Hardware: RMII PHY PMOD (~$25,
 fpga-development-plan #8). Prereq O; the bench capture tooling from Oracle bring-up
 is assumed (the old "L letter" skills — Ethernet without capture is a bad afternoon).
 
-## What MAIDEN gives us — and what it doesn't
+**Spoke framing (PROGRAM.md):** N adds one piece of hardware to the Panel+Oracle root
+— the RMII PHY PMOD — and exercises `PM.Net` (UDP/IPv4 TX ✓), the planned MAC RX,
+CRC32, async-FIFO CDC and the Ch.10 record framing. Its first real payload is the
+snooker demo (PLAN Phases 11–12): I's per-ball CENTROID records (≤32 per frame at
+200 fps, ≈110 KB/s) and M's velocity records, both IRIG-stamped, to the laptop that
+draws the table. The `MAIDEN/…` paths below are the library source archive, not a
+dependency on another program.
 
-MAIDEN has **no Ethernet anywhere**: its Ch.10 transport is one 115 200-baud 8N1
+## What the archive gives us — and what it doesn't
+
+The `MAIDEN/` archive has **no Ethernet anywhere**: its Ch.10 transport is one 115 200-baud 8N1
 UART per FPGA into a Raspberry Pi 5 recorder (`MAIDEN/firmware/recorder/`), which
 demultiplexes tagged records into IF-1 channels and writes the .ch10 file. So the
 RMII/MAC/UDP fabric is *new work* for this letter — but the record layer, payloads,
@@ -38,8 +46,8 @@ writer, torn-tail salvage on ingest.
 ## Architecture
 
 ```
-producers (ADC/Doppler/timebase/Imaging) ──record mux──► elastic FIFO (BRAM,
-   │ tagged records, one SEQ per type            then SDRAM ring when Imaging lands)
+producers (ADC / M radar / timebase / I centroids) ──record mux──► elastic FIFO (BRAM,
+   │ tagged records, one SEQ per type            then SDRAM ring when I lands)
    └── TIME_MARK from G (RTC↔UTC contract)              │
                                               UDP TX engine ─► IP/UDP checksums,
                                                        │        fixed headers from regs
@@ -55,7 +63,7 @@ producers (ADC/Doppler/timebase/Imaging) ──record mux──► elastic FIFO 
 - **Transport = tagged records inside UDP datagrams:** N records packed per
   datagram (MTU-limited, flush on timeout ≤10 ms or on TIME_MARK), preserving the
   PROTOCOL.md byte format so `recorder/sources.py`'s parser works unchanged — the
-  laptop end is MAIDEN's recorder pointed at a UDP socket instead of a serial port.
+  laptop end is the archive's recorder pointed at a UDP socket instead of a serial port.
   A 16-bit datagram sequence number rides in a thin prefix; per-type SEQ still
   detects producer-side loss. Ch.10 file writing stays on the laptop (writer.py);
   a native Ch.10-UDP streaming header (RCC 106 Ch.10 UDP transfer) is a later
@@ -87,6 +95,9 @@ control-plane (Forth); every per-packet action is gateware.
    DOPPLER_V-style records at full rate) to the laptop; pass = laptop-side parser
    reports zero SEQ gaps, zero checksum failures, and iNetDrops == 0 for 10 min.
    Evidence logged under `Network/results/`.
+4. **Snooker readiness (checked again when I lands):** 32 CENTROID records per frame
+   at 200 fps plus STROBE_STAMP and M velocity records, sustained, with the same
+   zero-gap criterion — this is the rate PLAN Phase 11's gap-free-track gate needs.
 
 ## Out of scope
 
