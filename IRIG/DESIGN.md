@@ -13,7 +13,11 @@ timestamp source for every recorded thing in the box: N's TIME_MARK, the snooker
 demo's camera frames (Imaging, via `strobe_latch`) and radar velocity records (M),
 so PLAN Phase 12's 5 % speed-match gate is aligned by *this* clock once G disciplines
 it. Status: implemented + sim-verified (`clash/`); the `MAIDEN/…` path below is the
-library source archive whose erratum-fixed reference the port was checked against.
+library source archive (a plain directory in this unified repo since 2026-09-15) whose
+erratum-fixed reference the port was checked against. In `../CLASH-LIBRARY-MAP.md`
+§ Module list, I contributes the IRIG-B DCLS + AM framer with settable BCD RTC
+(Timing and clock domains, ✓); the PPS discipline and strobe latch it pairs with are
+G's and Imaging's ◐ entries in the same family.
 
 ## IRIG-B in one page
 
