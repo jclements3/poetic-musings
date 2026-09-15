@@ -110,16 +110,16 @@ how fast the cue ball left, IRIG aligns them on one screen (PLAN.md Phases 11–
 | Cue-ball departure (~1.3 kHz Doppler at 8 m/s) | CIC decimate → FFT512 → CA-CFAR → velocity record; radial-only, no ball identity | `Maiden.Cic`, `Theremin.Fft`, `Maiden.Cfar`, `doppler_core.vhd` | ✓ blocks · ◐ chain |
 | V0 one-screen view | Ball paths + velocity trace on the overlay strip, timestamps aligned by IRIG; gate = radar speed within 5 % of camera speed | overlay FB + `Theremin.Fft` tap | ○ overlay |
 
-## Status — 2026-09-15
+## Status — 2026-09-15 (evening, after the parallel build-out)
 
 | Family | Verified ✓ | Awaiting port ◐ | To write ○ |
 |---|---|---|---|
-| DSP core | 11 | 1 | 4 |
-| Audio and synthesis | 6 | 0 | 4 |
-| I/O and links | 7 | 2 | 5 |
-| Timing and CDC | 4 | 2 | 2 |
-| Control and display | 4 | 0 | 1 |
-| **Total** | **32** | **5** | **16** |
+| DSP core | 15 | 1 | 0 |
+| Audio and synthesis | 10 | 0 | 0 |
+| I/O and links | 14 | 0 | 0 |
+| Timing and CDC | 6 | 0 | 2 |
+| Control and display | 5 | 0 | 0 |
+| **Total** | **50** | **1** | **2** |
 
 - **Verified** = hedgehog/assertion spec green in Clash sim, Verilog generated. Measured
   ECP5 area exists for `ThereminTop`, `Theremin.Fft`, `IirNStage` and the text console;
@@ -129,16 +129,19 @@ how fast the cue ball left, IRIG aligns them on one screen (PLAN.md Phases 11–
   record framing, PPS discipline, strobe timestamp latch (measured VHDL), and the
   Sleigh Glide sequencer (`SleighGlide.hs` → `PM.Sleigh`, one FPGA rule 2026-09-15). Each ports when its spoke
   starts (`LIBRARY.md` porting rule).
-- **To write** clusters in three spokes — Imaging (DVP capture, blob labeller,
-  centroids), Panel (LFOs, rhythm ROM, sequencer, overlay framebuffer), Erand49
-  (KS waveguide, I²S) — plus single blocks: DDC wiring + AM demod (S), Goertzel +
-  WSPR (U), MAC RX (N), DPLL and SDRAM controller (shared).
+- **To write** is down to two shared blocks: the PPS-locked 10 MHz DPLL (G) and the
+  SDRAM controller (N elasticity, Imaging frame store). The 2026-09-15 parallel
+  build-out (11 agents, one package each) added 16 blocks with 21 new test suites:
+  pm-ks, pm-dsp, pm-vision, pm-wspr, pm-time (new) and Lfo/Rhythm/Seq, I2s, NetRx/
+  Records, Sleigh, Overlay/Tmds (extended). Python golden models (fpython prelude
+  style) for KS, blob centroids and the WSPR encoder.
 - **Blockers:** none in gateware. ULX3S 85F on backorder until 2026-10-02
   (`ORDERS.md` R1) — no new area measurements before then. Regression gate (theremin
   suite) is green.
-- **Next moves in build order:** O and P add no new blocks but re-measure eight ✓
-  blocks on hardware; T re-measures the top; the first new writes are Panel's Audio
-  entries in Phase 5.
+- **Next moves:** `synth_ecp5` area for every ✓ block (no board needed); hedgehog
+  property tests + GHDL elaboration for the ported VHDL (porting-rule steps 2–3); a
+  variable-length UDP TX so `PM.Records` datagrams reach the wire; KS bank state to
+  BRAM before the 49-string synthesis; WSPR encoder cross-check against wsprsim.
 
 Update this table whenever a block changes column; the per-family list below is the
 source of the counts.
@@ -157,15 +160,21 @@ written. Roughly 35 ✓, 5 ◐, 15 ○ as of 2026-09-15.
 - ✓ NCO with quarter-wave sine LUT in BRAM
 - ✓ N-stage IIR — 175 LUT4 @ 132 MHz (`Theremin.IirNStage`)
 - ✓ Edge sampler, edge-to-pulse-position, sensor period measure, delay-difference filter
-- ◐ Doppler chain integration: CIC → FFT → CFAR → velocity records (`doppler_core.vhd`)
-- ○ DDC wiring (NCO mix + CIC + FIR at 65 MSPS), Goertzel tone detector, AM envelope demod, Karplus-Strong waveguide with allpass fractional delay
+- ◐ Doppler chain integration: CIC → FFT → CFAR → velocity records (`doppler_core.vhd`; wiring pattern now in `PM.Ddc`)
+- ✓ DDC: NCO mix → Maiden.Cic ÷512 → Maiden.Fir at 65 MSPS (`PM.Ddc`, pm-dsp)
+- ✓ Goertzel single-tone detector, runtime coefficient, hysteresis (`PM.Goertzel`)
+- ✓ AM envelope demod via CORDIC + IIR + DC tracker (`PM.AmDemod`)
+- ✓ Karplus-Strong voice + N-string bank, allpass fractional delay, bit-exact vs Python golden (`PM.Ks`, pm-ks)
 
 **Audio and synthesis**
 - ✓ Sigma-delta DAC and PWM (`PM.Audio`, `Theremin.Pwm`)
 - ✓ 4-channel saturating fixed-point mixer
 - ✓ Note-to-phase table, 10-pattern pulse oscillator, ADSSR envelope (`PM.Synth`)
 - ✓ Volume curve, musical NoteMap A0..G7
-- ○ Vibrato/tremolo LFOs, rhythm ROM + percussion, event sequencer, I²S serializer
+- ✓ Vibrato/tremolo triangle LFO with depth ramp (`PM.Lfo`)
+- ✓ 10-pattern rhythm ROM, LFSR percussion voices, tempo step sequencer (`PM.Rhythm`)
+- ✓ 100-entry REC/PLAY/One-Key-Play event sequencer (`PM.Seq`)
+- ✓ I²S master TX/RX, 24-in-32, 96 kHz (`PM.I2s`)
 
 **I/O and links**
 - ✓ UART with FIFO (`H2.SystemUart`)
@@ -173,17 +182,21 @@ written. Roughly 35 ✓, 5 ◐, 15 ○ as of 2026-09-15.
 - ✓ 8×8 key matrix scanner with debounce and event FIFO (`PM.Matrix`)
 - ✓ Slider zone decoder with hysteresis and 1 s dwell (`PM.Zones`)
 - ✓ Framed 8N1 event link, A5 + checksum, corruption resync (`PM.HarpLink`)
-- ◐ Sleigh Glide coil sequencer in the box: Moore FSM, dwell table, pacer, dead-man, PWM (`PM.Sleigh` — sims ✓ from `SleighGlide.hs`/`SleighSim`, bus port pending; the 250 kbaud link `PM.SleighSpeed` ✓ is retired with the Cu, its pitch→speed mapping reused)
+- ✓ Sleigh Glide coil sequencer in the box: Moore FSM, dwell table, pacer, ribbon dead-man, PWM, 0x4050 helpers (`PM.Sleigh`, Rev D)
 - ✓ NMEA `$GxRMC` time parser with checksum gate (`PM.Gps`)
 - ✓ RMII 100BASE-TX UDP/IPv4 transmitter with CRC32 (`PM.Net`)
-- ◐ Ch.10 tagged-record framing and record mux (recorder `PROTOCOL.md`)
-- ○ RMII MAC receiver, DVP camera capture, run-length blob labeller + per-ball centroids, TMDS/HDMI encoder, WSPR modulator
+- ✓ Tagged-record framers (PPS_STATUS, TIME_MARK, STROBE_STAMP, CENTROID), N-port round-robin mux, 4 KB elastic FIFO, 1400 B datagram packer (`PM.Records`)
+- ✓ RMII 100BASE-TX MAC receiver, CRC-32 check, address filter, runt reject (`PM.NetRx`)
+- ✓ DVP camera capture 640×400 with frame seq (`PM.Dvp`, pm-vision)
+- ✓ Run-length blob labeller, 32 labels, per-blob centroids, area filter (`PM.Blob`)
+- ✓ TMDS 8b/10b encoder + 10:1 sequencer, ODDR left as vendor black box (`PM.Video.Tmds`)
+- ✓ WSPR 162-symbol 4-FSK sequencer with hardware interlock; encoder golden in Python (`PM.Wspr`, pm-wspr)
 
 **Timing and clock domains**
 - ✓ 2-flop synchroniser, pulse synchroniser, Gray-code async FIFO (`PM.Cdc`)
 - ✓ IRIG-B DCLS + AM framer with settable BCD RTC (`IRIG/clash`)
-- ◐ PPS discipline with 48-bit RTC and holdover watchdog (`pps_discipline.vhd`)
-- ◐ Async strobe timestamp latch (`strobe_latch.vhd`)
+- ✓ PPS discipline with 48-bit RTC and holdover watchdog, ported from `pps_discipline.vhd` with quirks Q1–Q4 reproduced (`PM.PpsDiscipline`, pm-time)
+- ✓ Async strobe timestamp latch, 16-deep, sticky overflow, ported from `strobe_latch.vhd` (`PM.StrobeLatch`)
 - ○ PPS-locked 10 MHz DPLL, SDRAM controller
 
 **Control and display**
@@ -191,7 +204,7 @@ written. Roughly 35 ✓, 5 ◐, 15 ○ as of 2026-09-15.
 - ✓ Memory-mapped register file: FIFO-popping reads, command pulses, hardware TX interlock (`PM.RegFile`)
 - ✓ CW keyer and Morse decoder (`PM.Keyer`)
 - ✓ 1920×480 text console, pixel-exact IBM VGA glyphs (`Oracle/pm-video`)
-- ○ Overlay framebuffer for envelope and spectrum strips
+- ✓ 480×120 1-bpp overlay strip framebuffer, column plot, 2-cycle aligned to the console (`PM.Video.Overlay`)
 
 ## Algorithms — what the blocks compute
 
@@ -226,11 +239,11 @@ dead-man watchdogs.
 
 | Family | Components ✓ | ◐ | ○ |
 |---|---|---|---|
-| DSP core | Cic, Fir, Fft512, Cordic, Cfar, Nco, SineLut, IirNStage, DelayDiffFilter, EdgeSampler | doppler chain | DDC wiring, Goertzel, KS waveguide, AM demod |
-| Audio | DsmDac, Pwm, Mixer, Synth osc/ADSSR, note table | — | LFOs, rhythm, sequencer, I²S |
-| I/O + links | Uart, Spi, Matrix, Zones, HarpLink, Net TX, Gps parser | Ch.10 recorder, Sleigh (bus port) | MAC RX, TMDS, DVP, ASCII layer |
-| Timing / CDC | Cdc (sync, pulse, Gray FIFO), IRIG-B | pps_discipline, strobe_latch | DPLL, SDRAM controller |
-| Control | H2 SoC boot, RegFile, Keyer/decoder, Video console | H2 Clash port | overlay FB |
+| DSP core | Cic, Fir, Fft512, Cordic, Cfar, Nco, SineLut, IirNStage, DelayDiffFilter, EdgeSampler, Ddc, Goertzel, AmDemod, Ks | doppler chain | — |
+| Audio | DsmDac, Pwm, Mixer, Synth osc/ADSSR, note table, Lfo, Rhythm, Seq, I2s | — | — |
+| I/O + links | Uart, Spi, Matrix, Zones, HarpLink, Net TX, NetRx, Records, Gps parser, Sleigh, Dvp, Blob, Tmds, Wspr | — | ASCII layer |
+| Timing / CDC | Cdc (sync, pulse, Gray FIFO), IRIG-B, PpsDiscipline, StrobeLatch | — | DPLL, SDRAM controller |
+| Control | H2 SoC boot, RegFile, Keyer/decoder, Video console, Overlay | H2 Clash port | — |
 
 Rules carried over from `LIBRARY.md`: measured VHDL stays usable as a black box; a Clash
 port happens when a demonstrator part needs it; every port gets hedgehog + cycle-exact +

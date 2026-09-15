@@ -88,3 +88,19 @@ first, Clash port as Lessons 12–14):
 | SD block model + IRIG peripheral in the eForth sim | `Oracle/clash-h2` (SystemUart) | personal-card boot: owner greet from block 0, real `1 load` from block 1, live IRIG clock + TOD set — all from interactive Forth |
 | NMEA $GxRMC time parser -> TOD-set block (0x4040) | `Oracle/pm-gps` (PM.Gps) | checksum-gated BCD fields in the Irig set-word formats, incl. leap day-of-year; corrupt sentence and $GPGGA rejected, V-flag applies time without lock, one tod_set strobe per accepted fix |
 | RMII 100BASE-TX UDP/IPv4 status beacon (0x40xx TBD) | `Oracle/pm-net` (PM.Net) | dibit stream reassembled in the test: FCS vs independent table CRC32, IP checksum sums 0xFFFF, 64-byte min frame incl. pad, >= 96-bit IFG, seq +1 across two frames |
+
+## PM gateware written 2026-09-15 (parallel build-out; Clash, sim-verified)
+
+| block | where | proof |
+|---|---|---|
+| Karplus-Strong voice + N-string bank, allpass fractional delay | `Oracle/pm-ks` (PM.Ks) + `golden/ks_model.py` | pitch within 0.1 cent at delays 40/100/400; frac 0.5 between neighbours; decay monotone in gain; 4-string bank no cross-talk; first 64 samples bit-exact vs Python |
+| Goertzel tone detector · AM envelope demod · SDR DDC (NCO → Cic ÷512 → Fir) | `Oracle/pm-dsp` (PM.Goertzel, PM.AmDemod, PM.Ddc) — depends on `MAIDEN/theremin/clash` | 700 Hz true / 1200 Hz false, quadratic power; AM 1 kHz recovered, ratio within 0.1 %; DDC DC on I within 0.1 %, 5 kHz offset rotation period 25.4 |
+| DVP capture 640×400 · run-length blob labeller + per-ball centroids | `Oracle/pm-vision` (PM.Dvp, PM.Blob) + `golden/blob_model.py`, `golden/vectors.txt` | 256000 px/frame, 1 sof/eof; 1, 5 discs → exact records, centroid error 0/16 px; speck rejected; diagonal-touch merge documented |
+| WSPR type-1 encoder (golden) · 162-symbol 4-FSK sequencer with interlock | `Oracle/pm-wspr` (PM.Wspr) + `golden/wspr_model.py` | 17 doctests (structure + hand-verified packing; cross-check vs wsprsim before air); 162 symbols at exact period, tx_on 162 periods, unarmed never asserts, disarm drops same clock |
+| Strobe timestamp latch · PPS discipline (ports of measured VHDL) | `Oracle/pm-time` (PM.StrobeLatch, PM.PpsDiscipline) | timebase_tb cases reproduced: lock, ±30 ppm, jitter, 1.5 s holdover, relock; 17-strobe overflow sticky, seq counts dropped; quirks Q1–Q4 kept |
+| Vibrato/tremolo LFO · rhythm ROM + LFSR percussion · 100-note sequencer | `Oracle/pm-synth` (PM.Lfo, PM.Rhythm, PM.Seq) | period exact, zero-mean, depth ramp; LFSR period 65535, voices decay, no clip; rec 5 → play in order, okp wraps, stops at 100 |
+| I²S master TX/RX 24-in-32 | `Oracle/pm-audio` (PM.I2s) | 64 sck/frame, MSB one sck after ws, loop byte-exact incl. extremes, mid-frame resync |
+| RMII MAC receiver · tagged-record framers, N-port mux, elastic FIFO, datagram packer | `Oracle/pm-net` (PM.NetRx, PM.Records) | TX→RX loop byte-exact, CRC bad/runt/filter counted; 25 record checks: hand vectors, no interleave, SEQ monotone, size/timeout/TIME_MARK flushes |
+| In-box sleigh sequencer (Rev D) | `Oracle/pm-lib` (PM.Sleigh; calls PM.SleighSpeed.speedOf) | SS-004 walk, pacer 255/128/0 exact, ribbon-out gates low next clock, show-switch freeze, manual park, live dwell write on next glide |
+| Overlay strip framebuffer 480×120 · TMDS 8b/10b encoder | `Oracle/pm-video` (PM.Video.Overlay, PM.Video.Tmds) | bar/plot/origin/clear, containment, 2-cycle alignment; ≤5 transitions, control words, disparity bound ±8, invertible 0..255 |
+
