@@ -150,14 +150,14 @@ waterfall on Oracle; decode a broadcast or WSPR signal.
 
 **Demo:** the theremin's antennas become a radio receiver — same box, new mode.
 
-## Phase 11 — V · Imaging 📷
+## Phase 11 — I · Imaging 📷
 
 Global-shutter sensor per the Sep study; external trigger; IRIG timestamp; centroid
 extraction; stream over N.
 
 **Demo:** wave something in front of the camera, watch timestamped centroids stream.
 
-## Phase 12 — R · Radar 📡
+## Phase 12 — M · Motion radar 📡
 
 Doppler front end (SPI ADC) plugged into the root; CIC → FFT → CFAR → velocity
 records, IRIG-stamped, plotted on V0, streamed over N. Start with the measured

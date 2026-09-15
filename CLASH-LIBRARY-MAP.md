@@ -87,15 +87,15 @@ Legend — status: ✓ measured/sim-verified Clash · ◐ measured VHDL, Clash p
 | HDMI connector | TMDS encoder + DDR serializer | TMDS block | ○ |
 | Envelope/spectrum strip | Overlay framebuffer fed by FFT tap | Overlay + `Theremin.Fft` | ○ overlay · ✓ FFT |
 
-## 9. Network, Imaging, Radar, Coil spokes (letters N, V, R, C)
+## 9. Network, Imaging, Radar, Coil spokes (letters N, I, M, C)
 
 | Hardware part | Clash capability demonstrated | Library component | Status |
 |---|---|---|---|
 | Santa Glide sleigh tube (Alchitry Cu, 8 coils) | 250 kbaud speed frames, dead-man, 250 ms watchdog, coil pacer FSM | `PM.SleighSpeed` + `Coil/SantaGlide/firmware` Rev C (Cu 59.1 MHz PASS) | ✓ |
 | RMII PHY / RJ45 | 100BASE-TX dibit stream, CRC32 FCS, IPv4 checksum, 64-byte pad, IFG | `PM.Net` (`Oracle/pm-net`) TX ✓ · MAC RX ○ | ✓ / ○ |
 | Ch.10 recorder link (N) | Tagged-record UART framing, TMATS payloads | `MAIDEN/firmware/recorder/PROTOCOL.md` | ◐ (Python + wire spec) |
-| OV9281 global-shutter camera + strobe line (V) | DVP capture, external trigger, centroid | DVP + centroid | ○ |
-| Doppler radar front end (R) | CIC → FFT → CFAR → velocity records | `MAIDEN/firmware/doppler/doppler_core.vhd` | ◐ |
+| OV9281 global-shutter camera + strobe line (Imaging) | DVP capture, external trigger, centroid | DVP + centroid | ○ |
+| Doppler radar front end (M) | CIC → FFT → CFAR → velocity records | `MAIDEN/firmware/doppler/doppler_core.vhd` | ◐ |
 
 ## Library roll-up
 

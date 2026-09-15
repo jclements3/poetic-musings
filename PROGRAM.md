@@ -16,17 +16,20 @@ depend only on the root. Hardware-to-component map: `CLASH-LIBRARY-MAP.md`. Bloc
 inventory: `LIBRARY.md`.
 
 ```
-Panel + Oracle  (ULX3S ECP5-85F · keys · sliders · TFT · Forth · 0x40xx bus)
-├── T  Theremin   + pitch rod, volume loop, 2 Colpitts boards        → EdgeSampler, DelayDiff, IIR, NCO, DAC
+POETIC                                                                (personal)
+P  Panel      root — keys, sliders, buttons, TFT, speaker, case       → Matrix, Zones, RegFile, Synth, Audio, video console
+O  Oracle     root — ULX3S ECP5-85F, Forth, 0x40xx bus, SD            → H2 SoC, UART, Cdc, SPI
 ├── E  Erand49    + 98 IR pairs, 13 ADCs, harp frame                 → SPI ADC, CORDIC, CFAR, KS waveguide, HarpLink
+├── T  Theremin   + pitch rod, volume loop, 2 Colpitts boards        → EdgeSampler, DelayDiff, IIR, NCO, DAC
 ├── I  IRIG       + IRIG-B output, scope                             → DCLS framer, BCD time, TOD set
-├── G  GPS        + u-blox PPS/NMEA, 10 MHz out                      → PPS discipline, RTC, NMEA parser, DPLL
-├── S  SDR        + AD9226 ADC, antenna relay (reuses T antennas)    → CIC, FIR, DDC, FFT512, AM demod
-├── U  UHF        + whip on SMA, PA can                              → Keyer, Morse decoder, Goertzel, WSPR mod, TX interlock
-├── N  Network    + RMII PHY                                         → MAC TX/RX, UDP/IPv4, CRC32, Ch.10 framing
-├── V  Imaging    + OV9281 global-shutter camera, strobe line        → DVP capture, strobe latch, centroid
-├── R  Radar      + Doppler front end (SPI ADC)                      → CIC → FFT → CFAR → velocity records
 └── C  Coil       + Santa Glide tube on its own Alchitry Cu          → SleighSpeed link, watchdog, coil pacer
+MUSING                                                                (IRAD ledger)
+├── M  Motion radar + Doppler front end (SPI ADC)                    → CIC → FFT → CFAR → velocity records
+├── U  UHF        + whip on SMA, PA can                              → Keyer, Morse decoder, Goertzel, WSPR mod, TX interlock
+├── S  SDR        + AD9226 ADC, antenna relay (reuses T antennas)    → CIC, FIR, DDC, FFT512, AM demod
+├── I  Imaging    + OV9281 global-shutter camera, strobe line        → DVP capture, strobe latch, centroid
+├── N  Network    + RMII PHY                                         → MAC TX/RX, UDP/IPv4, CRC32, Ch.10 framing
+└── G  GPS        + u-blox PPS/NMEA, 10 MHz out                      → PPS discipline, RTC, NMEA parser, DPLL
 ```
 
 ## Spokes
@@ -35,16 +38,16 @@ Panel + Oracle  (ULX3S ECP5-85F · keys · sliders · TFT · Forth · 0x40xx bus
 |---|---|---|---|---|
 | **P** | `Panel/` | *root* — keys, sliders, buttons, TFT, speaker, case | Matrix, Zones, RegFile, Spi, Synth, Audio, video console | `Panel/DESIGN.md`; panel map `README.html` |
 | **O** | `Oracle/` | *root* — ULX3S, SD, USB serial | H2 SoC, UART, register bus, Cdc, SD block device | boots real eForth in Clash sim; Verilog generated |
-| T | `Theremin/` (older VHDL) · `MAIDEN/theremin/clash/` (measured Clash) | antennas + oscillator boards | full theremin suite — **regression gate for every library change** | measured: 1,816 LUT4 |
 | E | `Erand49/` | IR sensors, ADCs, harp frame | Cordic, Cfar, KS, HarpLink, I²S | designed; gate 1 = one string |
+| T | `Theremin/` (older VHDL) · `MAIDEN/theremin/clash/` (measured Clash) | antennas + oscillator boards | full theremin suite — **regression gate for every library change** | measured: 1,816 LUT4 |
 | I | `IRIG/` | IRIG-B out | DCLS framer | implemented + sim-verified |
-| G | `GPS/` | u-blox module | Gps parser ✓, pps_discipline (VHDL), DPLL ○ | `DESIGN.md` |
-| S | `SDR/` | AD9226 ADC + relay | Cic, Fir, Fft ✓; DDC wiring ○ | `DESIGN.md` |
-| U | `UHF/` | whip, PA | Keyer ✓, WSPR ○ | `DESIGN.md` |
-| N | `Network/` | RMII PHY | Net TX ✓, MAC RX ○ | `DESIGN.md` |
-| V | `Imaging/` | OV9281 camera | strobe_latch (VHDL), DVP ○ | `DESIGN.md` |
-| R | `MAIDEN/firmware/doppler/` | Doppler front end | doppler_core (VHDL), reuses Cic/Fft/Cfar | measured VHDL, sim green |
 | C | `Coil/` | Santa Glide tube + Alchitry Cu | SleighSpeed | design done, Rev C rx on Cu |
+| M | `MAIDEN/firmware/doppler/` | **Motion radar** — Doppler front end | doppler_core (VHDL), reuses Cic/Fft/Cfar | measured VHDL, sim green |
+| U | `UHF/` | whip, PA | Keyer ✓, WSPR ○ | `DESIGN.md` |
+| S | `SDR/` | AD9226 ADC + relay | Cic, Fir, Fft ✓; DDC wiring ○ | `DESIGN.md` |
+| I | `Imaging/` | OV9281 camera | strobe_latch (VHDL), DVP ○ | `DESIGN.md` |
+| N | `Network/` | RMII PHY | Net TX ✓, MAC RX ○ | `DESIGN.md` |
+| G | `GPS/` | u-blox module | Gps parser ✓, pps_discipline (VHDL), DPLL ○ | `DESIGN.md` |
 
 Build rule: **root first, then spokes as hardware arrives.** O → P, then T (regression
 gate), then any spoke in any order. Gates per spoke: `fpga-development-plan.md`.
@@ -72,7 +75,8 @@ Execution plan with the demo that closes each phase: `PLAN.md`.
   repo (own `.git`, tracked as a gitlink) where the measured Clash DSP blocks
   (`Maiden.{Cic,Fir,Cordic,Cfar}`, the theremin port, doppler and timebase VHDL) were
   born. Blocks are consumed in place or ported, never edited there. The 3-station
-  fusion program that used to be the "M" capstone is out of scope here.
+  fusion program that used to be the M capstone is out of scope; M is now the Doppler
+  radar spoke.
 - `Theremin/` also keeps its own `.git`. Their `.venv`s were not copied.
 - Panel silk legends are still tied to the 1981 Casio VL-1; they need a mode-neutral
   layer since VL-1 synthesis is one mode among many.
