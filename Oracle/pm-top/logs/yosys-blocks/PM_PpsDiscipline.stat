@@ -1,0 +1,20 @@
+
+3. Printing statistics.
+
+=== pps_discipline ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      647 wires
+     1915 wire bits
+      647 public wires
+     1915 public wire bits
+        9 ports
+      122 port bits
+      583 cells
+      173   CCU2C
+        3   L6MUX21
+      240   LUT4
+       11   PFUMX
+      156   TRELLIS_FF
+

@@ -110,41 +110,33 @@ how fast the cue ball left, IRIG aligns them on one screen (PLAN.md Phases 11–
 | Cue-ball departure (~1.3 kHz Doppler at 8 m/s) | CIC decimate → FFT512 → CA-CFAR → velocity record; radial-only, no ball identity | `Maiden.Cic`, `Theremin.Fft`, `Maiden.Cfar`, `doppler_core.vhd` | ✓ blocks · ◐ chain |
 | V0 one-screen view | Ball paths + velocity trace on the overlay strip, timestamps aligned by IRIG; gate = radar speed within 5 % of camera speed | overlay FB + `Theremin.Fft` tap | ○ overlay |
 
-## Status — 2026-09-15 (evening, after the parallel build-out)
+## Status — 2026-09-15 (night, after wave 2)
 
-| Family | Verified ✓ | Awaiting port ◐ | To write ○ |
-|---|---|---|---|
-| DSP core | 15 | 1 | 0 |
-| Audio and synthesis | 10 | 0 | 0 |
-| I/O and links | 14 | 0 | 0 |
-| Timing and CDC | 6 | 0 | 2 |
-| Control and display | 5 | 0 | 0 |
-| **Total** | **50** | **1** | **2** |
+| Family | Verified ✓ | Awaiting port ◐ | To write ○ | Measured on ECP5 |
+|---|---|---|---|---|
+| DSP core | 15 | 1 | 0 | 8 |
+| Audio and synthesis | 10 | 0 | 0 | 8 |
+| I/O and links | 15 | 0 | 0 | 12 |
+| Timing and CDC | 7 | 0 | 0 | 4 |
+| Control and display | 5 | 0 | 0 | 3 |
+| **Total** | **52** | **1** | **0** | **35** |
 
-- **Verified** = hedgehog/assertion spec green in Clash sim, Verilog generated. Measured
-  ECP5 area exists for `ThereminTop`, `Theremin.Fft`, `IirNStage` and the text console;
-  every other ✓ still needs an area number after integration (Lesson 11: area is a
-  measurement).
-- **Awaiting port** = green in sim, needs its box-side port: Doppler chain, Ch.10
-  record framing, PPS discipline, strobe timestamp latch (measured VHDL), and the
-  Sleigh Glide sequencer (`SleighGlide.hs` → `PM.Sleigh`, one FPGA rule 2026-09-15). Each ports when its spoke
-  starts (`LIBRARY.md` porting rule).
-- **To write** is down to two shared blocks: the PPS-locked 10 MHz DPLL (G) and the
-  SDRAM controller (N elasticity, Imaging frame store). The 2026-09-15 parallel
-  build-out (11 agents, one package each) added 16 blocks with 21 new test suites:
-  pm-ks, pm-dsp, pm-vision, pm-wspr, pm-time (new) and Lfo/Rhythm/Seq, I2s, NetRx/
-  Records, Sleigh, Overlay/Tmds (extended). Python golden models (fpython prelude
-  style) for KS, blob centroids and the WSPR encoder.
-- **Blockers:** none in gateware. ULX3S 85F on backorder until 2026-10-02
-  (`ORDERS.md` R1) — no new area measurements before then. Regression gate (theremin
-  suite) is green.
-- **Next moves:** `synth_ecp5` area for every ✓ block (no board needed); hedgehog
-  property tests + GHDL elaboration for the ported VHDL (porting-rule steps 2–3); a
-  variable-length UDP TX so `PM.Records` datagrams reach the wire; KS bank state to
-  BRAM before the 49-string synthesis; WSPR encoder cross-check against wsprsim.
-
-Update this table whenever a block changes column; the per-family list below is the
-source of the counts.
+- **Verified** = spec green in Clash sim, Verilog generated. The two VHDL ports now also
+  carry hedgehog property tests (300 cases each, cycle-exact vs pure models) and GHDL
+  elaboration — the porting rule's three checks (`Oracle/pm-time/VERIFY.md`).
+- **Measured** = yosys + nextpnr numbers in `measurements/README.md` (35 blocks). One
+  block was oversized — the blob labeller at 35k LUT4 — and is fixed to 3.5k with its
+  accumulator table in RAM, records bit-identical. Everything else is under its SWAG
+  budget; DSP inference (FFT 34, DDC 18, Goertzel 16) is the overshoot to watch.
+- **Awaiting port** = the Doppler chain integration only; `PM.Ddc` shows the pattern.
+- **To write: nothing.** Wave 2 added DPLL, SDRAM controller and a variable-length UDP
+  transmitter, and the snooker chain runs end-to-end in simulation (camera capture →
+  blob → records → UDP → MAC RX → parse, 5 frames, gap-free). The register bus proves
+  sleigh, imaging, WSPR and net groups from live Forth in the boot sim.
+- **Blockers:** the ULX3S 85F backorder (2026-10-02). Regression gate green.
+- **Next moves:** re-run the snooker fit with the fixed blob for a routed Fmax;
+  StrobeLatch FIFO → BRAM; pipeline KS/Goertzel/Audio for a shared 100 MHz clock;
+  measure the six unmeasured tops; WSJT-X decode of the WSPR tones before air.
 
 ## Module list — what the effort produces
 
@@ -187,6 +179,7 @@ written. Roughly 35 ✓, 5 ◐, 15 ○ as of 2026-09-15.
 - ✓ RMII 100BASE-TX UDP/IPv4 transmitter with CRC32 (`PM.Net`)
 - ✓ Tagged-record framers (PPS_STATUS, TIME_MARK, STROBE_STAMP, CENTROID), N-port round-robin mux, 4 KB elastic FIFO, 1400 B datagram packer (`PM.Records`)
 - ✓ RMII 100BASE-TX MAC receiver, CRC-32 check, address filter, runt reject (`PM.NetRx`)
+- ✓ Variable-length UDP/IPv4/Ethernet transmitter, double-buffered, UDP checksum, IFG (`PM.UdpTx`)
 - ✓ DVP camera capture 640×400 with frame seq (`PM.Dvp`, pm-vision)
 - ✓ Run-length blob labeller, 32 labels, per-blob centroids, area filter (`PM.Blob`)
 - ✓ TMDS 8b/10b encoder + 10:1 sequencer, ODDR left as vendor black box (`PM.Video.Tmds`)
@@ -197,7 +190,8 @@ written. Roughly 35 ✓, 5 ◐, 15 ○ as of 2026-09-15.
 - ✓ IRIG-B DCLS + AM framer with settable BCD RTC (`IRIG/clash`)
 - ✓ PPS discipline with 48-bit RTC and holdover watchdog, ported from `pps_discipline.vhd` with quirks Q1–Q4 reproduced (`PM.PpsDiscipline`, pm-time)
 - ✓ Async strobe timestamp latch, 16-deep, sticky overflow, ported from `strobe_latch.vhd` (`PM.StrobeLatch`)
-- ○ PPS-locked 10 MHz DPLL, SDRAM controller
+- ✓ PPS-locked 10 MHz DPLL: frac-N NCO, FLL acquire + type-II PI track, holdover, lock detect (`PM.Dpll`)
+- ✓ SDRAM controller for the ULX3S 32 MB part + byte ring wrapper, timing-checked vs a chip model (`PM.Sdram`, pm-sdram)
 
 **Control and display**
 - ✓ H2 stack CPU booting the real eForth image (`Oracle/clash-h2`)
@@ -241,8 +235,8 @@ dead-man watchdogs.
 |---|---|---|---|
 | DSP core | Cic, Fir, Fft512, Cordic, Cfar, Nco, SineLut, IirNStage, DelayDiffFilter, EdgeSampler, Ddc, Goertzel, AmDemod, Ks | doppler chain | — |
 | Audio | DsmDac, Pwm, Mixer, Synth osc/ADSSR, note table, Lfo, Rhythm, Seq, I2s | — | — |
-| I/O + links | Uart, Spi, Matrix, Zones, HarpLink, Net TX, NetRx, Records, Gps parser, Sleigh, Dvp, Blob, Tmds, Wspr | — | ASCII layer |
-| Timing / CDC | Cdc (sync, pulse, Gray FIFO), IRIG-B, PpsDiscipline, StrobeLatch | — | DPLL, SDRAM controller |
+| I/O + links | Uart, Spi, Matrix, Zones, HarpLink, Net TX, UdpTx, NetRx, Records, Gps parser, Sleigh, Dvp, Blob, Tmds, Wspr | — | ASCII layer |
+| Timing / CDC | Cdc (sync, pulse, Gray FIFO), IRIG-B, PpsDiscipline, StrobeLatch, Dpll, Sdram | — | — |
 | Control | H2 SoC boot, RegFile, Keyer/decoder, Video console, Overlay | H2 Clash port | — |
 
 Rules carried over from `LIBRARY.md`: measured VHDL stays usable as a black box; a Clash

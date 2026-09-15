@@ -15,6 +15,13 @@ console):
   `IRIG/clash` core is instantiated at its `SNat 1` sim scale (1 s = 10 000 cycles);
   live Forth reads the status word twice and sees it advance, then sets the time of day
   through oTodSecs/oTodDay/oTodSet and reads the applied BCD seconds back.
+- **0x4050 Sleigh, 0x4060 Imaging, 0x4070 WSPR, 0x4080 Records/Net**, 2026-09-15: the
+  real `PM.Sleigh`, `PM.Blob`, `PM.Wspr` and `PM.Records`→`PM.Net`→`PM.NetRx` (RMII
+  loopback) blocks are on the bus in the same sim; live Forth parks and glides the sleigh
+  and reads a dwell entry back, writes a WSPR symbol and reads it from the table, is
+  refused an arm outside C (the RegFile interlock, seen at 0x4032 and 0x4072), fires a
+  synthetic frame and reads one centroid pair (88, 56) then none at a higher threshold,
+  and sees that centroid leave as a datagram, a beacon frame and a counted rxGood.
 
 This defines what the H2/eForth console
 must be able to *do* so that every PM mode (S3: P·O·E·T·I·C) is driven from Forth, per
@@ -56,6 +63,51 @@ PM peripherals extend from `0x4020`. **All PM addresses are provisional** until
 | 0x4032 | oTxGate — write the arm key `0x0C1D` to enable the UHF PA branch; any other value disarms | iTxGate — armed flag, PA fuse-branch OK | **TX interlock.** Gateware additionally ANDs `armed` with `iPanel zone == C` (or U-mode flag later): software alone can never key RF outside C mode — the LAYOUT power-table interlock, enforced in hardware. |
 | 0x4034 | oIrig — display/capture control | iIrig — BCD time fields, lock/holdover status (from the Phase 2 clock, later G-disciplined) | **Time.** |
 | 0x4036 | oHarp — event-link control | iHarp — pluck event FIFO (string 0–48, velocity) from the Erand49 3 Mbaud link | **Harp events** (Phase 6; address reserved now). |
+
+### 1.1 Later groups (concrete; each proven from Forth in `cabal test h2-boot`)
+
+**0x4050 Sleigh (C · `PM.Sleigh`, header is normative):**
+
+| Addr | Write | Read |
+|---|---|---|
+| 0x4050 | oSleigh — bits 7:0 speed (0 = follow the theremin), bit 8 enable, bit 9 manual park | iSleigh — bits 1:0 state (0 PARK_A 1 GLIDE_FWD 2 PARK_B 3 GLIDE_REV), 4:2 coil, 5 ribbon present, 6 show switch, 7 paused, 15:8 effective speed |
+| 0x4052 | oSleighDwell — bits 11:0 dwell ms, 14:12 index | iSleighDwell — same layout, the pending entry at the last-written index |
+
+**0x4060 Imaging (I · `PM.Blob`; per `../Imaging/DESIGN.md`):**
+
+| Addr | Write | Read |
+|---|---|---|
+| 0x4060 | oImgCtrl — bit 0 capture en, bit 1 trigger master, bit 2 test pattern | iImgStat — bit 0 frame done, 1 label overflow (sticky), 2 pixels dropped (sticky), 3 sensor PLL locked, 15:8 blobs in the last frame |
+| 0x4062 | oImgTrig — bit 0 manual fire, 15:8 frames-per-PPS divider | iImgSeq — frame seq |
+| 0x4064 | oImgThresh — bits 7:0 threshold, 15:8 hysteresis | iImgCx / iImgCy — autoinc pair: 1st read cx_q4 of the oldest unread blob, 2nd read cy_q4 and pop (side-effecting read, like 0x4024) |
+| 0x4066 | oImgExp — exposure/gain | iImgSum — pixel count (sum_w) of that blob |
+| 0x4068 | oImgArea — bits 7:0 min area, 15:8 max area / 16 | iImgThresh readback |
+
+**0x4070 WSPR (U, transmits in C · `PM.Wspr`):**
+
+| Addr | Write | Read |
+|---|---|---|
+| 0x4070 | oWsprSym — bits 7:0 symbol index 0–161, 9:8 symbol | iWsprSym — bits 1:0 the table's symbol at the sequencer's current index (0 when idle), bit 2 txOn |
+| 0x4072 | oWsprCtrl — bit 0 start (the even-minute go) | iWsprStat — bit 0 armed (= iTxGate's interlocked flag), bit 1 txOn, bit 2 done (sticky until the next start) |
+| 0x4074 | oWsprDiv — clocks per symbol (low 16 bits; hardware widens to 32) | readback |
+| 0x4076 | oWsprBase — NCO increment, tone 0 (low 16) | iWsprPhase — phaseInc low 16 |
+| 0x4078 | oWsprStep — NCO increment per tone (low 16) | readback |
+
+`armed` is `PM.RegFile.prTxArmed` (arm key ∧ S3 == C): a start while unarmed is ignored
+and txOn can never assert — the same interlock `tx-arm` meets.
+
+**0x4080 Records / Net (N · `PM.Records` + `PM.Net`/`PM.NetRx`; `../Network/DESIGN.md`'s
+MAC/IP/port configuration registers follow at 0x408A+ when the UDP TX lands):**
+
+| Addr | Write | Read |
+|---|---|---|
+| 0x4080 | oNetCtrl — bit 0 enable (records enter the path only when set), bit 1 flush | iNetStat — bit 0 enabled, 1 tx busy, 2 rx activity |
+| 0x4082 | oNetTest — fire one PPS_STATUS record (offset = value) | iNetSeq — current datagram seq |
+| 0x4084 | — | iNetDrops — record drops, all ports (sticky, loud) |
+| 0x4086 | — | iNetRxGood — CRC-good frames accepted |
+| 0x4088 | — | iNetRxBad — accepted frames with bad CRC/runt |
+
+0x4090 is reserved for M (Motion radar), TBD at its phase start.
 
 Status (2026-08-31): 0x4020 zone-decode gateware (S2/S3/S4 hysteresis, 1 s S3 dwell, iPanel packing) exists in `pm-lib` (`Oracle/pm-lib/src/PM/Zones.hs`), sim-verified by `cabal test zones-test`.
 Status (2026-08-31): 0x4024 matrix-scanner gateware (8×8 scan, 10 ms debounce, event FIFO, iKeys/oMatrixCtrl) exists in `pm-lib` (`Oracle/pm-lib/src/PM/Matrix.hs`), sim-verified by `cabal test matrix-test`.
@@ -120,6 +172,22 @@ interlock) · `tx-off ( -- )` disarm · `cw-log ( -- )` `spot` the QSO transcrip
 `.pluck ( vel str -- )` show on V0 (gate-1 demo) · `harp>synth ( -- )` events drive KS
 voices · `harp>midi ( -- )` re-emit as MIDI-style events out the link.
 
+**`SLEIGH` (C; coil track)** — `sleigh-go ( spd -- )` enable at speed (`$100 or $4050 !`) ·
+`sleigh-off ( -- )` · `park ( -- )` / `unpark ( -- )` manual park bit · `sleigh? ( -- w )` iSleigh ·
+`.sleigh ( -- )` state/coil/paused line · `dwell! ( ms i -- )` / `dwell@ ( i -- ms )` pending table.
+
+**`IMAGING` (I)** — `img-go ( -- )` capture enable · `trig! ( n -- )` divider · `fire ( -- )` manual
+frame · `thresh! ( hyst thr -- )` · `area! ( max min -- )` · `blobs? ( -- n )` from iImgStat ·
+`cent@ ( -- cy cx )` the 0x4064 pair · `sum@ ( -- n )` · `.cent ( -- )` one line per blob.
+
+**`BEACON` (U; runs in C)** — `wspr-enc ( -- )` callsign/grid/power → 162 symbols (Forth) ·
+`sym! ( s i -- )` one table entry · `wspr-load ( -- )` all 162 · `symdiv! ( n -- )` ·
+`tones! ( base step -- )` · `wspr-tx ( -- )` `tx-arm` then start at even-minute:00, refused
+unless armed · `wspr? ( -- w )` iWsprStat · `beacon ( n -- )` every n minutes · `wspr-log`.
+
+**`NET` (N)** — `net-go ( -- )` / `net-halt ( -- )` enable bit · `net-test ( n -- )` fire a
+PPS_STATUS · `seq? ( -- n )` · `drops? ( -- n )` · `rx? ( -- bad good )` · `net-cfg` (0x408A+, TBD).
+
 **`MENU` (O)** — `menu ( -- )` list card contents (games, spoke demo scripts — snooker, SDR, beacon, net) on V0 ·
 `run ( blk -- )` load and run an entry · `games` / `scripts` filtered menus · plus the
 whole eForth interpreter itself: O mode *is* the ok prompt on glass.
@@ -175,5 +243,7 @@ if a human notices the latency, it is Forth.
 Each stage is demoable on its own; the Phase 3 gate is all four. The matrix (0x4024),
 synth (0x402E), and harp (0x4036) registers are specified now but first exercised in
 Phases 5–6 — the map is laid out so no address moves when they arrive. Later groups:
-0x4040 GPS/TOD (`../GPS/DESIGN.md`), 0x4050 Sleigh (`../Coil/DESIGN.md`), 0x4060 Imaging provisional (`../Imaging/DESIGN.md`);
-M (Motion radar) and S (SDR) groups are assigned at their phase start.
+0x4040 GPS/TOD (`../GPS/DESIGN.md`), 0x4050 Sleigh (`../Coil/DESIGN.md`), 0x4060 Imaging
+(`../Imaging/DESIGN.md`), 0x4070 WSPR (`../UHF/DESIGN.md`), 0x4080 Records/Net
+(`../Network/DESIGN.md`) — all concrete in §1.1; 0x4090 M (Motion radar) and the S (SDR)
+group are assigned at their phase start.

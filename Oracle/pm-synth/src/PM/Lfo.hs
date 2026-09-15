@@ -80,3 +80,18 @@ tremolo s depth m =
       g' = if g < 0 then 0 else g
       p  = (resize s :: Signed 22) * resize g'   -- |s*g'| <= 2047*256
   in resize (shiftR p 8)
+
+-- | Synthesis root (area/Fmax measurement).
+topEntity
+  :: Clock System -> Reset System -> Enable System
+  -> Signal System (Unsigned 16) -> Signal System (Unsigned 8) -> Signal System Bool
+  -> Signal System (Signed 9)
+topEntity = exposeClockResetEnable lfo
+{-# NOINLINE topEntity #-}
+{-# ANN topEntity
+  (Synthesize
+    { t_name   = "pm_lfo"
+    , t_inputs = [ PortName "clk", PortName "rst", PortName "en"
+                 , PortName "rate", PortName "depth", PortName "retrig" ]
+    , t_output = PortName "mod"
+    }) #-}

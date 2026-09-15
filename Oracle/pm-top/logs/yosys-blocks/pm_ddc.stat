@@ -1,0 +1,21 @@
+
+3. Printing statistics.
+
+=== pm_ddc ===
+
+        +----------Local Count, excluding submodules.
+        | 
+     6436 wires
+    42964 wire bits
+     6436 public wires
+    42964 public wire bits
+        6 ports
+       80 port bits
+     6329 cells
+      796   CCU2C
+      492   L6MUX21
+     2428   LUT4
+       18   MULT18X18D
+      917   PFUMX
+     1678   TRELLIS_FF
+

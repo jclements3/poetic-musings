@@ -9,7 +9,7 @@ every working session; the detail it summarises lives in `PLAN.md`,
 
 The program is reoriented as a **Clash FPGA signal-processing library** demonstrated on
 one box (Panel body + Oracle brains) with ten hardware spokes. Docs are unified in one
-self-contained repo. Gateware is ahead of hardware: 50 of 53 library blocks are verified in
+self-contained repo. Gateware is ahead of hardware: 52 of 53 library blocks are verified in
 simulation, the H2 boots real eForth, and every Phase 0 gate is met — but the FPGA
 board is on backorder, so nothing runs on silicon until October.
 
@@ -25,11 +25,11 @@ board is on backorder, so nothing runs on silicon until October.
 | 4 Theremin | T | Clash port measured, green | pitch/volume from antennas | bench the LC oscillators |
 | 5 Panel | P | design done; fabrication + printer spec'd; **all synth/audio blocks ✓** | events, zones, console, synth blocks | order printer, print coupon |
 | 6 Erand49 | E | frame CAD done, gateware spec'd | one string plucks (gate 1) | bore gauge, then gate-1 kit |
-| 7 GPS | G | design done; NMEA parser ✓ | clock stops drifting | u-blox module after O |
-| 8 Network | N | design done; UDP TX ✓ | zero-drop 10 min | PHY PMOD after O |
+| 7 GPS | G | GPSDO picked (Thunderbolt E); NMEA parser ✓, PPS discipline ✓ (hedgehog+GHDL), **DPLL ✓** | clock stops drifting | u-blox module after O |
+| 8 Network | N | beacon TX, MAC RX, records, **UDP TX ✓**, chain sim ✓ | zero-drop 10 min | PHY PMOD after O |
 | 9 UHF | U | design done; keyer ✓ | wsprnet spot | after G |
 | 10 SDR | S | design done; DSP blocks ✓ | AM decoded in-box | after T |
-| 11 Imaging | I | design done (snooker); **DVP + blob centroid ✓ in sim** | gap-free ball track @ 200 fps | Sep FOV study, then camera |
+| 11 Imaging | I | FOV study done (2.1 mm lens, 2.05 m, 850 nm strobe); **DVP + blob ✓, chain sim ✓, 3.5k LUT4** | gap-free ball track @ 200 fps | Sep FOV study, then camera |
 | 12 Motion radar | M | design done (snooker) | radar speed within 5 % of camera | after Imaging + G |
 
 Build order: **O → P → T**, then spokes as hardware arrives. December path: O → P →
@@ -38,17 +38,16 @@ coils and driver board built before the ULX3S lands, glide tuned after.
 
 ## Library (CLASH-LIBRARY-MAP.md § Status)
 
-| Family | ✓ | ◐ | ○ |
-|---|---|---|---|
-| DSP core | 15 | 1 | 0 |
-| Audio and synthesis | 10 | 0 | 0 |
-| I/O and links | 14 | 0 | 0 |
-| Timing and CDC | 6 | 0 | 2 |
-| Control and display | 5 | 0 | 0 |
-| **Total** | **50** | **1** | **2** |
+| Family | ✓ | ◐ | ○ | measured |
+|---|---|---|---|---|
+| DSP core | 15 | 1 | 0 | 8 |
+| Audio and synthesis | 10 | 0 | 0 | 8 |
+| I/O and links | 15 | 0 | 0 | 12 |
+| Timing and CDC | 7 | 0 | 0 | 4 |
+| Control and display | 5 | 0 | 0 | 3 |
+| **Total** | **52** | **1** | **0** | **35** |
 
-Regression gate (theremin suite): **green**. Measured on ECP5: ThereminTop 1,816 LUT4,
-Fft512 4,620 LUT4, IirNStage 175 LUT4, text console ~200 LUT4.
+Regression gate (theremin suite): **green**. 35 blocks measured on ECP5 (`measurements/README.md`); one oversized block found and fixed (blob labeller 35k → 3.5k LUT4). Snooker-mode fit: ~43 % LUT before the fix, 61 DSP (FFT 34 + DDC 18) is the overshoot.
 
 ## Orders (ORDERS.md)
 
@@ -63,8 +62,9 @@ Fft512 4,620 LUT4, IirNStage 175 LUT4, text console ~200 LUT4.
 
 - **Board backorder** to 2026-10-02: no silicon measurements before then. Mitigation:
   printer, coupon, oscillator bench and Sleigh Glide bring-up all proceed without it.
-- **Sep Basic Plan inputs due:** Imaging FOV/sensor study (now with the snooker table
-  as the fixed target) and the GPSDO metrology pick.
+- **Sep Basic Plan inputs — drafted 09-15:** `Imaging/FOV-STUDY.md` (2.1 mm at 2.05 m,
+  5.85 mm/px, DVP OV9281 module, ~$170) and `GPS/GPSDO-PICK.md` (Thunderbolt E, ~$180);
+  open *verify* items: DVP 200 fps ceiling, FSIN pinout, baize NIR reflectance.
 - **Decided 09-15: one FPGA board (ULX3S).** Cu retired; no harp-side board.
 - **Open design items:**
   Panel silk layer; M and S register groups unassigned; `lib/` migration out of the
@@ -72,6 +72,12 @@ Fft512 4,620 LUT4, IirNStage 175 LUT4, text console ~200 LUT4.
 
 ## Recent changes
 
+- 09-15 (night, wave 2, 10 agents): DPLL, SDRAM controller, variable-length UDP TX —
+  nothing left to write; end-to-end snooker chain sim (5 frames, gap-free); register
+  bus proves sleigh/imaging/WSPR/net from live Forth; hedgehog + GHDL on the VHDL
+  ports; WSPR encoder cross-checked by an independent implementation; 49-string KS
+  bank in BRAM (44 DP16KD); 35 blocks area-measured, blob labeller fixed 35k → 3.5k
+  LUT4; FOV study + GPSDO pick written; ORDERS I2/G2 priced.
 - 09-15 (evening): **16 new Clash blocks, 21 new test suites, 29 suites green** across 10
   packages (11 parallel agents): KS, DDC/Goertzel/AM, vision capture + blob centroids,
   WSPR, PPS/strobe ports, LFO/rhythm/sequencer, I²S, MAC RX, record mux, in-box sleigh

@@ -1,0 +1,21 @@
+
+3. Printing statistics.
+
+=== pm_harplink ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      592 wires
+     3918 wire bits
+      592 public wires
+     3918 public wire bits
+        7 ports
+      112 port bits
+      880 cells
+       30   CCU2C
+       14   L6MUX21
+      538   LUT4
+        1   MULT18X18D
+      103   PFUMX
+      194   TRELLIS_FF
+

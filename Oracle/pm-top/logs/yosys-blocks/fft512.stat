@@ -1,0 +1,22 @@
+
+3. Printing statistics.
+
+=== fft512_r2sdf ===
+
+        +----------Local Count, excluding submodules.
+        | 
+     5396 wires
+   178333 wire bits
+     5396 public wires
+   178333 public wire bits
+        4 ports
+       66 port bits
+     4230 cells
+      563   CCU2C
+        3   DP16KD
+     2976   LUT4
+       34   MULT18X18D
+      120   PFUMX
+       48   TRELLIS_DPR16X4
+      486   TRELLIS_FF
+

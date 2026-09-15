@@ -1,0 +1,21 @@
+
+3. Printing statistics.
+
+=== maiden_cfar ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      288 wires
+     1717 wire bits
+      288 public wires
+     1717 public wire bits
+        5 ports
+       40 port bits
+      411 cells
+       55   CCU2C
+       96   LUT4
+        2   MULT18X18D
+        2   PFUMX
+       10   TRELLIS_DPR16X4
+      246   TRELLIS_FF
+

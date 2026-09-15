@@ -18,7 +18,7 @@ common shared
 library
   import: shared
   hs-source-dirs: src
-  exposed-modules: PM.Net, PM.NetRx, PM.Records
+  exposed-modules: PM.Net, PM.NetRx, PM.Records, PM.UdpTx
 
 test-suite net-test
   import: shared
@@ -43,6 +43,22 @@ test-suite records-test
   main-is: RecordsSpec.hs
   build-depends: pm-net
   ghc-options: -threaded
+
+test-suite udptx-test
+  import: shared
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: UdpTxSpec.hs
+  build-depends: pm-net
+  ghc-options: -threaded
+
+test-suite chain-test
+  import: shared
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: ChainSpec.hs
+  build-depends: pm-net, pm-vision, pm-time
+  ghc-options: -threaded -O2 -rtsopts
 
 executable clash
   import: shared

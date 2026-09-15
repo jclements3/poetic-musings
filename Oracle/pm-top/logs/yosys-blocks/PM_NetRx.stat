@@ -1,0 +1,20 @@
+
+3. Printing statistics.
+
+=== pm_net_rx ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      350 wires
+     2672 wire bits
+      350 public wires
+     2672 public wire bits
+       13 ports
+       98 port bits
+      482 cells
+       30   CCU2C
+       12   L6MUX21
+      267   LUT4
+       34   PFUMX
+      139   TRELLIS_FF
+

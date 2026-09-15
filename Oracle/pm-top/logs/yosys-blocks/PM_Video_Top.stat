@@ -1,0 +1,22 @@
+
+3. Printing statistics.
+
+=== pm_video ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      357 wires
+    75525 wire bits
+      357 public wires
+    75525 public wire bits
+       18 ports
+       79 port bits
+      319 cells
+       46   CCU2C
+        5   DP16KD
+       23   L6MUX21
+      126   LUT4
+        2   MULT18X18D
+       34   PFUMX
+       83   TRELLIS_FF
+

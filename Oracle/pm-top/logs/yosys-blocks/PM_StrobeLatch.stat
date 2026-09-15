@@ -1,0 +1,20 @@
+
+3. Printing statistics.
+
+=== strobe_latch ===
+
+        +----------Local Count, excluding submodules.
+        | 
+     4887 wires
+     9348 wire bits
+     4887 public wires
+     9348 public wire bits
+       11 ports
+      124 port bits
+     5930 cells
+       14   CCU2C
+      820   L6MUX21
+     2712   LUT4
+     1327   PFUMX
+     1057   TRELLIS_FF
+

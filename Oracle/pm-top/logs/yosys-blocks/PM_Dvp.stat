@@ -1,0 +1,19 @@
+
+3. Printing statistics.
+
+=== pm_dvp ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       81 wires
+      556 wire bits
+       81 public wires
+      556 public wire bits
+        6 ports
+       60 port bits
+      108 cells
+       20   CCU2C
+       47   LUT4
+        5   PFUMX
+       36   TRELLIS_FF
+

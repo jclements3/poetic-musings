@@ -104,3 +104,17 @@ first, Clash port as Lessons 12–14):
 | In-box sleigh sequencer (Rev D) | `Oracle/pm-lib` (PM.Sleigh; calls PM.SleighSpeed.speedOf) | SS-004 walk, pacer 255/128/0 exact, ribbon-out gates low next clock, show-switch freeze, manual park, live dwell write on next glide |
 | Overlay strip framebuffer 480×120 · TMDS 8b/10b encoder | `Oracle/pm-video` (PM.Video.Overlay, PM.Video.Tmds) | bar/plot/origin/clear, containment, 2-cycle alignment; ≤5 transitions, control words, disparity bound ±8, invertible 0..255 |
 
+## PM gateware written 2026-09-15, wave 2 (Clash, sim-verified)
+
+| block | where | proof |
+|---|---|---|
+| PPS-locked 10 MHz DPLL (frac-N NCO, FLL acquire, type-II PI track, holdover, lock, 1 PPS out) | `Oracle/pm-time` (PM.Dpll) | +30 ppm → −29 997 ppb trim at 30 s (0.1 ppm), locked; holdover freezes trim; relock; tick step ≤ 1 |
+| Hedgehog property suites for StrobeLatch and PpsDiscipline; GHDL elaboration of all three timing tops | `Oracle/pm-time` (test/Prop.hs, VERIFY.md) | 300/300 each, cycle-exact vs pure models incl. quirks Q1–Q4; `ghdl -a/-e` OK |
+| SDRAM controller (IS42S16160G, CL2, open-page, auto-refresh) + byte ring | `Oracle/pm-sdram` (PM.Sdram) | init order/timing; 256 words over 3 banks × 2 rows; 1 ms random traffic, refresh gap ≤ 780; row-miss sequence; ring 4096 B in order — all vs a timing-enforcing chip model |
+| Variable-length UDP/IPv4/Ethernet TX, double-buffered, UDP checksum | `Oracle/pm-net` (PM.UdpTx) | 10 B / 1400 B datagrams through NetRx + parser: headers, IP/UDP checksums, pad, FCS; IFG 49 clk; drop counting |
+| End-to-end snooker chain | `Oracle/pm-net` (test/ChainSpec.hs; deps pm-vision, pm-time) | 5 × 640×400 frames, 3 discs → Dvp → Blob → Records (+STROBE_STAMP) → UdpTx → NetRx → parse: every centroid exact, stamps precede, SEQs contiguous, zero drops |
+| Register-bus integration proven from Forth (0x4050 sleigh, 0x4060 imaging, 0x4070 WSPR, 0x4080 net) | `Oracle/clash-h2` (SystemUart.hs, BootSpec.hs), `Oracle/eforth-pm.md` §1.1 | h2-boot: 13 new assertions from typed Forth — parked/gliding, dwell write, symbol write, arm refused outside C, threshold + centroid readback, record → frame → rxGood |
+| KS bank state + packed delay pool in BRAM (49 Erard strings) | `Oracle/pm-ks` (PM.Ks ksBank, ks49) | 15/15; A0 +0.11 ¢, C4 −0.006 ¢, G7 +0.47 ¢; 39 260 words; yosys 2 021 LUT4 / 44 DP16KD / 3 DSP |
+| Blob labeller accumulator table → RAM | `Oracle/pm-vision` (PM.Blob) | 11/11 identical; records bit-identical; 34 910 → 3 498 LUT4 |
+| WSPR independent reference encoder + FSK tone check | `Oracle/pm-wspr` (golden/wspr_ref.py, test/FskSpec.hs) | 24 call/grid/power cases agree at every stage; tones within 0.02 Hz |
+

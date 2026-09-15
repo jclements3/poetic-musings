@@ -1,0 +1,21 @@
+
+3. Printing statistics.
+
+=== irigb ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      977 wires
+     8009 wire bits
+      977 public wires
+     8009 public wire bits
+        9 ports
+       53 port bits
+      657 cells
+       55   CCU2C
+       29   L6MUX21
+      370   LUT4
+        5   MULT18X18D
+       81   PFUMX
+      117   TRELLIS_FF
+

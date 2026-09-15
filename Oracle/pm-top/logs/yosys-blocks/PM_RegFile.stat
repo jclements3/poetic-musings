@@ -1,0 +1,21 @@
+
+3. Printing statistics.
+
+=== pm_regfile ===
+
+        +----------Local Count, excluding submodules.
+        | 
+     2112 wires
+     7845 wire bits
+     2112 public wires
+     7845 public wire bits
+       10 ports
+      256 port bits
+     2752 cells
+       85   CCU2C
+      131   L6MUX21
+     1463   LUT4
+        6   MULT18X18D
+      343   PFUMX
+      724   TRELLIS_FF
+

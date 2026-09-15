@@ -1,0 +1,21 @@
+
+3. Printing statistics.
+
+=== pm_blob ===
+
+        +----------Local Count, excluding submodules.
+        | 
+    39577 wires
+   136987 wire bits
+    39577 public wires
+   136987 public wire bits
+        6 ports
+      184 port bits
+    53486 cells
+      205   CCU2C
+        1   DP16KD
+     4351   L6MUX21
+    34273   LUT4
+    10655   PFUMX
+     4001   TRELLIS_FF
+

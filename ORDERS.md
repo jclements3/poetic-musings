@@ -44,17 +44,17 @@ personal · **W** work · **H** ham (personal). Estimates are budget figures, no
 | M1 | CDM324-class 24 GHz Doppler module + SPI ADC | M | W | ~$60 | plan | after G |
 | U1 | Whip + SMA bulkhead, PA can, 20 m filter | U | H | TBD | plan | after G |
 | S1 | AD9226-class ADC board + antenna relay, JFET buffer | S | W | ~$30 | plan | after T |
-| I2 | OV9281 global-shutter module + lens + overhead clamp mount | Imaging | W | TBD (study) | plan | after Sep FOV study, N, G |
+| I2 | OV9281 DVP module (M12) + Arducam trigger MIPI fallback, 2.1 mm lens + 850 nm filter, level shifters, 2× 850 nm illuminators, Super Clamp/arm — `Imaging/FOV-STUDY.md` § (g) | Imaging | W | ~$170 | plan | after N, G; DVP module + lens first for the fps check |
 | N1 | RMII PHY PMOD | N | W | ~$25 | plan | after O |
 | G1 | u-blox module with PPS | G | W | ~$30 | plan | after O |
-| G2 | GPSDO metrology reference (used GS-101B / Thunderbolt-class) | G | W | ~$100–150 | plan | verification only |
+| G2 | Trimble Thunderbolt E kit, used (unit + 24 V PSU + antenna) — `GPS/GPSDO-PICK.md`; BG7TBL fallback | G | W | ~$180 | plan | verification only; Lady Heather logging |
 
 ## Totals (estimates)
 
 | Ledger | Planned | Notes |
 |---|---|---|
 | P personal | ~$2,600 | of which harp ~$1,340, printer ~$550–800, board + display ~$260 |
-| W work | ~$300 + camera/lens | spoke hardware only; work never buys the box |
+| W work | ~$500 | spoke hardware only (camera ~$170, GPSDO ~$180); work never buys the box |
 | H ham | TBD | UHF PA and antenna |
 
 Rules carried from PLAN.md: buy late (1 eval before 13, 5 pairs before 98, rib after

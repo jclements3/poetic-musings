@@ -7,6 +7,9 @@
 --  4. bank of 4: pluck string 2 only -> 0/1/3 silent, string 2 is bit-exact
 --     with ksVoice; pluck all four -> four independent pitches.
 --  5. golden: first 64 samples equal golden/ks_model.py (python3).
+--  6. Erard 49: packed allocation sums to ErardWords (39260) and every
+--     region holds its natural period; pluck A0, C4, G7 at real pitches
+--     -> each within 1 cent of 96000/f, the other 46 strings stay silent.
 import Clash.Prelude
 import qualified Prelude as P
 import qualified Data.List as L
@@ -24,15 +27,56 @@ voiceRun cfg v n =
     (\i -> let (t, c, p) = unbundle i in ksVoice t c p)
     (P.zip3 (P.repeat True) (P.repeat cfg) (Just v : P.repeat Nothing))
 
--- Bank of 4: tick every `sp` clocks, pluck events given per tick, output
--- sampled at the end of each tick slot.
-bankRun :: Vec 4 KsCfg -> [Maybe (Index 4, Unsigned 8)] -> Int -> Int -> [Vec 4 (Signed 16)]
-bankRun cfgs plucks sp n =
-  let ins = P.concat [ (True, cfgs, p) : P.replicate (sp - 1) (False, cfgs, Nothing)
-                     | p <- P.take n (plucks P.++ P.repeat Nothing) ]
-      outs = simulateN @System (n * sp)
-               (\i -> let (t, c, p) = unbundle i in ksBank t c p) ins
+-- Bank of n: load the configs (one write per clock), then tick every `sp`
+-- clocks with the pluck events given per tick; output sampled at the end of
+-- each tick slot.
+bankRunN
+  :: forall w n. (KnownNat n, 1 <= n, KnownNat w, 1 <= w)
+  => SNat w -> Vec n (Unsigned 12) -> Vec n KsCfg
+  -> [Maybe (Index n, Unsigned 8)] -> Int -> Int -> [Vec n (Signed 16)]
+bankRunN w maxD cfgs plucks sp n =
+  let nc   = P.length (toList cfgs)
+      load = [ (False, Just (i, c), Nothing) | (i, c) <- P.zip [0 ..] (toList cfgs) ]
+      ins  = load P.++ P.concat
+               [ (True, Nothing, p) : P.replicate (sp - 1) (False, Nothing, Nothing)
+               | p <- P.take n (plucks P.++ P.repeat Nothing) ]
+      outs = P.drop nc (simulateN @System (nc + n * sp)
+               (\i -> let (t, c, p) = unbundle i in ksBankVec w maxD t c p) ins)
   in [ o | (k, o) <- P.zip [0 :: Int ..] outs, k `P.mod` sp == sp - 1 ]
+
+bankRun :: Vec 4 KsCfg -> [Maybe (Index 4, Unsigned 8)] -> Int -> Int -> [Vec 4 (Signed 16)]
+bankRun = bankRunN (SNat @8192) (repeat 2048)
+
+-- Same drive on the raw ksBank stream, de-multiplexed per string (one
+-- sample per string per tick); cheaper to simulate for the 49-string bank.
+bankStream
+  :: forall w n. (KnownNat n, 1 <= n, KnownNat w, 1 <= w)
+  => SNat w -> Vec n (Unsigned 12) -> Vec n KsCfg
+  -> [Maybe (Index n, Unsigned 8)] -> Int -> Int -> Index n -> [Signed 16]
+bankStream w maxD cfgs plucks sp n =
+  let load = [ (False, Just (i, c), Nothing) | (i, c) <- P.zip [0 ..] (toList cfgs) ]
+      ins  = load P.++ P.concat
+               [ (True, Nothing, p) : P.replicate (sp - 1) (False, Nothing, Nothing)
+               | p <- P.take n (plucks P.++ P.repeat Nothing) ]
+      outs = simulateN @System (P.length load + n * sp)
+               (\i -> let (t, c, p) = unbundle i in ksBank w maxD t c p) ins
+  in \i -> [ y | Just (j, y) <- outs, j == i ]
+
+-- Running-sum boxcar (same values as boxcar up to float rounding; O(n)).
+boxcarFast :: Int -> [Double] -> [Double]
+boxcarFast m xs =
+  let ps = P.scanl (+) 0 xs
+  in P.zipWith (-) (P.drop m ps) ps
+
+-- period with the fast boxcar, for the long Erard strings.
+periodFast :: Double -> [Signed 16] -> Double
+periodFast p0 raw =
+  let ys = P.map P.fromIntegral raw :: [Double]
+      dc = P.zipWith (\x b -> x - b / P.fromIntegral (P.round p0 :: Int)) ys (boxcarFast (P.round p0) ys)
+      xs = P.foldl (\acc k -> boxcarFast (P.round (p0 / k)) acc) dc [2, 3, 4, 5]
+      cr = [ P.fromIntegral i + (-a) / (b - a)
+           | (i, (a, b)) <- P.zip [0 :: Int ..] (P.zip xs (P.drop 1 xs)), a < 0, b >= 0 ]
+  in if P.length cr < 2 then 0 / 0 else (P.last cr - P.head cr) / P.fromIntegral (P.length cr - 1)
 
 -- Boxcar of length m (linear phase: zero-crossing period is unchanged).
 boxcar :: Int -> [Double] -> [Double]
@@ -61,7 +105,7 @@ pitchOf cfg cyc =
       n0 = P.round (5 * p0); n1 = P.round (P.fromIntegral cyc * p0)
   in period p0 (P.take n1 (P.drop n0 (voiceRun cfg 200 (n0 + n1))))
 
-pitchTest :: Unsigned 11 -> Unsigned 8 -> Int -> IO (Bool, Double)
+pitchTest :: Unsigned 12 -> Unsigned 8 -> Int -> IO (Bool, Double)
 pitchTest d f cyc = do
   let target = P.fromIntegral d + P.fromIntegral f / 256 :: Double
       meas = pitchOf (KsCfg d f 255) cyc
@@ -112,6 +156,32 @@ main = do
       maxErr = P.maximum (P.zipWith (\a b -> abs (a - b)) golden hw)
   r10 <- check (P.length golden == 64 && maxErr <= 3)
            ("golden model: 64 samples, max |err| = " P.++ P.show maxErr P.++ " LSB")
-  if P.and [r1, r2, r3, r4, r5, r6, r7, r8, r9, r10]
+  -- 6. Erard 49
+  let words49 = bankWords erardMaxDelay
+      fits = P.and (toList (zipWith (\c d -> kDelay c + 1 <= d) erardCfg erardMaxDelay))
+      mn = P.minimum (toList erardMaxDelay); mx = P.maximum (toList erardMaxDelay)
+  r11 <- check (words49 == natToNum @ErardWords && fits)
+           ("erard: 49 packed regions " P.++ P.show mn P.++ " .. " P.++ P.show mx
+            P.++ " words, total " P.++ P.show words49 P.++ " (ErardWords), each >= kDelay + 1")
+  let a0 = 48; c4 = 25; g7 = 0 :: Index 49
+      hz i = [3136, 2793.8, 2637, 2349.3, 2093, 1975.5, 1760, 1568, 1396.9, 1318.5, 1174.7
+             , 1046.5, 987.77, 880, 783.99, 698.46, 659.26, 587.33, 523.25, 493.88, 440
+             , 392, 349.23, 329.63, 293.66, 261.63, 246.94, 220, 196, 174.61, 164.81
+             , 146.83, 130.81, 123.47, 110, 97.99, 87.31, 82.41, 73.42, 65.41, 61.74, 55
+             , 49, 43.65, 41.2, 36.71, 32.7, 30.868, 27.5] P.!! P.fromIntegral i :: Double
+      nE = 12 * 3491 + 8
+      col = bankStream (SNat @ErardWords) erardMaxDelay erardCfg
+              [Just (a0, 200), Just (c4, 200), Just (g7, 200)] 52 nE
+      centsOf i cyc =
+        let p0 = 96000 / hz i
+            n0 = P.round (4 * p0); n1 = P.round (cyc * p0)
+        in cents (periodFast p0 (P.take n1 (P.drop n0 (col i)))) p0
+      cA = centsOf a0 8; cC = centsOf c4 100; cG = centsOf g7 400
+      quiet = P.and [ P.all (== 0) (col i) | i <- [minBound .. maxBound], i `P.notElem` [a0, c4, g7] ]
+  r12 <- check (abs cA < 1) ("erard: A0 27.5 Hz within 1 cent (" P.++ P.show cA P.++ " cents)")
+  r13 <- check (abs cC < 1) ("erard: C4 261.63 Hz within 1 cent (" P.++ P.show cC P.++ " cents)")
+  r14 <- check (abs cG < 1) ("erard: G7 3136 Hz within 1 cent (" P.++ P.show cG P.++ " cents)")
+  r15 <- check quiet "erard: the other 46 strings stay silent (no cross-talk)"
+  if P.and [r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15]
     then putStrLn "ALL PASS: PM.Ks" >> exitSuccess
     else exitFailure

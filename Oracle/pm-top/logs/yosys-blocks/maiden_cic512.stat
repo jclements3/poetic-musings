@@ -1,0 +1,18 @@
+
+3. Printing statistics.
+
+=== maiden_cic512 ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      383 wires
+     3493 wire bits
+      383 public wires
+     3493 public wire bits
+        5 ports
+       55 port bits
+      410 cells
+      125   CCU2C
+        2   LUT4
+      283   TRELLIS_FF
+

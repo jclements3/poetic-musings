@@ -1,0 +1,28 @@
+cabal-version: 2.4
+name: pm-top
+version: 0.1.0.0
+synopsis: Snooker-mode top: one of every block, for the ECP5-85F fit study
+build-type: Simple
+extra-source-files: h2.bin
+
+common shared
+  default-language: Haskell2010
+  ghc-options: -Wall -fplugin GHC.TypeLits.Extra.Solver -fplugin GHC.TypeLits.Normalise -fplugin GHC.TypeLits.KnownNat.Solver
+  build-depends: base, Cabal, clash-prelude >= 1.8, ghc-typelits-natnormalise, ghc-typelits-extra, ghc-typelits-knownnat
+  default-extensions:
+    BangPatterns BinaryLiterals ConstraintKinds DataKinds DefaultSignatures
+    DeriveAnyClass DeriveGeneric DerivingStrategies FlexibleContexts
+    KindSignatures MagicHash NoStarIsType NumericUnderscores
+    ScopedTypeVariables TemplateHaskell TypeApplications TypeFamilies
+    TypeOperators NoImplicitPrelude RecordWildCards
+
+library
+  import: shared
+  hs-source-dirs: src
+  exposed-modules: PM.TopSnooker
+  build-depends: clash-h2, irig, pm-lib, pm-video, pm-net, pm-vision, pm-dsp, pm-time, theremin-clash
+
+executable clash
+  import: shared
+  main-is: bin/Clash.hs
+  build-depends: clash-ghc

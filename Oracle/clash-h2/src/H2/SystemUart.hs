@@ -95,6 +95,48 @@
 --   unpacking (div\/mod — sim-only code); the Irig core takes BCD digits
 --   directly, per its port comment.
 --
+--   [Sleigh (0x4050\/0x4052)] the REAL @PM.Sleigh@ coil sequencer, with the
+--   register semantics from its module header (oSleigh speed\/enable\/park,
+--   iSleigh state\/coil\/ribbon\/show\/paused\/speed, oSleighDwell \/
+--   iSleighDwell index+ms).  Sim scale: the 1 ms tick is EVERY clock (a
+--   park rests 2 500 cycles, a station dwell is its ms count in cycles), the
+--   show switch and ribbon-present lines are tied high, and speed 0 (\"follow
+--   the theremin\") reads a theremin speed of 0 = paused — there is no
+--   theremin here.
+--
+--   [WSPR (0x4070 group)] the REAL @PM.Wspr@ sequencer.  0x4070 write =
+--   symbol-table entry {bits 9:8 symbol, 7:0 index}; read = {bit 2 txOn,
+--   bits 1:0 the table's symbol at the sequencer's current index} — idle,
+--   that is index 0.  0x4072 write bit 0 = start strobe (the even-minute
+--   tick); read = {bit 0 armed, bit 1 txOn, bit 2 done (sticky, cleared by
+--   start)}.  @armed@ is PM.RegFile's interlocked prTxArmed (arm key AND
+--   S3 == C), so with the sliders parked in E a start is refused.  0x4074
+--   oWsprDiv (clocks per symbol, 16-bit here), 0x4076 oWsprBase \/ read
+--   phaseInc low 16, 0x4078 oWsprStep (NCO increments, low 16 bits).
+--
+--   [Imaging (0x4060 group)] the REAL @PM.Blob@ threshold+labeller on a
+--   synthetic frame source instead of the DVP capture: a 0x4062 write with
+--   bit 0 set fires one 16x8 frame (one pixel per clock; value 200 inside
+--   the 4x4 square x 4..7, y 2..5, 10 elsewhere — centroid (5.5, 3.5) =
+--   Q4 (88, 56), 16 pixels).  0x4064 write = {15:8 hysteresis, 7:0
+--   threshold}; 0x4068 write = {15:8 max area \/ 16, 7:0 min area}; 0x4068
+--   read = the threshold word back.  0x4064 read is the autoinc centroid
+--   pair: the first read returns cx of the oldest unread blob, the second
+--   cy and pops it (a side-effecting read, like 0x4024).  0x4066 read =
+--   that blob's pixel count (sum_w).  0x4060 read = {15:8 blobs in the
+--   last frame, bit 3 PLL locked (1), bit 2 dropped, bit 1 overflow, bit 0
+--   frame done}; 0x4062 read = frame sequence.
+--
+--   [Records \/ Net (0x4080 group)] the REAL @PM.Records.recordPath4@
+--   (CENTROID port fed by the blob records, PPS_STATUS port fired by a
+--   0x4082 write, 256-cycle flush tick), its datagrams pulsing the REAL
+--   @PM.Net.beaconTx@ through @beaconGoAdapter@, whose RMII output is looped
+--   back into the REAL @PM.NetRx.macRx@ — so a centroid typed out of 0x4064
+--   also ends as a counted, CRC-checked Ethernet frame.  0x4080 write bit 0
+--   = enable (records only enter the path when set); read = {bit 0 enable,
+--   bit 1 tx busy, bit 2 rx activity}.  0x4082 read = datagram seq, 0x4084
+--   = drops (sum of the four ports), 0x4086 = rxGood, 0x4088 = rxBad.
+--
 --   All other reads return 0 and all other writes (timer, LEDs, 7-segment,
 --   IRQ mask, baud divisors, memory controller, ...) are accepted and
 --   ignored, like unpopulated peripherals.  In particular @iMemDin@
@@ -112,6 +154,15 @@ import H2.System (Memory)
 import Irig (Rtc (..), SetVal (..), framePos, rtc, tick1k)
 import PM.Matrix (MatrixCfg (..))
 import PM.RegFile (PmBus (..), PmRegs (..), PmStatus (..), regFile)
+import PM.Sleigh (SleighIn (..), SleighCtl (..), sleigh, decodeSleighCtl, effectiveSpeed,
+                  encodeSleighStatus, decodeDwellWr, encodeDwellRd)
+import PM.Wspr (wspr)
+import PM.Dvp (Pix (..))
+import PM.Blob (BlobCfg (..), BlobOut (..), BlobRec (..), blobLabel)
+import PM.Records (PpsStatus (..), Centroid (..), recordPath4, beaconGoAdapter)
+import PM.Net (beaconTx)
+import PM.NetRx (RxOut (..), macRx)
+import Data.Maybe (isJust)
 
 -- | UART model state: bytes not yet offered to the CPU, and the rx holding
 --   register (last byte popped by the @UART_RX_RE@ strobe).
@@ -301,10 +352,146 @@ h2SystemSim instrMem dataMem script card = txS
     pmRegs = regFile 64 10000 (MatrixCfg 3125 10)
                pmBus (pure 0) (pure 1700) (pure 2560) pmCols pmStatus
 
-    ioDinS = decode <$> ioAddrS <*> iUartS <*> iSdRxS <*> (prDin <$> pmRegs)
-    decode a u sd pm
+    armedS = prTxArmed <$> pmRegs
+    reAt a = (ioRe <$> core) .&&. ((== a) <$> ioAddrS)
+    bit0   = (`testBit` 0) <$> dOutS
+
+    -- Sleigh (module header): real PM.Sleigh, tick every clock.
+    sleighCtl  = decodeSleighCtl <$> regEn 0 (wrAt 0x4050) dOutS
+    dwellPulse = mux (wrAt 0x4052) (Just . decodeDwellWr <$> dOutS) (pure Nothing)
+    dwellLast  = regEn (0, 400) (wrAt 0x4052) (decodeDwellWr <$> dOutS)
+    slSpeed    = (`effectiveSpeed` 0) <$> sleighCtl
+    slIn = (\c sp dw -> SleighIn (scEnable c) sp True True (scPark c) True dw)
+             <$> sleighCtl <*> slSpeed <*> dwellPulse
+    slOut = sleigh slIn
+    iSleigh      = (\o sp -> encodeSleighStatus o True True sp) <$> slOut <*> slSpeed
+    iSleighDwell = uncurry encodeDwellRd <$> dwellLast
+
+    -- WSPR (module header): real PM.Wspr, armed through the RegFile interlock.
+    wsprWr    = mux (wrAt 0x4070)
+                    ((\d -> Just (unpack (slice d7 d0 d), unpack (slice d9 d8 d))) <$> dOutS)
+                    (pure Nothing)
+    wsprStart = wrAt 0x4072 .&&. bit0
+    wsprDivW  = regEn (0x4000 :: Cell) (wrAt 0x4074) dOutS
+    wsprBaseW = regEn (0 :: Cell) (wrAt 0x4076) dOutS
+    wsprStepW = regEn (0 :: Cell) (wrAt 0x4078) dOutS
+    ext16 :: Signal dom Cell -> Signal dom (Unsigned 32)
+    ext16 = fmap (zeroExtend . unpack)
+    (wSym, wTxOn, wPhase, wDone) =
+      wspr wsprWr armedS wsprStart (ext16 wsprDivW) (ext16 wsprBaseW) (ext16 wsprStepW)
+    wDoneSt  = regEn False (wDone .||. wsprStart) (wDone .&&. (not <$> wsprStart))
+    iWsprSym  = (\sy t -> zeroExtend (pack sy) .|. (if t then 4 else 0)) <$> wSym <*> wTxOn
+    iWsprStat = (\a t d -> (if a then 1 else 0) .|. (if t then 2 else 0) .|. (if d then 4 else 0))
+                  <$> armedS <*> wTxOn <*> wDoneSt
+    iWsprPhase = (truncateB . pack) <$> wPhase :: Signal dom Cell
+
+    -- Imaging (module header): real PM.Blob on a synthetic 16x8 frame.
+    imgThreshW = regEn (0x0080 :: Cell) (wrAt 0x4064) dOutS
+    imgAreaW   = regEn (0xFF01 :: Cell) (wrAt 0x4068) dOutS
+    blobCfg = (\t a -> BlobCfg (unpack (slice d7 d0 t)) (unpack (slice d15 d8 t))
+                                (zeroExtend (unpack (slice d7 d0 a)))
+                                (zeroExtend (unpack (slice d15 d8 a)) `shiftL` 4))
+                <$> imgThreshW <*> imgAreaW
+    imgFire = wrAt 0x4062 .&&. bit0
+    pixS    = mealy frameGen (False, 0, 0) imgFire
+    blobOut = blobLabel blobCfg pixS
+    recS    = boRec <$> blobOut
+    frameSeq = regEn (0 :: Cell) imgFire (frameSeq + 1) :: Signal dom Cell
+    nRecs :: Signal dom (Unsigned 8)
+    nRecs = regEn 0 (imgFire .||. (isJust <$> recS))
+                    (mux imgFire 0 (nRecs + 1))
+    frameOk = regEn False (imgFire .||. (boFrameDone <$> blobOut)) (not <$> imgFire)
+    iImgStat = (\n ok o -> (zeroExtend (pack n) `shiftL` 8) .|. 8
+                             .|. (if boDropped o then 4 else 0) .|. (if boOverflow o then 2 else 0)
+                             .|. (if ok then 1 else 0))
+                 <$> nRecs <*> frameOk <*> blobOut
+    (iImgCent, iImgSum) = mealyB centStep ([], False) (recS, reAt 0x4064)
+
+    -- Records / Net (module header): real record path -> beacon -> RMII loopback -> macRx.
+    netEn   = (`testBit` 0) <$> regEn (0 :: Cell) (wrAt 0x4080) dOutS
+    ppsFire = mux (wrAt 0x4082 .&&. netEn)
+                  ((\d -> Just (PpsStatus (resize (unpack d :: Signed 16)) 0)) <$> dOutS)
+                  (pure Nothing)
+    centFire = mux netEn ((\r sq -> fmap (toCentroid sq) r) <$> recS <*> frameSeq) (pure Nothing)
+    (dgOut, dgSeq, _dgLen, drops) =
+      recordPath4 ppsFire (pure Nothing) (pure Nothing) centFire (riseEvery (SNat @256))
+    (bGo, bMode)       = beaconGoAdapter dgOut dgSeq
+    (txd, txen, _rdy)  = unbundle (beaconTx bGo bMode)
+    rxO                = macRx txd txen (pure 0x02504D000001)
+    iNetStat  = (\e b r -> (if e then 1 else 0) .|. (if b then 2 else 0) .|. (if r then 4 else 0))
+                  <$> netEn <*> (isJust <$> dgOut) <*> (rxValid <$> rxO)
+    iNetDrops = pack . sum <$> bundle drops
+    iNetSeq   = pack <$> dgSeq
+    iRxGood   = pack . rxGood <$> rxO
+    iRxBad    = pack . rxBad <$> rxO
+
+    ioDinS = decode <$> ioAddrS <*> iUartS <*> iSdRxS <*> (prDin <$> pmRegs) <*> pmExt
+    pmExt  = bundle ( bundle (iSleigh, iSleighDwell)
+                    , bundle (iWsprSym, iWsprStat, wsprDivW, iWsprPhase, wsprStepW)
+                    , bundle (iImgStat, frameSeq, iImgCent, iImgSum, imgThreshW)
+                    , bundle (iNetStat, iNetSeq, iNetDrops, iRxGood, iRxBad) )
+    decode a u sd pm ((sl, sld), (ws, wst, wdv, wph, wsp), (ist, isq, ic, isum, ith), (ns, nsq, nd, ng, nb))
       | a == 0x4000 = u
       | a == 0x4002 = iVT100
       | a == 0x4028 = iSdStat
       | a == 0x402A = sd
+      | a == 0x4050 = sl
+      | a == 0x4052 = sld
+      | a == 0x4070 = ws
+      | a == 0x4072 = wst
+      | a == 0x4074 = wdv
+      | a == 0x4076 = wph
+      | a == 0x4078 = wsp
+      | a == 0x4060 = ist
+      | a == 0x4062 = isq
+      | a == 0x4064 = ic
+      | a == 0x4066 = isum
+      | a == 0x4068 = ith
+      | a == 0x4080 = ns
+      | a == 0x4082 = nsq
+      | a == 0x4084 = nd
+      | a == 0x4086 = ng
+      | a == 0x4088 = nb
       | otherwise   = pm   -- 0x4020/22/24/2C/2E/30/32/34/36 + 0 elsewhere
+
+-- | Synthetic frame source for the Imaging block: state (running, x, y);
+--   a fire starts one 16x8 frame, one pixel per clock, with a 4x4 bright
+--   square at x 4..7, y 2..5 (see module header).
+frameGen :: (Bool, Unsigned 10, Unsigned 9) -> Bool -> ((Bool, Unsigned 10, Unsigned 9), Maybe Pix)
+frameGen (run, x, y) fire
+  | not run   = if fire then ((True, 0, 0), Nothing) else ((False, 0, 0), Nothing)
+  | otherwise = (st', Just pix)
+  where
+    w = 16; h = 8
+    eol = x == w - 1
+    eof = eol && y == h - 1
+    val = if x >= 4 && x <= 7 && y >= 2 && y <= 5 then 200 else 10
+    pix = Pix x y val (x == 0 && y == 0) eol eof
+    st' | eof       = (False, 0, 0)
+        | eol       = (True, 0, y + 1)
+        | otherwise = (True, x + 1, y)
+
+-- | The centroid read FIFO behind 0x4064\/0x4066 (sim-only Haskell list):
+--   blob records are appended as they arrive; a 0x4064 read strobe first
+--   returns cx, then cy and pops.  0x4066 reads the head's pixel count.
+centStep
+  :: ([(Cell, Cell, Cell)], Bool)
+  -> (Maybe BlobRec, Bool)
+  -> (([(Cell, Cell, Cell)], Bool), (Cell, Cell))
+centStep (q, phase) (rec, re) =
+  q' `seq` phase' `seq` ((q', phase'), (cent, cnt))
+  where
+    (cent, cnt) = case q of
+      ((cx, cy, n) : _) -> (if phase then cy else cx, n)
+      []                -> (0, 0)
+    q1 = case rec of
+      Just r  -> q P.++ [(pack (bCx r), pack (bCy r), pack (bCount r))]
+      Nothing -> q
+    (q', phase')
+      | re && not (P.null q) = if phase then (P.drop 1 q1, False) else (q1, True)
+      | otherwise            = (q1, phase)
+
+-- | A blob record as the CENTROID port payload (rtc = 0 here; the frame seq
+--   is the record's seq).
+toCentroid :: Cell -> BlobRec -> Centroid
+toCentroid sq r = Centroid 0 (unpack sq) (pack (bLabel r)) (bCx r) (bCy r) (bCount r) 0

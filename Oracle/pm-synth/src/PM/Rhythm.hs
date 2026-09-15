@@ -167,3 +167,18 @@ rhythmUnit pat cfg tick running = (stepSeq tick running, mix3 <$> b <*> s <*> h)
   b = bassVoice  (bit' 2 <$> trig) (rBass  <$> cfg) (iBass <$> cfg)
   s = noiseVoice (bit' 1 <$> trig) (rSnare <$> cfg)
   h = noiseVoice (bit' 0 <$> trig) (rHat   <$> cfg)
+
+-- | Synthesis root (area/Fmax measurement).
+topEntity
+  :: Clock System -> Reset System -> Enable System
+  -> Signal System (Index 10) -> Signal System PercCfg -> Signal System Bool -> Signal System Bool
+  -> (Signal System (Index 16), Signal System (Signed 12))
+topEntity = exposeClockResetEnable rhythmUnit
+{-# NOINLINE topEntity #-}
+{-# ANN topEntity
+  (Synthesize
+    { t_name   = "pm_rhythm"
+    , t_inputs = [ PortName "clk", PortName "rst", PortName "en"
+                 , PortName "pattern", PortName "cfg", PortName "tick", PortName "running" ]
+    , t_output = PortProduct "" [ PortName "step", PortName "sample" ]
+    }) #-}

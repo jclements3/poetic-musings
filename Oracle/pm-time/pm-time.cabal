@@ -6,7 +6,9 @@ description:
   Clash ports of MAIDEN/firmware/timebase/rtl (pps_discipline.vhd,
   strobe_latch.vhd), per LIBRARY.md's porting rule: widths explicit,
   upstream behaviour reproduced exactly, verified against the GHDL
-  testbench cases (timebase_tb.vhd) in test/Spec.hs.
+  testbench cases (timebase_tb.vhd) in test/Spec.hs, plus PM.Dpll, the
+  steered 10 MHz layer of GPS/DESIGN.md (test/DpllSpec.hs). Hedgehog
+  reference-model properties in test/Prop.hs; see VERIFY.md.
 build-type: Simple
 
 common shared
@@ -25,6 +27,7 @@ library
   hs-source-dirs: src
   exposed-modules: PM.StrobeLatch
                    PM.PpsDiscipline
+                   PM.Dpll
 
 test-suite time-test
   import: shared
@@ -32,6 +35,22 @@ test-suite time-test
   hs-source-dirs: test
   main-is: Spec.hs
   build-depends: pm-time
+  ghc-options: -threaded
+
+test-suite dpll-test
+  import: shared
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: DpllSpec.hs
+  build-depends: pm-time
+  ghc-options: -threaded -O2
+
+test-suite time-prop
+  import: shared
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: Prop.hs
+  build-depends: pm-time, hedgehog
   ghc-options: -threaded
 
 executable clash

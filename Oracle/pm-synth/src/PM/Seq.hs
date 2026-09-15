@@ -123,3 +123,18 @@ sequencer mode key tick = cmdS
  where
   (cmdS, wr, rd) = unbundle (mealy seqT seqInit (bundle (mode, key, tick, ram)))
   ram = blockRam (replicate d100 (0 :: BitVector 15)) rd wr
+
+-- | Synthesis root (area/Fmax measurement).
+topEntity
+  :: Clock System -> Reset System -> Enable System
+  -> Signal System SeqMode -> Signal System (Maybe (Unsigned 7)) -> Signal System Bool
+  -> Signal System SeqCmd
+topEntity = exposeClockResetEnable sequencer
+{-# NOINLINE topEntity #-}
+{-# ANN topEntity
+  (Synthesize
+    { t_name   = "pm_seq"
+    , t_inputs = [ PortName "clk", PortName "rst", PortName "en"
+                 , PortName "mode", PortName "key", PortName "tick" ]
+    , t_output = PortName "cmd"
+    }) #-}

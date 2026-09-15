@@ -1,0 +1,24 @@
+
+9. Printing statistics.
+
+=== pm_top_snooker ===
+
+        +----------Local Count, excluding submodules.
+        | 
+    40665 wires
+   451721 wire bits
+    40665 public wires
+   451721 public wire bits
+       31 ports
+       99 port bits
+    54483 cells
+        5   $scopeinfo
+     2346   CCU2C
+       44   DP16KD
+     1774   L6MUX21
+    29898   LUT4
+       61   MULT18X18D
+     7217   PFUMX
+       97   TRELLIS_DPR16X4
+    13041   TRELLIS_FF
+

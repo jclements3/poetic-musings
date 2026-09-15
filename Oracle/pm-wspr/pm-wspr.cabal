@@ -32,3 +32,11 @@ executable clash
   import: shared
   main-is: bin/Clash.hs
   build-depends: clash-ghc
+
+test-suite wspr-fsk-test
+  import: shared
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: FskSpec.hs
+  build-depends: pm-wspr
+  ghc-options: -threaded

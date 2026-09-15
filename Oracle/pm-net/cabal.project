@@ -1,2 +1,2 @@
-packages: .
+packages: . ../pm-vision ../pm-time
 write-ghc-environment-files: always

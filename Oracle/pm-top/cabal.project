@@ -1,0 +1,17 @@
+-- pm-top: the "Snooker mode" fit study. One copy of every block in the
+-- fpga-resource-swag.md Snooker row, wired plausibly, synthesised for the
+-- ECP5-85F. All dependencies are path packages; nothing here is published.
+packages: .
+          ../clash-h2
+          ../../IRIG/clash
+          ../pm-lib
+          ../pm-video
+          ../pm-net
+          ../pm-vision
+          ../pm-dsp
+          ../pm-time
+          ../pm-wspr
+          ../../MAIDEN/theremin/clash
+
+constraints: clash-prelude ==1.8.5, clash-ghc ==1.8.5
+write-ghc-environment-files: never

@@ -26,7 +26,7 @@ beyond iCE40 I/O; ECP5 ODDR handles it. So the box needs an ECP5 regardless.
 | IRIG-B gen/decode + GPS PPS DPLL + 10 MHz | 1.5k | 1 KB | 0 | counters |
 | SDR DDC (NCO, I/Q mix, CIC, FIR comp) @ AD9226 65 MSPS | 4k | 16 KB | 12 | the DSP-hungry one; FIR time-share limited at 65 MHz |
 | Network (RMII MAC, UDP, Ch.10 framing) | 3k | 16 KB | 0 | plus SDRAM for elasticity |
-| Imaging (DVP capture, trigger, run-length blob labeller, ≤32 per-ball centroids) | 3.5k | 12 KB | 2 | snooker: label line buffer + equivalence table + 32 accumulator sets (Σxw, Σyw, Σw, bbox, count); 2 pixel-rate multiplies; end-of-frame sequential divides; frame store in SDRAM, not BRAM |
+| Imaging (DVP capture, trigger, run-length blob labeller, ≤32 per-ball centroids) | 3.5k **(measured 3.5k after the RAM-table fix; 35k before)** | 12 KB | 2 | snooker: label line buffer + equivalence table + 32 accumulator sets (Σxw, Σyw, Σw, bbox, count); 2 pixel-rate multiplies; end-of-frame sequential divides; frame store in SDRAM, not BRAM |
 | M Motion radar (SPI ADC front end, CIC, CFAR, velocity records) | 4k | 8 KB | 6 | snooker cue-ball speed; FFT is the shared instance above; Ch.10 record mux lives in Network |
 | Glue: SPI/SD, I²S/TDM, event UART, debounce, PLL/reset, capture/trigger tooling | 3k | 16 KB | 0 | |
 
@@ -36,7 +36,7 @@ beyond iCE40 I/O; ECP5 ODDR handles it. So the box needs an ECP5 regardless.
 |---|---|---|---|
 | Biggest single mode (Panel: H2 + video + synth + theremin voice + harp playback + FFT + keyer) | ~22k | ~150 KB | ~25 |
 | "Everything resident" one-bitstream demo (add SDR + net + IRIG) | ~32k | ~190 KB | ~37 |
-| Snooker mode bitstream (H2 + video + net + imaging + Motion radar + FFT + IRIG) | ~21k | ~95 KB | ~15 |
+| Snooker mode bitstream (H2 + video + net + imaging + Motion radar + FFT + IRIG) | ~21k **(fit 2026-09-15: 36k pre-blob-fix, expect ~10k after)** | ~95 KB **(measured 99 KB)** | ~15 **(measured 61: FFT 34, DDC 18)** |
 | + 50% margin for beginner-Clash inference inefficiency and routing at speed | **~48k** | **~285 KB** | **~55** |
 
 Clock domains to plan for: 100 MHz system, ~74 MHz pixel, 65 MHz ADC, 25/50 MHz RMII,

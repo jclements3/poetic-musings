@@ -15,17 +15,42 @@
 --                  (every entry equal to a merged root is rewritten to the
 --                  target root), so parent !! l is always a root.
 --   * accumulate : per provisional label: sum x (28b), sum y (28b), count
---                  (18b), bbox.  Provisional, not root, so the per-pixel path is
---                  one read-modify-write; roots are folded at end of frame.
---   * end of frame (after the eof pixel drains): 32 merge cycles fold every
---                  non-root label into its root, then a scan over the 32 labels
---                  runs a 32-step restoring shift-subtract divide (cx and cy in
---                  parallel) for each root whose count lies in [minArea,
---                  maxArea] and emits one BlobRec with a valid strobe; the scan
---                  ends with boFrameDone.  Worst case 32 + 32 + 32*32 = 1088
---                  cycles, which must fit in vertical blanking: pixels that
---                  arrive while the end-of-frame phases run are dropped and set
---                  the sticky boDropped flag.
+--                  (18b), bbox — an Acc of 112 bits, held in a label-indexed
+--                  blockRam (32 x 112, single read port + single write port),
+--                  NOT in the mealy state: a 32-entry Vec of Acc in registers
+--                  cost 35k LUT4 of muxes (measurements/2026-09-15-area-A.md).
+--                  The per-pixel path is a read-modify-write with a one-cycle
+--                  pipeline: the labelled pixel issues the read of acc[label]
+--                  and the next cycle adds (x, y) and writes it back.  Still
+--                  one pixel per clock.  Hazards are closed by a single
+--                  forwarding register holding the last (label, Acc) written:
+--                  a read whose label equals it uses the register (the RAM
+--                  read would miss a write of the previous cycle).  A 32-bit
+--                  valid mask marks labels written this frame; a read of an
+--                  unwritten label yields accEmpty, which replaces clearing
+--                  the RAM at sof.
+--   * parent table: 32 x 5 bits stays in registers (160 FF, ~300 LUT4) with
+--                  the one-cycle flat relabel above: at that size it is far
+--                  cheaper than a parent-pointer RAM with find-on-read, keeps
+--                  parent !! l a root at all times, and gives the identical
+--                  root (the picked label's root) for every merge.
+--   * end of frame (after the eof pixel drains, whose write lands in the
+--                  first merge cycle): merge phase, 2 cycles per label — read
+--                  acc[l], read acc[root l], and in the following label's first
+--                  cycle write acc[root] = acc[root] + acc[l] (the forwarding
+--                  register covers the read of the label just written); then a
+--                  scan over the 32 labels, 2 cycles per label (read, decide),
+--                  latching the Acc of each root whose count lies in [minArea,
+--                  maxArea] and running a 32-step restoring shift-subtract
+--                  divide (cx and cy in parallel) that emits one BlobRec with a
+--                  valid strobe; the scan ends with boFrameDone.  Worst case
+--                  64 + 64 + 32*32 = 1152 cycles, which must fit in vertical
+--                  blanking: pixels that arrive while the end-of-frame phases
+--                  run are dropped and set the sticky boDropped flag.
+--   * throughput : 1 clock per pixel while labelling (640x400 at 200 fps is
+--                  51.2 Mpx/s, i.e. 0.51 clocks per pixel at 100 MHz, plus
+--                  <= 1152 cycles (11.5 us) once per frame; the frame period
+--                  is 5 ms).
 --   * centroid   : cx_q4 = round(16 * sum x / count) (ties up) — an unweighted
 --                  (binary) centroid in pixel-index units, the record's cx_q4 /
 --                  cy_q4 fields of PROTOCOL.md 0x20 CENTROID.  count is
@@ -136,10 +161,15 @@ data BlobSt = BlobSt
   , bsLastPrev :: !(Maybe Label)    -- its previous-line label
   , bsNext     :: !(Unsigned 6)     -- next free label, 32 = full
   , bsParent   :: !(Vec 32 Label)   -- flat: every entry is a root
-  , bsAcc      :: !(Vec 32 Acc)
+  , bsPend     :: !(Maybe (Label, Unsigned 10, Unsigned 9))  -- pixel whose acc read is in flight
+  , bsRdLab    :: !Label            -- label whose acc read was issued last cycle
+  , bsFwd      :: !(Label, Acc)     -- last acc written (forwarding)
+  , bsValid    :: !(BitVector 32)   -- acc[l] written this frame
+  , bsAccL     :: !Acc              -- merge: acc[l] latched; scan/divide: acc of bsIdx
+  , bsMPend    :: !Bool             -- merge: write acc[bsRdLab] += bsAccL this cycle
   , bsPhase    :: !Phase
   , bsIdx      :: !(Unsigned 5)     -- label under merge / scan / divide
-  , bsStep     :: !(Unsigned 5)     -- divide iteration
+  , bsStep     :: !(Unsigned 5)     -- merge/scan sub-step, divide iteration
   , bsNx       :: !(Unsigned 32)    -- numerators, shifting left
   , bsNy       :: !(Unsigned 32)
   , bsQx       :: !(Unsigned 16)    -- quotients, shifting in
@@ -152,7 +182,8 @@ data BlobSt = BlobSt
 
 blobInit :: BlobSt
 blobInit = BlobSt Nothing Nothing False maxBound Nothing Nothing 0 indicesI
-                  (repeat accEmpty) PhLabel 0 0 0 0 0 0 0 0 False False
+                  Nothing 0 (0, accEmpty) 0 accEmpty False
+                  PhLabel 0 0 0 0 0 0 0 0 False False
 
 -- | Restoring divide, one step: (numerator, quotient, remainder) with divisor d.
 divStep :: Unsigned 18 -> (Unsigned 32, Unsigned 16, Unsigned 19)
@@ -165,9 +196,28 @@ divStep d (n, q, r) =
 -- | Type of the line-buffer write port.
 type LineWr = Maybe (Unsigned 10, Maybe Label)
 
-blobT :: BlobSt -> (BlobCfg, Maybe Pix, Maybe Label) -> (BlobSt, (LineWr, BlobOut))
-blobT st (BlobCfg{..}, pixIn, rd) = (st3, (wr, out))
+-- | Accumulator RAM ports: read address (data next cycle), write.
+type AccWr = Maybe (Label, Acc)
+
+-- | Inputs: config, pixel, line-buffer read, acc RAM read (of the address
+-- output last cycle).  Outputs: line-buffer write, acc read address, acc
+-- write, records.
+blobT :: BlobSt -> (BlobCfg, Maybe Pix, Maybe Label, Acc)
+      -> (BlobSt, (LineWr, Label, AccWr, BlobOut))
+blobT st (BlobCfg{..}, pixIn, rd, accRam) = (st4, (wr, accAddr, accWr, out))
  where
+  -- acc read data of last cycle's address, forwarded and masked
+  accIn | not (testBit (bsValid st) (fromIntegral (bsRdLab st))) = accEmpty
+        | fst (bsFwd st) == bsRdLab st = snd (bsFwd st)
+        | otherwise = accRam
+  -- pending pixel accumulate (read issued last cycle)
+  -- (a write in flight when a sof pixel is labelled belongs to the old frame)
+  sofNow = case labelling of
+    Just sb -> pSof (sbPix sb) && bsPhase st == PhLabel
+    Nothing -> False
+  pixWr = if sofNow then Nothing
+          else fmap (\(l, x, y) -> (l, accAdd accIn (x, y))) (bsPend st)
+  st0 = st { bsPend = Nothing }
   -- threshold at arrival
   fgIn = maybe False (\p -> thresholdT (bsFgPrev st) (cThr, cHyst, pVal p)) pixIn
   fgPrev' = case pixIn of
@@ -183,29 +233,43 @@ blobT st (BlobCfg{..}, pixIn, rd) = (st3, (wr, out))
   -- pipeline shift
   a' = if advance then fmap (\p -> StageA p fgIn) pixIn else bsA st
   b' = if advance then fmap (\StageA{..} -> StageB saPix saFg rd) (bsA st) else bsB st
-  st1 = st { bsA = a', bsB = b', bsFgPrev = fgPrev' }
+  st1 = st0 { bsA = a', bsB = b', bsFgPrev = fgPrev' }
 
   -- end-of-frame phases (run regardless of the pipeline)
-  (st2, rec0, done) = eofPhase st1
+  (st2, rec0, done, eofAddr, eofWr) = eofPhase st1
   -- labelling of B
-  (st3, wr) = case labelling of
-    Nothing -> (st2, Nothing)
+  (st3, wr, pixAddr) = case labelling of
+    Nothing -> (st2, Nothing, Nothing)
     Just sb
-      | bsPhase st /= PhLabel -> (st2 { bsDropped = True }, Nothing)
+      | bsPhase st /= PhLabel -> (st2 { bsDropped = True }, Nothing, Nothing)
       | otherwise          -> labelPixel st2 sb
-  out = BlobOut rec0 done (bsOverflow st3) (bsDropped st3)
+  -- the pixel path owns the RAM ports while labelling, the eof phases after
+  -- the eof pixel; the two never write in the same cycle (the eof pixel's
+  -- write lands in the first merge cycle, whose write is idle).
+  accWr = case pixWr of
+    Just w  -> Just w
+    Nothing -> eofWr
+  accAddr = case pixAddr of
+    Just a  -> a
+    Nothing -> eofAddr
+  st4 = st3 { bsRdLab = accAddr
+            , bsFwd = maybe (bsFwd st3) id accWr
+            , bsValid = case accWr of
+                Just (l, _) -> setBit (bsValid st3) (fromIntegral l)
+                Nothing     -> bsValid st3 }
+  out = BlobOut rec0 done (bsOverflow st4) (bsDropped st4)
 
   -- (x+1, y-1) neighbour: A's read, valid when A is the next pixel of the line
   prevRight x = case bsA st of
     Just StageA{..} | pX saPix == x + 1 -> rd
     _ -> Nothing
 
-  labelPixel :: BlobSt -> StageB -> (BlobSt, LineWr)
-  labelPixel s0 StageB{..} = (sN, Just (x, lab))
+  labelPixel :: BlobSt -> StageB -> (BlobSt, LineWr, Maybe Label)
+  labelPixel s0 StageB{..} = (sN, Just (x, lab), lab)
    where
     Pix{..} = sbPix
     x = pX; y = pY
-    s = if pSof then s0 { bsNext = 0, bsParent = indicesI, bsAcc = repeat accEmpty
+    s = if pSof then s0 { bsNext = 0, bsParent = indicesI, bsValid = 0
                         , bsOverflow = False, bsDropped = False, bsLastCur = Nothing }
                 else s0
     adj = bsLastX s == x - 1
@@ -229,42 +293,48 @@ blobT st (BlobCfg{..}, pixIn, rd) = (st3, (wr, out))
       Just l  -> let tgt = par !! l
                  in map (\p -> if any (== Just p) roots then tgt else p) par
       Nothing -> par
-    acc' = case lab of
-      Just l  -> replace l (accAdd (bsAcc s !! l) (x, y)) (bsAcc s)
-      Nothing -> bsAcc s
-    sN = s { bsParent = parent', bsAcc = acc', bsNext = next'
+    sN = s { bsParent = parent', bsNext = next'
+           , bsPend = fmap (\l -> (l, x, y)) lab
            , bsOverflow = bsOverflow s || ovf
            , bsLastX = x, bsLastCur = lab, bsLastPrev = sbPrev
-           , bsPhase = if pEof then PhMerge else bsPhase s, bsIdx = 0 }
+           , bsPhase = if pEof then PhMerge else bsPhase s
+           , bsIdx = 0, bsStep = 0, bsMPend = False }
 
-  eofPhase :: BlobSt -> (BlobSt, Maybe BlobRec, Bool)
+  -- (state, record, frame done, acc read address, acc write)
+  eofPhase :: BlobSt -> (BlobSt, Maybe BlobRec, Bool, Label, AccWr)
   eofPhase s = case bsPhase s of
-    PhLabel -> (s, Nothing, False)
+    PhLabel -> (s, Nothing, False, bsRdLab s, Nothing)
     PhMerge ->
+      -- step 0: read acc[l]; step 1: read acc[r], latch acc[l]; the write of
+      -- acc[r] happens in the next step 0 (of the next label, or of the scan)
       let l = fromIntegral (bsIdx s) :: Label
           r = bsParent s !! l
-          acc = bsAcc s
-          acc' = if r /= l then replace r (accMerge (acc !! r) (acc !! l)) acc else acc
           lastL = bsIdx s == maxBound
-      in (s { bsAcc = acc', bsIdx = bsIdx s + 1, bsPhase = if lastL then PhScan else PhMerge }
-         , Nothing, False)
+      in if bsStep s == 0
+           then (s { bsStep = 1, bsMPend = False }, Nothing, False, l, mWr)
+           else (s { bsStep = 0, bsAccL = accIn, bsMPend = r /= l
+                   , bsIdx = bsIdx s + 1, bsPhase = if lastL then PhScan else PhMerge }
+                , Nothing, False, r, Nothing)
     PhScan ->
+      -- step 0: read acc[l] (and finish the last merge write); step 1: decide
       let l = fromIntegral (bsIdx s) :: Label
-          Acc{..} = bsAcc s !! l
+          Acc{..} = accIn
           isRoot = bsParent s !! l == l
           keep = isRoot && aN /= 0 && aN >= cMinArea && aN <= cMaxArea
           lastL = bsIdx s == maxBound
           half = resize (aN `shiftR` 1) :: Unsigned 32
-      in if keep
-           then (s { bsPhase = PhDiv, bsStep = 0
-                   , bsNx = (resize aSx `shiftL` 4) + half
-                   , bsNy = (resize aSy `shiftL` 4) + half
-                   , bsQx = 0, bsQy = 0, bsRx = 0, bsRy = 0 }, Nothing, False)
-           else (s { bsIdx = bsIdx s + 1, bsPhase = if lastL then PhLabel else PhScan }
-                , Nothing, lastL)
+      in if bsStep s == 0
+           then (s { bsStep = 1, bsMPend = False }, Nothing, False, l, mWr)
+           else if keep
+             then (s { bsPhase = PhDiv, bsStep = 0, bsAccL = accIn
+                     , bsNx = (resize aSx `shiftL` 4) + half
+                     , bsNy = (resize aSy `shiftL` 4) + half
+                     , bsQx = 0, bsQy = 0, bsRx = 0, bsRy = 0 }, Nothing, False, l, Nothing)
+             else (s { bsStep = 0, bsIdx = bsIdx s + 1, bsPhase = if lastL then PhLabel else PhScan }
+                  , Nothing, lastL, l, Nothing)
     PhDiv ->
       let l = fromIntegral (bsIdx s) :: Label
-          Acc{..} = bsAcc s !! l
+          Acc{..} = bsAccL s
           (nx, qx, rx) = divStep aN (bsNx s, bsQx s, bsRx s)
           (ny, qy, ry) = divStep aN (bsNy s, bsQy s, bsRy s)
           lastStep = bsStep s == maxBound
@@ -275,9 +345,12 @@ blobT st (BlobCfg{..}, pixIn, rd) = (st3, (wr, out))
           s' = s { bsNx = nx, bsNy = ny, bsQx = qx, bsQy = qy, bsRx = rx, bsRy = ry
                  , bsStep = bsStep s + 1 }
       in if lastStep
-           then (s' { bsIdx = bsIdx s + 1, bsPhase = if lastL then PhLabel else PhScan }
-                , Just rec, lastL)
-           else (s', Nothing, False)
+           then (s' { bsStep = 0, bsIdx = bsIdx s + 1, bsPhase = if lastL then PhLabel else PhScan }
+                , Just rec, lastL, l, Nothing)
+           else (s', Nothing, False, l, Nothing)
+   where
+    -- merge write: acc[root] (read last cycle, address bsRdLab) += acc[l]
+    mWr = if bsMPend s then Just (bsRdLab s, accMerge accIn (bsAccL s)) else Nothing
 
 -- | Threshold + labeller: register block in, pixel stream in, records out.
 blobLabel
@@ -290,7 +363,9 @@ blobLabel cfg pixIn = out
   held   = register 0 rdAddr
   rdAddr = (\h p -> maybe h pX p) <$> held <*> pixIn
   rd     = blockRam (replicate d1024 Nothing) rdAddr wr
-  (wr, out) = unbundle (mealy blobT blobInit (bundle (cfg, pixIn, rd)))
+  accRd  = blockRam (replicate d32 accEmpty) accAddr accWr
+  (wr, accAddr, accWr, out) =
+    unbundle (mealy blobT blobInit (bundle (cfg, pixIn, rd, accRd)))
 
 topEntity
   :: Clock System -> Reset System -> Enable System

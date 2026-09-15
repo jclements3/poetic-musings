@@ -1,0 +1,21 @@
+
+3. Printing statistics.
+
+=== h2 ===
+
+        +----------Local Count, excluding submodules.
+        | 
+     1430 wires
+     3762 wire bits
+     1430 public wires
+     3762 public wire bits
+       18 ports
+      134 port bits
+     1691 cells
+       46   CCU2C
+      140   L6MUX21
+     1076   LUT4
+      350   PFUMX
+       32   TRELLIS_DPR16X4
+       47   TRELLIS_FF
+

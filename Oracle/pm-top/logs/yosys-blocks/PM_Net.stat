@@ -1,0 +1,20 @@
+
+3. Printing statistics.
+
+=== pm_net_beacon ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      804 wires
+    12067 wire bits
+      804 public wires
+    12067 public wire bits
+        8 ports
+       16 port bits
+      667 cells
+       18   CCU2C
+       34   L6MUX21
+      408   LUT4
+       94   PFUMX
+      113   TRELLIS_FF
+

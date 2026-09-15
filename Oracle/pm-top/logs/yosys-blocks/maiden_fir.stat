@@ -1,0 +1,18 @@
+
+3. Printing statistics.
+
+=== maiden_fir ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      888 wires
+     7232 wire bits
+      888 public wires
+     7232 public wire bits
+        5 ports
+       59 port bits
+      817 cells
+      256   CCU2C
+        8   MULT18X18D
+      553   TRELLIS_FF
+

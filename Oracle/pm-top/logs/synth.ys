@@ -1,0 +1,4 @@
+read_verilog -sv verilog/PM.TopSnooker.topEntity/*.v
+hierarchy -top pm_top_snooker
+synth_ecp5 -top pm_top_snooker -json top.json
+tee -q -o stat-hier.txt stat -top pm_top_snooker
