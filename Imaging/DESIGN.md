@@ -8,6 +8,15 @@ ball's path live. Part 2 is M (Motion radar): cue-ball departure speed, checked
 against this letter's camera-derived speed within 5 %. Cost: OV9281 module + lens +
 overhead mount, TBD after **the Sep Basic Plan study** (fpga-development-plan #11).
 
+**Spoke framing (`../PROGRAM.md`):** Imaging adds the overhead OV9281 camera and its
+strobe/trigger line to the Panel+Oracle root. In `../CLASH-LIBRARY-MAP.md` § Module
+list it owns the largest block of ○ work in the library — DVP camera capture and the
+run-length blob labeller with per-ball centroids (I/O and links) — plus the ◐ async
+strobe timestamp latch (Timing, port from `strobe_latch.vhd`), and it consumes N's
+transmitter and I/G's clock. The `MAIDEN/…` paths below are the library source
+archive, a plain directory in this unified repo since 2026-09-15; its harvested camera
+decisions stand, its USB3→SBC video path does not apply here.
+
 ## Snooker geometry (sets the study's numbers)
 
 | Quantity | Value | Consequence |
