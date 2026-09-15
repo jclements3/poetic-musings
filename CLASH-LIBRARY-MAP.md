@@ -110,6 +110,56 @@ how fast the cue ball left, IRIG aligns them on one screen (PLAN.md Phases 11–
 | Cue-ball departure (~1.3 kHz Doppler at 8 m/s) | CIC decimate → FFT512 → CA-CFAR → velocity record; radial-only, no ball identity | `Maiden.Cic`, `Theremin.Fft`, `Maiden.Cfar`, `doppler_core.vhd` | ✓ blocks · ◐ chain |
 | V0 one-screen view | Ball paths + velocity trace on the overlay strip, timestamps aligned by IRIG; gate = radar speed within 5 % of camera speed | overlay FB + `Theremin.Fft` tap | ○ overlay |
 
+## Module list — what the effort produces
+
+✓ exists and is sim-verified · ◐ exists as measured VHDL, Clash port pending · ○ to be
+written. Roughly 35 ✓, 5 ◐, 15 ○ as of 2026-09-15.
+
+**DSP core**
+- ✓ CIC decimator with type-level ratio (`Maiden.Cic`)
+- ✓ 15-tap systolic FIR, CIC droop compensator (`Maiden.Fir`)
+- ✓ 512-point streaming FFT, R2SDF — 4,620 LUT4 / 34 DSP / 3 BRAM on ECP5 (`Theremin.Fft`)
+- ✓ 16-stage pipelined CORDIC, vectoring magnitude/phase (`Maiden.Cordic`)
+- ✓ CA-CFAR detector, integer compare, no divide (`Maiden.Cfar`)
+- ✓ NCO with quarter-wave sine LUT in BRAM
+- ✓ N-stage IIR — 175 LUT4 @ 132 MHz (`Theremin.IirNStage`)
+- ✓ Edge sampler, edge-to-pulse-position, sensor period measure, delay-difference filter
+- ◐ Doppler chain integration: CIC → FFT → CFAR → velocity records (`doppler_core.vhd`)
+- ○ DDC wiring (NCO mix + CIC + FIR at 65 MSPS), Goertzel tone detector, AM envelope demod, Karplus-Strong waveguide with allpass fractional delay
+
+**Audio and synthesis**
+- ✓ Sigma-delta DAC and PWM (`PM.Audio`, `Theremin.Pwm`)
+- ✓ 4-channel saturating fixed-point mixer
+- ✓ Note-to-phase table, 10-pattern pulse oscillator, ADSSR envelope (`PM.Synth`)
+- ✓ Volume curve, musical NoteMap A0..G7
+- ○ Vibrato/tremolo LFOs, rhythm ROM + percussion, event sequencer, I²S serializer
+
+**I/O and links**
+- ✓ UART with FIFO (`H2.SystemUart`)
+- ✓ SPI mode-0 master — SD and ADCs (`PM.Spi`)
+- ✓ 8×8 key matrix scanner with debounce and event FIFO (`PM.Matrix`)
+- ✓ Slider zone decoder with hysteresis and 1 s dwell (`PM.Zones`)
+- ✓ Framed 8N1 event link, A5 + checksum, corruption resync (`PM.HarpLink`)
+- ✓ 250 kbaud sleigh speed link with dead-man watchdog and coil pacer (`PM.SleighSpeed`)
+- ✓ NMEA `$GxRMC` time parser with checksum gate (`PM.Gps`)
+- ✓ RMII 100BASE-TX UDP/IPv4 transmitter with CRC32 (`PM.Net`)
+- ◐ Ch.10 tagged-record framing and record mux (recorder `PROTOCOL.md`)
+- ○ RMII MAC receiver, DVP camera capture, run-length blob labeller + per-ball centroids, TMDS/HDMI encoder, WSPR modulator
+
+**Timing and clock domains**
+- ✓ 2-flop synchroniser, pulse synchroniser, Gray-code async FIFO (`PM.Cdc`)
+- ✓ IRIG-B DCLS + AM framer with settable BCD RTC (`IRIG/clash`)
+- ◐ PPS discipline with 48-bit RTC and holdover watchdog (`pps_discipline.vhd`)
+- ◐ Async strobe timestamp latch (`strobe_latch.vhd`)
+- ○ PPS-locked 10 MHz DPLL, SDRAM controller
+
+**Control and display**
+- ✓ H2 stack CPU booting the real eForth image (`Oracle/clash-h2`)
+- ✓ Memory-mapped register file: FIFO-popping reads, command pulses, hardware TX interlock (`PM.RegFile`)
+- ✓ CW keyer and Morse decoder (`PM.Keyer`)
+- ✓ 1920×480 text console, pixel-exact IBM VGA glyphs (`Oracle/pm-video`)
+- ○ Overlay framebuffer for envelope and spectrum strips
+
 ## Library roll-up
 
 | Family | Components ✓ | ◐ | ○ |
