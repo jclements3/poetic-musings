@@ -25,8 +25,8 @@ Milestones: Basic Plan Sep 2026 · Prototype Dec 2026 · Field Demo Feb 2027. It
 | 8 | **N** Network | 3 | $25 (RMII PHY PMOD) | I | O | UDP stream of ADC samples to laptop, zero drops over 10 min; Ch.10 transport. ▲ |
 | 9 | **U** UHF beacon | 3 | TBD | P (ham — personal ledger) | G | GPS-disciplined CW + WSPR on air; spot appears on wsprnet. |
 | 10 | **S** SDR | 4 | ~$30 (AD9226-class ADC) | I | T, O | Direct-sampling HF on the theremin antennas; DDC (CIC/FIR) waterfall on O; decode a broadcast or WSPR signal. |
-| 11 | **I** Imaging | 4 | TBD — global-shutter sensor / trigger / FOV-range study first (Sep Basic Plan) | I | N, G | External-trigger capture, IRIG-timestamped, centroid stream over N. |
-| 12 | **M** Motion radar | 4 | ~$60 (Doppler module + SPI ADC) | I | O, G | Doppler front end on the root: CIC → FFT → CFAR → velocity records, IRIG-stamped, visible on V0 and streamed over N. Reuses `MAIDEN/firmware/doppler` VHDL as black box, then Clash port. |
+| 11 | **I** Imaging | 4 | OV9281 global-shutter module + lens + overhead mount (TBD after Sep FOV study) | I | N, G | Snooker table, part 1: overhead camera, external trigger, IRIG-stamped centroids in gateware over N. Gate: one rolled ball gives a gap-free track at 200 fps. Demo: ball paths drawn live on V0. Mono only, no colour ID. |
+| 12 | **M** Motion radar | 4 | ~$60 (CDM324-class 24 GHz module + SPI ADC) | I | O, G, I(maging) | Snooker table, part 2: Doppler aimed down the table; CIC → FFT → CFAR → velocity records, IRIG-stamped, on V0 and over N. Gate: cue-ball speed matches the camera-derived speed within 5 %, timestamps aligned. Demo: one shot, position from camera + speed from radar on one screen. Black-box `MAIDEN/firmware/doppler` VHDL first, then Clash port, re-measure on ECP5. |
 
 ## Panel quality BOM (demo-grade, decided 2026-08-31)
 
