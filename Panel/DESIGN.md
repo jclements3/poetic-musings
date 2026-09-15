@@ -5,6 +5,18 @@ keys, sliders, buttons and display are generic inputs and a scope for every mode
 Casio VL-1 was the visual inspiration for the flat-key look; VL-1 synthesis is one mode
 among six, not the goal, and VL-1 A/B accuracy is no longer a gate.
 
+**Root framing (`../PROGRAM.md`):** Panel is not a spoke. With Oracle it *is* the root:
+Panel is the body, Oracle the brains. Every spoke plugs its special hardware into
+this body — the theremin and UHF antenna studs on the end plates, the AD9226 board and
+antenna relay at the rear, the GPS and PA can rear-right, the RMII PHY, the harp and
+sleigh link connectors, and the strobe/trigger lines to the snooker camera — and every
+spoke shows its output on V0 and takes its knobs from S0–S4 and the keys. The library
+components Panel itself exercises: `PM.Matrix`, `PM.Zones`, `PM.RegFile`, `PM.Spi`
+(slider ADC), the `PM.Synth`/`PM.Audio` set in VL-1 synth mode, and the `pm-video`
+console. The six S3 zones are P·O·E·T·I·C; the MUSING spokes (M, U, S, I, N, G) are
+entered from the O-mode script menu (`../LAYOUT.html` mode table), so the slider
+never needs more than six detents.
+
 Phase 5 of PLAN.md: build the 3D-printed 49-key panel and case, mount the display and
 sliders, wire the matrix, and bring the control surface up against Oracle so every
 library block has a key, a slider and a screen. This doc consolidates the decisions scattered across PLAN.md,
@@ -105,7 +117,7 @@ VL-1-specific, and VL-1 emulation is *one mode among many* (PROGRAM.md open item
 **Recommendation: B, minimally** — permanent silk carries the neutral layer plus the
 few VL-1 legends that are functionally load-bearing in P mode (rhythm names under the
 white keys, button captions), styled after `vl1-reference-photo.png`; everything else
-(voice tables, IRAD scripts, band plans) is V0's job, and a single snap-in strip above
+(voice tables, spoke demo scripts, band plans) is V0's job, and a single snap-in strip above
 the keys is the escape hatch if another mode ever needs its own printed legend. The
 box *is* a VL-1 derivative — the silk may say so, as long as no mode *requires*
 reading another mode's labels.
