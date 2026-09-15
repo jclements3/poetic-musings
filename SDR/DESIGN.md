@@ -9,8 +9,11 @@ radio receiver — same box, new mode, entered from the O-mode script menu.
 **Spoke framing (PROGRAM.md):** S adds exactly one piece of hardware to the
 Panel+Oracle root — the AD9226 ADC board plus the antenna relay — and exercises the
 library's DDC set: `Theremin.Nco`, `Maiden.Cic`, `Maiden.Fir`, `Theremin.Fft`, CORDIC
-magnitude for AM. The `MAIDEN/…` paths below are the library source archive, not a
-dependency on another program; blocks are consumed in place or ported per LIBRARY.md.
+magnitude for AM. The `MAIDEN/…` paths below are the library source archive — a plain
+directory in this unified repo since 2026-09-15, not a dependency on another program;
+blocks are consumed in place or ported per LIBRARY.md. In `../CLASH-LIBRARY-MAP.md`
+§ Module list, S consumes the ✓ DSP core (CIC, FIR, FFT512, CORDIC, NCO) and owns the
+○ entries it must write: DDC wiring at 65 MSPS and the AM envelope demod.
 The Fft instance is shared with M (Motion radar) and the O spectrum view — one
 arbitered copy (fpga-resource-swag.md).
 
