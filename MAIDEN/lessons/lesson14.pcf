@@ -1,0 +1,13 @@
+# Lesson 14 blinky on the Alchitry Cu (iCE40HX8K-CB132).
+# Clock and LED balls per the Alchitry base project, via
+# theremin/clash/bringup/blinky.pcf. CONFIDENCE: high, but verify against
+# the Cu schematic before trusting them with anything beyond LEDs.
+set_io clk       P7
+set_io result[0] J11
+set_io result[1] K11
+set_io result[2] K12
+set_io result[3] K14
+set_io result[4] L12
+set_io result[5] L14
+set_io result[6] M12
+set_io result[7] N14

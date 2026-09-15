@@ -1,0 +1,30 @@
+; -*- mode: idef0 -*-
+; MAIDEN test-event operations — top-level IDEF0 model, starter cut.
+; Ruthless-minimalism rules: derive everything derivable (numbers stay #),
+; boundary flows are computed, not declared.
+tM Test Event Ops
+  a# Prepare Testbed
+    i# Test Request
+    c# Test Plan
+    o# Ready Testbed
+    m# Station Hardware
+  a# Launch Crossing
+    i# Ready Testbed
+    c# Test Plan
+    o# Crossing In Progress
+    m# Launch Rail
+  a# Sense Crossing
+    i# Crossing In Progress
+    c# Epoch Strobe
+    o# Sensor Streams
+    m# Cameras Radar Gates
+  a# Fuse And Grade
+    i# Sensor Streams
+    i# Truth Data
+    c# Error Model
+    o# Graded Track
+    m# Fusion Stack
+  a# Report Quick Look
+    i# Graded Track
+    c# Report Template
+    o# Quick Look Report

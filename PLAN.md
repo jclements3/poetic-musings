@@ -194,7 +194,7 @@ half exercised on one shot.
 - Finish before start; a phase closes only when its demo passes in front of a person.
 - Theremin suite = regression gate for every shared-library change after Phase 4.
 - Two boards only: ULX3S in the box, Alchitry Cu in Santa Glide.
-- Ledgers never commingle (P personal, I IRAD; U is ham/personal). Bookkeeping only;
+- Ledgers never commingle (P personal, W work; U is ham/personal). Bookkeeping only;
   it does not shape the build order.
 - Buy late: 1 ADC eval before 13; 5 IR pairs before 98; rib only after bore check;
   case last; TFT + HDMI as a matched kit.

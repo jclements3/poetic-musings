@@ -15,3 +15,35 @@ Coil/SantaGlide/firmware/verilog/
 Coil/SantaGlide/firmware/*.hi
 Coil/SantaGlide/firmware/*.o
 Coil/SantaGlide/firmware/build/
+
+# Unified repo (2026-09-15): MAIDEN/ and Theremin/ are plain directories now.
+# Business / finance material never goes in this public repo.
+MAIDEN/MAIDEN-*
+MAIDEN/*Template*
+MAIDEN/figures/i*/
+LEDGER.md
+receipts/
+*.pptx
+*.xlsx
+MAIDEN/HANDOFF.md
+MAIDEN/tabletop-range-BOM-plan.md
+MAIDEN/hardware/launcher-catcher.md
+MAIDEN/upload/
+MAIDEN/canvas-quote.pdf
+# Tool state, clones, data, build outputs, oversize renders
+**/.claude/
+MAIDEN/theremin/fpga-theremin/
+MAIDEN/data/
+**/build/
+**/dist-newstyle/
+*.hi
+*.o
+*.ghw
+*.ch10
+*.aux
+*.out
+*.log
+MAIDEN/mat-300dpi.png
+MAIDEN/mat-print.png
+MAIDEN/mat-*-source.png
+MAIDEN/mat-original-backup.png

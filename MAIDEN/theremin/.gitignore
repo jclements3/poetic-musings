@@ -1,0 +1,10 @@
+# Upstream reference clone, not vendored: 213 MB with its own git history.
+# Recreate with:
+#   git clone https://github.com/fpga-theremin/theremin.git fpga-theremin
+fpga-theremin/
+
+# Haskell / Clash build outputs
+clash/dist-newstyle/
+clash/build/
+*.hi
+*.o

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D6 — Design Description · MAIDEN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#EEF3F6; --paper:#FFFFFF; --ink:#14253A; --ink-2:#41546A; --rule:#C9D5DE;
+  --signal:#F25C05; --radar:#1F8F6B; --truth:#7C4DFF; --video:#1C6FB8; --time:#B88A00;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --disp:"Barlow Condensed","Arial Narrow",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--sky);color:var(--ink);font:15px/1.55 var(--sans)}
+a{color:var(--video)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px 80px}
+
+/* header */
+header{padding:44px 0 28px;border-bottom:2px solid var(--ink)}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+h1{font:700 clamp(44px,7vw,84px)/.95 var(--disp);letter-spacing:-.01em;margin:10px 0 6px;text-transform:uppercase}
+h1 small{display:block;font:600 clamp(16px,2.2vw,24px)/1.2 var(--disp);letter-spacing:.04em;color:var(--ink-2);text-transform:none;margin-top:6px}
+.lede{max-width:760px;font-size:17px;margin:18px 0 0}
+.meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:22px;font:14px var(--mono)}
+.meta b{display:block;font:500 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);margin-bottom:6px}
+
+/* milestones strip */
+.mile{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--rule);background:var(--paper);margin-top:28px}
+.mile div{padding:16px 18px;border-right:1px solid var(--rule)}
+.mile div:last-child{border-right:0}
+.mile .d{font:600 13px var(--mono);color:var(--signal)}
+.mile .n{font:600 22px/1.1 var(--disp);text-transform:uppercase;margin-top:2px}
+
+/* sections */
+section{padding-top:54px}
+h2{font:700 34px/1 var(--disp);text-transform:uppercase;letter-spacing:.01em;margin:0 0 6px}
+h2 .ref{font:500 12px var(--mono);letter-spacing:.12em;color:var(--ink-2);margin-left:12px;vertical-align:middle}
+.sub{color:var(--ink-2);margin:0 0 22px;max-width:760px}
+h3{font:600 20px/1.1 var(--disp);text-transform:uppercase;margin:26px 0 8px}
+ul{margin:8px 0 0;padding-left:20px}
+li{margin:4px 0}
+code{font:13px var(--mono);background:#E2EAF0;padding:1px 5px;border-radius:3px}
+.card{background:var(--paper);border:1px solid var(--rule);padding:22px 24px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:820px){.grid2{grid-template-columns:1fr}.mile{grid-template-columns:1fr}.mile div{border-right:0;border-bottom:1px solid var(--rule)}}
+
+table{border-collapse:collapse;width:100%;background:var(--paper);font-size:14px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);background:#F5F8FA}
+td:first-child{font:600 16px var(--disp);white-space:nowrap}
+
+/* block diagram */
+.diagram{background:var(--paper);border:1px solid var(--rule);padding:18px 18px 8px;overflow:auto}
+.diagram svg{width:100%;height:auto;min-width:760px;display:block;font-family:var(--sans)}
+.legend{display:flex;flex-wrap:wrap;gap:18px;padding:10px 4px 6px;font:12px var(--mono)}
+.legend span::before{content:"";display:inline-block;width:26px;height:3px;margin-right:8px;vertical-align:middle;background:var(--c)}
+.legend .dash::before{background:repeating-linear-gradient(90deg,var(--c) 0 6px,transparent 6px 10px)}
+
+/* gantt */
+.gantt{background:var(--paper);border:1px solid var(--rule);overflow:auto}
+.gantt-inner{min-width:880px}
+.g-head,.g-row{display:grid;grid-template-columns:260px repeat(14,1fr)}
+.g-head{position:sticky;top:0;background:#F5F8FA;border-bottom:1px solid var(--ink);z-index:2}
+.g-head .lbl{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);padding:12px 14px;border-right:1px solid var(--rule)}
+.g-head .m{grid-column:span 2;font:600 14px var(--disp);text-transform:uppercase;text-align:center;padding:10px 0 6px;border-right:1px solid var(--rule);position:relative}
+.g-head .m small{display:block;font:400 10px var(--mono);letter-spacing:.1em;color:var(--ink-2);margin-top:3px}
+.g-head .m::after{content:"";position:absolute;left:50%;bottom:0;width:1px;height:6px;background:var(--rule)}
+.g-row{border-bottom:1px solid #E6ECF0;min-height:36px;position:relative}
+.g-row.phase{background:#F5F8FA;min-height:40px}
+.g-row .lbl{padding:8px 14px;border-right:1px solid var(--rule);font-size:13.5px;position:relative;z-index:1}
+.g-row.phase .lbl{font:600 16px/1.2 var(--disp);text-transform:uppercase;padding-top:11px}
+.g-row .lbl .who{display:block;font:11px var(--mono);color:var(--ink-2);margin-top:1px}
+.g-row .bar{grid-row:1;align-self:center;height:14px;border-radius:2px;background:var(--c,var(--ink));margin:0 2px;position:relative;z-index:1}
+.g-row.phase .bar{height:6px;background:var(--ink);opacity:.55}
+.g-row .cell{grid-row:1;border-right:1px solid #EEF2F5;pointer-events:none}
+.g-row .cell.mon{border-right-color:#DCE4EA}
+.g-row .dia{grid-row:1;align-self:center;justify-self:center;width:14px;height:14px;background:var(--signal);transform:rotate(45deg);z-index:2;box-shadow:0 0 0 3px var(--paper)}
+.g-row .tag{grid-row:1;align-self:center;font:600 12px var(--mono);color:var(--signal);padding-left:10px;white-space:nowrap;z-index:2}
+.today{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--signal);z-index:3;pointer-events:none}
+.today i{position:absolute;top:2px;left:6px;font:500 10px var(--mono);color:var(--signal);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.g-key{display:flex;flex-wrap:wrap;gap:20px;padding:12px 14px;border-top:1px solid var(--rule);font:12px var(--mono);color:var(--ink-2)}
+.g-key span{display:inline-flex;align-items:center;gap:8px}
+.g-key .sw{width:22px;height:10px;border-radius:2px;background:var(--c)}
+.g-key .dm{width:10px;height:10px;background:var(--signal);transform:rotate(45deg)}
+
+/* risks */
+.risks{columns:2;column-gap:28px}
+.risks li{break-inside:avoid}
+@media(max-width:820px){.risks{columns:1}}
+
+footer{margin-top:60px;padding-top:16px;border-top:1px solid var(--rule);font:12px var(--mono);color:var(--ink-2)}
+@media print{body{background:#fff}.wrap{max-width:none;padding:0 10mm}section{break-inside:avoid}.today{display:none}}
+
+nav.docnav{display:flex;flex-wrap:wrap;gap:4px;margin:18px 0 0;font:500 12px var(--mono)}
+nav.docnav a{padding:6px 10px;border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);text-decoration:none;letter-spacing:.04em}
+nav.docnav a.cur{background:var(--ink);color:#fff;border-color:var(--ink)}
+nav.docnav a:hover{border-color:var(--ink)}
+.docid{font:600 12px var(--mono);letter-spacing:.14em;color:var(--signal);text-transform:uppercase}
+h1.doc{font:700 clamp(36px,5vw,60px)/1 var(--disp);text-transform:uppercase;margin:8px 0 4px}
+.status{display:inline-block;font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--rule);background:var(--paper);color:var(--ink-2)}
+a.xref{font-weight:500;text-decoration:none;border-bottom:1px solid var(--video)}
+a.xref:hover{background:#E2EAF0}
+.req{font:500 12.5px var(--mono);color:var(--ink);background:#E2EAF0;padding:1px 6px;border-radius:3px;white-space:nowrap}
+.toc{columns:2;column-gap:28px;margin:10px 0 0;padding-left:18px;font-size:14px}
+@media(max-width:820px){.toc{columns:1}}
+.filterbar{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 12px;font:13px var(--sans)}
+.filterbar select,.filterbar input{font:13px var(--sans);padding:6px 8px;border:1px solid var(--rule);background:var(--paper)}
+table.rtm td:first-child{font:500 12.5px var(--mono)}
+table.rtm td{font-size:13px}
+.pill{display:inline-block;font:500 10.5px var(--mono);letter-spacing:.08em;padding:2px 6px;border-radius:3px;color:#fff;background:var(--ink-2)}
+.pill.ground{background:var(--radar)}.pill.airborne{background:var(--truth)}.pill.software{background:var(--video)}.pill.data{background:var(--time)}.pill.field{background:var(--signal)}
+.callout{border-left:4px solid var(--signal);background:var(--paper);padding:14px 18px;margin:18px 0}
+.tbd{color:var(--signal);font:500 12px var(--mono)}
+.kv{display:grid;grid-template-columns:200px 1fr;gap:6px 18px;font-size:14px}
+.kv b{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);padding-top:3px}
+pre{background:var(--paper);border:1px solid var(--rule);padding:14px 16px;overflow:auto;font:12.5px/1.5 var(--mono)}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+.steps li{counter-increment:s;position:relative;padding:10px 0 10px 48px;border-bottom:1px solid var(--rule)}
+.steps li::before{content:counter(s);position:absolute;left:0;top:8px;width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;font:600 14px/30px var(--disp);text-align:center}
+</style></head>
+<body><div class="wrap">
+<header style="padding-bottom:22px">
+  <div class="eyebrow">MAIDEN · Moving Artificial Intelligence Data Evaluator Notary · <a href="MAIDEN_D0_Index.html" style="color:inherit">Document set</a></div>
+  <nav class="docnav"><a href="MAIDEN_D0_Index.html" class="">D0 · Index</a><a href="MAIDEN_D1_ConOps.html" class="">D1 · ConOps</a><a href="MAIDEN_D2_SyRS_RTM.html" class="">D2 · SyRS + RTM</a><a href="MAIDEN_D3_Architecture.html" class="">D3 · Architecture</a><a href="MAIDEN_D4_ICD.html" class="">D4 · ICD</a><a href="MAIDEN_D5_SEMP.html" class="">D5 · SEMP</a><a href="MAIDEN_D6_Design.html" class="cur">D6 · Design</a><a href="MAIDEN_D7_VVPlan.html" class="">D7 · V&V Plan</a><a href="MAIDEN_D8_ValReport.html" class="">D8 · Validation Report</a><a href="MAIDEN_D9_UserGuide.html" class="">D9 · User Guide</a></nav>
+  <div style="margin-top:26px"><span class="docid">D6</span> &nbsp; <span class="status">Draft · Rev 0.1 · 21 Aug 2026</span></div>
+  <h1 class="doc">Design Description</h1>
+</header>
+
+<p class="lede">How each element in <a class="xref" href="MAIDEN_D3_Architecture.html">D3 Architecture</a> is actually built. Requirement IDs show what each design element satisfies; interface details are in <a class="xref" href="MAIDEN_D4_ICD.html">D4 ICD</a>; how each element is tested is in <a class="xref" href="MAIDEN_D7_VVPlan.html">D7 V&V Plan</a>.</p>
+<section id="station"><h2>Ground station <span class="ref">GS-001 – GS-007</span></h2><div class="diagram"><svg viewBox="0 0 960 300" xmlns="http://www.w3.org/2000/svg"><style>.b{fill:#fff;stroke:#14253A;stroke-width:1.5;rx:3}.t{font-family:"IBM Plex Sans",sans-serif;font-size:12px;fill:#14253A}.h{font-weight:600;font-size:13px}.m{font-family:"IBM Plex Mono",monospace;font-size:10px;fill:#41546A}.e{stroke:#14253A;stroke-width:1.3;fill:none}.ti{stroke:#B88A00;stroke-width:1.2;stroke-dasharray:2 3;fill:none}</style>
+<defs><marker id="c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#14253A"/></marker></defs>
+<text x="20" y="28" class="t h">RADAR CHAIN</text>
+<g><rect x="20" y="40" width="120" height="54" class="b" stroke="#1F8F6B"/><text x="30" y="60" class="t h">CW module</text><text x="30" y="76" class="m">CDM324 24 GHz I/Q</text><text x="30" y="88" class="m">+ horn 15 dBi</text></g>
+<path d="M140 67 L160 67" class="e" marker-end="url(#c)"/>
+<g><rect x="162" y="40" width="110" height="54" class="b"/><text x="172" y="60" class="t h">LNA + AAF</text><text x="172" y="76" class="m">G=40 dB, fc=20 kHz</text></g>
+<path d="M272 67 L292 67" class="e" marker-end="url(#c)"/>
+<g><rect x="294" y="40" width="100" height="54" class="b"/><text x="304" y="60" class="t h">ADC</text><text x="304" y="76" class="m">2 ch · 16-bit</text><text x="304" y="88" class="m">48 kS/s</text></g>
+<path d="M394 67 L414 67" class="e" marker-end="url(#c)"/>
+<g><rect x="416" y="40" width="300" height="54" class="b" stroke-width="2"/><text x="426" y="60" class="t h">FPGA DSP</text><text x="426" y="76" class="m">CIC ↓R (4 @ 24 GHz · 8 @ 10.5 GHz) · 512-pt FFT @ 50 Hz · CFAR peak · v_r = f_d·λ/2</text><text x="426" y="88" class="m">outputs: v_r, SNR, raw I/Q pass-through</text></g>
+<path d="M716 67 L736 67" class="e" marker-end="url(#c)"/>
+<g><rect x="738" y="40" width="200" height="54" class="b" fill="#14253A"/><text x="748" y="60" class="t h" fill="#fff">Ch. 10 recorder</text><text x="748" y="76" class="m" fill="#DCE4EA">Ch 3 PCM (IF) · Ch 4 PCM (v_r)</text></g>
+<text x="20" y="138" class="t h">VIDEO CHAIN</text>
+<g><rect x="20" y="150" width="150" height="54" class="b" stroke="#1C6FB8"/><text x="30" y="170" class="t h">Camera</text><text x="30" y="186" class="m">1080p30 global-shutter USB3</text><text x="30" y="198" class="m">A: 60° · B: 35° · C: 60°</text></g>
+<path d="M170 177 L190 177" class="e" marker-end="url(#c)"/>
+<g><rect x="192" y="150" width="200" height="54" class="b"/><text x="202" y="170" class="t h">Capture host (SBC)</text><text x="202" y="186" class="m">frame grab · IRIG-B stamp (GPIO)</text><text x="202" y="198" class="m">H.264 encode</text></g>
+<path d="M392 177 L412 177" class="e" marker-end="url(#c)"/>
+<g><rect x="414" y="150" width="302" height="54" class="b"/><text x="424" y="170" class="t h">On-station tracker (optional)</text><text x="424" y="186" class="m">light detector → az/el · Ch 5 messages</text><text x="424" y="198" class="m">full tracker runs on host post-session</text></g>
+<path d="M716 177 L736 177" class="e" marker-end="url(#c)"/>
+<g><rect x="738" y="150" width="200" height="54" class="b" fill="#14253A"/><text x="748" y="170" class="t h" fill="#fff">Ch. 10 recorder</text><text x="748" y="186" class="m" fill="#DCE4EA">Ch 2 video · Ch 5 tracker</text></g>
+<text x="20" y="248" class="t h">TIME</text>
+<g><rect x="20" y="258" width="150" height="34" class="b" stroke="#B88A00"/><text x="30" y="280" class="t">GNSS + PPS</text></g>
+<path d="M170 275 L190 275" class="ti"/>
+<g><rect x="192" y="258" width="200" height="34" class="b" stroke="#B88A00"/><text x="202" y="280" class="t">FPGA IRIG-B generator + RTC</text></g>
+<path d="M292 258 L292 94" class="ti"/><path d="M292 258 L292 204" class="ti"/><path d="M392 275 L838 275 L838 204" class="ti"/><path d="M838 94 L838 110" class="ti"/>
+<text x="420" y="270" class="m" fill="#B88A00">IRIG-B → Ch 1 time packets · frame + minor-frame stamps</text>
+</svg></div>
+<h3 id="radar">Radar front end</h3><p><b>Module.</b> Baseline CDM324 (24.125 GHz, I/Q outputs) for better Doppler resolution per m/s and a smaller horn; HB100 (10.525 GHz) as the fallback if 24 GHz range on foam proves short. <span class="tbd">TBD after VT-05.</span> <b>Antenna.</b> 3D-printed pyramidal horn, ~15 dBi, copper-tape lined. <b>Gain.</b> Two-stage op-amp LNA, 40 dB, 2nd-order anti-alias at 20 kHz. A 30 m/s target gives f_d ≈ 4.8 kHz at 24 GHz (2.1 kHz at 10.5 GHz). <span class="req">GS-003</span></p>
+<h3 id="fpga">FPGA DSP</h3><p>Lattice/Xilinx low-cost dev board. Pipeline: 16-bit 48 kS/s I/Q → CIC decimate ×R — R = 4 at 24.125 GHz (±37 m/s unambiguous), 8 at 10.525 GHz; a fixed ↓8 at 24 GHz gives only ±18.6 m/s and aliases ~30 m/s pattern targets (see results/design-notes/decimation-audit.md; default R pends VT-05) → 512-point FFT every 20 ms (50 Hz) → CFAR peak detection → velocity = f_d·λ/2 with sign from I/Q phase → UART/SPI to recorder. Raw I/Q also streamed so the algorithm can be rerun offline. Resource note (Prototype, maiden35): the sim-verified RTL with behavioral RAM synthesizes far beyond iCE40 hx8k (no BRAM inferred); a BRAM-explicit memory rewrite is required before place-and-route, with ECP5 (ULX3S) the likely target — final board call at bench bring-up. <span class="req">GS-002</span></p>
+<h3 id="camera">Camera capture</h3><p>1080p30 global-shutter USB3 machine-vision camera on A and C (60° lens), narrower 35° lens on B for pixel scale at range. Frame strobe from the camera goes to an FPGA GPIO, which latches IRIG-B time per frame; the capture host encodes H.264 and hands frames + stamps to the recorder. <span class="req">GS-001</span></p>
+<h3 id="irigb">IRIG-B time source</h3><p>u-blox GNSS with PPS → FPGA generates IRIG-B (DC level shift) and maintains the 10 MHz RTC used for Ch. 10 packet headers. PPS lock state is logged in Ch 6. <span class="req">SYS-006</span></p>
+<h3 id="recorder">Ch. 10 recorder</h3><p>SBC (Raspberry Pi 5 class) running a Python/C recorder built on irig106lib: writes TMATS first, then interleaves time, video, PCM, and message packets by RTC. One file per session. <span class="req">SYS-005</span></p>
+<h3 id="power">Power and enclosure</h3><p>4S LiFePO₄ 10 Ah → 5 V / 12 V rails, ≥ 3 h. Weatherproof case on a surveyor tripod with a leveling head and a sighting rail for heading. <span class="req">GS-006</span>, <span class="req">GS-007</span></p>
+<h3 id="survey_procedure">Survey and calibration procedure</h3><ol class="steps"><li>Set tripod; level; mark ground point.</li><li>Log 5 min of GNSS at the mark (RTK if base available) → position in TMATS.</li><li>Sight a surveyed far landmark through the rail; read heading; verify with a second landmark.</li><li>Checkerboard at 5–10 m in 12 poses → intrinsics; reprojection ≤ 0.5 px.</li><li>Radar boresight: walk a corner reflector across the beam; confirm peak at rail heading.</li></ol><p><span class="req">GS-004</span>, <span class="req">GS-005</span>; tested by <a class="xref" href="MAIDEN_D7_VVPlan.html#VT-06">VT-06</a>/<a class="xref" href="MAIDEN_D7_VVPlan.html#VT-07">VT-07</a>.</p></section>
+<section id="logger"><h2>Airborne 6-DOF truth logger <span class="ref">AB-001 – AB-003</span></h2><div id="6-dof_logger"></div><p><b>Option 1 (baseline):</b> Matek H743 flight controller running ArduPlane in log-only mode with an M10 GNSS (RTK-capable F9P on the larger airframe), internal IMU and baro; logs DataFlash <code>.bin</code> at 10 Hz GPS / 100 Hz IMU. <b>Option 2:</b> standalone GNSS+IMU logger if Option 1 exceeds 60 g on the pattern ship. Mount: 3D-printed cradle on the CG, foam-isolated. <span class="tbd">Option decision by Sep.</span></p><div id="log_to_ch._10_converter"></div><h3>Log → Ch. 10 converter</h3><p>Python; parsers per <a class="xref" href="MAIDEN_D4_ICD.html#airborne">D4 ICD</a>; emits TMATS (airframe, logger serial, mount offset), Ch 1 time from GPS week/ms, PCM channels for GPS/IMU/BARO/ATT. Verified by <a class="xref" href="MAIDEN_D7_VVPlan.html#VT-09">VT-09</a>.</p></section>
+<section id="software"><h2>Processing software <span class="ref">SW-001 – SW-005</span></h2><div class="diagram"><svg viewBox="0 0 960 340" xmlns="http://www.w3.org/2000/svg"><style>.b{fill:#fff;stroke:#14253A;stroke-width:1.5;rx:3}.t{font-family:"IBM Plex Sans",sans-serif;font-size:12px;fill:#14253A}.h{font-weight:600;font-size:13px}.m{font-family:"IBM Plex Mono",monospace;font-size:10px;fill:#41546A}.e{stroke:#14253A;stroke-width:1.3;fill:none}.tw{stroke:#7C4DFF;stroke-width:1.3;stroke-dasharray:6 4;fill:none}</style>
+<defs><marker id="s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#14253A"/></marker><marker id="sp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#7C4DFF"/></marker></defs>
+<g><rect x="20" y="20" width="170" height="60" class="b"/><text x="30" y="40" class="t h">maiden.ingest</text><text x="30" y="56" class="m">ch10 reader · TMATS · adapters</text><text x="30" y="70" class="m">→ StateSample stream</text></g>
+<path d="M190 50 L220 50" class="e" marker-end="url(#s)"/>
+<g><rect x="222" y="20" width="170" height="60" class="b"/><text x="232" y="40" class="t h">maiden.track</text><text x="232" y="56" class="m">detector + 2D tracker</text><text x="232" y="70" class="m">→ az/el/conf per station</text></g>
+<path d="M392 50 L422 50" class="e" marker-end="url(#s)"/>
+<g><rect x="424" y="20" width="170" height="60" class="b" stroke-width="2"/><text x="434" y="40" class="t h">maiden.fuse</text><text x="434" y="56" class="m">EKF · 6-state + cov</text><text x="434" y="70" class="m">→ FUSED samples</text></g>
+<path d="M594 50 L624 50" class="e" marker-end="url(#s)"/>
+<g><rect x="626" y="20" width="170" height="60" class="b"/><text x="636" y="40" class="t h">maiden.maneuver</text><text x="636" y="56" class="m">segment + classify</text><text x="636" y="70" class="m">→ Event list</text></g>
+<path d="M796 50 L826 50" class="e" marker-end="url(#s)"/>
+<g><rect x="828" y="20" width="112" height="60" class="b"/><text x="838" y="40" class="t h">maiden.score</text><text x="838" y="56" class="m">rubric + calib</text></g>
+<path d="M884 80 L884 130" class="e" marker-end="url(#s)"/>
+<g><rect x="760" y="132" width="180" height="50" class="b" stroke="#F25C05"/><text x="770" y="152" class="t h">maiden.report</text><text x="770" y="168" class="m">1-page PDF · clips · JSON</text></g>
+<g><rect x="424" y="132" width="170" height="50" class="b" stroke="#7C4DFF"/><text x="434" y="152" class="t h">maiden.validate</text><text x="434" y="168" class="m">align · residuals · gate</text></g>
+<path d="M509 80 L509 130" class="tw" marker-end="url(#sp)"/>
+<g><rect x="20" y="132" width="170" height="50" class="b" stroke="#7C4DFF"/><text x="30" y="152" class="t h">TRUTH (airborne .ch10)</text><text x="30" y="168" class="m">via maiden.ingest</text></g>
+<path d="M190 157 L422 157" class="tw" marker-end="url(#sp)"/>
+<g><rect x="20" y="230" width="570" height="60" class="b" stroke="#7C4DFF"/><text x="30" y="250" class="t h">maiden.twin</text><text x="30" y="266" class="m">scripted Sportsman model → synthetic A/B/C az/el + v_r + noise → real .ch10 + truth .ch10</text><text x="30" y="280" class="m">station coverage prediction for new layouts</text></g>
+<path d="M105 230 L105 82" class="tw" marker-end="url(#sp)"/>
+<g><rect x="626" y="230" width="314" height="60" class="b"/><text x="636" y="250" class="t h">CI (GitHub Actions)</text><text x="636" y="266" class="m">pytest on parsers · replay HIL set + twin set</text><text x="636" y="280" class="m">fail if SYS-002/003/004 regress</text></g>
+<path d="M590 260 L624 260" class="e" marker-end="url(#s)"/>
+</svg></div>
+<h3 id="ingest_layer">Ingest</h3><p>PyChapter10 / irig106lib wrapper; TMATS parsed into a Station or Aircraft descriptor; every packet becomes a StateSample per <a class="xref" href="MAIDEN_D4_ICD.html#state">D4 ICD</a>. Adapters for native logs live beside it and emit the same type. <span class="req">SW-001</span></p>
+<h3 id="video_tracker">Video tracker</h3><p>Two-stage: background/sky model + motion to propose candidates, then a small YOLO-class detector (trained on twin-rendered and labeled field frames) to confirm; a 2D Kalman track per station gives az/el via the intrinsics, with confidence from detector score and track age. Target ≥ 6 px. <span class="req">SW-002</span></p>
+<h3 id="fusion_ekf">Fusion EKF</h3><p>State [E N U vE vN vU], constant-velocity with process noise tuned to aerobatic g. Measurements: az/el from each station (nonlinear, station pose from TMATS), v_r from each radar (projection of velocity on the station→target unit vector). Handles missing measurements, lags stations to a common epoch, and publishes the 6×6 covariance that feeds confidence bands in the report. Initialization from the first A+B pair. <span class="req">SYS-001</span>–<span class="req">SYS-004</span></p>
+<h3 id="maneuver_classifier">Maneuver segmentation and recognition</h3><p>Features on a sliding window: path curvature, heading rate, vertical-plane angle, altitude and speed profiles, roll-rate proxy from lateral acceleration. A small temporal CNN/GRU classifies loop, roll, stall turn, Immelmann, level leg, and "other"; segment boundaries from class changes with hysteresis. Trained on twin sequences, fine-tuned on labeled validation flights. <span class="req">SW-003</span></p>
+<h3 id="scoring_module">Scoring</h3><p>Rubric layer: deterministic geometry checks per AMA maneuver description (roundness as radius variance, centering as offset from pattern-box center line, track as heading deviation, entry/exit altitude match). Calibration layer: a monotone regression from rubric deductions to judge scores, fit on the validation flights and reported with r. <span class="req">SYS-007</span>, <span class="req">SYS-008</span></p>
+<h3 id="field-rule_checker">Field-rule checker and approach metrics</h3><p>Flight line and no-fly polygons from the survey; crossings are Events. Approach: final-leg segment → glideslope fit, threshold speed from C's radar and fusion, touchdown from vertical-speed zero plus C's video. <span class="req">SYS-009</span>, <span class="req">SYS-010</span></p>
+<h3 id="report_pipeline">Report</h3><p>One page: scores table, geometry overlay per maneuver, approach panel, top deductions in plain language, confidence bands from EKF covariance and the validation residuals in <a class="xref" href="MAIDEN_D8_ValReport.html">D8 Validation Report</a>. Clips cut from Station A video. JSON sidecar for archive. <span class="req">SYS-011</span></p>
+<h3 id="twin">Digital twin</h3><p>Scripted 6-DOF flight model (ideal Sportsman sequence with adjustable imperfections) → synthetic truth; projected through station poses and intrinsics to az/el with pixel noise, and through station→target geometry to v_r with Doppler noise; optional drop-outs and sun-crossing. Writes real .ch10 files so the whole pipeline, including ingest, runs unchanged. <span class="req">SW-004</span></p>
+<h3 id="ci_pipeline">CI</h3><p>GitHub Actions: unit tests on parsers and TMATS; replay the HIL set (recorded bench Station 1) and the twin set; compare fused track to twin truth and fail the build if SYS-002/003/004 regress. <span class="req">SW-005</span></p></section>
+
+<div style="display:flex;justify-content:space-between;gap:20px;margin-top:40px;font:13px var(--mono)"><span>← <a href="MAIDEN_D5_SEMP.html">D5 SEMP</a></span><span><a href="MAIDEN_D7_VVPlan.html">D7 V&V Plan</a> →</span></div>
+<footer>MAIDEN D6 · Design Description · Rev 0.1 · 21 Aug 2026 · Single-person project, tailored from ISO/IEC/IEEE 15288 / 12207 / EIA-632</footer>
+</div></body></html>

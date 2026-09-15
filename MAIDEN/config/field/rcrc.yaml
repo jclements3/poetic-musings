@@ -1,0 +1,57 @@
+# RCRC site geometry (D1 operating site; survey values per D4 IF-2 example).
+# Phase 0 survey supersedes these numbers; update this file + station TMATS
+# together, never one without the other.
+site:
+  name: RCRC
+  address: 4100 Leeman Ferry Rd
+  approx_lla: [34.685, -86.592]
+
+field_origin:            # Station A survey mark = field-frame origin
+  lla: [34.6851710, -86.5922440, 183.2]
+
+stations:
+  A:
+    lla: [34.6851710, -86.5922440, 183.2]
+    heading_deg: 12.4
+    boresight_el_deg: 8.0
+  B:                     # ~75 m along the flight line; placeholder until survey
+    lla: null
+    heading_deg: null
+  C:                     # near active threshold; placeholder until survey
+    lla: null
+    heading_deg: null
+
+pattern_box:
+  center_range_m: 150
+  half_angle_deg: 60
+
+# --- SYS-010 geometry (maiden57) --------------------------------------------
+# status PLACEHOLDER_PENDING_SURVEY: every vertex below is a sketch from
+# D1's site figure, NOT surveyed. The Phase 0 survey (maiden44/59)
+# replaces these and closes D2's SYS-010 TBD with a commit touching D2
+# and this file together (D5 change control). The report surfaces this
+# status on every page until then.
+
+runway:
+  status: PLACEHOLDER_PENDING_SURVEY
+  heading_deg: 90.0            # approx runway axis, from D1 sketch
+  ground_height_m: 0.0         # field frame U at the runway surface
+  threshold_enu: [-100.0, 20.0]   # [E, N] active threshold mark
+  target_enu: [-70.0, 20.0]       # touchdown target mark
+
+field_rules:
+  status: PLACEHOLDER_PENDING_SURVEY
+  hysteresis_samples: 5        # ~0.1 s at 50 Hz; boundary jitter guard
+  hysteresis_margin_m: 2.0     # spatial deadband; ~fused-position p95 x4
+  no_fly_polygons:
+    - name: pits and spectators
+      kind: no_overflight      # no_overflight | flight_line
+      vertices_enu:            # [[E, N], ...] closed ring, CCW
+        - [-120.0, -60.0]
+        - [60.0, -60.0]
+        - [60.0, -10.0]
+        - [-120.0, -10.0]
+  flight_line:                 # crossing south of this line = Event
+    vertices_enu:
+      - [-200.0, 0.0]
+      - [200.0, 0.0]

@@ -62,7 +62,7 @@ Theremin sub-repo: `DESIGN.md` + CLAUDE.md role note (one unpushed commit there)
 # 2026-08-29 mobile session (historical — letters, panel, PERT)
 
 ## Decisions
-- Program name: POETIC (personal) + MUSING (IRAD). Six letters each.
+- Program name: POETIC (personal) + MUSING (work ledger). Six letters each.
   - POETIC: Panel (VL-49 surface) · Oracle console (Forth H2, bar TFT, SD, CW keyer/decoder) · Erand49 harp · Theremin · IRIG clock · Coil launcher/catcher
   - MUSING: MAIDEN (incl. unit integration, solver) · UHF beacon (GPS-disciplined CW/WSPR, personal ledger, ham) · SDR (direct-sampling HF on theremin antennas, AD9226-class ADC) · Imaging (camera capture, timestamp, centroid) · Network (RMII/MAC/UDP/Ch.10) · GPS (station clock copies)
 - ~~Serial build rule, finish before start: C → I → O → T → P → E~~ Superseded 2026-09-15: root first O → P → T, then spokes as hardware arrives.

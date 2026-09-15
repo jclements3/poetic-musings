@@ -1,0 +1,62 @@
+# MAIDEN rubric constants (SYS-007; D6 "Scoring" rubric layer).
+#
+# PROVENANCE. Geometry checks are structured per D6 and AMA RC
+# Aerobatics 2024-2025 (docs/refs/AMA_RC_Aerobatics_2024-2025.pdf):
+# box/centering/track rules from §15, judge protocol §18.7, downgrade
+# authority §19 -> FAI F3A Manoeuvre Execution Guide.
+# REQUIRED-FETCH (wording, not structure): the F3A Execution Guide's
+# per-maneuver downgrade text (fai.org Sporting Code, Vol. F3) and the
+# current NSRCA Sportsman (401) sequence (nsrca.us; 404 at fetch time).
+# See docs/refs/AMA_2024-2025_extracts.md.
+#
+# DOWNGRADE MAGNITUDES (points per meter/degree) are MAIDEN's own until
+# maiden64's judge sheets train the calibration layer -- that is the
+# whole point of SYS-008 (D5 risk R6): the deterministic layer measures,
+# the monotone calibration learns what judges charge for it. Tuned on
+# twin sessions; recorded, versioned, cited from score.py.
+
+box:
+  # Box axis and centerline in field-frame terms. The twin flies its
+  # schedule on heading 090 with the pattern line at N=150 m; the loop
+  # (the designated center maneuver) is nominally centered at E=-120 m
+  # BY TWIN CONSTRUCTION (sportsman() seed geometry). The Phase 0 survey
+  # supersedes both with the real box center (then centerline_e_m
+  # becomes 0 in a surveyed field frame). Same rule as rcrc.yaml: update
+  # this file and the survey together, never one alone.
+  axis_deg: 90.0
+  centerline_e_m: -120.0
+  center_classes: [loop]
+
+loop:
+  roundness_tol_m: 0.5        # circle-fit radius sigma below this is free
+  roundness_pts_per_m: 1.0
+  shape_tol_m: 2.0            # |height - width| asymmetry allowance
+  shape_pts_per_4m: 1.0
+  centering_tol_m: 10.0
+  centering_pts_per_15m: 1.0
+  track_tol_deg: 2.0          # maneuver-plane heading vs box axis
+  track_pts_per_5deg: 0.5
+  alt_tol_m: 2.0              # exit vs entry altitude
+  alt_pts_per_5m: 1.0
+
+roll:
+  alt_hold_tol_m: 0.5         # altitude sigma along the roll line
+  alt_hold_pts_per_2m: 1.0
+  drift_tol_deg: 2.0          # exit heading vs entry heading
+  drift_pts_per_5deg: 1.0
+  track_tol_deg: 2.0
+  track_pts_per_5deg: 0.5
+
+stall_turn:
+  alt_tol_m: 3.0              # exit vs entry altitude
+  alt_pts_per_5m: 1.0
+  track_tol_deg: 3.0          # entry/exit line heading vs box axis
+  track_pts_per_5deg: 0.5
+
+immelmann:
+  roundness_tol_m: 0.5
+  roundness_pts_per_m: 1.0
+  gain_tol_m: 3.0             # altitude gain vs 2R from the fit
+  gain_pts_per_5m: 1.0
+  reversal_tol_deg: 5.0       # exit heading vs entry+180
+  reversal_pts_per_5deg: 0.5

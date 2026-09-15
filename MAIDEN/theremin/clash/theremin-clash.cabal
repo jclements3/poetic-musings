@@ -1,0 +1,96 @@
+cabal-version:      2.4
+name:               theremin-clash
+version:            0.1.0.0
+synopsis:           Clash port of the fpga-theremin DSP blocks (MAIDEN evaluation spike)
+build-type:         Simple
+
+common clash-opts
+    default-language: Haskell2010
+    default-extensions:
+        BangPatterns
+        BinaryLiterals
+        DataKinds
+        DeriveAnyClass
+        DeriveGeneric
+        DerivingStrategies
+        FlexibleContexts
+        MagicHash
+        NoImplicitPrelude
+        NoStarIsType
+        RecordWildCards
+        ScopedTypeVariables
+        TypeApplications
+        TypeFamilies
+        TypeOperators
+    ghc-options:
+        -Wall -Wcompat
+        -haddock
+        -fexpose-all-unfoldings
+        -fno-worker-wrapper
+        -fplugin GHC.TypeLits.Extra.Solver
+        -fplugin GHC.TypeLits.Normalise
+        -fplugin GHC.TypeLits.KnownNat.Solver
+    build-depends:
+        base                      >=4.17 && <4.19,
+        clash-prelude             ==1.8.5,
+        -- clash-ghc is a project dependency, not just a global tool: the
+        -- `clash` binary refuses to run against a clash-prelude instance
+        -- other than the one it was compiled against, so it has to come from
+        -- this project's build plan. Invoke it with `cabal run clash -- ...`.
+        clash-ghc                 ==1.8.5,
+        ghc-typelits-natnormalise,
+        ghc-typelits-extra,
+        ghc-typelits-knownnat
+
+library
+    import:           clash-opts
+    -- Builds the `clash` executable inside this project's plan. Required:
+    -- the binary refuses to run against any clash-prelude instance other
+    -- than the one it was compiled against, so a globally installed clash
+    -- cannot drive this project.
+    build-tool-depends: clash-ghc:clash
+    hs-source-dirs:   src
+    exposed-modules:
+        Maiden.Cfar
+        Maiden.Cic
+        Maiden.Cordic
+        Maiden.Fir
+        Theremin.Audio.DsmDac
+        Theremin.Audio.Nco
+        Theremin.Audio.NoteMap
+        Theremin.Audio.NoteTables
+        Theremin.Audio.PitchMap
+        Theremin.Audio.SineLut
+        Theremin.Audio.SineQuarter
+        Theremin.DelayDiffFilter
+        Theremin.EdgeSampler
+        Theremin.Fft
+        Theremin.Fft.Twiddle
+        Theremin.EdgeToPulsePosition
+        Theremin.IirNStage
+        Theremin.Pwm
+        Theremin.SensorPeriodMeasure
+        Theremin.SensorTop
+        Theremin.ThereminTop
+
+test-suite spec
+    import:           clash-opts
+    type:             exitcode-stdio-1.0
+    hs-source-dirs:   test
+    main-is:          Spec.hs
+    other-modules:    AudioSpec
+                      CfarSpec
+                      CicSpec
+                      CordicSpec
+                      FftSpec
+                      FirSpec
+                      IirSpec
+                      NoteMapSpec
+                      SensorSpec
+                      SensorTopSpec
+    build-depends:
+        theremin-clash,
+        tasty,
+        tasty-hunit,
+        tasty-hedgehog,
+        hedgehog

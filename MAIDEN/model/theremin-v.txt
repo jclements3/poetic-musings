@@ -1,0 +1,20 @@
+; -*- mode: idef0 -*-
+tV Theremin Verification
+## SysML v2 **verification case** view: each box is one verification
+## activity; its o-links back to R are requirement satisfaction.
+  a# Verify Sensor Chain
+  ## 80-test tasty/hedgehog suite; end-to-end square-wave recovery is
+  ## exact (2*512*half); IIR pinned cycle-exact to pure model.
+    i# Clash Design < P|Port Blocks To Clash|Clash Design
+    c# Reference Models
+    o# Verified Resolution > R|Impose Pitch Resolution|Verified Resolution
+    m# Test Suite
+  a# Measure On Target
+  ## yosys synth_ecp5 + nextpnr-ecp5, LFE5U-85F CABGA381. theremin_top
+  ## 86.7 MHz Fmax, PASS at 75 MHz; 1,816 LUT4 (2%).
+    i# Clash Design
+    c# Clock Constraint
+    o# Timing Evidence > R|Impose Timing Closure|Timing Evidence
+    o# Fit Evidence > R|Impose Device Fit|Fit Evidence
+    o# Verified Bitstream > P|Bring Up Bench|Verified Bitstream
+    m# Open Toolchain

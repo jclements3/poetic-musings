@@ -1,0 +1,462 @@
+<!doctype html><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Maiden Plates</title><style>body{font-family:IBM Plex Mono,monospace;background:#eee;margin:0}
+.plate{background:#fff;margin:18px auto;padding:6px;box-shadow:0 1px 4px #0003;
+width:max-content;max-width:calc(100vw - 20px);overflow-x:auto;
+page-break-after:always}
+h1{font-size:16px;margin:18px}
+table{border-collapse:collapse;margin:18px;background:#fff}
+td,th{border:1px solid #999;padding:3px 9px;font-size:12px}
+a{color:#1a5276}
+.nav{font-size:12px;padding:4px 8px;background:#f4f2ea;border-bottom:1px solid #ddd;
+position:sticky;left:0}
+.nav a{text-decoration:none;margin-right:4px}
+.dim{color:#999}
+details.notes{font-size:12px;max-width:640px;padding:4px 8px;background:#fdfcf2;
+border-bottom:1px solid #eee}
+details.notes p{margin:4px 0}
+.vp{overflow:hidden;touch-action:pan-x pan-y;cursor:grab}
+.vp:active{cursor:grabbing}
+.vp svg{display:block;transform-origin:0 0}
+.hasdoc{text-decoration:underline dotted 1.5px #6a994e;cursor:help}
+svg a text{cursor:pointer}
+svg a:hover rect{fill:#f5f9ee}
+#tip{position:fixed;display:none;z-index:9;max-width:340px;background:#fffbea;
+border:1px solid #b7a;box-shadow:2px 3px 8px #0004;padding:2px 12px;
+font-size:12.5px;line-height:1.45}
+#tip p{margin:8px 0}
+#tip code{background:#eee8d5;padding:0 3px}
+</style>
+<h1 id='top'>IDEF0 drawing set &mdash; p.1: node index and interface table</h1>
+<table><tr><th>NODE</th><th>TITLE</th><th>NUMBER</th></tr>
+<tr><td><a href='#plate-S0'>S0</a></td><td class='hasdoc' data-doc='S0'>Radar DSP</td><td><a href='#plate-S0'>p.2</a></td></tr>
+<tr><td><a href='#plate-S1'>S1</a></td><td class='hasdoc' data-doc='S1'>Cfar</td><td><a href='#plate-S1'>p.3</a></td></tr>
+<tr><td><a href='#plate-S4'>S4</a></td><td class='hasdoc' data-doc='S4'>Fft512</td><td><a href='#plate-S4'>p.4</a></td></tr>
+<tr><td><a href='#plate-K0'>K0</a></td><td class='hasdoc' data-doc='K0'>Fusion And Camera Tracking</td><td><a href='#plate-K0'>p.5</a></td></tr>
+<tr><td><a href='#plate-K1'>K1</a></td><td class='hasdoc' data-doc='K1'>Fuse Session</td><td><a href='#plate-K1'>p.6</a></td></tr>
+<tr><td><a href='#plate-K11'>K11</a></td><td class='hasdoc' data-doc='K11'>Load</td><td><a href='#plate-K11'>p.7</a></td></tr>
+<tr><td><a href='#plate-K2'>K2</a></td><td class='hasdoc' data-doc='K2'>Run Session</td><td><a href='#plate-K2'>p.8</a></td></tr>
+<tr><td><a href='#plate-K22'>K22</a></td><td class='hasdoc' data-doc='K22'>Poses From Session</td><td><a href='#plate-K22'>p.9</a></td></tr>
+<tr><td><a href='#plate-K23'>K23</a></td><td class='hasdoc' data-doc='K23'>Load</td><td><a href='#plate-K23'>p.10</a></td></tr>
+</table>
+<table><tr><th>SOURCE</th><th>DEST</th><th>FLOW</th></tr>
+</table>
+<div class='plate' id='plate-S0'>
+<div class='nav'><a href='#top'>&#8962; index</a> &middot; <span class='dim'>top plate</span> &middot; <a href='javascript:history.back()'>&#8592; back</a> &middot; <a href='javascript:history.forward()'>fwd &#8594;</a> &middot; <a href='#' class='vz' title='reset pan/zoom (ctrl+scroll or pinch to zoom, middle-drag to pan)'>&#10530; reset</a> &middot; <span class='dim'>S0 &middot; p.2</span></div>
+<details class='notes'><summary>notes: Radar DSP</summary><p>Derived from the Clash sources: boxes are block functions, ports are In/Out record fields, decomposition is the instantiation tree. Unconnected arrows are real port-name mismatches in the code, left visible on purpose.</p></details>
+<div class='vp'>
+<svg xmlns="http://www.w3.org/2000/svg" width="1795" height="1030" viewBox="0 0 1795 1030" font-family="IBM Plex Mono,monospace">
+<rect width="1795" height="1030" fill="#fdfcf8"/>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#222"/></marker></defs>
+<a href="#plate-S1">
+<rect x="191" y="56" width="180" height="90" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="S1"><tspan x="281.0" y="82">Cfar</tspan></text>
+<text x="365" y="138" font-size="10" text-anchor="end" fill="#555">S1*</text>
+</a>
+<path d="M151,101 H191" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="147" y="104" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Cell Magnitudes</text>
+<rect x="479" y="218" width="180" height="90" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="S2"><tspan x="569.0" y="244">Cic</tspan></text>
+<text x="653" y="300" font-size="10" text-anchor="end" fill="#555">S2</text>
+<path d="M439,254 H479" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="435" y="257" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">I In</text>
+<path d="M439,272 H479" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="435" y="275" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Q In</text>
+<path d="M659,245 H699" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="703" y="248" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">I Out</text>
+<path d="M659,263 H699" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="703" y="266" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Q Out</text>
+<path d="M659,281 H699" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="703" y="284" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Valid</text>
+<rect x="767" y="380" width="180" height="90" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="S3"><tspan x="857.0" y="406">Cordic</tspan></text>
+<text x="941" y="462" font-size="10" text-anchor="end" fill="#555">S3</text>
+<path d="M727,416 H767" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="723" y="419" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">I In</text>
+<path d="M727,434 H767" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="723" y="437" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Q In</text>
+<path d="M947,434 H987" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="991" y="437" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Phase</text>
+<a href="#plate-S4">
+<rect x="1055" y="542" width="180" height="90" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="S4"><tspan x="1145.0" y="568">Fft512</tspan></text>
+<text x="1229" y="624" font-size="10" text-anchor="end" fill="#555">S4*</text>
+</a>
+<path d="M1015,587 H1055" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="1011" y="590" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">In</text>
+<path d="M1235,587 H1275" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="1279" y="590" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Out</text>
+<rect x="1343" y="704" width="180" height="90" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="S5"><tspan x="1433.0" y="730">Fir</tspan></text>
+<text x="1517" y="786" font-size="10" text-anchor="end" fill="#555">S5</text>
+<path d="M1303,749 H1343" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="1299" y="752" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">X</text>
+<path d="M1523,749 H1563" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="1567" y="752" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Y</text>
+<rect x="0" y="976" width="1795" height="54" fill="#fff" stroke="#222"/>
+<line x1="99" y1="976" x2="99" y2="1030" stroke="#222"/>
+<line x1="1696" y1="976" x2="1696" y2="1030" stroke="#222"/>
+<text x="10" y="992" font-size="10">NODE</text>
+<text x="10" y="1012" font-size="12">S0</text>
+<text x="110" y="992" font-size="10">TITLE</text>
+<text x="110" y="1012" font-size="12" class="hasdoc" data-doc="S0">Radar DSP</text>
+<text x="1706" y="992" font-size="10">NUMBER</text>
+<text x="1706" y="1012" font-size="12">p.2</text>
+</svg>
+</div>
+</div>
+<div class='plate' id='plate-S1'>
+<div class='nav'><a href='#top'>&#8962; index</a> &middot; <a href='#plate-S0'>&#8593; S0</a> &middot; <a href='javascript:history.back()'>&#8592; back</a> &middot; <a href='javascript:history.forward()'>fwd &#8594;</a> &middot; <a href='#' class='vz' title='reset pan/zoom (ctrl+scroll or pinch to zoom, middle-drag to pan)'>&#10530; reset</a> &middot; <span class='dim'>S1 &middot; p.3</span></div>
+<details class='notes'><summary>notes: Cfar</summary><p>MAIDEN detector: cell-averaging CFAR over the Doppler magnitude stream.</p></details>
+<div class='vp'>
+<svg xmlns="http://www.w3.org/2000/svg" width="625" height="382" viewBox="0 0 625 382" font-family="IBM Plex Mono,monospace">
+<rect width="625" height="382" fill="#fdfcf8"/>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#222"/></marker></defs>
+<rect x="173" y="56" width="180" height="90" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="S11"><tspan x="263.0" y="82">Ram Delay</tspan></text>
+<text x="347" y="138" font-size="10" text-anchor="end" fill="#555">S11</text>
+<path d="M353,92 H393" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="397" y="95" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Detect</text>
+<path d="M353,110 H393" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="397" y="113" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Cell</text>
+<rect x="0" y="328" width="625" height="54" fill="#fff" stroke="#222"/>
+<line x1="99" y1="328" x2="99" y2="382" stroke="#222"/>
+<line x1="526" y1="328" x2="526" y2="382" stroke="#222"/>
+<text x="10" y="344" font-size="10">NODE</text>
+<text x="10" y="364" font-size="12">S1</text>
+<text x="110" y="344" font-size="10">TITLE</text>
+<text x="110" y="364" font-size="12" class="hasdoc" data-doc="S1">Cfar</text>
+<text x="536" y="344" font-size="10">NUMBER</text>
+<text x="536" y="364" font-size="12">p.3</text>
+</svg>
+</div>
+</div>
+<div class='plate' id='plate-S4'>
+<div class='nav'><a href='#top'>&#8962; index</a> &middot; <a href='#plate-S0'>&#8593; S0</a> &middot; <a href='javascript:history.back()'>&#8592; back</a> &middot; <a href='javascript:history.forward()'>fwd &#8594;</a> &middot; <a href='#' class='vz' title='reset pan/zoom (ctrl+scroll or pinch to zoom, middle-drag to pan)'>&#10530; reset</a> &middot; <span class='dim'>S4 &middot; p.4</span></div>
+<details class='notes'><summary>notes: Fft512</summary><p>512-point streaming FFT — radix-2 single-delay-feedback (R2SDF).</p></details>
+<div class='vp'>
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="706" viewBox="0 0 1120 706" font-family="IBM Plex Mono,monospace">
+<rect width="1120" height="706" fill="#fdfcf8"/>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#222"/></marker></defs>
+<rect x="92" y="56" width="180" height="90" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="S41"><tspan x="182.0" y="82">Sdf Stage</tspan></text>
+<text x="266" y="138" font-size="10" text-anchor="end" fill="#555">S41</text>
+<path d="M52,101 H92" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="48" y="104" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">In</text>
+<path d="M272,101 H312" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="316" y="104" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Out</text>
+<rect x="380" y="218" width="180" height="90" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="S42"><tspan x="470.0" y="244">Sdf Stage Last</tspan></text>
+<text x="554" y="300" font-size="10" text-anchor="end" fill="#555">S42</text>
+<path d="M340,263 H380" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="336" y="266" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">In</text>
+<path d="M560,263 H600" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="604" y="266" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Out</text>
+<rect x="668" y="380" width="180" height="90" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="S43"><tspan x="758.0" y="406">Sdf Stage2</tspan></text>
+<text x="842" y="462" font-size="10" text-anchor="end" fill="#555">S43</text>
+<path d="M628,425 H668" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="624" y="428" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">In</text>
+<path d="M848,425 H888" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="892" y="428" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Out</text>
+<rect x="0" y="652" width="1120" height="54" fill="#fff" stroke="#222"/>
+<line x1="99" y1="652" x2="99" y2="706" stroke="#222"/>
+<line x1="1021" y1="652" x2="1021" y2="706" stroke="#222"/>
+<text x="10" y="668" font-size="10">NODE</text>
+<text x="10" y="688" font-size="12">S4</text>
+<text x="110" y="668" font-size="10">TITLE</text>
+<text x="110" y="688" font-size="12" class="hasdoc" data-doc="S4">Fft512</text>
+<text x="1031" y="668" font-size="10">NUMBER</text>
+<text x="1031" y="688" font-size="12">p.4</text>
+</svg>
+</div>
+</div>
+<div class='plate' id='plate-K0'>
+<div class='nav'><a href='#top'>&#8962; index</a> &middot; <span class='dim'>top plate</span> &middot; <a href='javascript:history.back()'>&#8592; back</a> &middot; <a href='javascript:history.forward()'>fwd &#8594;</a> &middot; <a href='#' class='vz' title='reset pan/zoom (ctrl+scroll or pinch to zoom, middle-drag to pan)'>&#10530; reset</a> &middot; <span class='dim'>K0 &middot; p.5</span></div>
+<details class='notes'><summary>notes: Fusion And Camera Tracking</summary><p>Derived from the Python sources via ast: boxes are the cross-module call graph, i ports are parameters, o ports are return annotations (missing annotation = missing o, on purpose). Docstring first lines carry the SYS/D refs.</p></details>
+<div class='vp'>
+<svg xmlns="http://www.w3.org/2000/svg" width="895" height="544" viewBox="0 0 895 544" font-family="IBM Plex Mono,monospace">
+<rect width="895" height="544" fill="#fdfcf8"/>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#222"/></marker></defs>
+<a href="#plate-K1">
+<rect x="155" y="56" width="180" height="90" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="K1"><tspan x="245.0" y="82">Fuse Session</tspan></text>
+<text x="329" y="138" font-size="10" text-anchor="end" fill="#555">K1*</text>
+</a>
+<path d="M115,92 H155" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="111" y="95" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Session Dir</text>
+<path d="M115,110 H155" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="111" y="113" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Epoch Hz</text>
+<a href="#plate-K2">
+<rect x="443" y="218" width="180" height="90" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="K2"><tspan x="533.0" y="244">Run Session</tspan></text>
+<text x="617" y="300" font-size="10" text-anchor="end" fill="#555">K2*</text>
+</a>
+<path d="M403,245 H443" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="399" y="248" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Session Dir</text>
+<path d="M403,263 H443" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="399" y="266" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Out Dir</text>
+<path d="M403,281 H443" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="399" y="284" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Field Cfg</text>
+<path d="M623,263 H663" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="667" y="266" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Dict</text>
+<rect x="0" y="490" width="895" height="54" fill="#fff" stroke="#222"/>
+<line x1="99" y1="490" x2="99" y2="544" stroke="#222"/>
+<line x1="796" y1="490" x2="796" y2="544" stroke="#222"/>
+<text x="10" y="506" font-size="10">NODE</text>
+<text x="10" y="526" font-size="12">K0</text>
+<text x="110" y="506" font-size="10">TITLE</text>
+<text x="110" y="526" font-size="12" class="hasdoc" data-doc="K0">Fusion And Camera Tracking</text>
+<text x="806" y="506" font-size="10">NUMBER</text>
+<text x="806" y="526" font-size="12">p.5</text>
+</svg>
+</div>
+</div>
+<div class='plate' id='plate-K1'>
+<div class='nav'><a href='#top'>&#8962; index</a> &middot; <a href='#plate-K0'>&#8593; K0</a> &middot; <a href='javascript:history.back()'>&#8592; back</a> &middot; <a href='javascript:history.forward()'>fwd &#8594;</a> &middot; <a href='#' class='vz' title='reset pan/zoom (ctrl+scroll or pinch to zoom, middle-drag to pan)'>&#10530; reset</a> &middot; <span class='dim'>K1 &middot; p.6</span></div>
+<details class='notes'><summary>notes: Fuse Session</summary><p>Ingest every station file in a session directory and fuse.</p></details>
+<div class='vp'>
+<svg xmlns="http://www.w3.org/2000/svg" width="616" height="382" viewBox="0 0 616 382" font-family="IBM Plex Mono,monospace">
+<rect width="616" height="382" fill="#fdfcf8"/>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#222"/></marker></defs>
+<a href="#plate-K11">
+<rect x="92" y="56" width="180" height="90" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="K11"><tspan x="182.0" y="82">Load</tspan></text>
+<text x="266" y="138" font-size="10" text-anchor="end" fill="#555">K11*</text>
+</a>
+<path d="M52,101 H92" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="48" y="104" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Path</text>
+<path d="M272,101 H312" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="316" y="104" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">StateSample</text>
+<rect x="0" y="328" width="616" height="54" fill="#fff" stroke="#222"/>
+<line x1="99" y1="328" x2="99" y2="382" stroke="#222"/>
+<line x1="517" y1="328" x2="517" y2="382" stroke="#222"/>
+<text x="10" y="344" font-size="10">NODE</text>
+<text x="10" y="364" font-size="12">K1</text>
+<text x="110" y="344" font-size="10">TITLE</text>
+<text x="110" y="364" font-size="12" class="hasdoc" data-doc="K1">Fuse Session</text>
+<text x="527" y="344" font-size="10">NUMBER</text>
+<text x="527" y="364" font-size="12">p.6</text>
+</svg>
+</div>
+</div>
+<div class='plate' id='plate-K11'>
+<div class='nav'><a href='#top'>&#8962; index</a> &middot; <a href='#plate-K1'>&#8593; K1</a> &middot; <a href='javascript:history.back()'>&#8592; back</a> &middot; <a href='javascript:history.forward()'>fwd &#8594;</a> &middot; <a href='#' class='vz' title='reset pan/zoom (ctrl+scroll or pinch to zoom, middle-drag to pan)'>&#10530; reset</a> &middot; <span class='dim'>K11 &middot; p.7</span></div>
+<details class='notes'><summary>notes: Load</summary><p>Stream StateSamples in file order; constant memory.</p></details>
+<div class='vp'>
+<svg xmlns="http://www.w3.org/2000/svg" width="616" height="382" viewBox="0 0 616 382" font-family="IBM Plex Mono,monospace">
+<rect width="616" height="382" fill="#fdfcf8"/>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#222"/></marker></defs>
+<rect x="92" y="56" width="180" height="90" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="K111"><tspan x="182.0" y="82">Validate</tspan></text>
+<text x="266" y="138" font-size="10" text-anchor="end" fill="#555">K111</text>
+<path d="M52,101 H92" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="48" y="104" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">S</text>
+<rect x="0" y="328" width="616" height="54" fill="#fff" stroke="#222"/>
+<line x1="99" y1="328" x2="99" y2="382" stroke="#222"/>
+<line x1="517" y1="328" x2="517" y2="382" stroke="#222"/>
+<text x="10" y="344" font-size="10">NODE</text>
+<text x="10" y="364" font-size="12">K11</text>
+<text x="110" y="344" font-size="10">TITLE</text>
+<text x="110" y="364" font-size="12" class="hasdoc" data-doc="K11">Load</text>
+<text x="527" y="344" font-size="10">NUMBER</text>
+<text x="527" y="364" font-size="12">p.7</text>
+</svg>
+</div>
+</div>
+<div class='plate' id='plate-K2'>
+<div class='nav'><a href='#top'>&#8962; index</a> &middot; <a href='#plate-K0'>&#8593; K0</a> &middot; <a href='javascript:history.back()'>&#8592; back</a> &middot; <a href='javascript:history.forward()'>fwd &#8594;</a> &middot; <a href='#' class='vz' title='reset pan/zoom (ctrl+scroll or pinch to zoom, middle-drag to pan)'>&#10530; reset</a> &middot; <span class='dim'>K2 &middot; p.8</span></div>
+<details class='notes'><summary>notes: Run Session</summary><p>maiden.runner — <code>maiden run --session DIR</code> (D9 §Session workflow §6).</p></details>
+<div class='vp'>
+<svg xmlns="http://www.w3.org/2000/svg" width="1849" height="1120" viewBox="0 0 1849 1120" font-family="IBM Plex Mono,monospace">
+<rect width="1849" height="1120" fill="#fdfcf8"/>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#222"/></marker></defs>
+<rect x="155" y="56" width="198" height="108" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="K21"><tspan x="254.0" y="82">Fuse</tspan></text>
+<text x="347" y="156" font-size="10" text-anchor="end" fill="#555">K21</text>
+<path d="M115,92 H155" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="111" y="95" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Samples</text>
+<path d="M115,110 H155" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="111" y="113" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Stations</text>
+<path d="M115,128 H155" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="111" y="131" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Epoch Hz</text>
+<path d="M353,101 H393" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="397" y="104" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">FuseStats</text>
+<path d="M353,119 H393" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="397" y="122" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">StateSample</text>
+<a href="#plate-K22">
+<rect x="461" y="236" width="198" height="108" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="K22"><tspan x="560.0" y="262">Poses From Session</tspan></text>
+<text x="653" y="336" font-size="10" text-anchor="end" fill="#555">K22*</text>
+</a>
+<path d="M421,290 H461" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="417" y="293" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Session Dir</text>
+<path d="M659,290 H699" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="703" y="293" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Pose</text>
+<a href="#plate-K23">
+<rect x="767" y="416" width="198" height="108" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="K23"><tspan x="866.0" y="442">Load</tspan></text>
+<text x="959" y="516" font-size="10" text-anchor="end" fill="#555">K23*</text>
+</a>
+<path d="M727,470 H767" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="723" y="473" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Path</text>
+<path d="M965,470 H1005" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="1009" y="473" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">StateSample</text>
+<rect x="1073" y="596" width="198" height="108" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="K24"><tspan x="1172.0" y="622">Render</tspan></text>
+<text x="1265" y="696" font-size="10" text-anchor="end" fill="#555">K24</text>
+<path d="M1033,641 H1073" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="1029" y="644" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Fd</text>
+<path d="M1033,659 H1073" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="1029" y="662" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Out Dir</text>
+<path d="M1271,650 H1311" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="1315" y="653" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Dict</text>
+<rect x="1379" y="776" width="198" height="108" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="K25"><tspan x="1478.0" y="802">Score Sequence</tspan></text>
+<text x="1571" y="876" font-size="10" text-anchor="end" fill="#555">K25</text>
+<path d="M1339,803 H1379" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="1335" y="806" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Events</text>
+<path d="M1339,821 H1379" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="1335" y="824" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Samples</text>
+<path d="M1339,839 H1379" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="1335" y="842" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Calibration</text>
+<path d="M1339,857 H1379" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="1335" y="860" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Rubric</text>
+<path d="M1577,830 H1617" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="1621" y="833" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">ManeuverScore</text>
+<rect x="0" y="1066" width="1849" height="54" fill="#fff" stroke="#222"/>
+<line x1="99" y1="1066" x2="99" y2="1120" stroke="#222"/>
+<line x1="1750" y1="1066" x2="1750" y2="1120" stroke="#222"/>
+<text x="10" y="1082" font-size="10">NODE</text>
+<text x="10" y="1102" font-size="12">K2</text>
+<text x="110" y="1082" font-size="10">TITLE</text>
+<text x="110" y="1102" font-size="12" class="hasdoc" data-doc="K2">Run Session</text>
+<text x="1760" y="1082" font-size="10">NUMBER</text>
+<text x="1760" y="1102" font-size="12">p.8</text>
+</svg>
+</div>
+</div>
+<div class='plate' id='plate-K22'>
+<div class='nav'><a href='#top'>&#8962; index</a> &middot; <a href='#plate-K2'>&#8593; K2</a> &middot; <a href='javascript:history.back()'>&#8592; back</a> &middot; <a href='javascript:history.forward()'>fwd &#8594;</a> &middot; <a href='#' class='vz' title='reset pan/zoom (ctrl+scroll or pinch to zoom, middle-drag to pan)'>&#10530; reset</a> &middot; <span class='dim'>K22 &middot; p.9</span></div>
+<details class='notes'><summary>notes: Poses From Session</summary><p>Station Poses from the session&#x27;s own TMATS (works for twin or real).</p></details>
+<div class='vp'>
+<svg xmlns="http://www.w3.org/2000/svg" width="886" height="544" viewBox="0 0 886 544" font-family="IBM Plex Mono,monospace">
+<rect width="886" height="544" fill="#fdfcf8"/>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#222"/></marker></defs>
+<rect x="146" y="56" width="180" height="90" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="K221"><tspan x="236.0" y="82">Enu From Lla</tspan></text>
+<text x="320" y="138" font-size="10" text-anchor="end" fill="#555">K221</text>
+<path d="M106,92 H146" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="102" y="95" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Origin Lla</text>
+<path d="M106,110 H146" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="102" y="113" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Lla</text>
+<path d="M326,101 H366" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="370" y="104" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Ndarray</text>
+<rect x="434" y="218" width="180" height="90" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="K222"><tspan x="524.0" y="244">Describe</tspan></text>
+<text x="608" y="300" font-size="10" text-anchor="end" fill="#555">K222</text>
+<path d="M394,263 H434" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="390" y="266" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Path</text>
+<path d="M614,254 H654" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="658" y="257" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Station</text>
+<path d="M614,272 H654" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="658" y="275" font-size="9" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">Aircraft</text>
+<rect x="0" y="490" width="886" height="54" fill="#fff" stroke="#222"/>
+<line x1="99" y1="490" x2="99" y2="544" stroke="#222"/>
+<line x1="787" y1="490" x2="787" y2="544" stroke="#222"/>
+<text x="10" y="506" font-size="10">NODE</text>
+<text x="10" y="526" font-size="12">K22</text>
+<text x="110" y="506" font-size="10">TITLE</text>
+<text x="110" y="526" font-size="12" class="hasdoc" data-doc="K22">Poses From Session</text>
+<text x="797" y="506" font-size="10">NUMBER</text>
+<text x="797" y="526" font-size="12">p.9</text>
+</svg>
+</div>
+</div>
+<div class='plate' id='plate-K23'>
+<div class='nav'><a href='#top'>&#8962; index</a> &middot; <a href='#plate-K2'>&#8593; K2</a> &middot; <a href='javascript:history.back()'>&#8592; back</a> &middot; <a href='javascript:history.forward()'>fwd &#8594;</a> &middot; <a href='#' class='vz' title='reset pan/zoom (ctrl+scroll or pinch to zoom, middle-drag to pan)'>&#10530; reset</a> &middot; <span class='dim'>K23 &middot; p.10</span></div>
+<details class='notes'><summary>notes: Load</summary><p>Stream StateSamples in file order; constant memory.</p></details>
+<div class='vp'>
+<svg xmlns="http://www.w3.org/2000/svg" width="616" height="382" viewBox="0 0 616 382" font-family="IBM Plex Mono,monospace">
+<rect width="616" height="382" fill="#fdfcf8"/>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#222"/></marker></defs>
+<rect x="92" y="56" width="180" height="90" fill="#fff" stroke="#222" stroke-width="1.6"/>
+<text font-size="12" text-anchor="middle" class="hasdoc" data-doc="K231"><tspan x="182.0" y="82">Validate</tspan></text>
+<text x="266" y="138" font-size="10" text-anchor="end" fill="#555">K231</text>
+<path d="M52,101 H92" fill="none" stroke="#222" stroke-width="1.1" marker-end="url(#arr)"/>
+<text x="48" y="104" font-size="9" text-anchor="end" paint-order="stroke" stroke="#fdfcf8" stroke-width="3">S</text>
+<rect x="0" y="328" width="616" height="54" fill="#fff" stroke="#222"/>
+<line x1="99" y1="328" x2="99" y2="382" stroke="#222"/>
+<line x1="517" y1="328" x2="517" y2="382" stroke="#222"/>
+<text x="10" y="344" font-size="10">NODE</text>
+<text x="10" y="364" font-size="12">K23</text>
+<text x="110" y="344" font-size="10">TITLE</text>
+<text x="110" y="364" font-size="12" class="hasdoc" data-doc="K23">Load</text>
+<text x="527" y="344" font-size="10">NUMBER</text>
+<text x="527" y="364" font-size="12">p.10</text>
+</svg>
+</div>
+</div>
+<div id='tip'></div><script>const DOCS={"S0": "<p>Derived from the Clash sources: boxes are block functions, ports are In/Out record fields, decomposition is the instantiation tree. Unconnected arrows are real port-name mismatches in the code, left visible on purpose.<\/p>", "S1": "<p>MAIDEN detector: cell-averaging CFAR over the Doppler magnitude stream.<\/p>", "S11": "<p>Instantiated x2 by the parent. MAIDEN detector: cell-averaging CFAR over the Doppler magnitude stream.<\/p>", "S2": "<p>MAIDEN CW-Doppler front-end decimator: an order-n CIC (Hogenauer) filter with a type-level decimation ratio r.<\/p>", "S3": "<p>MAIDEN Doppler magnitude\\/phase extractor: a 16-iteration vectoring-mode CORDIC, pipelined one iteration per stage.<\/p>", "S4": "<p>512-point streaming FFT \u2014 radix-2 single-delay-feedback (R2SDF).<\/p>", "S41": "<p>Instantiated x7 by the parent. 512-point streaming FFT \u2014 radix-2 single-delay-feedback (R2SDF).<\/p>", "S42": "<p>512-point streaming FFT \u2014 radix-2 single-delay-feedback (R2SDF).<\/p>", "S43": "<p>512-point streaming FFT \u2014 radix-2 single-delay-feedback (R2SDF).<\/p>", "S5": "<p>MAIDEN CIC droop compensator: a 15-tap transposed-form (systolic MAC) FIR.<\/p>", "K0": "<p>Derived from the Python sources via ast: boxes are the cross-module call graph, i ports are parameters, o ports are return annotations (missing annotation = missing o, on purpose). Docstring first lines carry the SYS/D refs.<\/p>", "K1": "<p>Ingest every station file in a session directory and fuse.<\/p>", "K11": "<p>Stream StateSamples in file order; constant memory.<\/p>", "K111": "<p>Raise ValueError on any IF-4 violation. Cheap; call it in adapters.<\/p>", "K2": "<p>maiden.runner \u2014 <code>maiden run --session DIR<\/code> (D9 \u00a7Session workflow \u00a76).<\/p>", "K21": "<p>Full scheduler per lesson 13: sequential predict-to-measurement<\/p>", "K22": "<p>Station Poses from the session&#x27;s own TMATS (works for twin or real).<\/p>", "K221": "<p>Exact ENU meters of <code>lla<\/code> relative to <code>origin_lla<\/code>.<\/p>", "K222": "<p>Parse only the first packet (TMATS, per IF-1) into a descriptor.<\/p>", "K23": "<p>Stream StateSamples in file order; constant memory.<\/p>", "K231": "<p>Raise ValueError on any IF-4 violation. Cheap; call it in adapters.<\/p>", "K24": "<p>One Letter page + sidecar + clips. Returns paths.<\/p>", "K25": "<p>Score every recognized maneuver in schedule order (VT-20 shape).<\/p>"};
+const tip=document.getElementById('tip');
+let pin=null;
+function show(k,x,y){tip.innerHTML=DOCS[k]||'';tip.style.display='block';
+ const r=tip.getBoundingClientRect();
+ x=Math.min(x+14,innerWidth-r.width-8);y=Math.min(y+16,innerHeight-r.height-8);
+ tip.style.left=Math.max(4,x)+'px';tip.style.top=Math.max(4,y)+'px';}
+function hide(){tip.style.display='none';pin=null;}
+const canHover=matchMedia('(hover:hover)').matches;
+document.addEventListener('mousemove',e=>{if(!canHover||pin)return;
+ const t=e.target.closest?e.target.closest('.hasdoc'):null;
+ if(t)show(t.dataset.doc,e.clientX,e.clientY);else hide();});
+document.addEventListener('click',e=>{
+ const t=e.target.closest?e.target.closest('.hasdoc'):null;
+ if(t&&!t.closest('a')){
+  if(pin===t.dataset.doc){hide();}
+  else{pin=t.dataset.doc;show(pin,e.clientX,e.clientY);}
+  e.stopPropagation();}
+ else if(!e.target.closest('#tip'))hide();});
+document.querySelectorAll('.plate').forEach(pl=>{
+ const vp=pl.querySelector('.vp'),rz=pl.querySelector('.vz');
+ if(!vp)return;
+ const g=vp.firstElementChild;
+ let s=1,tx=0,ty=0,drag=null,moved=0,pd=0,pm=null,tmoved=0,lastTap=0;
+ const P=new Map();
+ const ap=()=>{g.style.transform='translate('+tx+'px,'+ty+'px) scale('+s+')';};
+ const rst=()=>{s=1;tx=0;ty=0;ap();};
+ const zoom=(f,x,y)=>{const ns=Math.min(8,Math.max(0.2,s*f));
+  tx=x-(x-tx)*ns/s;ty=y-(y-ty)*ns/s;s=ns;ap();};
+ if(rz)rz.addEventListener('click',e=>{e.preventDefault();rst();});
+ vp.addEventListener('dblclick',rst);
+ vp.addEventListener('wheel',e=>{if(!e.ctrlKey)return;e.preventDefault();
+  const r=vp.getBoundingClientRect();
+  zoom(Math.exp(-e.deltaY*.002),e.clientX-r.left,e.clientY-r.top);},{passive:false});
+ vp.addEventListener('pointerdown',e=>{
+  P.set(e.pointerId,[e.clientX,e.clientY]);
+  if(P.size===2){const a=[...P.values()];
+   pd=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);
+   pm=[(a[0][0]+a[1][0])/2,(a[0][1]+a[1][1])/2];tmoved=1;}
+  else if(e.pointerType==='mouse'&&e.button===1){e.preventDefault();
+   drag=[e.clientX,e.clientY];moved=0;}});
+ vp.addEventListener('pointermove',e=>{
+  if(!P.has(e.pointerId))return;
+  P.set(e.pointerId,[e.clientX,e.clientY]);
+  if(P.size===2){e.preventDefault();
+   const a=[...P.values()],r=vp.getBoundingClientRect(),
+   d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]),
+   m=[(a[0][0]+a[1][0])/2,(a[0][1]+a[1][1])/2];
+   if(pd)zoom(d/pd,m[0]-r.left,m[1]-r.top);
+   tx+=m[0]-pm[0];ty+=m[1]-pm[1];pd=d;pm=m;ap();}
+  else if(drag){const dx=e.clientX-drag[0],dy=e.clientY-drag[1];
+   if(moved||Math.hypot(dx,dy)>4){moved=1;tx+=dx;ty+=dy;
+    drag=[e.clientX,e.clientY];ap();}}},{passive:false});
+ const up=e=>{if(e.type==='pointercancel')tmoved=1;
+  P.delete(e.pointerId);
+  if(P.size<2)pd=0;
+  if(e.pointerType==='mouse')drag=null;
+  else if(P.size===0){const n=Date.now();
+   if(!tmoved&&n-lastTap<350)rst();
+   lastTap=n;tmoved=0;}};
+ vp.addEventListener('pointerup',up);
+ vp.addEventListener('pointercancel',up);
+ vp.addEventListener('auxclick',e=>{if(moved){e.stopPropagation();e.preventDefault();moved=0;}},true);
+});
+</script>

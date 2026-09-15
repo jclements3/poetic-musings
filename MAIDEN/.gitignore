@@ -1,0 +1,45 @@
+# Claude Code local settings
+.claude/settings.local.json
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Raw session data stays out of git (D5 CM: raw .ch10 never modified,
+# derived products regenerable; data/ carries a README stub instead)
+/data/
+*.ch10
+
+# FPGA build outputs
+firmware/**/build/
+*.o
+*.ghw
+
+# Windows ADS artifacts
+*Zone.Identifier*
+
+# setuptools build metadata
+*.egg-info/
+
+# Internal business material - never commit (repo is public)
+MAIDEN-*
+*Template*
+LEDGER.md
+receipts/
+HANDOFF.md
+tabletop-range-BOM-plan.md
+hardware/launcher-catcher.md
+*.pptx
+*.xlsx
+figures/i*/
+Final Final New logo*.svg
+MAIDEN-display*
+MAIDEN-table-concept*
+
+upload/
+
+# Private finance repo (Tackler journal) — never in the public repo
+finance/

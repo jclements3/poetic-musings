@@ -23,7 +23,7 @@ O  Oracle     root — ULX3S ECP5-85F, Forth, 0x40xx bus, SD            → H2 S
 ├── T  Theremin   + pitch rod, volume loop, 2 Colpitts boards        → EdgeSampler, DelayDiff, IIR, NCO, DAC
 ├── I  IRIG       + IRIG-B output, scope                             → DCLS framer, BCD time, TOD set
 └── C  Coil       + Santa Glide tube on its own Alchitry Cu          → SleighSpeed link, watchdog, coil pacer
-MUSING                                                                (IRAD ledger)
+MUSING                                                                (work ledger)
 ├── M  Motion radar + Doppler front end (SPI ADC)                    → CIC → FFT → CFAR → velocity records
 ├── U  UHF        + whip on SMA, PA can                              → Keyer, Morse decoder, Goertzel, WSPR mod, TX interlock
 ├── S  SDR        + AD9226 ADC, antenna relay (reuses T antennas)    → CIC, FIR, DDC, FFT512, AM demod
@@ -71,7 +71,7 @@ Execution plan with the demo that closes each phase: `PLAN.md`.
 
 ## Notes / open items
 
-- `MAIDEN/` is a **library source archive**, not a spoke: it is the older IRAD testbed
+- `MAIDEN/` is a **library source archive**, not a spoke: it is the older work-project testbed
   repo (own `.git`, tracked as a gitlink) where the measured Clash DSP blocks
   (`Maiden.{Cic,Fir,Cordic,Cfar}`, the theremin port, doppler and timebase VHDL) were
   born. Blocks are consumed in place or ported, never edited there. The 3-station

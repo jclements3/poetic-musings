@@ -1,0 +1,3 @@
+maiden23 clean A+B run (twin seed 202, dropouts off)
+pos RMS = 0.520 m   vel RMS = 2.974 m/s (angles only; mediocre by design — maiden24's motivation)
+sigma_a sweep (pos RMS, m): 5->1.201  10->21.945  20->0.520  40->0.548

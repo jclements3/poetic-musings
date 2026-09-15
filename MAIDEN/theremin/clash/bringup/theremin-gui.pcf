@@ -1,0 +1,17 @@
+# Alchitry Cu (iCE40HX8K-CB132) — GUI theremin build.
+# clk/LED balls per the Alchitry base project; usb_rx/usb_tx confirmed
+# 11 Sep 2026 against georgerennie/alchitry_cu_helpers cu.pcf
+# ("usb_rx P14 # tx in the schematic", "usb_tx M9 # rx in the schematic").
+set_io clk100 P7
+set_io led[0] J11
+set_io led[1] K11
+set_io led[2] K12
+set_io led[3] K14
+set_io led[4] L12
+set_io led[5] L14
+set_io led[6] M12
+set_io led[7] N14
+set_io usb_rx P14
+set_io usb_tx M9
+# Br-bank pin below is a BEST GUESS — verify against the Cu schematic.
+set_io audio    A5

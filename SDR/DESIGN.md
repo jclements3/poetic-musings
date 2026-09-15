@@ -2,7 +2,7 @@
 
 Phase 10 of PLAN.md: an AD9226-class ADC direct-samples HF off the theremin antennas;
 a DDC (NCO/mixer → CIC → FIR) brings one channel down to audio; waterfall on V0 via
-Oracle. IRAD ledger, ~$30 hardware (fpga-development-plan.md row 10). Prereqs T and O.
+Oracle. Work ledger (W), ~$30 hardware (fpga-development-plan.md row 10). Prereqs T and O.
 Gate: **decode a broadcast or WSPR signal.** Demo: the theremin's antennas become a
 radio receiver — same box, new mode, entered from the O-mode script menu.
 

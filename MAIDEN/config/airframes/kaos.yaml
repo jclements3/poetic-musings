@@ -1,0 +1,8 @@
+# Airframe descriptor for the converter's TMATS record (D4 IF-3).
+# mass_g is the VT-13 weigh-in — placeholder until maiden48's bench
+# number lands; mount offset measured from the CG, mm, x fwd / y right /
+# z down.
+name: KAOS_60
+logger_serial: MAIDEN-LOG-001
+mass_g: null          # VT-13 weigh-in pending (maiden48)
+mount_xyz_mm: [12, 0, -8]

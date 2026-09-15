@@ -1,0 +1,23 @@
+; -*- mode: idef0 -*-
+tD Theremin Definition
+## SysML v2 **part definition** (v1 BDD) per the QuadX mapping rule:
+## composition = the activity tree; a box is a part rendered as the
+## function it contributes; attributes live in doc comments.
+  a# Constitute Sensing Front End
+  ## Parts: Colpitts oscillator *x2* (L 1.45 mH, C0G tank), antenna
+  ## *x2* (pitch rod, volume loop), coax feed *x2*.
+    i# Hand Proximity
+    o# Oscillator Period Signal
+    m# LC Oscillator Pair
+  a# Constitute Measurement Core
+  ## Parts: ECP5 LFE5U-85F on ULX3S. Sub-parts are the Clash blocks:
+  ## EdgeSampler, EdgeToPulsePosition, DelayDiffFilter *x2* (DP16KD),
+  ## IirNStage *x2* (DPR16X4). Measured: 1,816 LUT4 / 452 FF / 2 BRAM.
+    i# Oscillator Period Signal
+    o# Filtered Period
+    m# ECP5 Fabric
+  a# Constitute Audio Chain
+  ## Parts: PitchMap, Nco, SineLut (asyncRom), DsmDac (1-bit).
+    i# Filtered Period
+    o# Audio Bitstream
+    m# ECP5 Fabric

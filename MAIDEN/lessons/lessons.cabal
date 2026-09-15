@@ -1,0 +1,49 @@
+cabal-version: 2.4
+name:          lessons
+version:       0.1.0.0
+build-type:    Simple
+
+library
+  hs-source-dirs:     src
+  exposed-modules:    Lesson01
+                      Lesson02
+                      Lesson03
+                      Lesson04
+                      Lesson05
+                      Lesson06
+                      Lesson07
+                      Lesson08
+                      Lesson09
+                      Lesson10
+                      Lesson11
+                      Lesson12
+                      Lesson13
+                      Lesson14
+  build-depends:      base
+                    , clash-prelude ^>=1.8.1
+                    , ghc-typelits-natnormalise
+                    , ghc-typelits-extra
+                    , ghc-typelits-knownnat
+                    , hedgehog
+  default-language:   GHC2021
+  default-extensions: DataKinds
+                      DeriveAnyClass
+                      DerivingStrategies
+                      NoImplicitPrelude
+                      NoStarIsType
+                      TypeFamilies
+  ghc-options: -fplugin GHC.TypeLits.Extra.Solver
+               -fplugin GHC.TypeLits.Normalise
+               -fplugin GHC.TypeLits.KnownNat.Solver
+
+executable clash
+  main-is:          Clash.hs
+  hs-source-dirs:   bin
+  build-depends:    base
+                  , clash-ghc ^>=1.8.1
+                  , clash-prelude ^>=1.8.1
+                  , ghc-typelits-natnormalise
+                  , ghc-typelits-extra
+                  , ghc-typelits-knownnat
+                  , lessons
+  default-language: GHC2021

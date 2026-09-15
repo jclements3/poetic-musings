@@ -1,0 +1,68 @@
+# SW-005: lint + unit tests + canonical twin replay with the absolute
+# threshold gate (config/thresholds.yaml; D2 is the authority).
+#
+# Job split (lesson 15):
+#  - test + replay run on every push/PR: the twin's Ch 5 message-level
+#    az/el goes through ingest -> fuse -> validate (no video render).
+#  - The render-heavy video/tracker path and the GHDL firmware sims are
+#    NIGHTLY/manual (schedule + workflow_dispatch): minutes-long, not
+#    merge-gating.
+# `make ci` runs the identical scripts locally.
+
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 7 * * *"   # nightly full path
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m venv .venv && .venv/bin/pip install -e "software[dev]"
+      - run: .venv/bin/ruff check software scripts
+      - run: .venv/bin/pytest software/tests -q
+
+  replay:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m venv .venv && .venv/bin/pip install -e "software[dev]"
+      # Cache keyed on twin SOURCE hash + seeds — a stale twin dataset
+      # silently tests the wrong thing (lesson 15), so the key must move
+      # when the twin moves. replay.py re-verifies via MANIFEST.json even
+      # on a cache hit.
+      - uses: actions/cache@v4
+        with:
+          path: data/twin-ci
+          key: twin-ci-${{ hashFiles('software/maiden/twin/**', 'software/maiden/ch10/**', 'software/maiden/timebase.py', 'software/maiden/tmats.py', 'software/maiden/geo.py') }}-1001-1003
+      - run: .venv/bin/python scripts/replay.py
+
+  nightly-video:
+    # Render-heavy tracker path: not merge-gating (see split note above).
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m venv .venv && .venv/bin/pip install -e "software[dev]"
+      - run: .venv/bin/pytest software/tests -q -k "render or candidates or tracker"
+
+  # GHDL firmware sims (firmware/doppler, firmware/timebase) are bench-
+  # adjacent and minutes-long; they run on the pinned OSS CAD Suite on
+  # the dev machines (make -C firmware/doppler sim). Wiring a pinned
+  # oss-cad-suite into Actions is future work — recorded, not silent.

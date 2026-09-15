@@ -1,0 +1,22 @@
+# SYS-002/003/004 pass criteria — the single code-readable home.
+#
+# Values transcribed from D2 SyRS; D2 is the authority. A change here
+# without a matching D2 revision is a process violation (D5 change
+# control): one commit touches D2 and this file together.
+#
+# These are ABSOLUTE thresholds (VT-10/11/12 field criteria, exercised
+# in sim as rehearsal) — never golden-file diffs of last week's RMS.
+SYS-002: {pos_rms_m: 1.0, at_range_m: 150}
+SYS-003: {vel_rms_mps: 1.0}
+SYS-004: {continuity: 0.95}
+SYS-006: {sync_budget_s: 0.005}
+
+# Achieved-in-sim regression floors (maiden25 headline, seed 303,
+# --imperfect; results/lesson13/headline.md). INFORMATIONAL: replay
+# prints margin against the SYS numbers above; these record where the
+# sim rehearsal landed so a large silent drift is visible in review.
+# VT-10/11/12 bind only in the field.
+sim-rehearsal-floors:
+  pos_rms_m: 0.219
+  vel_rms_mps: 0.909
+  continuity: 1.0000

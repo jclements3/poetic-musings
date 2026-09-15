@@ -1,0 +1,182 @@
+-- Lesson 13: reference card. Lookup material, not a lesson -- keep it within arm's reach.
+--
+--     Build:  cabal exec -- clash -isrc Lesson13 --vhdl
+--     Output: vhdl/Lesson13.topEntity/topEntity.vhdl
+--
+-- Add `Lesson13` to exposed-modules in lessons.cabal first.
+--
+-- Exactly one topEntity may be uncommented at a time. The one below exists so the card
+-- stays compiler-checked; it exercises a handful of entries from the tables.
+
+module Lesson13 where
+
+import Clash.Prelude
+
+------------------------------------------------------------------------------------------------
+-- The sized integer types
+------------------------------------------------------------------------------------------------
+--
+--     type          range                    (+) overflow      typical use
+--     -----------------------------------------------------------------------------------
+--     Unsigned n    0 .. 2^n - 1             wraps             counters, addresses, magnitudes
+--     Signed n      -2^(n-1) .. 2^(n-1)-1    wraps             samples, differences, DSP
+--     BitVector n   n bits, no arithmetic    wraps (as bits)   ports, packing, slicing
+--                   meaning implied
+--     Index n       0 .. n - 1               RUNTIME ERROR     RAM/Vec addresses, "one of n"
+--                                            in simulation
+--
+-- Index is the odd one out and the most underused: `Index 512` documents "a valid address"
+-- in the type, and simulation catches arithmetic that escapes the range instead of wrapping
+-- it away. For a counter over Index, wrap deliberately: `satSucc SatWrap i`.
+--
+-- Literals are polymorphic (`0 :: Signed 8`, `0 :: Index 512` both fine) -- and checked in
+-- the repl, 27 Aug 2026, out-of-range literals follow the same overflow rules with no
+-- compile-time complaint: `300 :: Unsigned 8` is silently 44, while `600 :: Index 512`
+-- raises `X: Clash.Sized.Index: result 600 is out of bounds: [0..511]` when evaluated.
+
+------------------------------------------------------------------------------------------------
+-- Fixed point
+------------------------------------------------------------------------------------------------
+--
+--     SFixed i f     signed,   i integer bits (sign included) + f fractional bits
+--     UFixed i f     unsigned, i integer bits                 + f fractional bits
+--
+--     SFixed 1 15 : the classic Q1.15 audio/DSP format, range [-1, 1)
+--
+-- In-type arithmetic (Num: + - *) wraps like the integer types. The growing alternatives
+-- (ExtendingNum) return a type wide enough that they cannot:
+--
+--     add :: SFixed a b -> SFixed c d -> SFixed (1 + Max a c) (Max b d)
+--     mul :: SFixed a b -> SFixed c d -> SFixed (a + c) (b + d)
+--
+-- Saturating alternatives (SatNum): `satAdd SatBound`, `satMul SatBound`, ... with modes
+-- SatWrap / SatBound / SatZero / SatSymmetric / SatError. Resizing fixed point is
+-- `resizeF` (truncates fraction bits, extends or clips integer bits). Lesson 10 is the
+-- discipline for choosing among all of these.
+
+------------------------------------------------------------------------------------------------
+-- Changing width and changing label
+------------------------------------------------------------------------------------------------
+--
+-- Two independent moves, drawn as two axes. Vertical: same type, new width. Horizontal:
+-- same width, new label on the bits. (The diagram earns its place here because the usual
+-- confusion -- "resize or bitCoerce?" -- is exactly a confusion of axes.)
+--
+--       width axis (resize, truncateB, extend, zeroExtend, signExtend)
+--
+--       Unsigned m        Signed m         BitVector m
+--          ▲                 ▲                 ▲
+--          │                 │                 │
+--          ▼                 ▼                 ▼
+--       Unsigned n ◀─────▶ Signed n ◀─────▶ BitVector n ◀─────▶ Vec n Bit
+--
+--       label axis (pack, unpack, bitCoerce): zero gates, and n = n always
+--
+--     function      direction      Unsigned                Signed
+--     -----------------------------------------------------------------------------------
+--     extend        wider only     zero-extends            sign-extends
+--     zeroExtend    wider only     zero-extends            zero-extends (sign ignored!)
+--     signExtend    wider only     ZERO-extends            sign-extends
+--     truncateB     narrower only  drops MSBs              drops MSBs (sign included!)
+--     resize        both ways      zero-extends / drops    sign-extends / KEEPS the sign
+--                                  MSBs                    bit, drops the MSBs below it
+--
+-- The surprises in that table are repl-checked (27 Aug 2026): `signExtend` on an Unsigned
+-- is not a type error -- it exists and zero-extends, because the class default is `resize`
+-- (`signExtend (0b1000 :: Unsigned 4) :: Unsigned 8` gives 8, not 248). And Signed's
+-- narrowing `resize` really does keep the sign bit: `resize (-3 :: Signed 8) :: Signed 4`
+-- is -3, where `truncateB` of the same value would also give -3 but diverges once the
+-- dropped MSBs carry information. When in doubt, the repl is one line away.
+--
+--     pack       :: a -> BitVector (BitSize a)      -- any BitPack type, records included
+--     unpack     :: BitVector (BitSize a) -> a
+--     bitCoerce  :: (BitSize a ~ BitSize b) => a -> b   -- = unpack . pack
+--
+-- bitCoerce relabels, never resizes: widths must already agree (see FAILURE below).
+-- Signed-to-unsigned conversions that should *preserve value*, not bits, go through
+-- arithmetic or `resize` at the wider width first -- bitCoerce (-1 :: Signed 4) is 15.
+
+------------------------------------------------------------------------------------------------
+-- Vec, the essentials
+------------------------------------------------------------------------------------------------
+--
+--     construct    x :> y :> Nil          literal vector (rightmost is index maxBound)
+--                  replicate d8 x         eight copies (d8 : term-level width witness)
+--                  iterateI f x           x, f x, f (f x), ... to the inferred length
+--                  indicesI               0, 1, 2, ... as Index values
+--     index        v !! i                 i may be Index/Unsigned/Int; sim-checked
+--                  head v / last v        first / last element
+--     modify       replace i x v          v with element i swapped for x
+--     traverse     map f v                elementwise; hardware = n copies of f
+--                  imap f v               like map, f also gets the Index
+--                  zipWith f v w          pairwise combine
+--                  foldr f z v            a chain of f's; fold f v for a balanced tree
+--     reshape      take/drop dN v         prefixes/suffixes, length in the type
+--                  v ++ w                 concatenation (Vec (n+m) a)
+--                  concat / unconcat dN   Vec (n*m) a <-> Vec n (Vec m a)
+--                  reverse / rotateLeftS  what they say; rotations by SNat
+--     escape       toList v               to a plain list (simulation/printing only)
+--
+-- Rule of thumb from Lesson 5: a Vec in register state is a bank of flip-flops with full
+-- parallel access, and it prices accordingly. Big and sequentially accessed = a memory:
+--
+--     asyncRom vec         combinational read     LUTs/distributed
+--     asyncRam dN          0-cycle read, 1 write  distributed RAM  (no reset -- survives it)
+--     blockRam vec         1-CYCLE READ LATENCY   block RAM        (no reset -- survives it)
+
+------------------------------------------------------------------------------------------------
+-- The lifted-operator table (value world -> Signal world)
+------------------------------------------------------------------------------------------------
+--
+--     on values                     on Signals                     notes
+--     -----------------------------------------------------------------------------------
+--     f x                           f <$> x                        any pure f
+--     f x y                         f <$> x <*> y                  ditto, n-ary
+--     x + y  (Num ops)              x + y                          Num lifts; literals too
+--     x == y, x < y, ...            x .==. y, x .<. y, ...         also ./=. .<=. .>. .>=.
+--     x && y, x || y, not x         x .&&. y, x .||. y, fmap not
+--     if c then a else b            mux c a b                      c :: Signal dom Bool
+--     case/guards on x              lift a pure step function      or mealy/moore (Lesson 3)
+--     (a, b) of signals             bundle (a, b)                  Signal of tuple <-> tuple
+--     s :: Signal (a, b)            unbundle s                     of Signals
+--
+--     register x0 s                 D flip-flop, reset value x0    (Lesson 2)
+--     regEn x0 en s                 ditto, holds when en is low
+--     delay x0 s                    flip-flop WITHOUT reset
+--     mealy f s0 / moore f g s0     state machines from pure step functions
+
+------------------------------------------------------------------------------------------------
+-- FAILURE: bitCoerce is not resize
+------------------------------------------------------------------------------------------------
+--
+-- The one entry above that regularly gets misremembered, broken on purpose:
+--
+--     topEntity :: BitVector 8 -> Signed 9
+--     topEntity bv = bitCoerce bv
+--
+--     src/Lesson13.hs:169:16: error: [GHC-18872]
+--         * Couldn't match type `8' with `9'
+--             arising from a use of `bitCoerce'
+--         * In the expression: bitCoerce bv
+--           In an equation for `topEntity': topEntity bv = bitCoerce bv
+--
+-- Compiled and confirmed 27 Aug 2026. Note the error code: GHC-18872, not the GHC-83865 of
+-- every width mismatch so far. `bitCoerce` demands the *equation* BitSize a ~ BitSize b,
+-- and a failed equality constraint is its own kind of error -- same diagnosis, different
+-- stamp. It is a relabelling, and 8 bits do not relabel into 9. Widen first, then relabel
+-- (or the other order -- a different circuit for Signed! -- which is Lesson 1's point all
+-- over again).
+
+topEntity :: BitVector 8 -> (Unsigned 8, Signed 8, Vec 8 Bit)
+topEntity bv = (unpack bv, unpack bv, bitCoerce bv)
+
+------------------------------------------------------------------------------------------------
+-- Exercises
+------------------------------------------------------------------------------------------------
+--
+-- 1. Predict pack (-3 :: Signed 4), bitCoerce (0b1000 :: BitVector 4) :: Signed 4, and
+--    resize (-3 :: Signed 8) :: Signed 4, then check all three in the repl.
+--
+-- 2. One entry in the extend/truncate table is a trap for two's-complement values passing
+--    through zeroExtend. Construct the Signed 8 value that a zeroExtend-to-16 corrupts and
+--    the one it does not.

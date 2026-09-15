@@ -1,0 +1,26 @@
+; -*- mode: idef0 -*-
+tP Theremin Project
+## The sub-project as work: MAIDEN's de-risking vehicle from reference
+## design to sounding hardware. Cross-links to V put design-under-test
+## flow in the interface table alongside the R<->V traceability rows.
+  a# Port Blocks To Clash
+    i# Reference Design
+    c# Clash Idioms
+    o# Clash Design > V|Verify Sensor Chain|Clash Design
+    m# Clash Toolchain
+  a# Procure Hardware
+    i# Orders List
+    c# Materials Budget
+    o# Bench Hardware
+  a# Bring Up Bench
+  ## Lab machine flashes over USB-serial; oscillators verified on
+  ## scope before FPGA integration.
+    i# Bench Hardware
+    i# Verified Bitstream < V|Measure On Target|Verified Bitstream
+    o# Sounding Theremin
+    m# Lab Machine
+  a# Harvest Lessons
+  ## The point of the sub-project: toolchain, idioms, and measured
+  ## numbers flow to MAIDEN proper.
+    i# Sounding Theremin
+    o# Derisked Toolchain

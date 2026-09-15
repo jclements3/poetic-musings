@@ -1,0 +1,10 @@
+packages: .
+
+-- Clash 1.8.5 is the release series validated against GHC 9.6.x (the ghcup
+-- default on this machine). Bumping to 1.10 requires GHC >= 9.4 and has not
+-- been checked here.
+constraints: clash-prelude ==1.8.5,
+             clash-ghc ==1.8.5
+
+write-ghc-environment-files: never
+tests: True

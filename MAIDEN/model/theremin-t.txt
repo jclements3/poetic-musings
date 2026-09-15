@@ -1,0 +1,43 @@
+; -*- mode: idef0 -*-
+tT Theremin Instrument
+## SysML v2 **action/flow view** of the instrument: behavior as one
+## plate. Measure Period decomposes (plate T2) into the DSP block
+## chain, the same composition drill-down rule as plate D2 in QuadX.
+  a# Sense Proximity
+  ## Colpitts LC oscillator per axis: hand capacitance detunes the
+  ## tank, shifting the oscillation period the FPGA measures.
+    i# Hand Position
+    o# Oscillator Square Wave
+    m# LC Oscillator Pair
+  a# Measure Period
+    i# Oscillator Square Wave
+    o# Filtered Period
+    m# ECP5 Fabric
+    a# Sample Edges
+    ## Theremin.EdgeSampler: 3-FF synchroniser + free-running counter,
+    ## 1x sampling; supersedes the Xilinx ISERDES front end.
+      i# Oscillator Square Wave
+      o# Edge Positions
+    a# Centre Pulses
+    ## Theremin.EdgeToPulsePosition: adjacent-edge sum cancels PWM.
+      i# Edge Positions
+      o# Pulse Centres
+    a# Average Window
+    ## Theremin.DelayDiffFilter: 512-tap boxcar in DP16KD.
+      i# Pulse Centres
+      o# Raw Period
+    a# Smooth Period
+    ## Theremin.IirNStage: time-multiplexed 4-stage IIR, K=8.
+      i# Raw Period
+      o# Filtered Period
+  a# Map To Pitch
+  ## Theremin.PitchMap: clamped linear map, period to NCO frequency
+  ## word; constants recalibrate at bench, no RTL change.
+    i# Filtered Period
+    c# Tuning Constants
+    o# Frequency Word
+  a# Synthesize Audio
+  ## Nco -> SineLut -> DsmDac, 1-bit sigma-delta to the audio jack.
+    i# Frequency Word
+    o# Audio Bitstream
+    m# ECP5 Fabric

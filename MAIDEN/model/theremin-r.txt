@@ -1,0 +1,20 @@
+; -*- mode: idef0 -*-
+tR Theremin Requirements
+## SysML v2 **requirement definition** as work: each box is
+## "Impose <requirement>"; satisfaction evidence arrives by
+## cross-model link from V, so R<->V rows in INTERFACES *are*
+## the traceability matrix.
+  a# Impose Pitch Resolution
+  ## Threshold: period resolution well under 1 cent of pitch.
+  ## Analysis: 1x @ 75 MHz + 512-tap averaging = ~0.055 cent.
+    i# Verified Resolution < V|Verify Sensor Chain|Verified Resolution
+    c# Musical Audibility Basis
+    o# Resolution Requirement
+  a# Impose Timing Closure
+  ## Threshold: every block meets its clock constraint post-route.
+    i# Timing Evidence < V|Measure On Target|Timing Evidence
+    o# Timing Requirement
+  a# Impose Device Fit
+  ## Threshold: full design fits LFE5U-85F. Measured: 2% LUT4.
+    i# Fit Evidence < V|Measure On Target|Fit Evidence
+    o# Fit Requirement

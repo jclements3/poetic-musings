@@ -4,7 +4,7 @@ PLAN.md Phase 7: u-blox PPS in → PPS-locked 10 MHz → discipline the Phase 2 
 clock → disciplined clock copies as a stock module. Gate/demo: the Phase 2 clock stops
 drifting — holdover vs. locked, verified against the GPSDO metrology reference
 (used GS-101B or Thunderbolt-class, per HANDOFF and fpga-development-plan #7, ~$30
-u-blox + reference). Ledger: IRAD.
+u-blox + reference). Ledger: work (W).
 
 **Spoke framing (PROGRAM.md):** G adds one piece of hardware to the Panel+Oracle root
 — the u-blox module (PPS + NMEA) and a 10 MHz BNC out — and exercises `PM.Gps`
