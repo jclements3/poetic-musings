@@ -8,7 +8,7 @@
 --
 -- The eforth-pm contract: gateware digitizes S2–S4 and compares against zone
 -- thresholds *with hysteresis* (a slider parked on a boundary never flickers
--- — PLAN Piano BOM rule); Forth reads clean zone numbers, never raw counts.
+-- — PLAN Panel BOM rule); Forth reads clean zone numbers, never raw counts.
 -- The SPI ADC sequencing lives with oPanelCtrl elsewhere; this module takes
 -- already-sampled 12-bit values, one per detent slider:
 --

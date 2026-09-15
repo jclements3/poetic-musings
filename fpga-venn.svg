@@ -6,7 +6,7 @@
 <text x="150" y="70" font-size="30" font-weight="700" fill="#2a5ea8">THEREMIN</text>
 <text x="800" y="70" font-size="30" font-weight="700" fill="#a8302a">MAIDEN</text>
 <text x="470" y="985" font-size="30" font-weight="700" fill="#2a7a42">PIANO (VL-49)</text>
-<text x="30" y="30" font-size="16" fill="#111">Module count: Theremin 17 · MAIDEN 20 · Piano 22 · Shared by all three 5</text>
+<text x="30" y="30" font-size="16" fill="#111">Module count: Theremin 17 · MAIDEN 20 · Panel 22 · Shared by all three 5</text>
 <text x="215" y="271" font-size="15" font-weight="400" fill="#111" text-anchor="middle">LC oscillator front end</text>
 <text x="215" y="290" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Antenna capacitance sense</text>
 <text x="215" y="310" font-size="15" font-weight="400" fill="#111" text-anchor="middle">Frequency counter</text>

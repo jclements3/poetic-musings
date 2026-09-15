@@ -1,12 +1,17 @@
-# Piano — Phase 5 design (the PM device takes physical form)
+# Panel — Phase 5 design (the control surface takes physical form)
+
+Role (clarified 2026-09-15): the Panel is the **control surface** for the Clash library —
+keys, sliders, buttons and display are generic inputs and a scope for every mode. The
+Casio VL-1 was the visual inspiration for the flat-key look; VL-1 synthesis is one mode
+among six, not the goal, and VL-1 A/B accuracy is no longer a gate.
 
 Phase 5 of PLAN.md: build the 3D-printed 49-key panel and case, mount the display and
-sliders, wire the matrix, and bring up the VL-1 synth engine with Oracle as the brains
-behind the UI. This doc consolidates the decisions scattered across PLAN.md,
-fpga-development-plan.md (Piano quality BOM), LAYOUT.html, README.html/gen.py,
+sliders, wire the matrix, and bring the control surface up against Oracle so every
+library block has a key, a slider and a screen. This doc consolidates the decisions scattered across PLAN.md,
+fpga-development-plan.md (Panel quality BOM), LAYOUT.html, README.html/gen.py,
 HANDOFF.md and Oracle/eforth-pm.md — **Phase 5 should start from this file alone.**
 Prereqs O and T. Physical reference: `vl1-reference-photo.png` in this directory
-(the real 1981 Casio VL-1 the panel is derived from — the A/B target for the gate).
+(the real 1981 Casio VL-1 the flat-key look is derived from — visual reference only).
 
 First act of Phase 5 (before any printing): **micrometer bore check, then order the
 harp rib** — E's long-lead item rides on P's start (PERT rule).
@@ -120,12 +125,12 @@ calc` — eforth-pm.md §2). SWAG budget: ~4k LUT / 8 KB / 4 DSP, time-muxed.
 
 ## Phase 5 gate (fpga-development-plan.md row 5 + PLAN.md)
 
-1. 49 keys scan (events clean at 0x4024, ASCII layer types into Forth).
-2. `90099914 patch!` plays; voices and rhythms select from the panel.
-3. Da Da Da on One Key Play; 100-note sequencer records and replays from card.
-4. Calculator sub-mode works.
-5. **A/B against the real VL-1** (`vl1-reference-photo.png` unit).
-6. Antennas + theremin source select — theremin plays as a Piano voice.
+1. 59 switches deliver clean press/release events at 0x4024 (PM.Matrix); ASCII layer types into Forth.
+2. S0/S1 read as ADC (PM.Spi); S2–S4 zones never flicker on a boundary; S3 mode change dwells 1 s and hands off with teardown (PM.Zones, PM.RegFile).
+3. V0 shows the Forth console plus a live envelope/spectrum strip (pm-video + Fft tap).
+4. Keys drive every PM.Synth / PM.Audio block — note table, pulse oscillator, ADSSR, mixer, ΣΔ DAC — and each is re-measured on ECP5 after integration.
+5. Synth mode plays the VL-1 patches (`90099914 patch!`) and the sequencer; sound-alike is a nice-to-have, not a gate.
+6. Antennas + theremin source select — theremin plays as a Panel voice.
 
 **Demo: this is PM device v1** — a playable instrument/computer; every prior phase
 runs inside one object. Write the per-mode demo-day cue card (what to say, what to

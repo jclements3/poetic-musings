@@ -1,6 +1,6 @@
 # PLAN — incremental build of the PM device
 
-The end state: **one portable controller** — the 3D-printed 49-key Piano panel with the
+The end state: **one portable controller** — the 3D-printed 49-key Panel with the
 Oracle Forth console as its brains on a single ULX3S ECP5-85F — that boots to a mode
 menu and can demonstrate every POETIC MUSING project on demand. Every phase below ends
 with a **working demo someone can watch**, so there is always something to show the
@@ -88,19 +88,21 @@ theremin suite runs as the regression target for every library change.
 **Demo:** play music from thin air; watch the pitch track on the display.
 **Teaches:** mixed-signal, frequency counting, NCOs, DSP basics.
 
-## Phase 5 — P · Piano 🎹 (the PM device takes physical form)
+## Phase 5 — P · Panel 🎛 (the control surface takes physical form)
 
 Micrometer bore check, then order the harp rib (long lead — see PERT). Keys are
 VL-1-authentic flat buttons: 59 MX-class switches (49 keys + P0–P9) under 3D-printed
 white/black caps set in a printed keyboard graphic; print the panel per `README.html`;
-mount bar TFT and sliders S0–S4; wire the 8×8 matrix (one 1N4148 per switch). VL-1 synth engine: 5 voices + ADSR slot, 10
-rhythms, 100-note sequencer, One Key Play, calculator mode. A/B against the real VL-1.
+mount bar TFT and sliders S0–S4; wire the 8×8 matrix (one 1N4148 per switch). Synth mode exercises PM.Synth / PM.Audio
+(NCO, pulse oscillator, ADSSR, mixer, ΣΔ DAC) from the keys; VL-1 voices are the
+test patches, not an accuracy target.
 
 Design task before printing: mode-neutral silk legends — VL-1 emulation is one mode of
 the PM device, not its identity (see PROGRAM.md open items).
 
-**Demo:** *this is PM device v1* — a playable instrument/computer: Da Da Da on One Key
-Play, `90099914 patch!`, ASCII keyboard into Forth, theremin as a voice source.
+**Demo:** *this is PM device v1* — the control surface drives every library block:
+keys as ASCII into Forth, keys as notes through PM.Synth, sliders switching modes with no
+flicker, envelope/spectrum live on V0, theremin as a voice source.
 **Teaches:** integration — every prior phase is running inside one object.
 
 ## Phase 6 — E · Erand49 🪕
@@ -111,7 +113,7 @@ Gate 1 first, cheap: **one string, one ADC eval, 5 IR pairs** — pluck detected
 3 Mbaud event frames, playable.
 
 **Demo:** pluck real strings, optical sensors catch it, the box sings; harp drives
-the Piano synth over MIDI-style events.
+the Panel synth over MIDI-style events.
 **Teaches:** detection theory, physical modeling synthesis, multi-channel ADC.
 
 ---
@@ -171,9 +173,9 @@ Oracle as operator console.
 
 ## Definition of done — the PM device
 
-- One case: Piano panel + Oracle, ULX3S inside; Santa Glide packs alongside on its Cu.
+- One case: Panel + Oracle, ULX3S inside; Santa Glide packs alongside on its Cu.
 - Power on → the **S3 MODE slider selects the demonstration: P · O · E · T · I · C**
-  (Piano+calculator · Oracle/Forth/games/IRAD scripts · Erand49 · Theremin · IRIG clock · CW);
+  (Panel · VL-1 mode · Oracle/Forth/games/IRAD scripts · Erand49 · Theremin · IRIG clock · CW);
   V0 shows the mode screen, deeper choices via keys.
 - Every mode reachable in under a minute, no laptop, no internet.
 - A demo-day checklist per mode (what to say, what to show, reset procedure) lives in

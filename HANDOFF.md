@@ -2,10 +2,10 @@
 
 ## Decisions
 - Program name: POETIC (personal) + MUSING (IRAD). Six letters each.
-  - POETIC: Piano VL-49 · Oracle console (Forth H2, bar TFT, SD, CW keyer/decoder) · Erand49 harp · Theremin · IRIG clock · Coil launcher/catcher
+  - POETIC: Panel (VL-49 surface) · Oracle console (Forth H2, bar TFT, SD, CW keyer/decoder) · Erand49 harp · Theremin · IRIG clock · Coil launcher/catcher
   - MUSING: MAIDEN (incl. unit integration, solver) · UHF beacon (GPS-disciplined CW/WSPR, personal ledger, ham) · SDR (direct-sampling HF on theremin antennas, AD9226-class ADC) · Imaging (camera capture, timestamp, centroid) · Network (RMII/MAC/UDP/Ch.10) · GPS (station clock copies)
 - Serial build rule, finish before start: C → I → O → T → P → E (updated on desktop 2026-08-31; was C → T → O → P → E). U/S after E if funding delayed.
-- Piano box is the platform demo (One Box). Not a MAIDEN dependency.
+- Panel box is the platform demo (One Box). Not a MAIDEN dependency.
 - Display: 8.8" 1920x480 bar TFT over ULX3S GPDI; 55 mm band; verify active area before cutting.
 - Keyboard: 49 keys C2–C6, gold harp labels A0–G7 one per key, two-layer ASCII (SHIFT = One Key Play L). ~~Buy a used 49-key MIDI controller keybed, not membrane.~~ Superseded 2026-08-31: VL-1-authentic flat buttons — MX-class switches under 3D-printed white/black caps set in a printed keyboard graphic.
 - H2 forth-cpu (howerj) as control plane; port to Clash as Lessons 12–14; black-box VHDL first.

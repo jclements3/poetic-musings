@@ -14,7 +14,7 @@ Milestones: Basic Plan Sep 2026 · Prototype Dec 2026 · Field Demo Feb 2027. It
 | 2 | **I** IRIG clock | 2 | $0 (GPSDO comes later, under G) | P | C (skills) | Spec-valid IRIG-B out, verified on scope/decoder. Free-running on board crystal until G disciplines it; time display added once O exists. |
 | 3 | **O** Oracle console | 3 | $60 (8.8" bar TFT + HDMI board) | P | — | Forth prompt on bar TFT, no laptop; `1 2 + .` → 3; GPIO toggle, ADC read, SD block 1 loads; CW keyer sends, decoder prints. clash-h2 H2 port already started. ▲ |
 | 4 | **T** Theremin | 1 (Clash port already passing) | $0 (ordered) | P | O (tuning UI) | Oscillator hardware on bench; port tracks pitch and volume from antennas through speaker. Stays the regression target for every library change. |
-| 5 | **P** Piano VL-49 | 3 | ~$130 quality BOM (see Piano BOM below) | P | O, T | The 3D-printed keyboard per `README.html` (panel map) — VL-1-style flat button keys in a printed keyboard graphic, sliders, buttons, display band. Oracle is the brains behind its UI. 49 keys scan; `90099914 patch!` plays; Da Da Da on One Key Play; A/B vs real VL-1; antennas + theremin source select. |
+| 5 | **P** Panel (control surface) | 3 | ~$130 quality BOM (see Panel BOM below) | P | O, T | The 3D-printed keyboard per `README.html` (panel map) — VL-1-style flat button keys in a printed keyboard graphic, sliders, buttons, display band. Oracle is the brains behind its UI. Gates: 59 switches deliver clean press/release events (0x4024) and the ASCII layer types into Forth; S2–S4 zones never flicker across a boundary, S3 mode dwell hands off cleanly; V0 shows console + envelope/spectrum strip; every PM.Synth block (NCO, pulse osc, ADSSR, mixer, DAC) is driven from the keys and measured on ECP5; antennas + theremin source select. VL-1 synth mode plays but is not A/B-gated. |
 | 6 | **E** Erand49 harp | 5 | ~$1,200 (13× ADC, 98 IR pairs, CNC rib, strings) | P | P, O | Gate 1: one string, one ADC eval, pluck on display. Gate 2: 49 strings, I²S 24/96 harp-master into the box, playable. |
 
 ## MUSING (IRAD)
@@ -28,7 +28,7 @@ Milestones: Basic Plan Sep 2026 · Prototype Dec 2026 · Field Demo Feb 2027. It
 | 11 | **I** Imaging | 4 | TBD — global-shutter sensor / trigger / FOV-range study first (Sep Basic Plan) | I | N, G | External-trigger capture, IRIG-timestamped, centroid stream over N. |
 | 12 | **M** MAIDEN | 5 | ~$400/station × 3 | I | everything above | Tabletop testbed (elastic draw-stop rig) first; one station records IRIG-stamped Doppler + video into Ch.10; three-station fusion at RCRC. ▲ |
 
-## Piano quality BOM (demo-grade, decided 2026-08-31)
+## Panel quality BOM (demo-grade, decided 2026-08-31)
 
 Reliability rule: authorized distributors and name brands only — no clone switch packs,
 no generic pots. Nothing may stick or misbehave in front of the grandkids.

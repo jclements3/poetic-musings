@@ -91,7 +91,7 @@ table{{border-collapse:collapse;width:100%;margin-top:14px;font-size:13px}} th,t
 <tr><td>P0–P9</td><td>Reset, Del, Tempo ▲/▼, Rhythm, ML-C, Music, Auto Play, One Key Play ×2</td><td>10</td><td>Fold into matrix (8×8 total)</td></tr>
 <tr><td>S0, S1</td><td>Volume, Balance</td><td>2</td><td>ADC, continuous</td></tr>
 <tr><td>S2</td><td>Octave (low / middle / high)</td><td>3 zones</td><td>ADC, zone + hysteresis</td></tr>
-<tr><td>S3</td><td>MODE selector — P·O·E·T·I·C (Piano, Oracle, Erand49, Theremin, IRIG clock, CW). Switches after 1 s dwell in a new zone, banner on V0. Voice select in P mode: MUSIC (P6) + black-key digit</td><td>6 zones</td><td>ADC, zone + hysteresis</td></tr>
+<tr><td>S3</td><td>MODE selector — P·O·E·T·I·C (Panel, Oracle, Erand49, Theremin, IRIG clock, CW). Switches after 1 s dwell in a new zone, banner on V0. Voice select in P mode: MUSIC (P6) + black-key digit</td><td>6 zones</td><td>ADC, zone + hysteresis</td></tr>
 <tr><td>S4</td><td>Off / cal / play / rec — within the current mode (CAL = retune/calibrate, REC = record)</td><td>4 zones</td><td>ADC, zone + hysteresis</td></tr>
 <tr><td>V0</td><td>8.8" 1920×480 bar TFT (~220×55 mm), HDMI driver board</td><td>1</td><td>GPDI/DVI from ULX3S; H2 vga.vhd text mode retimed, plus overlay framebuffer</td></tr>
 <tr><td>—</td><td>Speaker, underside, rear port; ⅛" jack</td><td>1 ch</td><td>PWM/ΣΔ + RC LP</td></tr>

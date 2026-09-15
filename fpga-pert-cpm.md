@@ -21,7 +21,7 @@ I1 IRIG-B gen on ULX3S ─► I2 scope/decoder verify    │  (I needs no C outp
 T1 oscillator hw ─► T2 antenna cal (existing bitstream)  ◄──────────────────────────────┘
         │
         ▼
-P1 switch matrix (59× MX2A + diodes) ─► P2 voice engine ─► P3 sequencer/rhythm ─► P4 overlay + A/B ─► P5 theremin voice ─► P6 case
+P1 switch matrix (59× MX2A + diodes) ─► P2 voice engine ─► P3 sequencer/rhythm ─► P4 overlay + block re-measure ─► P5 theremin voice ─► P6 case
                                                                                                             │
         E2 synthetic-string tests ◄── run inside P after P2 (pure HDL)                                      │
         E3 KS from keys           ◄── run inside P after P2                                                 ▼

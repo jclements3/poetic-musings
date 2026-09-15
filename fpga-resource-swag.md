@@ -34,7 +34,7 @@ beyond iCE40 I/O; ECP5 ODDR handles it. So the box needs an ECP5 regardless.
 
 | Scenario | LUT | BRAM | DSP |
 |---|---|---|---|
-| Biggest single mode (Piano: H2 + video + synth + theremin voice + harp playback + FFT + keyer) | ~22k | ~150 KB | ~25 |
+| Biggest single mode (Panel: H2 + video + synth + theremin voice + harp playback + FFT + keyer) | ~22k | ~150 KB | ~25 |
 | "Everything resident" one-bitstream demo (add SDR + net + IRIG) | ~32k | ~190 KB | ~37 |
 | MAIDEN station bitstream (H2 + video + net + imaging + Doppler + IRIG) | ~25k | ~110 KB | ~25 |
 | + 50% margin for beginner-Clash inference inefficiency and routing at speed | **~48k** | **~285 KB** | **~55** |
@@ -48,7 +48,7 @@ audio 96 kHz — CDC/async-FIFO library blocks are load-bearing, not optional.
 | Part | LUT | BRAM | DSP | Verdict |
 |---|---|---|---|---|
 | iCE40 HX8K (owned) | 7.7k | 16 KB | 0 | Santa Glide only; can't do V0 video. Right where it is. |
-| ECP5-25F | 24k | 126 KB | 28 | Fits nothing beyond the single Piano mode, no margin. No. |
+| ECP5-25F | 24k | 126 KB | 28 | Fits nothing beyond the single Panel mode, no margin. No. |
 | ECP5-45F | 44k | 243 KB | 72 | Fits per-mode bitstreams with care; "everything resident" + margin is tight on LUT/BRAM. The gamble option, saves ~$60–80. |
 | **ECP5-85F (ULX3S)** | **84k** | **468 KB** | **156** | ~2.5× the margined worst case. Room to write naive Clash first and optimize never. **Re-order this.** |
 

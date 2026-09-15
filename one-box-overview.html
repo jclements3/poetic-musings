@@ -12,7 +12,7 @@ table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;
 .k{font-weight:700}
 </style></head><body><main>
 <h1>ONE BOX — POETIC + MUSING PROGRAM OVERVIEW</h1>
-<p class="sub">POETIC (personal) + MUSING (IRAD). One library, one Forth console (Oracle), one case. The Piano VL-49 — the 3D-printed keyboard below, with Oracle as the brains behind its user interface — is the platform demo; theremin, harp, HWIL, radar, games all plug into it. ULX3S ECP5-85F is the only board in the box; Santa Glide (C) runs standalone on an Alchitry Cu.</p>
+<p class="sub">POETIC (personal) + MUSING (IRAD). One library, one Forth console (Oracle), one case. The Panel — the 3D-printed control surface below, with Oracle as the brains behind its user interface — is the demonstrator for the Clash library; theremin, harp, HWIL, radar, games all plug into it. ULX3S ECP5-85F is the only board in the box; Santa Glide (C) runs standalone on an Alchitry Cu.</p>
 
 <h2>Build order (serial, finish before starting)</h2>
 <p class="chain">C → I → O → T → P → E &nbsp;&nbsp;·&nbsp;&nbsp; MUSING (IRAD): G → N → U → S → I → M</p>
@@ -22,7 +22,7 @@ table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;
 <tr><td>2</td><td class="k">I IRIG clock</td><td>Spec-valid IRIG-B out, verified on scope/decoder; free-running crystal until G disciplines it</td><td>$0</td></tr>
 <tr><td>3</td><td class="k">O Oracle console</td><td>Prompt on bar TFT, no laptop; <code>1 2 + .</code> → 3; GPIO toggle, ADC read, SD block 1 loads; CW keyer sends, decoder prints</td><td>~$60 TFT</td></tr>
 <tr><td>4</td><td class="k">T theremin</td><td>Oscillator hardware on bench; ECP5 port tracks pitch and volume from antennas through speaker</td><td>$0 (ordered)</td></tr>
-<tr><td>5</td><td class="k">P piano VL-49</td><td>3D-printed panel per layout below, Oracle behind the UI; 49 keys scan; <code>90099914 patch!</code> plays; Da Da Da on One Key Play; A/B vs real VL-1; antennas + theremin source select</td><td>~$150</td></tr>
+<tr><td>5</td><td class="k">P Panel (control surface)</td><td>3D-printed panel per layout below, Oracle behind the UI; clean key events + ASCII into Forth; flicker-free mode sliders; console + spectrum strip on V0; every PM.Synth block driven from the keys and re-measured; antennas + theremin source select; VL-1 synth is one mode, not a gate</td><td>~$130</td></tr>
 <tr><td>6</td><td class="k">E harp Erand49</td><td>Gate 1: one string, one ADC, pluck on display. Gate 2: 49 strings, I²S out, playable</td><td>~$1,240</td></tr>
 </table>
 

@@ -2,7 +2,7 @@
 
 **Mission (reoriented 2026-09-15):** build up a measured, sim-verified **Clash FPGA
 signal-processing library**. The One Box (ULX3S ECP5-85F behind the 3D-printed 49-key
-Piano panel with Oracle as the brains) is the *demonstrator*: every piece of hardware on
+Panel with Oracle as the brains) is the *demonstrator*: every piece of hardware on
 it — keys, sliders, speaker, harp sensors, theremin antennas, IRIG/GPS, display, radio,
 sleigh link, camera/radar — exists to exercise one or more library components. The
 hardware-to-component map is `CLASH-LIBRARY-MAP.md`; the block inventory is `LIBRARY.md`.
@@ -16,7 +16,7 @@ Panel map: `README.html` (regenerate with `gen.py`).
 
 | L | Directory | Project | Status |
 |---|---|---|---|
-| P | `Piano/` | 3D-printed 49-key VL-1-derivative keyboard; Oracle is the brains behind its UI | `Piano/DESIGN.md` consolidates panel/switches/case for Phase 5; panel map `README.html` |
+| P | `Panel/` | Control surface: 49 keys, 5 sliders, 10 buttons, bar TFT — the human interface every library component is demonstrated through (VL-1 look is inspiration only; VL-1 synth is one mode) | `Panel/DESIGN.md` consolidates panel/switches/case for Phase 5; panel map `README.html` |
 | O | `Oracle/` | Console: H2 Forth CPU, 8.8" bar TFT, SD, CW keyer/decoder | `Oracle/clash-h2/` compiles + smoke-tests; Verilog generated; eForth-in-Clash sim now demonstrates the personal-card boot (block-0 owner greet, real `1 load` from SD via SPI regs) and a live, settable IRIG clock — all from interactive Forth; gateware library growing beside it (`LIBRARY.md`): matrix, zones, CDC, harp link, keyer, audio, synth voice, SPI, 1920x480 text console — every block sim-proven with Verilog generated |
 | E | `Erand49/` | Harp: 98 IR optical sensors → pluck detect → KS synthesis → MIDI/I²S | designed: `Erand49/LAYOUT.html` (string band, ER-001..006), `frame_cad.py` → `frame.step` CAD master, string/frame specs, sensor-stations.csv; gate 1 = one string, one ADC eval |
 | T | `Theremin/` | D-Lev-derived theremin; antennas double as SDR input | older VHDL-era repo; the measured Clash port lives in `MAIDEN/theremin/clash/` (see LIBRARY.md) |

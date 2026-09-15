@@ -44,7 +44,7 @@ PM peripherals extend from `0x4020`. **All PM addresses are provisional** until
 
 | Addr | Write | Read | Peripheral |
 |---|---|---|---|
-| 0x4020 | oPanelCtrl — ADC mux/start, backlight, LED dim | iPanel — S3 zone (0–5 = P·O·E·T·I·C), S4 zone (OFF·CAL·PLAY·REC), S2 zone, `stable` flag | **Mode sliders.** Gateware digitizes S2–S4, compares against zone thresholds *with hysteresis* (a slider parked on a boundary never flickers — PLAN Piano BOM rule). Forth reads clean zone numbers, never raw counts. |
+| 0x4020 | oPanelCtrl — ADC mux/start, backlight, LED dim | iPanel — S3 zone (0–5 = P·O·E·T·I·C), S4 zone (OFF·CAL·PLAY·REC), S2 zone, `stable` flag | **Mode sliders.** Gateware digitizes S2–S4, compares against zone thresholds *with hysteresis* (a slider parked on a boundary never flickers — PLAN Panel BOM rule). Forth reads clean zone numbers, never raw counts. |
 | 0x4022 | — | iAdc — raw 12-bit ADC, channel select via oPanelCtrl (S0 volume, S1 balance, spare) | **Continuous sliders.** Raw values; scaling/curves are Forth's job. |
 | 0x4024 | oMatrixCtrl — scan enable, debounce time (default 10 ms), FIFO clear | iKeys — event FIFO head: bit7 press/release, bits5:0 keycode 0–63 (A0–G7 = 0–48, P0–P9 = 49–58), bit15 `valid` | **8×8 matrix scanner.** Free-running scan + debounce in gateware; Forth pops *events*, never scans rows. |
 | 0x4026 | oTFT — char/attr write, VT100 stream (same contract as oVT100) | iTFT — ready/busy, cursor row·col | **Bar TFT console.** The upstream vga.vhd text/VT100 interface reused verbatim at 1920×480 timing (240×30 cells @ 8×16 font; a large-font mode for the I-clock face is a VT100 escape, not a new register). oVT100 (serial-side terminal) and oTFT can be fanned out together so `emit` hits both. |
@@ -103,7 +103,7 @@ the recorded sequence · `calc` calculator sub-mode (matrix digits → V0).
 
 **`THEREMIN` (T)** — `t-cal ( -- )` retune both oscillators to the room (S4 CAL) ·
 `pitch@ ( -- n )` / `vol@ ( -- n )` current tracked values · `t-view ( -- )`
-envelope/spectrum view on V0 · `t>synth ( f -- )` route theremin as a Piano voice
+envelope/spectrum view on V0 · `t>synth ( f -- )` route theremin as a Panel voice
 source · `t-range! ( lo hi -- )` playable window.
 
 **`CLOCK` (I)** — `time@ ( -- s m h )` BCD from iIrig · `.time ( -- )` big-font

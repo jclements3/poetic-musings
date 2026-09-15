@@ -1,7 +1,7 @@
 # CLASH LIBRARY MAP — the One Box as a Clash signal-processing library build-up
 
 **Reorientation (2026-09-15):** the program is a Clash FPGA signal-processing library.
-The tabletop keyboard controller (One Box: ULX3S ECP5-85F, 49-key Piano panel, Oracle
+The tabletop keyboard controller (One Box: ULX3S ECP5-85F, 49-key Panel, Oracle
 Forth console) is the *demonstrator* — every piece of hardware bolted to it exists to
 exercise, measure and regression-test one or more library components. The instrument is
 the test fixture; the library is the deliverable.
@@ -30,7 +30,7 @@ Legend — status: ✓ measured/sim-verified Clash · ◐ measured VHDL, Clash p
 | 25 MHz oscillator → sys / pixel / audio clocks | PLL, reset sync, 2-flop sync, pulse sync, Gray async FIFO across non-integer ratios | `PM.Cdc` (`Oracle/pm-lib`) | ✓ |
 | Test-only | Hedgehog property tests, cycle-exact equivalence, GHDL elaboration of generated HDL | Lesson 09 method, `MAIDEN/lessons` | ✓ |
 
-## 3. Audio synthesis (Piano / VL-1 mode, letter P)
+## 3. Audio synthesis (Panel, VL-1 synth mode, letter P)
 
 | Hardware part | Clash capability demonstrated | Library component | Status |
 |---|---|---|---|

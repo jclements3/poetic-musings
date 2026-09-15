@@ -78,7 +78,7 @@ Top
 
 1. Clocks + H2 SoC + UART: Forth prompt over USB serial. Gate: `ok` echo.
 2. Key matrix + ASCII decoder: Forth prompt from the panel. Gate: type `1 2 + .` on keys.
-3. Voice engine + DAC: `90099914 patch!` from the prompt. Gate: A/B against real VL-1, scope traces vs SyntherJack.
+3. Voice engine + DAC: `90099914 patch!` from the prompt. Gate: each PM.Synth block driven from keys, area re-measured on ECP5; SyntherJack traces as a reference, not a gate.
 4. Sequencer + rhythm. Gate: Da Da Da.
 5. GPDI text mode. Gate: prompt on the bar TFT. Unplug USB serial.
 6. Overlay + FFT strip. Gate: live envelope + spectrum during play.
