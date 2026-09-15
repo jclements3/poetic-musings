@@ -5,6 +5,21 @@ before 98 · rib only after the micrometer bore check · strings last. Design fa
 `DESIGN.md` (gateware, gates), `frame-spec.md` (members), `string-specs.md` (band),
 `sensor-stations.csv` (49 stations, 3.2 mm bores, 60° pair, per-station yaw).
 Ledger: personal (P). Program estimate ~$1,200 (fpga-development-plan.md row 6).
+Brain board: `../Oracle/ORDERS.md` (ULX3S 85F, backordered for the 2026-10-02 batch);
+printer for caps, sensor mounts and jigs: `../Panel/ORDERS.md`.
+
+## Timing
+
+E is Phase 6 (after P and O), and the rib is the long-lead item, so:
+
+1. **Now:** the bore gauge (Stage 0) — cheap, and it gates the rib.
+2. **When the ULX3S lands (Oct):** Stage 1 kit; gate 1 runs on the bench against the
+   box with the eval module on a PMOD header — no harp frame needed.
+3. **At P start, after the bore check:** order the frame stock and rib (PERT rule) so
+   welding overlaps the Panel build.
+4. **Only after gate 1 passes:** Stage 2 electronics (13 ADCs, 98 pairs, carrier PCB)
+   and the harp-side board decision below.
+5. **Strings last**, once the frame is welded and the tuners are in.
 
 ## Stage 0 — before anything (P start)
 
@@ -40,6 +55,20 @@ Ledger: personal (P). Program estimate ~$1,200 (fpga-development-plan.md row 6).
 | **Strings** | 49 (+7) | Erard band per `string-specs.md`: nylon g7–~c4, wound bass to a0 | ~$200 |
 | Rigid column travel case | 1 | strings stay tensioned (LAYOUT travel table) | ~$80 |
 
+## Where to buy
+
+| Item | Link | Note |
+|---|---|---|
+| ADS131M08EVM | https://www.ti.com/tool/ADS131M08EVM · https://www.mouser.com/c/?q=ADS131M08EVM | TI direct is usually cheapest; the ADS131M08 ICs for Stage 2 from the same sources |
+| IR pairs, 3 mm 940 nm (TSAL4400 + BPV10NF or equivalent) | https://www.mouser.com/c/?q=TSAL4400 · https://www.mouser.com/c/?q=BPV10NF | Vishay; buy 108 for Stage 2 (98 + spares) |
+| OPA2380-class TIA opamps | https://www.mouser.com/c/?q=OPA2380 | 2 for Stage 1, ~50 for the carrier |
+| 6061-T6 channel, tube, flat bar, plate | https://www.onlinemetals.com · https://www.mcmaster.com | per `frame-spec.md` sections; cut lengths to the CAD |
+| Ø12 × 2 mm 6061 tube, M6 × 0.75 lead screw stock, slider nuts | https://www.mcmaster.com | ER-008 tuners, 49 + spares |
+| Shoulder bolts, crush sleeves, M8 hardware, heat-set inserts | https://www.mcmaster.com | ER-005/006/007 |
+| Harp strings (Erard band) | https://www.harpsetc.com · https://www.vermontharps.com | order by the `string-specs.md` table (nylon treble, wound bass); ask for a pedal-harp gauge set A0–G7 |
+| EtherCON RJ45 + cable | https://www.mouser.com/c/?q=NE8FDP | Neutrik; matches the rear HARP port |
+| Rigid column case | — | golf travel case or hard tube case, sized to the frame CAD |
+
 ## Open item — the harp-side board vs the "two boards only" rule
 
 `DESIGN.md` puts detection + KS on a board **in the harp** (98 analog channels never
@@ -53,3 +82,5 @@ in Santa Glide). Decide at Stage 2, not before:
   SPI at the ADC clock needs LVDS repeaters and eats box GPIO.
 
 Recommendation: A, decided when gate 1 shows the real cable length and noise floor.
+If A: a second ULX3S (12F or 25F is enough for 13 ADCs + detection + KS — the SWAG
+puts E's gateware at ~7k LUT / 88 KB) from the same Mouser listing family, ~$100.
