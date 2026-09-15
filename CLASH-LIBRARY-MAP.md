@@ -193,6 +193,35 @@ written. Roughly 35 ✓, 5 ◐, 15 ○ as of 2026-09-15.
 - ✓ 1920×480 text console, pixel-exact IBM VGA glyphs (`Oracle/pm-video`)
 - ○ Overlay framebuffer for envelope and spectrum strips
 
+## Algorithms — what the blocks compute
+
+**Signal processing:** CIC decimation · 15-tap systolic FIR (CIC droop compensation) ·
+N-stage IIR · radix-2 SDF streaming FFT, 512 pt · CORDIC vectoring (magnitude/phase) ·
+cell-averaging CFAR · digital down-conversion (NCO mix to I/Q) · Goertzel single-tone
+detection · AM envelope demodulation · Doppler velocity from FFT bin index.
+
+**Synthesis and audio:** direct digital synthesis (phase accumulator + quarter-wave sine
+table) · sigma-delta 1-bit DAC · PWM · Karplus-Strong plucked string with allpass
+fractional delay · ADSSR envelope · pulse-pattern oscillators, vibrato/tremolo LFOs ·
+fixed-point saturating mixing.
+
+**Detection and vision:** period measurement by edge sampling / pulse position ·
+run-length blob labelling with run-overlap union · single-pass weighted centroid
+(running sums, one divide per frame) · nearest-neighbour track association.
+
+**Timing and clocks:** PLL discipline of a local oscillator to GPS PPS · holdover with
+drift estimate · IRIG-B pulse-width timecode + BCD time · asynchronous event
+timestamping via 2-flop sync · Gray-code pointer async FIFO.
+
+**Communications and coding:** CRC-32 (Ethernet FCS) · IPv4/UDP one's-complement
+checksums · Morse keying/decoding with adaptive element timing · WSPR encoding
+(convolutional code, interleave, 4-FSK) · NMEA parse with XOR checksum · framed serial
+links (sync byte, checksum, resync) · debounce and hysteresis.
+
+**Control:** stack-machine instruction execution (H2 Forth) · open-loop stepping
+schedule with virtual-tick pacing (linear reluctance motor) · Moore state machines with
+dead-man watchdogs.
+
 ## Library roll-up
 
 | Family | Components ✓ | ◐ | ○ |
