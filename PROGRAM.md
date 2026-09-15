@@ -37,7 +37,7 @@ MUSING                                                                (work ledg
 | L | Directory | Extra hardware added to the root | Library components exercised | Status |
 |---|---|---|---|---|
 | **P** | `Panel/` | *root* — keys, sliders, buttons, TFT, speaker, case | Matrix, Zones, RegFile, Spi, Synth, Audio, video console | `Panel/DESIGN.md` (incl. fabrication), `Panel/ORDERS.md` (printer); panel map `README.html` |
-| **O** | `Oracle/` | *root* — ULX3S, SD, USB serial | H2 SoC, UART, register bus, Cdc, SD block device | `Oracle/DESIGN.md`; boots real eForth in Clash sim; Verilog generated |
+| **O** | `Oracle/` | *root* — ULX3S, SD, USB serial | H2 SoC, UART, register bus, Cdc, SD block device | `Oracle/DESIGN.md`, `Oracle/ORDERS.md` (ULX3S 85F); boots real eForth in Clash sim; Verilog generated |
 | E | `Erand49/` | IR sensors, ADCs, harp frame | Cordic, Cfar, KS, HarpLink, I²S | `Erand49/DESIGN.md`, `Erand49/ORDERS.md` (staged buys); frame CAD done; gate 1 = one string |
 | T | `Theremin/` (older VHDL) · `MAIDEN/theremin/clash/` (measured Clash) | antennas + oscillator boards | full theremin suite — **regression gate for every library change** | `Theremin/DESIGN.md`; measured: 1,816 LUT4 |
 | I | `IRIG/` | IRIG-B out | DCLS framer | implemented + sim-verified |
@@ -84,7 +84,7 @@ Execution plan with the demo that closes each phase: `PLAN.md`.
   measured blocks into a top-level `lib/` so the archive can go.
 - Every root and spoke directory has a `DESIGN.md` in one shape (plan summary ·
   framing · signal path · registers/Forth · gates · out of scope) that names its
-  entries in the module list; Panel and Erand49 also have `ORDERS.md`.
+  entries in the module list; Panel, Oracle and Erand49 also have `ORDERS.md`.
 - Panel silk legends are still tied to the 1981 Casio VL-1; they need a mode-neutral
   layer since VL-1 synthesis is one mode among many.
 - Two boards total: ULX3S ECP5-85F in the box; Alchitry Cu runs Santa Glide standalone.
