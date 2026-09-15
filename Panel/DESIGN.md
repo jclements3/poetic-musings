@@ -101,6 +101,46 @@ All inter-board runs along the rear wall. Antenna studs in shallow counterbores 
 packed ends are flush; rods/whip clip inside the lid. Case prints **last** (PERT rule)
 — panel first, case once the boards are placed for real.
 
+## Fabrication — how the panel gets made (added 2026-09-15)
+
+The face is **504 × 150 mm**; no hobby bed prints that in one piece, so the panel is a
+**segmented plate** on a printer chosen in `ORDERS.md` (recommended: 256 mm-class
+enclosed CoreXY → three segments; a 350 mm-class bed → two). Order of work:
+
+1. **Decide the silk** (next section) — it changes the top surface and the cap set.
+2. **Geometry from the panel map, not by hand.** `../gen.py` owns every key, slider,
+   button and display position. Add an export of the cut layer (SVG/DXF, 1:1 mm):
+   59 × **14.0 × 14.0 mm** switch cutouts at **16 mm pitch**, five **45 mm** slider
+   slots, the **55 mm** display band (verify the TFT active area against the
+   datasheet before cutting), P0–P9 button wells, antenna-stud counterbores at the
+   ends. Extrude in CAD: 3 mm plate, 2 mm perimeter lip, 1.5 mm ribs under the key
+   rows so a 500 mm span does not oil-can.
+3. **Segment on key-pitch boundaries.** Joints fall *between* switch cutouts, never
+   through one; each segment carries whole hardware groups (the slider board and the
+   display band each stay inside one segment; the 8×8 ribbon exits from one segment).
+   Three segments ≈ 168 mm each. Joint: printed tongue-and-groove along the seam +
+   two alignment dowels + M3 heat-set inserts underneath with a 20 × 3 mm aluminium
+   splice bar across each joint (the splice is what makes three prints feel like one
+   panel). Seam lands under a black key row where the silk can hide it.
+4. **Material and settings.** **PETG or ASA, never PLA** (finger heat + clamp load
+   creep a key well into a sticking key). ASA in an enclosure; PETG open is fine.
+   0.4 mm nozzle, 0.2 mm layers, 5 perimeters, 40 % gyroid, print the plate **face
+   down on a textured/smooth sheet** for the top finish. Cutouts modelled **0.2 mm
+   undersize** and reamed to 14.0 mm so MX2A housings snap tight without rattle.
+5. **Caps, knobs, overlays** as separate small jobs in the same material: 29 white +
+   20 black key caps, P0–P9 caps (P8/P9 double width), 5 slider knobs (or Bourns
+   knobs per the BOM), plus 10 % spares. Two-colour legends via a filament swap at
+   the cap top layer, or engraved 0.4 mm and paint-filled.
+6. **Coupon first.** Print one 3 × 2-key coupon with a slider slot in the chosen
+   material: cap fit, switch snap, slot clearance, flatness after a night on the
+   bench. Only then slice the segments (~6–8 h each).
+7. **Assembly.** Press switches into the plate (no hot-swap sockets — soldered),
+   one 1N4148 per switch, rows/columns, 16-wire ribbon to the ULX3S GPIO; slider
+   pots in the slots; splice the segments; bring the plate up on the bench against
+   the ULX3S **before the case exists** — every Phase 5 gate is electrical.
+8. **Case last** (PERT rule): same segment split, PETG/ASA wedge 40 → 70 mm, once
+   the boards are placed for real.
+
 ## Open design task — panel silk (decide before printing)
 
 The panel IDs are already mode-neutral (A0–G7, S0–S4, P0–P9, ASCII layers) but the

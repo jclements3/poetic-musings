@@ -36,7 +36,7 @@ MUSING                                                                (IRAD ledg
 
 | L | Directory | Extra hardware added to the root | Library components exercised | Status |
 |---|---|---|---|---|
-| **P** | `Panel/` | *root* — keys, sliders, buttons, TFT, speaker, case | Matrix, Zones, RegFile, Spi, Synth, Audio, video console | `Panel/DESIGN.md`; panel map `README.html` |
+| **P** | `Panel/` | *root* — keys, sliders, buttons, TFT, speaker, case | Matrix, Zones, RegFile, Spi, Synth, Audio, video console | `Panel/DESIGN.md` (incl. fabrication), `Panel/ORDERS.md` (printer); panel map `README.html` |
 | **O** | `Oracle/` | *root* — ULX3S, SD, USB serial | H2 SoC, UART, register bus, Cdc, SD block device | `Oracle/DESIGN.md`; boots real eForth in Clash sim; Verilog generated |
 | E | `Erand49/` | IR sensors, ADCs, harp frame | Cordic, Cfar, KS, HarpLink, I²S | `Erand49/DESIGN.md`; frame CAD done; gate 1 = one string |
 | T | `Theremin/` (older VHDL) · `MAIDEN/theremin/clash/` (measured Clash) | antennas + oscillator boards | full theremin suite — **regression gate for every library change** | `Theremin/DESIGN.md`; measured: 1,816 LUT4 |
