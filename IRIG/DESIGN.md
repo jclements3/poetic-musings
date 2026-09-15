@@ -5,6 +5,16 @@ crystal until G (GPS) disciplines it. Gate: spec-valid IRIG-B verified on a
 scope/decoder. The skills are deliberately the second rep of Santa Glide's:
 counters, framing, serialization.
 
+**Spoke framing (`../PROGRAM.md`):** I adds one piece of hardware to the Panel+Oracle
+root — an IRIG-B output (DCLS on a GPIO, AM on the audio path) and the scope that
+checks it — and exercises the library's *time* set: the DCLS/AM framer, BCD time
+fields, the settable RTC, and the TOD-set strobe contract shared with G. It is the
+timestamp source for every recorded thing in the box: N's TIME_MARK, the snooker
+demo's camera frames (Imaging, via `strobe_latch`) and radar velocity records (M),
+so PLAN Phase 12's 5 % speed-match gate is aligned by *this* clock once G disciplines
+it. Status: implemented + sim-verified (`clash/`); the `MAIDEN/…` path below is the
+library source archive whose erratum-fixed reference the port was checked against.
+
 ## IRIG-B in one page
 
 - 1 frame/second, 100 bit cells of 10 ms each.
@@ -74,7 +84,9 @@ IS the GPS lesson.
 ## Explicitly out of scope for Phase 2
 
 GPS/PPS (Phase 7), IEEE-1588/NTP anything, battery backup, display (I mode's V0
-screen arrives with O; until then the scope is the display).
+screen arrives with O; until then the scope is the display), stamping other spokes'
+records (that is `strobe_latch` and the record mux — Imaging/DESIGN.md and
+Network/DESIGN.md consume this clock; they do not extend it).
 
 ## Status (31 Aug 2026)
 
