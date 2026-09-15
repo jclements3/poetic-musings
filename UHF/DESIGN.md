@@ -1,12 +1,20 @@
 # UHF — Phase 9 design (GPS-disciplined CW + WSPR beacon)
 
 Phase 9 of PLAN.md: a GPS-disciplined CW + WSPR beacon in the PM box. Ham radio,
-**personal ledger** (U is the one MUSING letter on the P ledger — see
-fpga-development-plan.md). Prereq: G (the disciplined clock — see
+**personal ledger** (U is the one MUSING-group spoke on the P ledger — see
+fpga-development-plan.md; the ledger is bookkeeping only, PROGRAM.md). Prereq: G (the disciplined clock — see
 GPS/DESIGN.md; everything here consumes its outputs loosely: the PPS-locked 10 MHz
 station copy — GPS/DESIGN.md names the WSPR beacon as a customer — and UTC
 time-of-day via the iIrig/GPS time registers). Gate: **a spot appears on wsprnet.org**
 — transmit, then show the grandkids their signal was heard hundreds of miles away.
+
+**Spoke framing (PROGRAM.md):** U adds one piece of hardware to the Panel+Oracle root
+— the whip on its SMA bulkhead plus the PA can at the rear-right — and owns the
+library's radio set: `PM.Keyer` (CW keyer + Morse decoder, ✓, currently housed in
+`Oracle/pm-keyer`), the planned Goertzel tone detector and WSPR modulator, and the
+hardware TX interlock in `PM.RegFile` (✓). Those blocks *run* in the box's C mode
+(the RF mode, below) but they are U's components; Oracle is the runtime, not their
+owner. Shared with S: the antenna end-plate hardware and the disciplined 10 MHz from G.
 
 ## Band choice — honest note on the name
 
