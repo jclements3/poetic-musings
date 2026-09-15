@@ -44,18 +44,33 @@ were chosen.
   Glide's FSM moves into the box (`PM.Sleigh`, Rev D), gates over a 10-wire ribbon
   to the driver board at the tube; the Alchitry Cu is retired to bench spare. The
   harp gets no board of its own: 13 ADCs daisy-chain over the EtherCON link.
+- **Sleigh project renamed "Sleigh Glide"** (`Coil/SleighGlide/`, `SleighGlide.hs`,
+  `sleigh_glide.pcf`; the slug is "the sleigh"). Git history was rewritten with
+  `filter-branch` and **force-pushed** so no commit message carries the old name;
+  reflog expired and gc'd locally. Any other clone must `git fetch && git reset --hard
+  origin/main`.
+- **Purchases:** ULX3S 85F backordered at Mouser for the 2026-10-02 batch
+  (`Oracle/ORDERS.md`); printer recommendation Bambu Lab P1S (`Panel/ORDERS.md`);
+  master tracker `ORDERS.md` with the P/W/H ledger split; `STATUS.md` is the one-page
+  state, updated each session.
 
 ## Doc changes this session (all committed on `main`, nothing pushed)
-PROGRAM.md (rewritten) · CLASH-LIBRARY-MAP.md (new) · PLAN.md · fpga-development-plan.md
-· fpga-resource-swag.md · LIBRARY.md · one-box-overview.html · LAYOUT.html ·
-README.html/gen.py · vl1-clash-module-tree.md · fpga-pert-cpm.md · every DESIGN.md.
-Theremin sub-repo: `DESIGN.md` + CLAUDE.md role note (one unpushed commit there).
+PROGRAM.md (rewritten) · CLASH-LIBRARY-MAP.md (new: map, module list, status) ·
+STATUS.md (new) · ORDERS.md (new) + Oracle/Panel/Erand49 ORDERS.md · PLAN.md ·
+fpga-development-plan.md · fpga-resource-swag.md · LIBRARY.md · one-box-overview.html
+· LAYOUT.html · README.html/gen.py · vl1-clash-module-tree.md · fpga-pert-cpm.md ·
+a DESIGN.md in every root/spoke directory · Coil/DESIGN.md rewritten for Rev D.
+Repo unified (MAIDEN/, Theremin/ absorbed) and pushed to
+github.com/jclements3/poetic-musings; history rewritten for the rename.
 
 ## Open items
-- **No git remote** on this repo; the Theremin sub-repo has github.com/jclements3/theremin.
+- ~~No git remote~~ — pushed to github.com/jclements3/poetic-musings (public); the old
+  standalone theremin and MAIDEN repos are stale copies to archive.
 - Migrate the measured Clash blocks out of `MAIDEN/…` into a top-level `lib/` so the
   archive can eventually go; `Oracle/pm-*` packages are the interim home.
 - Move `Oracle/pm-keyer` under `UHF/` when cabal paths are next touched.
+- Write `PM.Sleigh` (bus-side port of `SleighGlide.hs`, 0x4050 group) — first new
+  block needed when the board lands; wind coils and build the driver channels before.
 - M and S register groups are unassigned until their phase starts (0x4060 Imaging is
   provisional).
 - Panel silk still VL-1-flavoured; mode-neutral layer decision in `Panel/DESIGN.md`.
