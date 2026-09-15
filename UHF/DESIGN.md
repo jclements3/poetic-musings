@@ -15,6 +15,10 @@ library's radio set: `PM.Keyer` (CW keyer + Morse decoder, ✓, currently housed
 hardware TX interlock in `PM.RegFile` (✓). Those blocks *run* in the box's C mode
 (the RF mode, below) but they are U's components; Oracle is the runtime, not their
 owner. Shared with S: the antenna end-plate hardware and the disciplined 10 MHz from G.
+In `../CLASH-LIBRARY-MAP.md` § Module list, U contributes the CW keyer and Morse
+decoder (Control, ✓) and the hardware TX interlock inside the register file (✓), and
+owns two ○ entries to write: the Goertzel tone detector (DSP core) and the WSPR
+modulator (I/O and links). Everything U needs is inside this unified repo.
 
 ## Band choice — honest note on the name
 
