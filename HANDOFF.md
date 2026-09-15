@@ -40,6 +40,11 @@ were chosen.
   Panel, Oracle, Erand49, Theremin (in its sub-repo), IRIG, Coil, GPS, SDR, UHF,
   Network, Imaging. `MAIDEN/…` paths inside them mean "archive", not a dependency.
 
+- **One FPGA board — the ULX3S — is the only FPGA in PM** (later on 09-15). Santa
+  Glide's FSM moves into the box (`PM.Sleigh`, Rev D), gates over a 10-wire ribbon
+  to the driver board at the tube; the Alchitry Cu is retired to bench spare. The
+  harp gets no board of its own: 13 ADCs daisy-chain over the EtherCON link.
+
 ## Doc changes this session (all committed on `main`, nothing pushed)
 PROGRAM.md (rewritten) · CLASH-LIBRARY-MAP.md (new) · PLAN.md · fpga-development-plan.md
 · fpga-resource-swag.md · LIBRARY.md · one-box-overview.html · LAYOUT.html ·

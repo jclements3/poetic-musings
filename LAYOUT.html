@@ -14,7 +14,7 @@ table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;
 <h1>PM CONTROLLER — FINAL LAYOUT</h1>
 <p class="sub">One portable controller: 3D-printed 49-key panel (~504 × 150 mm face, 16 mm key pitch), ULX3S ECP5-85F inside,
 Oracle as the brains. Boots to a mode menu on the bar TFT; every demonstration reachable in under a
-minute, no laptop. Santa Glide travels alongside on its own Alchitry Cu; the Erand49 harp is a separate
+minute, no laptop. Santa Glide travels alongside (tube + driver board, gate ribbon to the box); the Erand49 harp is a separate
 instrument that plugs into the rear port.</p>
 <p class="sub"><b>Root + spokes (PROGRAM.md):</b> this box is the <b>root</b> of the Clash library — Panel is the body,
 Oracle the brains. Each spoke adds one piece of hardware to it: antennas (T, U), AD9226 + relay (S), GPS (G),
@@ -140,7 +140,7 @@ underside, rear-ported. Silk legends shown are VL-1 mode; final silk gets a mode
 <!-- SPEAKER PORT -->
 <text x="1205" y="14" class="rg">SPKR</text>
 <g fill="#2a2c30"><rect x="1170" y="55" width="70" height="4" rx="2"/><rect x="1170" y="63" width="70" height="4" rx="2"/><rect x="1170" y="71" width="70" height="4" rx="2"/><rect x="1170" y="79" width="70" height="4" rx="2"/></g><text x="1205" y="105" class="rs" text-anchor="middle">rear port</text>
-<text x="10" y="150" class="rs">Rear panel, viewed from behind. HDMI to V0 is internal (matched TFT + driver kit). RF connections live on the left and right end panels below. NOT YET DRAWN (2026-09-15; land in the NET/TIME group at rear-right): SLEIGH (C) ⅛" TRS — 250 kbaud TX + ground to the Cu; SNOOKER (I·M) — camera DVP ribbon + strobe/trigger ⅛" TRS, and the Doppler module SPI/ADC header. Redraw the SVG when P starts.</text>
+<text x="10" y="150" class="rs">Rear panel, viewed from behind. HDMI to V0 is internal (matched TFT + driver kit). RF connections live on the left and right end panels below. NOT YET DRAWN (2026-09-15; land in the NET/TIME group at rear-right): SLEIGH (C) 10-pin IDC — 8 gates + sense + ground to the driver board; SNOOKER (I·M) — camera DVP ribbon + strobe/trigger ⅛" TRS, and the Doppler module SPI/ADC header. Redraw the SVG when P starts.</text>
 </svg></div>
 
 
@@ -269,7 +269,7 @@ underside, rear-ported. Silk legends shown are VL-1 mode; final silk gets a mode
 <tr><td>u-blox GPS + PPS</td><td>rear, at SMA</td><td>disciplines IRIG clock (G→I)</td></tr>
 <tr><td>RMII PHY PMOD</td><td>rear, at RJ45</td><td>N: UDP/Ch.10</td></tr>
 <tr><td>UHF beacon PA (U)</td><td>rear, shielded corner</td><td>GPS-disciplined CW/WSPR → TX SMA</td></tr>
-<tr><td>Sleigh link (C)</td><td>rear, TIME/NET group</td><td>one GPIO TX at 250 kbaud + ground → Alchitry Cu <code>sleigh_rx</code>; unplugged = Santa parks (watchdog)</td></tr>
+<tr><td>Sleigh gates (C)</td><td>rear SLEIGH 10-pin, TIME/NET group</td><td>8 gate lines (3.3 V, 100 Ω series) + show-switch sense + ground → MOSFET driver board at the tube; ribbon out = pulldowns park Santa; 24 V stays at the tube</td></tr>
 <tr><td>Snooker camera (I) — OV9281 on an overhead mount</td><td>external; DVP ribbon + strobe/trigger line to rear</td><td>DVP capture + <code>strobe_latch</code> IRIG stamp; per-ball centroids over N</td></tr>
 <tr><td>Snooker Doppler module (M) — CDM324-class 24 GHz + SPI ADC</td><td>external, aimed down the table; header at rear</td><td>CIC → FFT → CFAR → velocity records on V0 and over N</td></tr>
 </table>
@@ -333,7 +333,7 @@ they are potted in the neck rail, rigid to the flat pins, so they never need rea
 <tr><td class="k">Cable</td><td>One shielded Cat-6, 2–3 m: two pairs carry 5 V + return to the harp; one differential pair harp→box (I²S 24/96 audio + 3 Mbaud event frames, framed together, harp is clock master); one differential pair box→harp (control).</td></tr>
 <tr><td class="k">Not Ethernet</td><td>Cat-6 is used only as a rugged shielded 4-pair cable with a stage-grade locking connector — there is no networking on it: the pairs carry raw 5 V, I²S, and UART, point-to-point. The real network lives on the separate NET port. Guard against mix-ups: HARP port, plug shells, and cable ends color-coded gold; NET black; and neither end is damaged by the wrong socket — the harp link idles until its framing handshake, and a PHY ignores it.</td></tr>
 <tr><td class="k">Power budget</td><td>The 98 IR pairs are scanned through the mux — only a handful lit at once — so harp draw is ~0.5 A at 5 V, fine over the cable pairs. Gate 1 measures it; if real load exceeds the budget, the plinth gets its own barrel jack + bank bay under the same 5-V-only rule.</td></tr>
-<tr><td class="k">Where the smarts sit</td><td>Pluck detect (CORDIC mag + CA-CFAR) runs harp-side in the plinth per the handoff; the box receives audio + note events. Harp-side controller board is a Phase 6 gate-1 decision.</td></tr>
+<tr><td class="k">Where the smarts sit</td><td>Pluck detect (CORDIC mag + CA-CFAR) runs harp-side in the plinth per the handoff; the box receives audio + note events. No harp-side board (one FPGA rule, 2026-09-15): the 13 ADCs daisy-chain over the EtherCON link to the box.</td></tr>
 </table>
 <p class="sub"><b>Travel:</b> the harp never comes apart — 49 strings stay at tension (no 45-minute retune at
 the destination) and the sensors are potted in the neck sensor rail, rigid to the flat pins, so alignment
@@ -350,7 +350,7 @@ keyboard instead.</p>
 <table>
 <tr><th>Piece</th><th>Carried</th><th>Hookup</th></tr>
 <tr><td class="k">PM box</td><td>the device</td><td>5 V brick or USB power bank</td></tr>
-<tr><td>Santa Glide</td><td>own case: Alchitry Cu + driver board + coil tube, rolled</td><td>standalone; 24 V supply stays home unless the village travels</td></tr>
+<tr><td>Santa Glide</td><td>own case: driver board + coil tube, rolled, 10-wire ribbon</td><td>plugs into the rear SLEIGH connector; 24 V supply stays home unless the village travels</td></tr>
 <tr><td>Erand49 harp</td><td>rigid column case, strings stay tensioned, sensors potted in the neck rail</td><td>one locking cable to HARP port; CAL re-baselines sensors on site</td></tr>
 <tr><td>Antenna rods</td><td>unscrew, clip inside lid</td><td>binding posts</td></tr>
 <tr><td>Snooker kit (I·M)</td><td>camera + lens + clamp mount, Doppler module, two cables — small pouch</td><td>DVP ribbon + strobe TRS, SPI header; the table itself stays home (Santa Glide's village sits on it)</td></tr>

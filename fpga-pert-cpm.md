@@ -88,7 +88,7 @@ until the TFT active area is measured. P6 stays last.
 **R7 — Bar TFT + driver mismatch.** Matched kit with 1920×480 EDID (link below).
 
 **R8 — Purchases with no consumer yet.** UP5K spares, RMII PHY, GPS module, GPSDO:
-work-ledger parts; they have no consumer until G/N/M. Leave them. (The Alchitry Cu is
+work-ledger parts; they have no consumer until G/N/M. Leave them. (The Alchitry Cu — retired to bench spare 2026-09-15 — is
 bought and spoken for — it *is* Santa Glide.)
 
 **R9 — Wasted effort: a second theremin bitstream.** T2 uses the existing ECP5 port

@@ -18,7 +18,7 @@ E is Phase 6 (after P and O), and the rib is the long-lead item, so:
 3. **At P start, after the bore check:** order the frame stock and rib (PERT rule) so
    welding overlaps the Panel build.
 4. **Only after gate 1 passes:** Stage 2 electronics (13 ADCs, 98 pairs, carrier PCB)
-   and the harp-side board decision below.
+   (LVDS repeaters for the ADC daisy-chain included).
 5. **Strings last**, once the frame is welded and the tuners are in.
 
 ## Stage 0 — before anything (P start)
@@ -69,18 +69,9 @@ E is Phase 6 (after P and O), and the rib is the long-lead item, so:
 | EtherCON RJ45 + cable | https://www.mouser.com/c/?q=NE8FDP | Neutrik; matches the rear HARP port |
 | Rigid column case | — | golf travel case or hard tube case, sized to the frame CAD |
 
-## Open item — the harp-side board vs the "two boards only" rule
+## Decided — no harp-side board (one FPGA rule, 2026-09-15)
 
-`DESIGN.md` puts detection + KS on a board **in the harp** (98 analog channels never
-leave the frame), but PLAN's standing rule is *two boards only* (ULX3S in the box, Cu
-in Santa Glide). Decide at Stage 2, not before:
-
-- **A — third board in the harp** (ULX3S-12F or an ECP5 PMOD-class board, ~$60–100):
-  cleanest signal integrity; amends the rule to "two boards *in the box demo*".
-- **B — no harp FPGA:** 13 ADCs daisy-chained over one SPI/LVDS run through the
-  EtherCON cable to the box; the box does detection + KS. Keeps the rule; ~1.5 m of
-  SPI at the ADC clock needs LVDS repeaters and eats box GPIO.
-
-Recommendation: A, decided when gate 1 shows the real cable length and noise floor.
-If A: a second ULX3S (12F or 25F is enough for 13 ADCs + detection + KS — the SWAG
-puts E's gateware at ~7k LUT / 88 KB) from the same Mouser listing family, ~$100.
+The 13 ADCs daisy-chain over SPI with LVDS repeaters through the EtherCON cable; the
+box does detection + KS. Gate 1 runs the eval module on the real cable length to
+measure the noise floor. Add to Stage 2: LVDS driver/receiver pair (SN65LVDS31/32-
+class) ×2, ~$10.

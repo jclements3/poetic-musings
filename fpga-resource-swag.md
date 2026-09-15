@@ -47,7 +47,7 @@ audio 96 kHz — CDC/async-FIFO library blocks are load-bearing, not optional.
 
 | Part | LUT | BRAM | DSP | Verdict |
 |---|---|---|---|---|
-| iCE40 HX8K (owned) | 7.7k | 16 KB | 0 | Santa Glide only; can't do V0 video. Right where it is. |
+| iCE40 HX8K (owned) | 7.7k | 16 KB | 0 | retired to bench spare 2026-09-15 (Santa Glide moved into the box); can't do V0 video. |
 | ECP5-25F | 24k | 126 KB | 28 | Fits nothing beyond the single Panel mode, no margin. No. |
 | ECP5-45F | 44k | 243 KB | 72 | Fits per-mode bitstreams with care; "everything resident" + margin is tight on LUT/BRAM. The gamble option, saves ~$60–80. |
 | **ECP5-85F (ULX3S)** | **84k** | **468 KB** | **156** | ~2.5× the margined worst case. Room to write naive Clash first and optimize never. **Re-order this.** |

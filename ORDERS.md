@@ -31,11 +31,11 @@ personal · **W** work · **H** ham (personal). Estimates are budget figures, no
 | E2 | Frame stock 6061 (channel, tube, bar, plate) + rib | E | P | ~$250 | plan | at P start, after E0 |
 | E3 | 13× ADS131M08 + carrier PCB, 108 IR pairs, tuners ×49, hardware, welding | E | P | ~$520 | plan | only after gate 1 passes |
 | E4 | Strings ×56 (Erard band), travel case | E | P | ~$280 | plan | last |
-| E5 | Harp-side board (ULX3S 12F/25F) — *open item* | E | P | ~$100 | plan | decided after gate 1 |
+| E5 | LVDS repeater pair for the ADC daisy-chain (no harp-side board — one FPGA rule) | E | P | ~$10 | plan | with E3 |
 | T1 | Theremin LC oscillator parts | T | P | $0 | **received** | ordered pre-program |
 | I1 | IRIG-B: none (scope on hand) | I | P | $0 | — | GPSDO reference comes under G |
-| C1 | Santa Glide: Cu, coils, MOSFETs, diodes, tube, buttons, bench supply | C | P | sunk | **received** | `Coil/SantaGlide/orders/` |
-| C2 | Still to buy: AAs, 8–10 mm ID rigid coil-form tube | C | P | ~$20 | plan | HANDOFF 08-29 |
+| C1 | Santa Glide: coils, MOSFETs, diodes, tube, buttons, bench supply (Cu retired to spare) | C | P | sunk | **received** | `Coil/SantaGlide/orders/` |
+| C2 | Still to buy: 8–10 mm ID rigid coil-form tube; 10-pin IDC ribbon (≤3 m) + rear connector | C | P | ~$25 | plan | Rev D gate ribbon |
 
 ## MUSING spokes
 

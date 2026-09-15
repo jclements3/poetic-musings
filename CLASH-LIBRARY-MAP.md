@@ -91,7 +91,7 @@ Legend — status: ✓ measured/sim-verified Clash · ◐ measured VHDL, Clash p
 
 | Hardware part | Clash capability demonstrated | Library component | Status |
 |---|---|---|---|
-| Santa Glide sleigh tube (Alchitry Cu, 8 coils) | 250 kbaud speed frames, dead-man, 250 ms watchdog, coil pacer FSM | `PM.SleighSpeed` + `Coil/SantaGlide/firmware` Rev C (Cu 59.1 MHz PASS) | ✓ |
+| Santa Glide: 8 coils + MOSFET driver board over a 10-wire gate ribbon | Moore FSM + dwell table, virtual-tick pacer, ribbon-sense dead-man, PWM hold/run, theremin-pitch → speed | `PM.Sleigh` (○ — port of `SantaGlide.hs` + `PM.SleighSpeed` mapping onto the bus; FSM/pacer/watchdog sims ✓ carry over) | ◐ |
 | RMII PHY / RJ45 | 100BASE-TX dibit stream, CRC32 FCS, IPv4 checksum, 64-byte pad, IFG | `PM.Net` (`Oracle/pm-net`) TX ✓ · MAC RX ○ | ✓ / ○ |
 | Ch.10 recorder link (N) | Tagged-record UART framing, TMATS payloads | `MAIDEN/firmware/recorder/PROTOCOL.md` | ◐ (Python + wire spec) |
 
@@ -116,17 +116,18 @@ how fast the cue ball left, IRIG aligns them on one screen (PLAN.md Phases 11–
 |---|---|---|---|
 | DSP core | 11 | 1 | 4 |
 | Audio and synthesis | 6 | 0 | 4 |
-| I/O and links | 8 | 1 | 5 |
+| I/O and links | 7 | 2 | 5 |
 | Timing and CDC | 4 | 2 | 2 |
 | Control and display | 4 | 0 | 1 |
-| **Total** | **33** | **4** | **16** |
+| **Total** | **32** | **5** | **16** |
 
 - **Verified** = hedgehog/assertion spec green in Clash sim, Verilog generated. Measured
   ECP5 area exists for `ThereminTop`, `Theremin.Fft`, `IirNStage` and the text console;
   every other ✓ still needs an area number after integration (Lesson 11: area is a
   measurement).
-- **Awaiting port** = measured VHDL with a green GHDL testbench: Doppler chain, Ch.10
-  record framing, PPS discipline, strobe timestamp latch. Each ports when its spoke
+- **Awaiting port** = green in sim, needs its box-side port: Doppler chain, Ch.10
+  record framing, PPS discipline, strobe timestamp latch (measured VHDL), and the
+  Santa Glide sequencer (`SantaGlide.hs` → `PM.Sleigh`, one FPGA rule 2026-09-15). Each ports when its spoke
   starts (`LIBRARY.md` porting rule).
 - **To write** clusters in three spokes — Imaging (DVP capture, blob labeller,
   centroids), Panel (LFOs, rhythm ROM, sequencer, overlay framebuffer), Erand49
@@ -172,7 +173,7 @@ written. Roughly 35 ✓, 5 ◐, 15 ○ as of 2026-09-15.
 - ✓ 8×8 key matrix scanner with debounce and event FIFO (`PM.Matrix`)
 - ✓ Slider zone decoder with hysteresis and 1 s dwell (`PM.Zones`)
 - ✓ Framed 8N1 event link, A5 + checksum, corruption resync (`PM.HarpLink`)
-- ✓ 250 kbaud sleigh speed link with dead-man watchdog and coil pacer (`PM.SleighSpeed`)
+- ◐ Santa Glide coil sequencer in the box: Moore FSM, dwell table, pacer, dead-man, PWM (`PM.Sleigh` — sims ✓ from `SantaGlide.hs`/`SleighSim`, bus port pending; the 250 kbaud link `PM.SleighSpeed` ✓ is retired with the Cu, its pitch→speed mapping reused)
 - ✓ NMEA `$GxRMC` time parser with checksum gate (`PM.Gps`)
 - ✓ RMII 100BASE-TX UDP/IPv4 transmitter with CRC32 (`PM.Net`)
 - ◐ Ch.10 tagged-record framing and record mux (recorder `PROTOCOL.md`)
@@ -198,7 +199,7 @@ written. Roughly 35 ✓, 5 ◐, 15 ○ as of 2026-09-15.
 |---|---|---|---|
 | DSP core | Cic, Fir, Fft512, Cordic, Cfar, Nco, SineLut, IirNStage, DelayDiffFilter, EdgeSampler | doppler chain | DDC wiring, Goertzel, KS waveguide, AM demod |
 | Audio | DsmDac, Pwm, Mixer, Synth osc/ADSSR, note table | — | LFOs, rhythm, sequencer, I²S |
-| I/O + links | Uart, Spi, Matrix, Zones, HarpLink, SleighSpeed, Net TX, Gps parser | Ch.10 recorder | MAC RX, TMDS, DVP, ASCII layer |
+| I/O + links | Uart, Spi, Matrix, Zones, HarpLink, Net TX, Gps parser | Ch.10 recorder, Sleigh (bus port) | MAC RX, TMDS, DVP, ASCII layer |
 | Timing / CDC | Cdc (sync, pulse, Gray FIFO), IRIG-B | pps_discipline, strobe_latch | DPLL, SDRAM controller |
 | Control | H2 SoC boot, RegFile, Keyer/decoder, Video console | H2 Clash port | overlay FB |
 

@@ -15,8 +15,8 @@ Panel+Oracle root — 98 IR pairs, 13 multi-channel ADCs on a carrier PCB, and t
 harp frame itself — and exercises the library's *detection* set: multi-channel
 `PM.Spi` ADC sequencing, `Maiden.Cordic` (vectoring magnitude), `Maiden.Cfar`
 (CA-CFAR, no divide), the planned KS waveguide with allpass fractional delay, the
-ADSSR from `PM.Synth`, `PM.HarpLink` (framed 8N1 event link, ✓) and a planned I²S
-serializer. The instrument is the mechanical layer (`LAYOUT.html`, `frame-spec.md`,
+ADSSR from `PM.Synth`, a planned I²S serializer (the `PM.HarpLink` event link ✓ is
+kept for the harp's local controls only). The instrument is the mechanical layer (`LAYOUT.html`, `frame-spec.md`,
 `string-specs.md`); this file is the gateware and the gates. The CORDIC + CFAR pair
 is the same chain M uses for the snooker cue ball — one library, two sensors. In
 `../CLASH-LIBRARY-MAP.md` § Module list, E consumes the ✓ CORDIC, CFAR, SPI master and
@@ -30,7 +30,7 @@ the library source archive, a plain directory in this unified repo since 2026-09
 ```
 49 strings ─ IR X/Y pair per string (60° pair, per-station yaw: sensor-stations.csv)
    → 98 photodiode channels → 13× ADS131M08 (8-ch, 24-bit, SPI) on the carrier PCB
-   → PM.Spi multi-channel sequencer (harp-side FPGA)  → DC HPF per channel
+   → 13 ADCs daisy-chained (SPI/LVDS) over the EtherCON link to the box → PM.Spi sequencer → DC HPF per channel
    → per-string 2×2 calibrated X/Y solve (CAL)        → CORDIC |x+jy| magnitude
    → CA-CFAR vs the string's own noise floor          → pluck event (string, velocity)
         ├─► KS waveguide ×49 @ 96 kHz (one pipelined engine, allpass fractional delay)
@@ -39,10 +39,10 @@ the library source archive, a plain directory in this unified repo since 2026-09
                 → Forth: `.pluck` on V0 · `harp>synth` · `harp>midi`
 ```
 
-- **Two FPGAs, one library.** The harp carries its own board (detection + KS run at
-  the strings, 98 analog channels never leave the frame); the box gets events and
-  audio. Both sides are the same Clash blocks; the harp bitstream is a second
-  consumer of the library, not a fork.
+- **One FPGA (decided 2026-09-15).** No harp-side board: the 13 ADS131M08s sit on
+  the carrier PCB in the midrib and daisy-chain their SPI data over LVDS repeaters
+  through the EtherCON cable; detection and KS run in the box. Cable length and noise
+  floor are measured at gate 1 with the eval module on the real cable.
 - **Detection = the radar chain at audio rate.** Velocity from the CFAR excess over
   threshold; the X/Y pair gives pluck direction (the ~15 % noise penalty of the 60°
   pair vs orthogonal is accepted for bore fit — `frame-spec.md`).

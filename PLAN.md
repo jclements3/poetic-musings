@@ -43,19 +43,20 @@ source archive) and `Theremin/` absorbed as plain directories, nested histories
 archived outside the tree, private material and build outputs ignored by rule; every
 root/spoke directory carries a `DESIGN.md`; Panel and Erand49 carry `ORDERS.md`.
 
-## Phase 1 — C · Santa Glide 🛷 (first demo, standalone)
+## Phase 1 — C · Santa Glide 🛷 (first demo, driven from the box)
 
-Per `Coil/SantaGlide/HANDOFF.md` §7. Desktop prep done 2026-08-31: synthesized
-bitstream at 50 MHz (PLL from the Cu's 100 MHz osc; timing closes with ~20% margin,
-4% utilization), verified pin constraints (`santa_glide.pcf`, gates on Br bank A),
-FSM re-verified in clashi after retiming — see `firmware/BUILD.md`. Flash from
-Windows with Alchitry Labs (WSL2 has no USB by default). Bench sequence remains:
-channel 0 at 12 V/CC 2 A → 7 more driver channels → wind 8 coils (200T, 24 AWG) →
-slug in, all dwells 400 ms → tune `runDuty`, then the dwell table, then voltage.
+Per `Coil/DESIGN.md` Rev D (decided 2026-09-15: the ULX3S is the only FPGA board).
+The coil FSM, pacer and watchdog move into the box as `PM.Sleigh`; the driver board
+at the tube gets its 8 gate signals over a 10-wire ribbon from the rear SLEIGH
+connector; the Cu is retired. Rev B/C sims (FSM walk 0→7→0, pacer rates, watchdog)
+carry over. Before the board arrives: wind 8 coils (200 T, 24 AWG), build the 8
+driver channels, test each with a bench 3.3 V gate source at 12 V / CC 2 A. When it
+lands: `PM.Sleigh` in the bitstream, slug in, all dwells 400 ms → tune `runDuty`,
+then the dwell table live from the Forth prompt (`dwell!`), then voltage.
 
-**Demo:** flip the show switch; Santa glides house A→B→A over the snow village,
-pauses at each house, parks when switched off. Runs on the Alchitry Cu with no
-laptop — the first take-anywhere demo, and the Christmas deliverable.
+**Demo:** flip the switch; Santa glides house A→B→A over the snow village, pauses at
+each house, parks when switched off; theremin pitch sets the speed. The Christmas
+deliverable — needs the box present.
 **Teaches:** Moore FSMs, PWM, MOSFET drive, magnetics.
 
 ## Phase 2 — I · IRIG clock ⏱
@@ -189,7 +190,7 @@ half exercised on one shot.
 
 ## Definition of done — the PM device
 
-- One case: Panel + Oracle, ULX3S inside; Santa Glide packs alongside on its Cu.
+- One case: Panel + Oracle, ULX3S inside; Santa Glide packs alongside (tube, driver board, ribbon).
 - Power on → the **S3 MODE slider selects the demonstration: P · O · E · T · I · C**
   (Panel · Oracle/Forth/games/spoke scripts · Erand49 · Theremin · IRIG clock · CW);
   V0 shows the mode screen, deeper choices via keys.
@@ -201,8 +202,9 @@ half exercised on one shot.
 
 - Finish before start; a phase closes only when its demo passes in front of a person.
 - Theremin suite = regression gate for every shared-library change after Phase 4.
-- Two boards only: ULX3S in the box, Alchitry Cu in Santa Glide. *(Open: Erand49 may
-  need a third board inside the harp — decided after gate 1; `Erand49/ORDERS.md`.)*
+- **One FPGA board only — the ULX3S ECP5-85F** (2026-09-15). Everything else is
+  sensors, drivers and ADCs on cables: Santa Glide's driver board over a gate ribbon,
+  the harp's 13 ADCs daisy-chained over the EtherCON link. No harp-side board.
 - Ledgers never commingle (P personal, W work; U is ham/personal). Bookkeeping only;
   it does not shape the build order.
 - Buy late: 1 ADC eval before 13; 5 IR pairs before 98; rib only after bore check;

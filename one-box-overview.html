@@ -12,13 +12,13 @@ table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;
 .k{font-weight:700}
 </style></head><body><main>
 <h1>ONE BOX — PANEL+ORACLE ROOT AND ITS SPOKES</h1>
-<p class="sub">One Clash library, one root (Panel body + Oracle brains), one case; every other assembly is a spoke that adds hardware to the root. The Panel — the 3D-printed control surface below, with Oracle as the brains behind its user interface — is the demonstrator for the Clash library; theremin, harp, HWIL, radar, games all plug into it. ULX3S ECP5-85F is the only board in the box; Santa Glide (C) runs standalone on an Alchitry Cu.</p>
+<p class="sub">One Clash library, one root (Panel body + Oracle brains), one case; every other assembly is a spoke that adds hardware to the root. The Panel — the 3D-printed control surface below, with Oracle as the brains behind its user interface — is the demonstrator for the Clash library; theremin, harp, HWIL, radar, games all plug into it. ULX3S ECP5-85F is the only FPGA board in the program; Santa Glide (C) is driven from it over a gate ribbon.</p>
 
 <h2>Build order (serial, finish before starting)</h2>
 <p class="chain">Root O → P → T &nbsp;&nbsp;·&nbsp;&nbsp; spokes E · I · C · M · U · S · I · N · G</p>
 <table>
 <tr><th>#</th><th>Proj</th><th>Finish line</th><th>Cost</th></tr>
-<tr><td>1</td><td class="k">C coil — Santa Glide</td><td>Slug glides house A→B→A continuously while the show switch is on, parks on pause; dwell profile tuned. Standalone on Alchitry Cu</td><td>$0 left (all parts ordered)</td></tr>
+<tr><td>1</td><td class="k">C coil — Santa Glide</td><td>Slug glides house A→B→A continuously while the show switch is on, parks on pause; dwell profile tuned live from Forth. FSM in the box, gates over a ribbon to the driver board (one FPGA rule)</td><td>$0 left (all parts ordered)</td></tr>
 <tr><td>2</td><td class="k">I IRIG clock</td><td>Spec-valid IRIG-B out, verified on scope/decoder; free-running crystal until G disciplines it</td><td>$0</td></tr>
 <tr><td>3</td><td class="k">O Oracle console</td><td>Prompt on bar TFT, no laptop; <code>1 2 + .</code> → 3; GPIO toggle, ADC read, SD block 1 loads; CW keyer sends, decoder prints</td><td>~$60 TFT</td></tr>
 <tr><td>4</td><td class="k">T theremin</td><td>Oscillator hardware on bench; ECP5 port tracks pitch and volume from antennas through speaker</td><td>$0 (ordered)</td></tr>
@@ -193,7 +193,7 @@ table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;
 <tr><td>E</td><td>Erand49: 49 strings, 98 IR, DC HPF, CORDIC mag/angle, CA-CFAR onset, velocity map, 49 KS waveguides, allpass delay, dispersion reg, I²S/TDM, event UART (A absorbed)</td></tr>
 <tr><td>T</td><td>LC oscillator, antenna sense, freq counter, pitch quantizer, CIC/FIR, NCO, envelope, vibrato, ΣΔ DAC</td></tr>
 <tr><td>I</td><td>IRIG-B generator/decoder, DC-level + modulated out; free-running crystal, disciplined by G; time shown on Oracle</td></tr>
-<tr><td>C</td><td>Santa Glide: 8-coil linear reluctance glide, steel slug in 10 ft silicone tube over the snow village; Alchitry Cu, Moore FSM, PWM Hold/Run, IRLZ44N + 1N5408 flyback, show switch</td></tr>
+<tr><td>C</td><td>Santa Glide: 8-coil linear reluctance glide, steel slug in 10 ft silicone tube over the snow village; <code>PM.Sleigh</code> in the box (Moore FSM, PWM Hold/Run, watchdog), 10-wire gate ribbon to the IRLZ44N + 1N5408 driver board, show switch</td></tr>
 <tr><td>M</td><td>Motion radar — snooker table, part 2: CDM324-class 24 GHz Doppler aimed down the table; CIC → FFT → CFAR → velocity records, IRIG-stamped, on V0 and over N. Gate: cue-ball speed within 5 % of the camera track, timestamps aligned. Demo: one shot — position from the camera, speed from the radar, one screen. ~$60</td></tr>
 <tr><td>U</td><td>UHF beacon: GPS-disciplined CW/WSPR, ham — personal ledger</td></tr>
 <tr><td>S</td><td>SDR: direct-sampling HF on theremin antennas, AD9226-class ADC, DDC (CIC/FIR), waterfall on Oracle</td></tr>

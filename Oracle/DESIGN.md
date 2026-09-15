@@ -32,7 +32,7 @@ register bus lives.
 
 The `pm-*` cabal packages are the **library's home** until a top-level `lib/` exists:
 `PM.Matrix`/`PM.Zones` (Panel), `PM.Synth`/`PM.Audio` (Panel synth mode),
-`PM.Keyer` (U), `PM.HarpLink` (E), `PM.SleighSpeed` (C), `PM.Gps` (G), `PM.Net` (N).
+`PM.Keyer` (U), `PM.HarpLink` (E), `PM.Sleigh` (C, ◐), `PM.Gps` (G), `PM.Net` (N).
 Each is listed under its spoke in `../CLASH-LIBRARY-MAP.md`; `../LIBRARY.md` is the
 catalogue. Rule: a spoke's block may live here, but its gate and its design live in
 the spoke's DESIGN.md. In the map's § Module list, O itself contributes the ✓ H2

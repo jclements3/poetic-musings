@@ -12,7 +12,7 @@ What each row leaves behind is a set of measured Clash modules — `CLASH-LIBRAR
 
 | # | Proj | Difficulty | Cost | Ledger | Prereqs | Gate |
 |---|---|---|---|---|---|---|
-| 1 | **C** Coil — Santa Glide | 2 | parts ordered (opt. 2nd 24 AWG spool) | P | — | Slug glides house A→B→A continuously while show switch on; parks in place on pause; dwell profile tuned. Standalone on Alchitry Cu. |
+| 1 | **C** Coil — Santa Glide | 2 | parts in hand (opt. 2nd 24 AWG spool; 10-pin ribbon + connector ~$10) | P | O (board) | Slug glides house A→B→A continuously while show switch on; parks in place on pause; dwell profile tuned live from Forth. FSM in the box (`PM.Sleigh`), gates over a ribbon to the driver board; Cu retired. |
 | 2 | **I** IRIG clock | 2 | $0 (GPSDO comes later, under G) | P | C (skills) | Spec-valid IRIG-B out, verified on scope/decoder. Free-running on board crystal until G disciplines it; time display added once O exists. |
 | 3 | **O** Oracle console | 3 | $60 (8.8" bar TFT + HDMI board) | P | — | Forth prompt on bar TFT, no laptop; `1 2 + .` → 3; GPIO toggle, ADC read, SD block 1 loads; CW keyer sends, decoder prints. clash-h2 H2 port already started. ▲ |
 | 4 | **T** Theremin | 1 (Clash port already passing) | $0 (ordered) | P | O (tuning UI) | Oscillator hardware on bench; port tracks pitch and volume from antennas through speaker. Stays the regression target for every library change. |

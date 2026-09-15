@@ -19,7 +19,7 @@ board is on backorder, so nothing runs on silicon until October.
 |---|---|---|---|---|
 | 0 Foundations | — | **done** 08-31 | both firmwares compile, eForth boots in sim | — |
 | 0b Repo hygiene | — | **done** 09-15 | unified repo, DESIGN/ORDERS per directory | — |
-| 1 Santa Glide | C | parts in hand, Rev C bitstream PASS | slug glides A→B→A | bench channel 0 at 12 V (`Coil/SantaGlide/HANDOFF.md` §7) |
+| 1 Santa Glide | C | parts in hand; **Rev D: FSM moves into the box** (Cu retired) | slug glides A→B→A | wind coils, build driver channels now; `PM.Sleigh` when the board lands |
 | 2 IRIG clock | I | **sim-verified** | spec-valid IRIG-B on a scope | scope check once R1 lands |
 | 3 Oracle | O | ladder pre-proven in sim | `ok` on glass, SD loads, keyer decodes | wire real pins when R1 lands |
 | 4 Theremin | T | Clash port measured, green | pitch/volume from antennas | bench the LC oscillators |
@@ -41,10 +41,10 @@ I → G → N → snooker demo; C ships for Christmas standalone.
 |---|---|---|---|
 | DSP core | 11 | 1 | 4 |
 | Audio and synthesis | 6 | 0 | 4 |
-| I/O and links | 8 | 1 | 5 |
+| I/O and links | 7 | 2 | 5 |
 | Timing and CDC | 4 | 2 | 2 |
 | Control and display | 4 | 0 | 1 |
-| **Total** | **33** | **4** | **16** |
+| **Total** | **32** | **5** | **16** |
 
 Regression gate (theremin suite): **green**. Measured on ECP5: ThereminTop 1,816 LUT4,
 Fft512 4,620 LUT4, IirNStage 175 LUT4, text console ~200 LUT4.
@@ -64,13 +64,15 @@ Fft512 4,620 LUT4, IirNStage 175 LUT4, text console ~200 LUT4.
   printer, coupon, oscillator bench and Santa Glide bring-up all proceed without it.
 - **Sep Basic Plan inputs due:** Imaging FOV/sensor study (now with the snooker table
   as the fixed target) and the GPSDO metrology pick.
-- **Open design items:** harp-side board vs "two boards only" (`Erand49/ORDERS.md`);
+- **Decided 09-15: one FPGA board (ULX3S).** Cu retired; no harp-side board.
+- **Open design items:**
   Panel silk layer; M and S register groups unassigned; `lib/` migration out of the
   `MAIDEN/` archive.
 
 ## Recent changes
 
-- 09-15: reorientation to library + root/spokes; Piano → Panel; MAIDEN capstone
+- 09-15: one-FPGA rule (ULX3S only; Santa Glide Rev D in the box, Cu retired; no harp board);
+  reorientation to library + root/spokes; Piano → Panel; MAIDEN capstone
   dropped, M = Motion radar; snooker tracking as the I/M demo; DESIGN.md in every
   directory; ORDERS files; repo unified and pushed to github.com/jclements3/poetic-musings.
 - 08-31: Phase 0 gate met; H2 boots eForth in Clash sim; IRIG sim-verified.

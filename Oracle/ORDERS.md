@@ -35,8 +35,8 @@ frame store and Network's elastic buffer in SDRAM, and all spoke I/O through the
 headers (16-wire matrix ribbon, slider ADC, RMII PHY PMOD, AD9226 board, camera DVP
 ribbon, sleigh link, harp EtherCON breakout).
 
-The Alchitry Cu already owned stays on Santa Glide (standalone); it is not a fallback
-for the box — the HX8K has no video and 16 KB of BRAM.
+**The ULX3S is the only FPGA board in PM** (2026-09-15). The Alchitry Cu already owned
+is retired to bench spare — Santa Glide is driven from the box over a gate ribbon.
 
 ## With the board
 

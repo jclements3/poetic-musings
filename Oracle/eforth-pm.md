@@ -175,5 +175,5 @@ if a human notices the latency, it is Forth.
 Each stage is demoable on its own; the Phase 3 gate is all four. The matrix (0x4024),
 synth (0x402E), and harp (0x4036) registers are specified now but first exercised in
 Phases 5–6 — the map is laid out so no address moves when they arrive. Later groups:
-0x4040 GPS/TOD (`../GPS/DESIGN.md`), 0x4060 Imaging provisional (`../Imaging/DESIGN.md`);
+0x4040 GPS/TOD (`../GPS/DESIGN.md`), 0x4050 Sleigh (`../Coil/DESIGN.md`), 0x4060 Imaging provisional (`../Imaging/DESIGN.md`);
 M (Motion radar) and S (SDR) groups are assigned at their phase start.
