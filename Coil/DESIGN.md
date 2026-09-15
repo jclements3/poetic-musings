@@ -12,7 +12,7 @@ open-loop 8-pole linear reluctance motor. Personal ledger, parts in hand. Workin
 in `SleighGlide/`: `HANDOFF.md` (design history, drawings SS-001..004, coil spec,
 bring-up order), `firmware/BUILD.md` (Rev B/C sim proof — still valid for the FSM),
 `drawings/`. **Gate:** slug glides house A→B→A continuously while the show switch is
-on; parks in place on pause; dwell profile tuned. **Demo:** flip the switch; The sleigh
+on; parks in place on pause; dwell profile tuned. **Demo:** flip the switch; the sleigh
 floats over the village — theremin pitch sets the speed.
 
 **Spoke framing (`../PROGRAM.md`):** C adds to the Panel+Oracle root the hardware

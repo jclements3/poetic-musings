@@ -54,7 +54,7 @@ driver channels, test each with a bench 3.3 V gate source at 12 V / CC 2 A. When
 lands: `PM.Sleigh` in the bitstream, slug in, all dwells 400 ms → tune `runDuty`,
 then the dwell table live from the Forth prompt (`dwell!`), then voltage.
 
-**Demo:** flip the switch; The sleigh glides house A→B→A over the snow village, pauses at
+**Demo:** flip the switch; the sleigh glides house A→B→A over the snow village, pauses at
 each house, parks when switched off; theremin pitch sets the speed. The Christmas
 deliverable — needs the box present.
 **Teaches:** Moore FSMs, PWM, MOSFET drive, magnetics.
