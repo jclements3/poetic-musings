@@ -32,6 +32,8 @@ library
                    PM.Video.Font
                    PM.Video.FontData
                    PM.Video.TextConsole
+                   PM.Video.Overlay
+                   PM.Video.Tmds
                    PM.Video.Top
 
 -- `cabal exec -- clash -isrc PM.Video.Top --verilog` needs a clash
@@ -56,5 +58,21 @@ test-suite render-test
   type:           exitcode-stdio-1.0
   hs-source-dirs: test
   main-is:        RenderSpec.hs
+  ghc-options:    -O2
+  build-depends:  pm-video
+
+test-suite overlay-test
+  import:         opts
+  type:           exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is:        OverlaySpec.hs
+  ghc-options:    -O2
+  build-depends:  pm-video
+
+test-suite tmds-test
+  import:         opts
+  type:           exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is:        TmdsSpec.hs
   ghc-options:    -O2
   build-depends:  pm-video

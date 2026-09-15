@@ -18,13 +18,29 @@ common shared
 library
   import: shared
   hs-source-dirs: src
-  exposed-modules: PM.Net
+  exposed-modules: PM.Net, PM.NetRx, PM.Records
 
 test-suite net-test
   import: shared
   type: exitcode-stdio-1.0
   hs-source-dirs: test
   main-is: NetSpec.hs
+  build-depends: pm-net
+  ghc-options: -threaded
+
+test-suite netrx-test
+  import: shared
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: NetRxSpec.hs
+  build-depends: pm-net
+  ghc-options: -threaded
+
+test-suite records-test
+  import: shared
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: RecordsSpec.hs
   build-depends: pm-net
   ghc-options: -threaded
 

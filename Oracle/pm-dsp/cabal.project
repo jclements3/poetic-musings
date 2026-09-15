@@ -1,0 +1,3 @@
+packages: . ../../MAIDEN/theremin/clash
+constraints: clash-prelude ==1.8.5, clash-ghc ==1.8.5
+write-ghc-environment-files: always

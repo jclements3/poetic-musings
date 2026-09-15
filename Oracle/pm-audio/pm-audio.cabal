@@ -1,7 +1,7 @@
 cabal-version: 2.4
 name: pm-audio
 version: 0.1.0.0
-synopsis: PM audio path - sigma-delta DAC, NCO, mixer
+synopsis: PM audio path - sigma-delta DAC, NCO, mixer, I2S
 build-type: Simple
 
 common shared
@@ -18,13 +18,21 @@ common shared
 library
   import: shared
   hs-source-dirs: src
-  exposed-modules: PM.Audio
+  exposed-modules: PM.Audio, PM.I2s
 
 test-suite audio-test
   import: shared
   type: exitcode-stdio-1.0
   hs-source-dirs: test
   main-is: Spec.hs
+  build-depends: pm-audio
+  ghc-options: -threaded
+
+test-suite i2s-test
+  import: shared
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: I2sSpec.hs
   build-depends: pm-audio
   ghc-options: -threaded
 

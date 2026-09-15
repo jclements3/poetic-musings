@@ -1,7 +1,7 @@
 cabal-version: 2.4
-name: pm-synth
+name: pm-wspr
 version: 0.1.0.0
-synopsis: VL-1 synth core - voice, LFOs, auto-rhythm, 100-note sequencer
+synopsis: WSPR 162-symbol 4-FSK sequencer - blockRam symbol table, NCO phase-inc out, TX interlock
 build-type: Simple
 
 common shared
@@ -18,38 +18,14 @@ common shared
 library
   import: shared
   hs-source-dirs: src
-  exposed-modules: PM.Synth PM.Lfo PM.Rhythm PM.Seq
+  exposed-modules: PM.Wspr
 
-test-suite synth-test
+test-suite wspr-test
   import: shared
   type: exitcode-stdio-1.0
   hs-source-dirs: test
   main-is: Spec.hs
-  build-depends: pm-synth
-  ghc-options: -threaded
-
-test-suite lfo-test
-  import: shared
-  type: exitcode-stdio-1.0
-  hs-source-dirs: test
-  main-is: LfoSpec.hs
-  build-depends: pm-synth
-  ghc-options: -threaded
-
-test-suite rhythm-test
-  import: shared
-  type: exitcode-stdio-1.0
-  hs-source-dirs: test
-  main-is: RhythmSpec.hs
-  build-depends: pm-synth
-  ghc-options: -threaded
-
-test-suite seq-test
-  import: shared
-  type: exitcode-stdio-1.0
-  hs-source-dirs: test
-  main-is: SeqSpec.hs
-  build-depends: pm-synth
+  build-depends: pm-wspr
   ghc-options: -threaded
 
 executable clash

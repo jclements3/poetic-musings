@@ -10,6 +10,8 @@ and above the TMDS serializers.
 ```
 cabal test timing-test --test-show-details=direct
 cabal test render-test --test-show-details=direct
+cabal test overlay-test --test-show-details=direct
+cabal test tmds-test --test-show-details=direct
 cabal build exe:clash && cabal exec -- clash -isrc PM.Video.Top --verilog
 ```
 
@@ -20,6 +22,8 @@ cabal build exe:clash && cabal exec -- clash -isrc PM.Video.Top --verilog
 | `PM.Video.Timing` | Parameterized h/v counters, sync pulses (polarity per record), active-area strobe, line/frame strobes. Takes a `VideoTiming` record; knows nothing about 1920x480. |
 | `PM.Video.TextConsole` | 240x30 character buffer (one 7200x8 block RAM; CPU port write-only: `{row, col, char}`), cursor register with readback, and the char→glyph-row→pixel pipeline (2-cycle latency, syncs delayed to match). |
 | `PM.Video.Font` / `PM.Video.FontData` | 8x16 font ROM (2 KB, one block RAM). Classic IBM PC VGA ROM font, extracted by `tools/psf2hs.py` from Debian console-setup's `Uni2-VGA16.psf.gz`; bitmap glyphs are not copyrightable in the US (37 CFR 202.1(e)), treated as public domain. ASCII 0x20–0x7E populated. |
+| `PM.Video.Overlay` | 480x120 1-bpp overlay strip (7 KB, one 480x120-bit true-dual-port RAM, column-major) for the envelope/spectrum view. CPU ops: `OvColumn x height` (bar from the bottom, one write), `OvPlot x y bit` (2-cycle RMW), `OvClear` (480-cycle sweep, `ooBusy`); origin register places the strip; `ooOn` is 2 cycles after the timing sample, same as the console, to OR over its pixel. |
+| `PM.Video.Tmds` | DVI TMDS 8b/10b encoder (XOR/XNOR minimisation, running disparity, the four (vsync,hsync) control words) and a 10:1 LSB-first shift sequencer. The ECP5 ODDR serializer + LVCMOS33D pins are vendor-specific and left to the board Top as a black box. |
 | `PM.Video.Top` | `pm_video` synthesis top at the real timing: parallel RGB (8:8:8, green-phosphor fg per the LAYOUT V0 mock) + DE + syncs + cursor readback, in a ~66.7 MHz `PixelDom`. |
 
 ## The 0x4026 contract, and what V0 deliberately is not
