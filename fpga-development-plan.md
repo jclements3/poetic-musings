@@ -6,6 +6,8 @@ Build rule: root first, then spokes as hardware arrives. **O → P → T** (T is
 
 Milestones: Basic Plan Sep 2026 · Prototype Dec 2026 · Field Demo Feb 2027. Items marked ▲ must be pulled forward regardless of rank because December depends on them.
 
+What each row leaves behind is a set of measured Clash modules — `CLASH-LIBRARY-MAP.md` § Module list (✓ / ◐ / ○ by family); each directory's `DESIGN.md` carries the gate detail and names its module-list entries, and `Panel/ORDERS.md` / `Erand49/ORDERS.md` carry the purchases. One unified repo since 2026-09-15.
+
 ## Root
 
 | # | Proj | Difficulty | Cost | Ledger | Prereqs | Gate |
@@ -62,13 +64,13 @@ O third: the platform. Old F and D merged here — H2 Forth CPU (black-box VHDL 
 
 T after O: the Clash port already passes; what remains is bench work on the LC oscillators, which goes faster with O's display for tuning.
 
-P then E close out personal, per the handoff: P is the platform demo — the 3D-printed 49-key keyboard from the panel drawing, with Oracle as the brains behind its user interface. E consumes everything (ADC front end, DSP blocks, event link) and is the expensive one with no deadline.
+P then E close out the personal group: P is the root's body — the 3D-printed control surface per `Panel/DESIGN.md` (fabrication + printer in `Panel/ORDERS.md`), with Oracle as the brains behind it. E consumes everything (ADC front end, DSP blocks, event link) and is the expensive one with no deadline.
 
 Among the spokes, G goes first because trusted time unblocks U, Imaging and M — and closes I's free-running caveat. N before Imaging because Imaging needs the transport. The old standalone L (logic analyzer) is no longer a letter: its skills (SDRAM capture, async FIFO/CDC, trigger) get built as O bring-up tooling — Ethernet without capture on the bench is still a bad afternoon, so N's gate assumes that tooling exists.
 
 ## December path (pull-forward)
 
-C → I → O → G → N → single-station M. T, P, E, U, S, and Imaging are off the critical path and wait their turn.
+O → P (bench, no case) → I → G → N → Imaging + M snooker demo. C ships for Christmas regardless (standalone). T, E, U and S are off the critical path and wait their turn.
 
 ## PERT/CPM outcomes (carried forward)
 
@@ -79,7 +81,7 @@ C → I → O → G → N → single-station M. T, P, E, U, S, and Imaging are o
 
 ## Spend summary
 
-Personal: ~$1,700, of which $1,200 is the harp; Santa Glide parts are already ordered (sunk). U (ham) is on the personal ledger, cost TBD. Work ledger: ~$1,225 for three stations plus PHY, plus the GPSDO reference and the Imaging sensor (TBD after the Sep study). Ledgers never commingle; hardware bought personal can be re-bought on the work ledger when M needs its own copies.
+Personal: ~$1,700, of which $1,200 is the harp; Santa Glide parts are already ordered (sunk). U (ham) is on the personal ledger, cost TBD. Work ledger: ~$200 for the spoke hardware (OV9281 camera + mount, CDM324 radar + ADC, RMII PHY, u-blox GPS, AD9226 ADC) plus plus the GPSDO reference and the Imaging sensor (TBD after the Sep study). Ledgers never commingle; hardware bought personal can be re-bought on the work ledger when M needs its own copies.
 
 ## Legacy letter map (pre-merge → current)
 
@@ -88,9 +90,9 @@ Personal: ~$1,700, of which $1,200 is the harp; Santa Glide parts are already or
 | F Forth CPU | **O** Oracle (with D absorbed) |
 | D display | **O** Oracle |
 | A ADC front end | split: **E** harp front end · **S** SDR sampling |
-| L logic analyzer | no longer a letter — O bring-up tooling + M unit integration |
+| L logic analyzer | no longer a letter — O bring-up tooling |
 | G GPS/IRIG clock | split: **I** IRIG clock (personal) · **G** GPS discipline (work) |
 | C launcher/catcher (v2, ballistic) | **C** Santa Glide (v4, 8-coil sequenced glide) |
-| S snooker rig | **M** tabletop testbed |
+| S snooker rig | **M** Motion radar + **I** Imaging — the snooker table is now the I/M demo fixture |
 | H harp Erand49 | **E** Erand49 |
 | P, T, N, M | unchanged letters: P, T, N, M |
