@@ -111,8 +111,8 @@ table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;
 
 <h2>What the box demonstrates</h2>
 <table>
-<tr><th>As-is</th><th>With one plug-in</th><th>Never (needs the IRAD system)</th></tr>
-<tr><td>Forth console, display, ADC path, voice/sequencer, theremin, harp front end, key matrix, SD games</td><td>Doppler spectrum (dadamachines board), GPS/IRIG time (PPS module), camera (DVP + SDRAM)</td><td>Three-station fusion, truth-logger validation, cross-station time sync, Ch.10 at field rate, real aircraft</td></tr>
+<tr><th>As-is</th><th>With one plug-in</th><th>Out of scope</th></tr>
+<tr><td>Forth console, display, ADC path, voice/sequencer, theremin, harp front end, key matrix, SD games</td><td>GPS/IRIG time (PPS module), snooker ball tracking (overhead OV9281 camera + 24 GHz Doppler), SDR on the theremin antennas, RMII network</td><td>Three-station fusion, truth-logger validation, cross-station time sync, Ch.10 at field rate, real aircraft</td></tr>
 </table>
 
 <h2>Component overlap</h2>
@@ -181,7 +181,7 @@ table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;
 <tr><td>13× ADS131M08 + carrier PCB (harp)</td><td>$180</td><td>P</td></tr>
 <tr><td>Keys/panel: 70× MX2A Silent Red + Bourns pots + diodes, PETG/ASA prints</td><td>~$130</td><td>P</td></tr>
 <tr><td>Harp strings, rib CNC, 98 IR pairs</td><td>~$1,000</td><td>P</td></tr>
-<tr><td>Station boards ×3, PHY, GPS, radar, cameras</td><td>~$1,225</td><td>IRAD</td></tr>
+<tr><td>Spoke hardware: OV9281 camera + mount, CDM324 radar + ADC, RMII PHY, u-blox GPS, AD9226 ADC</td><td>~$200 + camera mount TBD</td><td>IRAD</td></tr>
 </table>
 <p class="sub">Personal total ≈ $1,450. FPGA-adjacent share ≈ $240. Ledgers never commingle; IRAD plugs modules into the box, it does not buy the box.</p>
 
@@ -194,10 +194,10 @@ table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;
 <tr><td>T</td><td>LC oscillator, antenna sense, freq counter, pitch quantizer, CIC/FIR, NCO, envelope, vibrato, ΣΔ DAC</td></tr>
 <tr><td>I</td><td>IRIG-B generator/decoder, DC-level + modulated out; free-running crystal, disciplined by G; time shown on Oracle</td></tr>
 <tr><td>C</td><td>Santa Glide: 8-coil linear reluctance glide, steel slug in 10 ft silicone tube over the snow village; Alchitry Cu, Moore FSM, PWM Hold/Run, IRLZ44N + 1N5408 flyback, show switch</td></tr>
-<tr><td>M</td><td>Motion radar: Doppler front end on the root — CIC, FFT, CFAR, velocity records, IRIG-stamped; the 3-station fusion program is out of scope</td></tr>
+<tr><td>M</td><td>Motion radar — snooker table, part 2: CDM324-class 24 GHz Doppler aimed down the table; CIC → FFT → CFAR → velocity records, IRIG-stamped, on V0 and over N. Gate: cue-ball speed within 5 % of the camera track, timestamps aligned. Demo: one shot — position from the camera, speed from the radar, one screen. ~$60</td></tr>
 <tr><td>U</td><td>UHF beacon: GPS-disciplined CW/WSPR, ham — personal ledger</td></tr>
 <tr><td>S</td><td>SDR: direct-sampling HF on theremin antennas, AD9226-class ADC, DDC (CIC/FIR), waterfall on Oracle</td></tr>
-<tr><td>I</td><td>Imaging: global-shutter camera capture, external trigger, IRIG timestamp, centroid</td></tr>
+<tr><td>I</td><td>Imaging — snooker table, part 1: overhead OV9281 global-shutter camera (640×400, 120–210 fps), external trigger, IRIG-stamped centroids in gateware over N. Gate: one rolled ball gives a gap-free track at 200 fps. Demo: ball paths drawn live on V0. Mono only, no colour ID</td></tr>
 <tr><td>N</td><td>Network: RMII PHY, MAC, UDP, Ch.10 transport</td></tr>
 <tr><td>G</td><td>GPS: PPS DPLL, 10 MHz, station clock copies; disciplines the IRIG clock</td></tr>
 </table>
