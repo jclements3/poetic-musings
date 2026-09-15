@@ -15,7 +15,11 @@ components Panel itself exercises: `PM.Matrix`, `PM.Zones`, `PM.RegFile`, `PM.Sp
 (slider ADC), the `PM.Synth`/`PM.Audio` set in VL-1 synth mode, and the `pm-video`
 console. The six S3 zones are P·O·E·T·I·C; the MUSING spokes (M, U, S, I, N, G) are
 entered from the O-mode script menu (`../LAYOUT.html` mode table), so the slider
-never needs more than six detents.
+never needs more than six detents. In `../CLASH-LIBRARY-MAP.md` § Module list, P
+contributes the ✓ matrix scanner, slider zone decoder, register file, ΣΔ DAC, mixer,
+note table, pulse oscillator and ADSSR, and owns the ○ Audio entries — LFOs, rhythm
+ROM + percussion, event sequencer — and the ○ overlay framebuffer (Control and
+display). Fabrication and the printer order: § Fabrication below and `ORDERS.md`.
 
 Phase 5 of PLAN.md: build the 3D-printed 49-key panel and case, mount the display and
 sliders, wire the matrix, and bring the control surface up against Oracle so every
