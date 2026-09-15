@@ -56,6 +56,7 @@ Execution plan with the demo that closes each phase: `PLAN.md`.
 ## Root files
 
 - `PROGRAM.md` — this index
+- `STATUS.md` — one-page state of the program: phases, library counts, orders, blockers; updated each session
 - `ORDERS.md` — master purchase tracker: every buy, its status, and the P/W/H ledger split; detail in `Oracle/`, `Panel/`, `Erand49/` ORDERS files
 - `CLASH-LIBRARY-MAP.md` — every hardware part mapped to the Clash component it demonstrates, plus the **module list** by family with status (≈35 ✓ · 5 ◐ · 15 ○)
 - `LIBRARY.md` — shared-block inventory: what exists (measured VHDL/Clash), where, and which spokes consume it
