@@ -18,6 +18,11 @@ of stock; wait rather than downgrade.**
 | Radiona direct | https://radiona.org/ulx3s/ | EU shipping; slower to the US |
 | Tindie / eBay (used) | — | only if the photos show the 85F marking and a v3.1.x board |
 
+**Stock check 2026-09-15 (Mouser):** 0 on hand, backorderable; 105 expected
+**2026-10-02**, 85 more 2027-01-29; 16-week factory lead beyond that. **Action:
+backorder 1 now** to sit in the October batch — ahead of the December Prototype
+milestone; the next window is late January. Spare board later, if at all.
+
 | Option | Choice | Why |
 |---|---|---|
 | FPGA | **LFE5U-85F** (not 12F/25F/45F) | margined worst case ≈ 48k LUT / 285 KB / 55 DSP (`../fpga-resource-swag.md`); 85F is ~2.5× that. 45F is a gamble on LUT/BRAM. |
