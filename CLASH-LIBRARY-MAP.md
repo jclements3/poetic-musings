@@ -87,15 +87,28 @@ Legend — status: ✓ measured/sim-verified Clash · ◐ measured VHDL, Clash p
 | HDMI connector | TMDS encoder + DDR serializer | TMDS block | ○ |
 | Envelope/spectrum strip | Overlay framebuffer fed by FFT tap | Overlay + `Theremin.Fft` | ○ overlay · ✓ FFT |
 
-## 9. Network, Imaging, Radar, Coil spokes (letters N, I, M, C)
+## 9. Network and Coil spokes (letters N, C)
 
 | Hardware part | Clash capability demonstrated | Library component | Status |
 |---|---|---|---|
 | Santa Glide sleigh tube (Alchitry Cu, 8 coils) | 250 kbaud speed frames, dead-man, 250 ms watchdog, coil pacer FSM | `PM.SleighSpeed` + `Coil/SantaGlide/firmware` Rev C (Cu 59.1 MHz PASS) | ✓ |
 | RMII PHY / RJ45 | 100BASE-TX dibit stream, CRC32 FCS, IPv4 checksum, 64-byte pad, IFG | `PM.Net` (`Oracle/pm-net`) TX ✓ · MAC RX ○ | ✓ / ○ |
 | Ch.10 recorder link (N) | Tagged-record UART framing, TMATS payloads | `MAIDEN/firmware/recorder/PROTOCOL.md` | ◐ (Python + wire spec) |
-| OV9281 global-shutter camera + strobe line (Imaging) | DVP capture, external trigger, centroid | DVP + centroid | ○ |
-| Doppler radar front end (M) | CIC → FFT → CFAR → velocity records | `MAIDEN/firmware/doppler/doppler_core.vhd` | ◐ |
+
+## 10. Snooker table: Imaging + Motion radar (letters I, M)
+
+One demo, two spokes: the overhead camera says where every ball went, the radar says
+how fast the cue ball left, IRIG aligns them on one screen (PLAN.md Phases 11–12).
+
+| Hardware part | Clash capability demonstrated | Library component | Status |
+|---|---|---|---|
+| Overhead OV9281 global-shutter camera, 640×400 @ 120–210 fps | DVP parallel capture, line/frame sync, external trigger | DVP capture | ○ |
+| Camera strobe line | Async trigger → 2FF → (rtc, seq) FIFO with sticky overflow; IRIG-stamped frame | `strobe_latch.vhd` (MAIDEN timebase) | ◐ |
+| Balls on green baize (~9 px per 52.5 mm ball) | Threshold + run-length blob, centroid accumulate, one record per ball per frame | centroid | ○ |
+| Track stream to laptop | Centroid records in Ch.10 framing over UDP; gate = gap-free track at 200 fps | `PM.Net` + recorder protocol | ✓ TX / ◐ framing |
+| CDM324-class 24 GHz Doppler module aimed down the table | SPI ADC front end, I/Q sample path | `PM.Spi`, doppler_top ADC front end | ✓ / ◐ |
+| Cue-ball departure (~1.3 kHz Doppler at 8 m/s) | CIC decimate → FFT512 → CA-CFAR → velocity record; radial-only, no ball identity | `Maiden.Cic`, `Theremin.Fft`, `Maiden.Cfar`, `doppler_core.vhd` | ✓ blocks · ◐ chain |
+| V0 one-screen view | Ball paths + velocity trace on the overlay strip, timestamps aligned by IRIG; gate = radar speed within 5 % of camera speed | overlay FB + `Theremin.Fft` tap | ○ overlay |
 
 ## Library roll-up
 
