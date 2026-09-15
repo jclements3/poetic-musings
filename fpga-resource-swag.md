@@ -26,8 +26,8 @@ beyond iCE40 I/O; ECP5 ODDR handles it. So the box needs an ECP5 regardless.
 | IRIG-B gen/decode + GPS PPS DPLL + 10 MHz | 1.5k | 1 KB | 0 | counters |
 | SDR DDC (NCO, I/Q mix, CIC, FIR comp) @ AD9226 65 MSPS | 4k | 16 KB | 12 | the DSP-hungry one; FIR time-share limited at 65 MHz |
 | Network (RMII MAC, UDP, Ch.10 framing) | 3k | 16 KB | 0 | plus SDRAM for elasticity |
-| Imaging (DVP capture, trigger, centroid) | 2k | 8 KB line bufs | 2 | frame store in SDRAM, not BRAM |
-| MAIDEN station (I/Q Doppler, CFAR, Ch.10/TMATS mux) | 10k | 32 KB | 20 | reuses FFT/CORDIC/CFAR library blocks |
+| Imaging (DVP capture, trigger, run-length blob labeller, ≤32 per-ball centroids) | 3.5k | 12 KB | 2 | snooker: label line buffer + equivalence table + 32 accumulator sets (Σxw, Σyw, Σw, bbox, count); 2 pixel-rate multiplies; end-of-frame sequential divides; frame store in SDRAM, not BRAM |
+| M Motion radar (SPI ADC front end, CIC, CFAR, velocity records) | 4k | 8 KB | 6 | snooker cue-ball speed; FFT is the shared instance above; Ch.10 record mux lives in Network |
 | Glue: SPI/SD, I²S/TDM, event UART, debounce, PLL/reset, capture/trigger tooling | 3k | 16 KB | 0 | |
 
 ## Scenarios
@@ -36,7 +36,7 @@ beyond iCE40 I/O; ECP5 ODDR handles it. So the box needs an ECP5 regardless.
 |---|---|---|---|
 | Biggest single mode (Panel: H2 + video + synth + theremin voice + harp playback + FFT + keyer) | ~22k | ~150 KB | ~25 |
 | "Everything resident" one-bitstream demo (add SDR + net + IRIG) | ~32k | ~190 KB | ~37 |
-| MAIDEN station bitstream (H2 + video + net + imaging + Doppler + IRIG) | ~25k | ~110 KB | ~25 |
+| Snooker mode bitstream (H2 + video + net + imaging + Motion radar + FFT + IRIG) | ~21k | ~95 KB | ~15 |
 | + 50% margin for beginner-Clash inference inefficiency and routing at speed | **~48k** | **~285 KB** | **~55** |
 
 Clock domains to plan for: 100 MHz system, ~74 MHz pixel, 65 MHz ADC, 25/50 MHz RMII,
