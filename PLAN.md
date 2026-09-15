@@ -150,20 +150,31 @@ waterfall on Oracle; decode a broadcast or WSPR signal.
 
 **Demo:** the theremin's antennas become a radio receiver — same box, new mode.
 
-## Phase 11 — I · Imaging 📷
+## Phase 11 — I · Imaging 📷 (snooker table, part 1: where the balls are)
 
-Global-shutter sensor per the Sep study; external trigger; IRIG timestamp; centroid
-extraction; stream over N.
+Global-shutter OV9281 (640×400, 120–210 fps) mounted overhead on the snooker table;
+external trigger; IRIG timestamp; centroid extraction in gateware; stream over N.
+A 52.5 mm ball is ~9 px across the full 12 ft table — enough for a centroid; at
+200 fps an 8 m/s break moves under one ball diameter per frame, so tracks stay
+continuous. Colour ID is out of scope (mono sensor); cue/player occlusion is expected.
 
-**Demo:** wave something in front of the camera, watch timestamped centroids stream.
+**Gate:** roll one ball; a continuous, IRIG-stamped centroid track arrives over N with
+no frame gaps at 200 fps.
+**Demo:** roll balls on the table; V0 draws each ball's path live.
 
-## Phase 12 — M · Motion radar 📡
+## Phase 12 — M · Motion radar 📡 (snooker table, part 2: how fast the cue ball leaves)
 
-Doppler front end (SPI ADC) plugged into the root; CIC → FFT → CFAR → velocity
-records, IRIG-stamped, plotted on V0, streamed over N. Start with the measured
-`MAIDEN/firmware/doppler` VHDL as a black box, port to Clash, re-measure on ECP5.
+24 GHz Doppler front end (CDM324-class, SPI ADC) aimed down the table; CIC → FFT → CFAR
+→ velocity records, IRIG-stamped, plotted on V0, streamed over N. Start with the
+measured `MAIDEN/firmware/doppler` VHDL as a black box, port to Clash, re-measure on
+ECP5. Radial speed only: a ball crossing the beam reads near zero, and multiple moving
+balls give speeds with no ball identity.
 
-**Demo:** walk toward the box; the velocity trace on V0 follows you.
+**Gate:** strike the cue ball straight at the radar; the velocity trace on V0 matches the
+camera-derived speed from Phase 11 within 5 %, timestamps aligned by IRIG.
+**Demo:** one shot on the snooker table — camera says where every ball went, radar says
+how fast the cue ball left, both on one time-aligned screen. This is the whole MUSING
+half exercised on one shot.
 **Teaches:** the full detection chain on one screen — the same blocks E used for plucks.
 
 ---
