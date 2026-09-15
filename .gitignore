@@ -10,11 +10,11 @@ IRIG/clash/.ghc.environment.*
 IRIG/clash/src/*.hi
 IRIG/clash/src/*.o
 
-# Clash build artifacts (SantaGlide firmware)
-Coil/SantaGlide/firmware/verilog/
-Coil/SantaGlide/firmware/*.hi
-Coil/SantaGlide/firmware/*.o
-Coil/SantaGlide/firmware/build/
+# Clash build artifacts (SleighGlide firmware)
+Coil/SleighGlide/firmware/verilog/
+Coil/SleighGlide/firmware/*.hi
+Coil/SleighGlide/firmware/*.o
+Coil/SleighGlide/firmware/build/
 
 # Unified repo (2026-09-15): MAIDEN/ and Theremin/ are plain directories now.
 # Business / finance material never goes in this public repo.

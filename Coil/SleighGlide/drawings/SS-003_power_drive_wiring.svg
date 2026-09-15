@@ -15,7 +15,7 @@
     </g>
   </defs>
 
-  <text x="40" y="45" font-size="15" font-weight="bold">POWER &amp; DRIVE WIRING &#8212; 8-CHANNEL COIL DRIVER (SANTA GLIDE)</text>
+  <text x="40" y="45" font-size="15" font-weight="bold">POWER &amp; DRIVE WIRING &#8212; 8-CHANNEL COIL DRIVER (SLEIGH GLIDE)</text>
   <text x="40" y="62" font-size="10.5">IEC 60617 SYMBOLS. CHANNELS 1&#8211;6 OMITTED FOR CLARITY &#8212; IDENTICAL TO CH0 / CH7 (TYP 8 PLACES).</text>
 
   <!-- ================= ALCHITRY CU ================= -->
@@ -145,7 +145,7 @@
     <line x1="770" y1="480" x2="770" y2="565"/>
   </g>
   <text x="463" y="494" font-size="9">TITLE</text>
-  <text x="463" y="529" font-size="13" font-weight="bold">POWER &amp; DRIVE WIRING &#8212; SANTA GLIDE</text>
+  <text x="463" y="529" font-size="13" font-weight="bold">POWER &amp; DRIVE WIRING &#8212; SLEIGH GLIDE</text>
   <text x="658" y="494" font-size="9">DRAWING NO.</text>
   <text x="736" y="497" font-size="12" font-weight="bold">SS-003</text>
   <text x="778" y="494" font-size="9">SHEET</text>

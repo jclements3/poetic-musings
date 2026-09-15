@@ -19,7 +19,7 @@ board is on backorder, so nothing runs on silicon until October.
 |---|---|---|---|---|
 | 0 Foundations | — | **done** 08-31 | both firmwares compile, eForth boots in sim | — |
 | 0b Repo hygiene | — | **done** 09-15 | unified repo, DESIGN/ORDERS per directory | — |
-| 1 Santa Glide | C | parts in hand; **Rev D: FSM moves into the box** (Cu retired) | slug glides A→B→A | wind coils, build driver channels now; `PM.Sleigh` when the board lands |
+| 1 Sleigh Glide | C | parts in hand; **Rev D: FSM moves into the box** (Cu retired) | slug glides A→B→A | wind coils, build driver channels now; `PM.Sleigh` when the board lands |
 | 2 IRIG clock | I | **sim-verified** | spec-valid IRIG-B on a scope | scope check once R1 lands |
 | 3 Oracle | O | ladder pre-proven in sim | `ok` on glass, SD loads, keyer decodes | wire real pins when R1 lands |
 | 4 Theremin | T | Clash port measured, green | pitch/volume from antennas | bench the LC oscillators |
@@ -54,14 +54,14 @@ Fft512 4,620 LUT4, IirNStage 175 LUT4, text console ~200 LUT4.
 | Status | Items |
 |---|---|
 | backorder | ULX3S ECP5-85F — Mouser batch **2026-10-02** |
-| received | Santa Glide parts; theremin oscillator parts |
+| received | Sleigh Glide parts; theremin oscillator parts |
 | order now | Bambu Lab P1S + filament; bore gauge |
 | next | TFT kit, switches/pots (after print coupon), gate-1 harp kit (after board) |
 
 ## Blockers and risks
 
 - **Board backorder** to 2026-10-02: no silicon measurements before then. Mitigation:
-  printer, coupon, oscillator bench and Santa Glide bring-up all proceed without it.
+  printer, coupon, oscillator bench and Sleigh Glide bring-up all proceed without it.
 - **Sep Basic Plan inputs due:** Imaging FOV/sensor study (now with the snooker table
   as the fixed target) and the GPSDO metrology pick.
 - **Decided 09-15: one FPGA board (ULX3S).** Cu retired; no harp-side board.
@@ -71,7 +71,7 @@ Fft512 4,620 LUT4, IirNStage 175 LUT4, text console ~200 LUT4.
 
 ## Recent changes
 
-- 09-15: one-FPGA rule (ULX3S only; Santa Glide Rev D in the box, Cu retired; no harp board);
+- 09-15: one-FPGA rule (ULX3S only; Sleigh Glide Rev D in the box, Cu retired; no harp board);
   reorientation to library + root/spokes; Piano → Panel; MAIDEN capstone
   dropped, M = Motion radar; snooker tracking as the I/M demo; DESIGN.md in every
   directory; ORDERS files; repo unified and pushed to github.com/jclements3/poetic-musings.

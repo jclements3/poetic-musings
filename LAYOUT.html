@@ -14,7 +14,7 @@ table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;
 <h1>PM CONTROLLER — FINAL LAYOUT</h1>
 <p class="sub">One portable controller: 3D-printed 49-key panel (~504 × 150 mm face, 16 mm key pitch), ULX3S ECP5-85F inside,
 Oracle as the brains. Boots to a mode menu on the bar TFT; every demonstration reachable in under a
-minute, no laptop. Santa Glide travels alongside (tube + driver board, gate ribbon to the box); the Erand49 harp is a separate
+minute, no laptop. Sleigh Glide travels alongside (tube + driver board, gate ribbon to the box); the Erand49 harp is a separate
 instrument that plugs into the rear port.</p>
 <p class="sub"><b>Root + spokes (PROGRAM.md):</b> this box is the <b>root</b> of the Clash library — Panel is the body,
 Oracle the brains. Each spoke adds one piece of hardware to it: antennas (T, U), AD9226 + relay (S), GPS (G),
@@ -269,7 +269,7 @@ underside, rear-ported. Silk legends shown are VL-1 mode; final silk gets a mode
 <tr><td>u-blox GPS + PPS</td><td>rear, at SMA</td><td>disciplines IRIG clock (G→I)</td></tr>
 <tr><td>RMII PHY PMOD</td><td>rear, at RJ45</td><td>N: UDP/Ch.10</td></tr>
 <tr><td>UHF beacon PA (U)</td><td>rear, shielded corner</td><td>GPS-disciplined CW/WSPR → TX SMA</td></tr>
-<tr><td>Sleigh gates (C)</td><td>rear SLEIGH 10-pin, TIME/NET group</td><td>8 gate lines (3.3 V, 100 Ω series) + show-switch sense + ground → MOSFET driver board at the tube; ribbon out = pulldowns park Santa; 24 V stays at the tube</td></tr>
+<tr><td>Sleigh gates (C)</td><td>rear SLEIGH 10-pin, TIME/NET group</td><td>8 gate lines (3.3 V, 100 Ω series) + show-switch sense + ground → MOSFET driver board at the tube; ribbon out = pulldowns park the sleigh; 24 V stays at the tube</td></tr>
 <tr><td>Snooker camera (I) — OV9281 on an overhead mount</td><td>external; DVP ribbon + strobe/trigger line to rear</td><td>DVP capture + <code>strobe_latch</code> IRIG stamp; per-ball centroids over N</td></tr>
 <tr><td>Snooker Doppler module (M) — CDM324-class 24 GHz + SPI ADC</td><td>external, aimed down the table; header at rear</td><td>CIC → FFT → CFAR → velocity records on V0 and over N</td></tr>
 </table>
@@ -277,7 +277,7 @@ underside, rear-ported. Silk legends shown are VL-1 mode; final silk gets a mode
 
 <h2>Power</h2>
 <p class="sub">One rule: <b>nothing above 5 V inside the PM box, ever.</b> Mains stays in a sealed wall
-brick; Santa Glide's 24 V coil supply is a different rig and never travels in this case.</p>
+brick; Sleigh Glide's 24 V coil supply is a different rig and never travels in this case.</p>
 <table>
 <tr><th>Element</th><th>Design</th></tr>
 <tr><td class="k">Input</td><td>5 V via rear barrel jack (wall brick) <i>or</i> rear USB-C or the internal battery-bay bank — ideal-diode OR inside, so either works and swapping is safe live. Master rocker (PWR) cuts everything.</td></tr>
@@ -350,10 +350,10 @@ keyboard instead.</p>
 <table>
 <tr><th>Piece</th><th>Carried</th><th>Hookup</th></tr>
 <tr><td class="k">PM box</td><td>the device</td><td>5 V brick or USB power bank</td></tr>
-<tr><td>Santa Glide</td><td>own case: driver board + coil tube, rolled, 10-wire ribbon</td><td>plugs into the rear SLEIGH connector; 24 V supply stays home unless the village travels</td></tr>
+<tr><td>Sleigh Glide</td><td>own case: driver board + coil tube, rolled, 10-wire ribbon</td><td>plugs into the rear SLEIGH connector; 24 V supply stays home unless the village travels</td></tr>
 <tr><td>Erand49 harp</td><td>rigid column case, strings stay tensioned, sensors potted in the neck rail</td><td>one locking cable to HARP port; CAL re-baselines sensors on site</td></tr>
 <tr><td>Antenna rods</td><td>unscrew, clip inside lid</td><td>binding posts</td></tr>
-<tr><td>Snooker kit (I·M)</td><td>camera + lens + clamp mount, Doppler module, two cables — small pouch</td><td>DVP ribbon + strobe TRS, SPI header; the table itself stays home (Santa Glide's village sits on it)</td></tr>
+<tr><td>Snooker kit (I·M)</td><td>camera + lens + clamp mount, Doppler module, two cables — small pouch</td><td>DVP ribbon + strobe TRS, SPI header; the table itself stays home (Sleigh Glide's village sits on it)</td></tr>
 <tr><td>Cue card (paper)</td><td>lid pocket</td><td>per-mode checklist: what to say, what to show, how to reset</td></tr>
 <tr><td>Spare demo microSD</td><td>lid pocket</td><td>known-good clone — swap, not debug, mid-demo</td></tr>
 <tr><td>Spare battery bank</td><td>lid pocket</td><td>charged; this is the "battery swap"</td></tr>

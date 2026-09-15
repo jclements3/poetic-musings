@@ -1,4 +1,4 @@
-# HANDOFF — Santa Glide (FPGA-controlled linear reluctance motor, snow village show)
+# HANDOFF — Sleigh Glide (FPGA-controlled linear reluctance motor, snow village show)
 
 **Owner:** JC (James Clements), Laceys Spring, AL
 **Handoff date:** 2026-08-31
@@ -9,7 +9,7 @@
 
 ## 1. What this project is
 
-A holiday animatronic for the grandkids. A small steel slug with Santa's sleigh
+A holiday animatronic for the grandkids. A small steel slug with the sleigh
 painted on it glides back and forth inside a clear 1/8" ID silicone tube strung
 in an arc over a snow village on a 5×10 ft American snooker table. The slug is
 moved by **8 coils wound around the tube**, energized in sequence by an
@@ -17,21 +17,21 @@ moved by **8 coils wound around the tube**, energized in sequence by an
 (Haskell HDL). It is an open-loop, 8-pole linear reluctance motor — a stepper
 motor unrolled flat. Velocity is set entirely by the coil-stepping schedule.
 
-The magic: nothing touches Santa, no wires, no visible mechanism. He floats
+The magic: nothing touches the sleigh, no wires, no visible mechanism. He floats
 from house A to house B, pauses, floats back, forever, while a show switch is on.
 
 ## 2. Design history (so you don't re-litigate settled decisions)
 
 | Rev | Idea | Why it was dropped |
 |---|---|---|
-| v1 | Servo sweeping Santa on a wire | JC wanted a coil launcher |
+| v1 | Servo sweeping the sleigh on a wire | JC wanted a coil launcher |
 | v2 | Single coil launcher + push button | Needed to return to A |
 | v3 | Two coils (launch/catch at each house) | Ballistic, hard to tune, not "magical" |
 | **v4 (current)** | **8-coil sequenced glide, slug inside tube** | — |
 
 Settled decisions — don't reopen unless JC asks:
 - Slug is **soft mild steel, not a magnet** (single MOSFET per coil, attraction only).
-- Santa is **painted directly on the slug**; nothing hangs from it.
+- the sleigh is **painted directly on the slug**; nothing hangs from it.
 - Power is a **bench supply (NANKADF 30V/10A)** for development, not AA batteries.
   A fixed 24 V brick may replace it for the deployed show later.
 - Coil wire is **24 AWG** (JC bought this instead of 28 AWG — it's fine, spec was updated).
@@ -50,7 +50,7 @@ Settled decisions — don't reopen unless JC asks:
 
 Open all SVGs in a browser. They're the spec; the prose in this file is the commentary.
 
-## 4. Firmware (firmware/SantaGlide.hs) — Rev B
+## 4. Firmware (firmware/SleighGlide.hs) — Rev B
 
 - Clash, target `System` domain = 100 MHz (Alchitry Cu).
 - `controller = moore next output initSt` — output depends on state only.
@@ -60,12 +60,12 @@ Open all SVGs in a browser. They're the spec; the prose in this file is the comm
   **Never drive a coil 100 % continuous** — coils are ~0.4 Ω, that's a 50 A short at 24 V.
 - Velocity profile = `dwellMs :: Index 8 -> Unsigned 32` (400/250/150/100/100/150/250/400 ms, symmetric).
 - Show switch is debounced (10 ms) and registered into `paused`; ¬showOn freezes
-  timers and drops the active coil to `Hold` so Santa parks in place.
+  timers and drops the active coil to `Hold` so the sleigh parks in place.
 - `topEntity` ports: `clk rst en show_on` in, `gates[7:0]` out. `gates[0]` = station C0 nearest house A.
 
 **Not yet done:** it has never been compiled. Expect small type errors
 (`RecordWildCards` pragma may be needed for `St{..}`, `boolToBit` import, etc.).
-First task on desktop: `clash --verilog SantaGlide.hs` and fix whatever falls out.
+First task on desktop: `clash --verilog SleighGlide.hs` and fix whatever falls out.
 
 ## 5. Hardware inventory
 

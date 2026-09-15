@@ -7,7 +7,7 @@ decision, not an owned asset. Numbers are SWAG-grade: ±50% on LUTs, better on B
 allows.
 
 Owned today: Alchitry Cu (iCE40 HX8K — 7.7k LUT, 32× 4Kb BRAM, no DSP) and the
-Doppler UP5K board. The HX8K is spoken for (Santa Glide) and **cannot drive the V0
+Doppler UP5K board. The HX8K is spoken for (Sleigh Glide) and **cannot drive the V0
 display anyway**: 1920×480@60 needs a ~74 MHz pixel clock → ~370 Mbps TMDS DDR lanes,
 beyond iCE40 I/O; ECP5 ODDR handles it. So the box needs an ECP5 regardless.
 
@@ -47,7 +47,7 @@ audio 96 kHz — CDC/async-FIFO library blocks are load-bearing, not optional.
 
 | Part | LUT | BRAM | DSP | Verdict |
 |---|---|---|---|---|
-| iCE40 HX8K (owned) | 7.7k | 16 KB | 0 | retired to bench spare 2026-09-15 (Santa Glide moved into the box); can't do V0 video. |
+| iCE40 HX8K (owned) | 7.7k | 16 KB | 0 | retired to bench spare 2026-09-15 (Sleigh Glide moved into the box); can't do V0 video. |
 | ECP5-25F | 24k | 126 KB | 28 | Fits nothing beyond the single Panel mode, no margin. No. |
 | ECP5-45F | 44k | 243 KB | 72 | Fits per-mode bitstreams with care; "everything resident" + margin is tight on LUT/BRAM. The gamble option, saves ~$60–80. |
 | **ECP5-85F (ULX3S)** | **84k** | **468 KB** | **156** | ~2.5× the margined worst case. Room to write naive Clash first and optimize never. **Re-order this.** |

@@ -1,8 +1,8 @@
--- PM.SleighSpeed — the theremin drives Santa's sleigh (Coil letter, SS-005).
+-- PM.SleighSpeed — the theremin drives the sleigh (Coil letter, SS-005).
 --
 -- Pitch raises/lowers the sleigh's speed; killing the volume stops it. The
 -- volume antenna is thereby a DEAD-MAN switch for the coil driver: hand off
--- the volume antenna => speed 0 => the Cu parks Santa at Hold duty.
+-- the volume antenna => speed 0 => the Cu parks the sleigh at Hold duty.
 --
 --   pitch, vol : numeric antenna values from the theremin DSP
 --                (Theremin/SensorTop; higher pitch value = higher tone)

@@ -7,7 +7,7 @@
     </marker>
   </defs>
 
-  <text x="40" y="45" font-size="15" font-weight="bold">STATE MACHINE &#8212; SANTA GLIDE CONTROLLER (8-COIL LINEAR ASSEMBLY)</text>
+  <text x="40" y="45" font-size="15" font-weight="bold">STATE MACHINE &#8212; SLEIGH GLIDE CONTROLLER (8-COIL LINEAR ASSEMBLY)</text>
   <text x="40" y="62" font-size="10.5">UML STATE NOTATION. STATE = (phase, i, t, rest). i = ACTIVE STATION C0..C7 (SS-002). TRANSITION LABEL: guard / action.</text>
 
   <!-- dwell table -->
@@ -98,7 +98,7 @@
   <rect x="60" y="380" width="230" height="60" rx="4" fill="none" stroke="#000" stroke-width="1.2" stroke-dasharray="6 3"/>
   <text x="68" y="396" font-size="9.5" font-weight="bold">ALL STATES  [&#172;showOn]</text>
   <text x="68" y="410" font-size="9.5">timers t, rest FROZEN</text>
-  <text x="68" y="424" font-size="9.5">coil[i] := HOLD (Santa parks in place)</text>
+  <text x="68" y="424" font-size="9.5">coil[i] := HOLD (the sleigh parks in place)</text>
   <text x="68" y="437" font-size="9.5">resumes exactly where stopped</text>
 
   <!-- ======= NOTES ======= -->
@@ -107,7 +107,7 @@
     <text x="35" y="513">1.  OUTPUT gates[0..7] IS ONE-HOT ON i, PWM-MODULATED: RUN &#8776; 10&#8211;25 % DUTY, HOLD &#8776; 5 % DUTY.</text>
     <text x="50" y="527">24 AWG COILS &#8776; 0.4 &#937; AT 24 V &#8212; NEVER 100 % CONTINUOUS. BENCH SUPPLY CC LIMIT SET BEFORE TEST.</text>
     <text x="35" y="541">2.  dwell(i) IS THE VELOCITY PROFILE: SYMMETRIC, SLOW AT HOUSES, FAST MID-ARC. EDIT TABLE ONLY TO RETUNE.</text>
-    <text x="35" y="555">3.  100 MHz CLOCK: 1 ms = 100 000 TICKS. rest = 2.5 s PAUSE AT EACH HOUSE. CODE: SantaGlide.hs (mealy step).</text>
+    <text x="35" y="555">3.  100 MHz CLOCK: 1 ms = 100 000 TICKS. rest = 2.5 s PAUSE AT EACH HOUSE. CODE: SleighGlide.hs (mealy step).</text>
   </g>
 
   <!-- ======= TITLE BLOCK ======= -->
@@ -119,7 +119,7 @@
     <line x1="770" y1="480" x2="770" y2="565"/>
   </g>
   <text x="463" y="494" font-size="9">TITLE</text>
-  <text x="463" y="529" font-size="13" font-weight="bold">STATE MACHINE &#8212; SANTA GLIDE</text>
+  <text x="463" y="529" font-size="13" font-weight="bold">STATE MACHINE &#8212; SLEIGH GLIDE</text>
   <text x="658" y="494" font-size="9">DRAWING NO.</text>
   <text x="736" y="497" font-size="12" font-weight="bold">SS-004</text>
   <text x="778" y="494" font-size="9">SHEET</text>

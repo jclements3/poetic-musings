@@ -1,4 +1,4 @@
-# santa_glide.pcf — Alchitry Cu (Lattice iCE40 HX8K, CB132 package)
+# sleigh_glide.pcf — Alchitry Cu (Lattice iCE40 HX8K, CB132 package)
 #
 # FPGA ball names verified against the Alchitry Labs V2 board definition
 # (hardware/pinout/CuPin.kt, github.com/alchitry/Alchitry-Labs-V2).
@@ -32,5 +32,5 @@ set_io gates[7] D1    # Br A12 -> Q7
 # Theremin speed link (SS-005) — 250 kbaud serial from the ULX3S
 # (PM.SleighSpeed). Br bank A pin A15 (ball B1 — VERIFY against CuPin.kt on
 # the bench before wiring). Pullup keeps the line idle-high when unplugged;
-# the firmware watchdog then parks Santa within 250 ms.
+# the firmware watchdog then parks the sleigh within 250 ms.
 set_io -pullup yes sleigh_rx B1

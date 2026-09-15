@@ -31,7 +31,7 @@ were chosen.
 - **Snooker ball tracking is the I + M demo.** Overhead OV9281 (640×400, 200 fps)
   gives per-ball centroids, IRIG-stamped, over N; 24 GHz Doppler gives cue-ball
   departure speed. Gate: gap-free track at 200 fps (I); radar speed within 5 % of
-  the camera speed, timestamps aligned (M). The snow village / Santa Glide sits on
+  the camera speed, timestamps aligned (M). The snow village / Sleigh Glide sits on
   the same 5×10 ft table — a known-trajectory calibration target.
 - **Build rule:** root first — **O → P → T** (T is the regression gate) — then any
   spoke as its hardware arrives. Funding sets timing, not dependency.
@@ -40,7 +40,7 @@ were chosen.
   Panel, Oracle, Erand49, Theremin (in its sub-repo), IRIG, Coil, GPS, SDR, UHF,
   Network, Imaging. `MAIDEN/…` paths inside them mean "archive", not a dependency.
 
-- **One FPGA board — the ULX3S — is the only FPGA in PM** (later on 09-15). Santa
+- **One FPGA board — the ULX3S — is the only FPGA in PM** (later on 09-15). The sleigh
   Glide's FSM moves into the box (`PM.Sleigh`, Rev D), gates over a 10-wire ribbon
   to the driver board at the tube; the Alchitry Cu is retired to bench spare. The
   harp gets no board of its own: 13 ADCs daisy-chain over the EtherCON link.

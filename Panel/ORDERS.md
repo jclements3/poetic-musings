@@ -59,5 +59,5 @@ wanted). Three segments of ~168 mm each fit the 256 mm bed with the joint tongue
 | 3 mm dowel pins | 8 | segment alignment |
 | 14 mm reamer or square file | 1 | switch cutouts to size |
 
-Ledger: personal (P). Printer is shared tooling — Erand49 caps, Santa Glide village
+Ledger: personal (P). Printer is shared tooling — Erand49 caps, Sleigh Glide village
 parts and the Coil driver-board case print on it too.

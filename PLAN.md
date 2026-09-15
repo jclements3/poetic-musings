@@ -24,15 +24,15 @@ December critical path: Phases 0–2, then 3, 7, 8, 12a. Everything else has sla
 Toolchain and repo hygiene; no hardware.
 
 1. Install GHC 9.x + Clash 1.8 (cabal) on the desktop.
-2. `Coil/SantaGlide/firmware/SantaGlide.hs`: first compile (`clash --verilog`), fix
+2. `Coil/SleighGlide/firmware/SleighGlide.hs`: first compile (`clash --verilog`), fix
    type errors, simulate in `clashi` — confirm `gates` walks 0→7→0 with the dwell table.
 3. `Oracle/clash-h2/`: `cabal build`, run the smoke test (`0xA5` on `oLeds`).
 4. Sep Basic Plan inputs due: Imaging sensor/trigger/FOV study; metrology pick for I
    (used GS-101B or Thunderbolt-class GPSDO).
 
 **Gate: MET 2026-08-31.** Both firmwares compile (GHC 9.6.7 / Clash 1.8.5): clash-h2
-passes its smoke test (0xA5 on oLeds) and generates `h2.v`; SantaGlide generates
-`santa_glide.v`. The real eForth image (3334 words, metacompiled from upstream
+passes its smoke test (0xA5 on oLeds) and generates `h2.v`; SleighGlide generates
+`sleigh_glide.v`. The real eForth image (3334 words, metacompiled from upstream
 forth-cpu with plain gcc — no gforth) boots in the reference C simulator
 (`2 3 + . → 5`) and is installed as `Oracle/clash-h2/h2.bin` — and the same image
 **boots end-to-end in Clash simulation** (`cabal test h2-boot`: banner + arithmetic
@@ -43,7 +43,7 @@ source archive) and `Theremin/` absorbed as plain directories, nested histories
 archived outside the tree, private material and build outputs ignored by rule; every
 root/spoke directory carries a `DESIGN.md`; Panel and Erand49 carry `ORDERS.md`.
 
-## Phase 1 — C · Santa Glide 🛷 (first demo, driven from the box)
+## Phase 1 — C · Sleigh Glide 🛷 (first demo, driven from the box)
 
 Per `Coil/DESIGN.md` Rev D (decided 2026-09-15: the ULX3S is the only FPGA board).
 The coil FSM, pacer and watchdog move into the box as `PM.Sleigh`; the driver board
@@ -54,7 +54,7 @@ driver channels, test each with a bench 3.3 V gate source at 12 V / CC 2 A. When
 lands: `PM.Sleigh` in the bitstream, slug in, all dwells 400 ms → tune `runDuty`,
 then the dwell table live from the Forth prompt (`dwell!`), then voltage.
 
-**Demo:** flip the switch; Santa glides house A→B→A over the snow village, pauses at
+**Demo:** flip the switch; The sleigh glides house A→B→A over the snow village, pauses at
 each house, parks when switched off; theremin pitch sets the speed. The Christmas
 deliverable — needs the box present.
 **Teaches:** Moore FSMs, PWM, MOSFET drive, magnetics.
@@ -190,7 +190,7 @@ half exercised on one shot.
 
 ## Definition of done — the PM device
 
-- One case: Panel + Oracle, ULX3S inside; Santa Glide packs alongside (tube, driver board, ribbon).
+- One case: Panel + Oracle, ULX3S inside; Sleigh Glide packs alongside (tube, driver board, ribbon).
 - Power on → the **S3 MODE slider selects the demonstration: P · O · E · T · I · C**
   (Panel · Oracle/Forth/games/spoke scripts · Erand49 · Theremin · IRIG clock · CW);
   V0 shows the mode screen, deeper choices via keys.
@@ -203,7 +203,7 @@ half exercised on one shot.
 - Finish before start; a phase closes only when its demo passes in front of a person.
 - Theremin suite = regression gate for every shared-library change after Phase 4.
 - **One FPGA board only — the ULX3S ECP5-85F** (2026-09-15). Everything else is
-  sensors, drivers and ADCs on cables: Santa Glide's driver board over a gate ribbon,
+  sensors, drivers and ADCs on cables: Sleigh Glide's driver board over a gate ribbon,
   the harp's 13 ADCs daisy-chained over the EtherCON link. No harp-side board.
 - Ledgers never commingle (P personal, W work; U is ham/personal). Bookkeeping only;
   it does not shape the build order.

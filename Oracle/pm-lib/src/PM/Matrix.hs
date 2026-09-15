@@ -26,7 +26,7 @@
 -- Timing (hwMatrixCfg): 3125 ticks/row @ 25 MHz × 8 rows = exactly 1 ms per
 -- full scan pass, so the debounce threshold counts scan passes = milliseconds.
 -- Default 10 passes = the 10 ms debounce norm (fpga-development-plan quality
--- BOM, as in Coil/SantaGlide).  Debounce is an integrating counter per key:
+-- BOM, as in Coil/SleighGlide).  Debounce is an integrating counter per key:
 -- N consecutive samples disagreeing with the debounced state flip it (and
 -- emit one event); any agreeing sample resets the counter, so the scan is
 -- tolerant of slow/bouncy release and a sub-threshold glitch emits nothing.

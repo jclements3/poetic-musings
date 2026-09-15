@@ -2,7 +2,7 @@
 
 One row per purchase decision across the program. Detail, links and timing live in
 the per-directory files: `Oracle/ORDERS.md` · `Panel/ORDERS.md` · `Erand49/ORDERS.md`;
-Santa Glide's receipts are screenshots in `Coil/SantaGlide/orders/`. Update the
+Sleigh Glide's receipts are screenshots in `Coil/SleighGlide/orders/`. Update the
 **Status** column here when something is ordered or arrives; keep receipts, amounts
 paid and reimbursement paperwork **out of this public repo** (`LEDGER.md` and
 `receipts/` are git-ignored by rule).
@@ -34,7 +34,7 @@ personal · **W** work · **H** ham (personal). Estimates are budget figures, no
 | E5 | LVDS repeater pair for the ADC daisy-chain (no harp-side board — one FPGA rule) | E | P | ~$10 | plan | with E3 |
 | T1 | Theremin LC oscillator parts | T | P | $0 | **received** | ordered pre-program |
 | I1 | IRIG-B: none (scope on hand) | I | P | $0 | — | GPSDO reference comes under G |
-| C1 | Santa Glide: coils, MOSFETs, diodes, tube, buttons, bench supply (Cu retired to spare) | C | P | sunk | **received** | `Coil/SantaGlide/orders/` |
+| C1 | Sleigh Glide: coils, MOSFETs, diodes, tube, buttons, bench supply (Cu retired to spare) | C | P | sunk | **received** | `Coil/SleighGlide/orders/` |
 | C2 | Still to buy: 8–10 mm ID rigid coil-form tube; 10-pin IDC ribbon (≤3 m) + rear connector | C | P | ~$25 | plan | Rev D gate ribbon |
 
 ## MUSING spokes

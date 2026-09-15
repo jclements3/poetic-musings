@@ -2,7 +2,7 @@
 
 Phase 2 of PLAN.md: an IRIG-B generator on the ULX3S, free-running on the board
 crystal until G (GPS) disciplines it. Gate: spec-valid IRIG-B verified on a
-scope/decoder. The skills are deliberately the second rep of Santa Glide's:
+scope/decoder. The skills are deliberately the second rep of Sleigh Glide's:
 counters, framing, serialization.
 
 **Spoke framing (`../PROGRAM.md`):** I adds one piece of hardware to the Panel+Oracle

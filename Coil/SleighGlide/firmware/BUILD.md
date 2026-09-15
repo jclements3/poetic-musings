@@ -1,7 +1,7 @@
-# Santa Glide — FPGA build (Alchitry Cu, iCE40 HX8K-CB132)
+# Sleigh Glide — FPGA build (Alchitry Cu, iCE40 HX8K-CB132)
 
 Rev B firmware, synthesized 2026-08-31. `./build.sh` produces
-`build/santa_glide.bin` (135 KB). Bitstreams and the Clash `verilog/` dir are
+`build/sleigh_glide.bin` (135 KB). Bitstreams and the Clash `verilog/` dir are
 gitignored — only sources, constraints, and this doc are committed.
 
 ## Toolchain (no sudo)
@@ -19,7 +19,7 @@ with `FPGA_TOOLS=/path/to/bin`).
 
 Flow: `yosys synth_ice40` → `nextpnr-ice40 --hx8k --package cb132 --freq 50`
 → `icepack`. Top module is `cu_top.v`, a thin board wrapper around the
-Clash-generated `santa_glide` core.
+Clash-generated `sleigh_glide` core.
 
 ## Clocking — the one thing to know
 
@@ -31,7 +31,7 @@ effect:
 
 - `cu_top.v` has an `SB_PLL40_CORE` dividing 100 MHz → **50 MHz** logic clock
   (`icepll -i 100 -o 50`: DIVR=0, DIVF=7, DIVQ=4, FILTER_RANGE=5).
-- `SantaGlide.hs` `msTicks` is **50000** (1 ms @ 50 MHz), so all real-time
+- `SleighGlide.hs` `msTicks` is **50000** (1 ms @ 50 MHz), so all real-time
   behavior (dwell table, 2.5 s house rest, 10 ms debounce) is unchanged.
 - Side effect: the 8-bit PWM carrier is now ~195 kHz instead of ~390 kHz —
   still far above audio and fine for the IRLZ44N gates.
@@ -52,7 +52,7 @@ constants — identical behavior, folded by Clash (verify: 20000000 / 12500000
 | SB_IO | 11 / 256 |
 | Globals / PLL | 4 / 8 SB_GB, 1 / 2 PLL |
 
-## Pin assignments (santa_glide.pcf)
+## Pin assignments (sleigh_glide.pcf)
 
 Ball names verified against Alchitry's own board definition
 (`CuPin.kt` in [alchitry/Alchitry-Labs-V2](https://github.com/alchitry/Alchitry-Labs-V2),
@@ -84,7 +84,7 @@ only lists the Au) — use Alchitry's loader:
 
 - **Alchitry Labs V2** (alchitry.com/alchitry-labs, or the GitHub releases of
   `alchitry/Alchitry-Labs-V2`): unpack anywhere, no sudo; use its loader to
-  write `build/santa_glide.bin` to the Cu's SPI flash (choose *flash*, not
+  write `build/sleigh_glide.bin` to the Cu's SPI flash (choose *flash*, not
   RAM-only, so the show survives power cycles).
 - CLI alternative: `alchitry/alchitry-loader` (small C++ tool, plain `make`).
 
@@ -99,8 +99,8 @@ From `Oracle/clash-h2` (GHC/Cabal in `~/.ghcup/bin`, `~/.cabal/bin`):
 
 ```
 cabal exec -- clash --verilog \
-  -fclash-hdldir <repo>/Coil/SantaGlide/firmware/verilog \
-  <repo>/Coil/SantaGlide/firmware/SantaGlide.hs
+  -fclash-hdldir <repo>/Coil/SleighGlide/firmware/verilog \
+  <repo>/Coil/SleighGlide/firmware/SleighGlide.hs
 ```
 
 ## Post-retiming simulation check (2026-08-31)
@@ -115,7 +115,7 @@ and sets `paused`. Ready for first power-up per HANDOFF §7 step 3.
 
 The sleigh's speed is now driven by the One Box theremin: pitch maps to
 speed 1..255, volume off (or cable out, or sender dead — 250 ms watchdog)
-parks Santa at Hold duty. `PM.SleighSpeed` on the ULX3S sends (0xA5, speed)
+parks the sleigh at Hold duty. `PM.SleighSpeed` on the ULX3S sends (0xA5, speed)
 frames at 250 kbaud, 50/s; this firmware receives on `sleigh_rx`.
 
 Wiring: one wire from the ULX3S `sleigh_tx` GPIO to Br bank A pin A15

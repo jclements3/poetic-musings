@@ -1,4 +1,4 @@
-# Coil — Phase 1 design (C · Santa Glide, driven from the box)
+# Coil — Phase 1 design (C · Sleigh Glide, driven from the box)
 
 **Decision 2026-09-15: the ULX3S is the only FPGA board in PM.** The coil sequencer
 moves into the box; the Alchitry Cu is retired from the program (kept as a bench
@@ -6,13 +6,13 @@ spare). Rev C's Cu firmware and the 250 kbaud sleigh link are superseded by **Re
 the same Moore FSM, dwell table, watchdog and pacer, compiled for the ECP5, driving
 the MOSFET board at the tube over a gate ribbon.
 
-PLAN.md Phase 1: a painted steel slug (Santa's sleigh) glides inside a 10 ft silicone
+PLAN.md Phase 1: a painted steel slug (the sleigh) glides inside a 10 ft silicone
 tube strung over the snow village, driven by 8 coils sequenced by the box — an
 open-loop 8-pole linear reluctance motor. Personal ledger, parts in hand. Working docs
-in `SantaGlide/`: `HANDOFF.md` (design history, drawings SS-001..004, coil spec,
+in `SleighGlide/`: `HANDOFF.md` (design history, drawings SS-001..004, coil spec,
 bring-up order), `firmware/BUILD.md` (Rev B/C sim proof — still valid for the FSM),
 `drawings/`. **Gate:** slug glides house A→B→A continuously while the show switch is
-on; parks in place on pause; dwell profile tuned. **Demo:** flip the switch; Santa
+on; parks in place on pause; dwell profile tuned. **Demo:** flip the switch; The sleigh
 floats over the village — theremin pitch sets the speed.
 
 **Spoke framing (`../PROGRAM.md`):** C adds to the Panel+Oracle root the hardware
@@ -22,7 +22,7 @@ ground) from the rear SLEIGH connector. Library components it exercises: the Moo
 FSM / dwell table (SS-004), the virtual-tick pacer, the dead-man watchdog (now on the
 ribbon's presence line), PWM coil drive, and the theremin-pitch → speed mapping from
 `PM.SleighSpeed`. In `../CLASH-LIBRARY-MAP.md` § Module list this becomes one in-box
-block, `PM.Sleigh` (○ — a port of `SantaGlide.hs` onto the register bus; the FSM and
+block, `PM.Sleigh` (○ — a port of `SleighGlide.hs` onto the register bus; the FSM and
 pacer sims carry over unchanged).
 
 **Shared fixture with I and M:** the snow village sits on the 5×10 ft American snooker
@@ -53,7 +53,7 @@ volume off / ribbon unplugged ─► watchdog ──┘        │ pacer (rate s
   ticks; speed 255 is Rev B timing within 0.4 %, so the tuned table survives.
 - **24 V never enters the box:** only 3.3 V gate signals and ground cross the ribbon;
   series 100 Ω at the box, pulldowns at the board. The bench supply stays at the tube.
-- **Retired:** the Cu, `sleigh_rx`, the 0xA5 frame link, `santa_glide.pcf`. The
+- **Retired:** the Cu, `sleigh_rx`, the 0xA5 frame link, `sleigh_glide.pcf`. The
   `PM.SleighSpeed` TX block stays in the library as tested code (its pitch → speed
   mapping is reused in `PM.Sleigh`).
 
@@ -78,9 +78,9 @@ station live · `.sleigh` state on V0.
    alone at 12 V / CC 2 A → 7 more channels → wind 8 coils (200 T, 24 AWG, 0.4 Ω) →
    slug in, all dwells 400 ms → tune `runDuty`, then `dwell!` per station live from
    the prompt, then voltage. Pass = continuous A→B→A glide with the switch on, parked
-   on pause. Evidence to `SantaGlide/results/`.
+   on pause. Evidence to `SleighGlide/results/`.
 4. **Link:** theremin pitch changes the glide speed live; pulling the ribbon parks
-   Santa immediately (pulldowns) and iSleigh reports ribbon absent.
+   the sleigh immediately (pulldowns) and iSleigh reports ribbon absent.
 
 **Schedule note:** Phase 1 now needs the ULX3S (backordered to 2026-10-02). Coil
 winding, the driver board and channel tests with a bench 3.3 V source proceed before

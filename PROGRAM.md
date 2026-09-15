@@ -22,7 +22,7 @@ O  Oracle     root — ULX3S ECP5-85F, Forth, 0x40xx bus, SD            → H2 S
 ├── E  Erand49    + 98 IR pairs, 13 ADCs, harp frame                 → SPI ADC, CORDIC, CFAR, KS waveguide, HarpLink
 ├── T  Theremin   + pitch rod, volume loop, 2 Colpitts boards        → EdgeSampler, DelayDiff, IIR, NCO, DAC
 ├── I  IRIG       + IRIG-B output, scope                             → DCLS framer, BCD time, TOD set
-└── C  Coil       + Santa Glide tube + MOSFET driver board, gate ribbon → coil FSM/pacer, watchdog, PWM drive
+└── C  Coil       + Sleigh Glide tube + MOSFET driver board, gate ribbon → coil FSM/pacer, watchdog, PWM drive
 MUSING                                                                (work ledger)
 ├── M  Motion radar + Doppler front end (SPI ADC)                    → CIC → FFT → CFAR → velocity records
 ├── U  UHF        + whip on SMA, PA can                              → Keyer, Morse decoder, Goertzel, WSPR mod, TX interlock
@@ -41,7 +41,7 @@ MUSING                                                                (work ledg
 | E | `Erand49/` | IR sensors, ADCs, harp frame | Cordic, Cfar, KS, HarpLink, I²S | `Erand49/DESIGN.md`, `Erand49/ORDERS.md` (staged buys); frame CAD done; gate 1 = one string |
 | T | `Theremin/` (older VHDL) · `MAIDEN/theremin/clash/` (measured Clash) | antennas + oscillator boards | full theremin suite — **regression gate for every library change** | `Theremin/DESIGN.md`; measured: 1,816 LUT4 |
 | I | `IRIG/` | IRIG-B out | DCLS framer | implemented + sim-verified |
-| C | `Coil/` | Santa Glide tube + MOSFET driver board on the snooker table, 10-wire gate ribbon | `PM.Sleigh` (FSM, pacer, watchdog, PWM) | `Coil/DESIGN.md`; Rev D = FSM in the box; parts in hand |
+| C | `Coil/` | Sleigh Glide tube + MOSFET driver board on the snooker table, 10-wire gate ribbon | `PM.Sleigh` (FSM, pacer, watchdog, PWM) | `Coil/DESIGN.md`; Rev D = FSM in the box; parts in hand |
 | M | `MAIDEN/firmware/doppler/` | **Motion radar** — Doppler front end | doppler_core (VHDL), reuses Cic/Fft/Cfar | measured VHDL, sim green |
 | U | `UHF/` | whip, PA | Keyer ✓, WSPR ○ | `DESIGN.md` |
 | S | `SDR/` | AD9226 ADC + relay | Cic, Fir, Fft ✓; DDC wiring ○ | `DESIGN.md` |
@@ -89,7 +89,7 @@ Execution plan with the demo that closes each phase: `PLAN.md`.
   entries in the module list; Panel, Oracle and Erand49 also have `ORDERS.md`.
 - Panel silk legends are still tied to the 1981 Casio VL-1; they need a mode-neutral
   layer since VL-1 synthesis is one mode among many.
-- **One FPGA board: the ULX3S ECP5-85F** (decided 2026-09-15). Santa Glide is driven from
+- **One FPGA board: the ULX3S ECP5-85F** (decided 2026-09-15). Sleigh Glide is driven from
   the box over a gate ribbon; the Alchitry Cu is retired to bench spare; the harp has
   no board of its own (ADCs daisy-chain to the box).
 - Toolchain: GHC 9.6.7 / Clash 1.8.5; some Python tools need

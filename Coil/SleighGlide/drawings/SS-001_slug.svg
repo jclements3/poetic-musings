@@ -36,7 +36,7 @@
   <line x1="250" y1="260" x2="290" y2="316" stroke="#000" stroke-width="0.75" marker-start="url(#arr)"/>
   <line x1="290" y1="316" x2="420" y2="316" stroke="#000" stroke-width="0.75"/>
   <text x="296" y="311" font-size="14">FLAT 0.4 DEEP, FULL LENGTH</text>
-  <text x="296" y="332" font-size="12">(ANTI-ROLL &#8212; SANTA PAINTED OPPOSITE FACE)</text>
+  <text x="296" y="332" font-size="12">(ANTI-ROLL &#8212; SLEIGH PAINTED OPPOSITE FACE)</text>
 
   <!-- view label -->
   <text x="240" y="292" font-size="13" text-anchor="middle" font-weight="bold">FRONT VIEW</text>
@@ -87,7 +87,7 @@
   </g>
 
   <text x="465" y="459" font-size="10">TITLE</text>
-  <text x="465" y="496" font-size="15" font-weight="bold">SANTA SLUG &#8212; GLIDE SHUTTLE ARMATURE</text>
+  <text x="465" y="496" font-size="15" font-weight="bold">SLEIGH SLUG &#8212; GLIDE SHUTTLE ARMATURE</text>
 
   <text x="660" y="459" font-size="10">DRAWING NO.</text>
   <text x="740" y="461" font-size="13" font-weight="bold">SS-001</text>

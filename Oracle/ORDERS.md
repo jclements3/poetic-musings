@@ -36,7 +36,7 @@ headers (16-wire matrix ribbon, slider ADC, RMII PHY PMOD, AD9226 board, camera 
 ribbon, sleigh link, harp EtherCON breakout).
 
 **The ULX3S is the only FPGA board in PM** (2026-09-15). The Alchitry Cu already owned
-is retired to bench spare — Santa Glide is driven from the box over a gate ribbon.
+is retired to bench spare — Sleigh Glide is driven from the box over a gate ribbon.
 
 ## With the board
 

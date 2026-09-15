@@ -1,6 +1,6 @@
 # PERT/CPM — personal FPGA program (C → I → O → T → P → E)
 
-Updated 2026-08-31 to the POETIC lettering and current decisions (Santa Glide is C;
+Updated 2026-08-31 to the POETIC lettering and current decisions (Sleigh Glide is C;
 O absorbs old F+D; E is the harp with the welded frame; keys are MX2A switches, not
 a keybed). Unit: weekends; expected = (o + 4m + p)/6. Policy stays serial, so the
 critical path is the chain by construction; CPM is for spotting where purchases can
@@ -60,12 +60,12 @@ P1 switch matrix (59× MX2A + diodes) ─► P2 voice engine ─► P3 sequencer
 
 Expected chain: C 5.4 + I 2.2 + O 6.9 + T 3.2 + P 11.0 + E 14.9 ≈ **44 weekends**
 (~11 months of weekends); σ ≈ 3.5, 90% ≈ 48. The growth from the old 31 is scope,
-not slippage: Santa Glide bring-up, IRIG, the keyer, and the harp frame are now real
+not slippage: Sleigh Glide bring-up, IRIG, the keyer, and the harp frame are now real
 tasks instead of asterisks.
 
 ## Exposures
 
-**R1 — retired.** C4 (FPGA pulse timing before Forth) was cut; Santa Glide's Rev B is
+**R1 — retired.** C4 (FPGA pulse timing before Forth) was cut; Sleigh Glide's Rev B is
 open-loop by design and already compiles to Verilog.
 
 **R2 — O2 before O1 is a false gate.** If the TFT arrives before eForth talks over USB
@@ -89,7 +89,7 @@ until the TFT active area is measured. P6 stays last.
 
 **R8 — Purchases with no consumer yet.** UP5K spares, RMII PHY, GPS module, GPSDO:
 work-ledger parts; they have no consumer until G/N/M. Leave them. (The Alchitry Cu — retired to bench spare 2026-09-15 — is
-bought and spoken for — it *is* Santa Glide.)
+bought and spoken for — it *is* Sleigh Glide.)
 
 **R9 — Wasted effort: a second theremin bitstream.** T2 uses the existing ECP5 port
 unchanged; it gets refactored onto the register bus once, in P5.

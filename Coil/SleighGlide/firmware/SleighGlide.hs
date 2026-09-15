@@ -7,12 +7,12 @@
 -- (the clash CLI enables these by default; spelled out so plain GHC tools
 -- like the SleighSim runghc harness can load this file too)
 
--- SantaGlide.hs  --  Rev C: theremin speed control per SS-005
+-- SleighGlide.hs  --  Rev C: theremin speed control per SS-005
 --   (Rev B: pure Moore machine per SS-004)
 --
 -- Rev C adds the sleigh_rx serial input: the One Box theremin sends
 -- (0xA5, speed) frames at 250 kbaud (PM.SleighSpeed). Pitch = speed,
--- volume off = speed 0 = dead-man stop (Hold duty, Santa parked).
+-- volume off = speed 0 = dead-man stop (Hold duty, the sleigh parked).
 -- A 250 ms watchdog forces speed 0 when the cable is unplugged. Speed
 -- scales the WHOLE dwell table without multipliers: an accumulator
 -- passes 'virtual ticks' to the FSM at rate speed/256, so speed 255 is
@@ -30,7 +30,7 @@
 -- 32-bit dwell counters close timing at ~72 MHz on the HX fabric, not 100.
 -- msTicks below is set for the 50 MHz logic clock.
 
-module SantaGlide where
+module SleighGlide where
 
 import Clash.Prelude
 
@@ -71,7 +71,7 @@ data Drive = Off | Hold | Run
   deriving (Generic, NFDataX, Eq, Show)
 
 holdDuty, runDuty :: Unsigned 8
-holdDuty = 13                        -- ~5 %   keeps Santa parked
+holdDuty = 13                        -- ~5 %   keeps the sleigh parked
 runDuty  = 51                        -- ~20 %  start point, tune on bench
 
 ------------------------------------------------------------------------
@@ -258,7 +258,7 @@ topEntity = exposeClockResetEnable glide
 {-# NOINLINE topEntity #-}
 {-# ANN topEntity
   (Synthesize
-    { t_name   = "santa_glide"
+    { t_name   = "sleigh_glide"
     , t_inputs = [PortName "clk", PortName "rst", PortName "en", PortName "show_on", PortName "sleigh_rx"]
     , t_output = PortName "gates"
     }) #-}

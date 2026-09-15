@@ -41,7 +41,7 @@ cabal run clash -- -isrc PM.Zones  --verilog   # verilog/PM.Zones.topEntity/pm_z
 * **Debounce** is an integrating counter per key, threshold in scan passes;
   one full pass = exactly 1 ms at 25 MHz (8 rows × 3125 ticks), so the
   oMatrixCtrl debounce field is directly in milliseconds (default 10 ms —
-  the fpga-development-plan quality-BOM norm, as in Coil/SantaGlide).  Any
+  the fpga-development-plan quality-BOM norm, as in Coil/SleighGlide).  Any
   agreeing sample resets the integrator: tolerant of slow, bouncy release;
   a sub-threshold glitch emits nothing.
 * **One event per clock**: the 8 columns latched at a row's sample tick are

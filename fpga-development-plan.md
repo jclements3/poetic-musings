@@ -12,7 +12,7 @@ What each row leaves behind is a set of measured Clash modules — `CLASH-LIBRAR
 
 | # | Proj | Difficulty | Cost | Ledger | Prereqs | Gate |
 |---|---|---|---|---|---|---|
-| 1 | **C** Coil — Santa Glide | 2 | parts in hand (opt. 2nd 24 AWG spool; 10-pin ribbon + connector ~$10) | P | O (board) | Slug glides house A→B→A continuously while show switch on; parks in place on pause; dwell profile tuned live from Forth. FSM in the box (`PM.Sleigh`), gates over a ribbon to the driver board; Cu retired. |
+| 1 | **C** Coil — Sleigh Glide | 2 | parts in hand (opt. 2nd 24 AWG spool; 10-pin ribbon + connector ~$10) | P | O (board) | Slug glides house A→B→A continuously while show switch on; parks in place on pause; dwell profile tuned live from Forth. FSM in the box (`PM.Sleigh`), gates over a ribbon to the driver board; Cu retired. |
 | 2 | **I** IRIG clock | 2 | $0 (GPSDO comes later, under G) | P | C (skills) | Spec-valid IRIG-B out, verified on scope/decoder. Free-running on board crystal until G disciplines it; time display added once O exists. |
 | 3 | **O** Oracle console | 3 | $60 (8.8" bar TFT + HDMI board) | P | — | Forth prompt on bar TFT, no laptop; `1 2 + .` → 3; GPIO toggle, ADC read, SD block 1 loads; CW keyer sends, decoder prints. clash-h2 H2 port already started. ▲ |
 | 4 | **T** Theremin | 1 (Clash port already passing) | $0 (ordered) | P | O (tuning UI) | Oscillator hardware on bench; port tracks pitch and volume from antennas through speaker. Stays the regression target for every library change. |
@@ -49,7 +49,7 @@ detent zones under S2–S4. Any spare fits any position.
 | Panel + key caps + slider knobs | — | 3D-printed, **PETG or ASA (not PLA** — creeps under finger heat/pressure; a warped key well is a sticking key**)**. Key pitch **16 mm** (MX housing limit; decided 2026-08-31 over 13 mm mini pitch), body ≈ 504 mm, 14×14 mm plate cutouts | own printer | filament |
 | Solder, wire, misc | — | switches soldered, **no hot-swap sockets** (a socket is one more contact to fail mid-demo); spares live in the lid pocket | on hand | ~$5 |
 
-Firmware-side reliability, free: generous 10 ms debounce (as in Santa Glide), scan
+Firmware-side reliability, free: generous 10 ms debounce (as in Sleigh Glide), scan
 tolerant of slow release, and hysteresis on the S2–S4 ADC zone thresholds so a slider
 parked on a boundary can't flicker between modes during a demo. No velocity sensing —
 period-correct (the VL-1 had none); velocity expression is the Erand49's job.
@@ -81,7 +81,7 @@ O → P (bench, no case) → I → G → N → Imaging + M snooker demo. C ships
 
 ## Spend summary
 
-Personal: ~$1,700, of which $1,200 is the harp; Santa Glide parts are already ordered (sunk). U (ham) is on the personal ledger, cost TBD. Work ledger: ~$200 for the spoke hardware (OV9281 camera + mount, CDM324 radar + ADC, RMII PHY, u-blox GPS, AD9226 ADC) plus plus the GPSDO reference and the Imaging sensor (TBD after the Sep study). Ledgers never commingle; hardware bought personal can be re-bought on the work ledger when M needs its own copies.
+Personal: ~$1,700, of which $1,200 is the harp; Sleigh Glide parts are already ordered (sunk). U (ham) is on the personal ledger, cost TBD. Work ledger: ~$200 for the spoke hardware (OV9281 camera + mount, CDM324 radar + ADC, RMII PHY, u-blox GPS, AD9226 ADC) plus plus the GPSDO reference and the Imaging sensor (TBD after the Sep study). Ledgers never commingle; hardware bought personal can be re-bought on the work ledger when M needs its own copies.
 
 ## Legacy letter map (pre-merge → current)
 
@@ -92,7 +92,7 @@ Personal: ~$1,700, of which $1,200 is the harp; Santa Glide parts are already or
 | A ADC front end | split: **E** harp front end · **S** SDR sampling |
 | L logic analyzer | no longer a letter — O bring-up tooling |
 | G GPS/IRIG clock | split: **I** IRIG clock (personal) · **G** GPS discipline (work) |
-| C launcher/catcher (v2, ballistic) | **C** Santa Glide (v4, 8-coil sequenced glide) |
+| C launcher/catcher (v2, ballistic) | **C** Sleigh Glide (v4, 8-coil sequenced glide) |
 | S snooker rig | **M** Motion radar + **I** Imaging — the snooker table is now the I/M demo fixture |
 | H harp Erand49 | **E** Erand49 |
 | P, T, N, M | unchanged letters: P, T, N, M |

@@ -1,12 +1,12 @@
-// cu_top.v — Alchitry Cu board wrapper for santa_glide (Clash-generated).
+// cu_top.v — Alchitry Cu board wrapper for sleigh_glide (Clash-generated).
 //
 // Two adaptations live here, because a PCF cannot express either:
 //
-// 1. Clock: the Cu's oscillator is 100 MHz (ball P7), but the santa_glide
+// 1. Clock: the Cu's oscillator is 100 MHz (ball P7), but the sleigh_glide
 //    logic (32-bit dwell counters/comparators) closes timing around 60 MHz
 //    on the HX8K fabric, so an SB_PLL40_CORE divides it to a 50 MHz logic
 //    clock (icepll -i 100 -o 50: DIVR=0 DIVF=7 DIVQ=4). msTicks in
-//    SantaGlide.hs is set to 50000 to match — 1 ms is still 1 ms.
+//    SleighGlide.hs is set to 50000 to match — 1 ms is still 1 ms.
 //
 // 2. Reset/enable: the Clash `System` domain expects an active-HIGH
 //    synchronous reset and active-high enable. The Cu's reset button
@@ -44,7 +44,7 @@ module cu_top (
     reg [1:0] rst_sync = 2'b11;
     always @(posedge clk50) rst_sync <= {rst_sync[0], ~rst_n | ~pll_locked};
 
-    santa_glide sg (
+    sleigh_glide sg (
         .clk     (clk50),
         .rst     (rst_sync[1]),
         .en      (1'b1),

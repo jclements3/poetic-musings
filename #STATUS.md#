@@ -19,7 +19,7 @@ board is on backorder, so nothing runs on silicon until October.
 |-----------------|--------|-------------------------------------------|---------------------------------------------|-----------------------------------------------------------|
 | 0 Foundations   | —      | **done** 08-31                            | both firmwares compile, eForth boots in sim | —                                                         |
 | 0b Repo hygiene | —      | **done** 09-15                            | unified repo, DESIGN/ORDERS per directory   | —                                                         |
-| 1 Santa Glide   | C      | parts in hand, Rev C bitstream PASS       | slug glides A→B→A                           | bench channel 0 at 12 V (`Coil/SantaGlide/HANDOFF.md` §7) |
+| 1 Sleigh Glide   | C      | parts in hand, Rev C bitstream PASS       | slug glides A→B→A                           | bench channel 0 at 12 V (`Coil/SleighGlide/HANDOFF.md` §7) |
 | 2 IRIG clock    | I      | **sim-verified**                          | spec-valid IRIG-B on a scope                | scope check once R1 lands                                 |
 | 3 Oracle        | O      | ladder pre-proven in sim                  | `ok` on glass, SD loads, keyer decodes      | wire real pins when R1 lands                              |
 | 4 Theremin      | T      | Clash port measured, green                | pitch/volume from antennas                  | bench the LC oscillators                                  |
@@ -54,7 +54,7 @@ Fft512 4,620 LUT4, IirNStage 175 LUT4, text console ~200 LUT4.
 | Status    | Items                                                                      |
 |-----------|----------------------------------------------------------------------------|
 | backorder | ULX3S ECP5-85F — Mouser batch **2026-10-02**                               |
-| received  | Santa Glide parts; theremin oscillator parts                               |
+| received  | Sleigh Glide parts; theremin oscillator parts                               |
 | order now | Bambu Lab P1S + filament; bore gauge                                       |
 | next      | TFT kit, switches/pots (after print coupon), gate-1 harp kit (after board) |
 |           |                                                                            |
@@ -62,7 +62,7 @@ Fft512 4,620 LUT4, IirNStage 175 LUT4, text console ~200 LUT4.
 ## Blockers and risks
 
 - **Board backorder** to 2026-10-02: no silicon measurements before then. Mitigation:
-  printer, coupon, oscillator bench and Santa Glide bring-up all proceed without it.
+  printer, coupon, oscillator bench and Sleigh Glide bring-up all proceed without it.
 - **Sep Basic Plan inputs due:** Imaging FOV/sensor study (now with the snooker table
   as the fixed target) and the GPSDO metrology pick.
 - **Open design items:** harp-side board vs "two boards only" (`Erand49/ORDERS.md`);

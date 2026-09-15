@@ -58,7 +58,7 @@ harp rib** — E's long-lead item rides on P's start (PERT rule).
 - **8×8 matrix, one 1N4148 per switch** (full N-key rollover): 59 switches fold into
   one scan, one 16-wire ribbon (8 rows + 8 cols) to ULX3S GPIO — the only front-back
   crossing besides the speaker pair (LAYOUT plan view).
-- Gateware scans free-running with **10 ms debounce** (Santa Glide's value), tolerant
+- Gateware scans free-running with **10 ms debounce** (Sleigh Glide's value), tolerant
   of slow release; Forth pops press/release *events* from the 0x4024 FIFO
   (eforth-pm.md) — it never scans rows. No velocity sensing — period-correct (the
   VL-1 had none); velocity expression is Erand49's job.

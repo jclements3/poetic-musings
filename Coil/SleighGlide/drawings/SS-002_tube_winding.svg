@@ -143,7 +143,7 @@
     <text x="455" y="414">4.  SECURE EACH WINDING WITH TAPE OR CA GLUE; SCRAPE ENAMEL AT TERMINATIONS.</text>
     <text x="455" y="431">5.  STATION SPACING IS DELIBERATELY DENSER NEAR THE HOUSES (GAPS</text>
     <text x="470" y="446">10-14-18-16-18-14-10 in) FOR FINE CONTROL AT LAUNCH AND LANDING.</text>
-    <text x="455" y="463">6.  C0 IS NEAREST HOUSE A AND MAPS TO gates[0] IN SANTA GLIDE FIRMWARE.</text>
+    <text x="455" y="463">6.  C0 IS NEAREST HOUSE A AND MAPS TO gates[0] IN SLEIGH GLIDE FIRMWARE.</text>
   </g>
 
   <!-- ============ TITLE BLOCK ============ -->
@@ -155,7 +155,7 @@
     <line x1="770" y1="480" x2="770" y2="565"/>
   </g>
   <text x="463" y="494" font-size="9">TITLE</text>
-  <text x="463" y="529" font-size="13" font-weight="bold">TUBE WINDING LAYOUT &#8212; SANTA GLIDE</text>
+  <text x="463" y="529" font-size="13" font-weight="bold">TUBE WINDING LAYOUT &#8212; SLEIGH GLIDE</text>
   <text x="658" y="494" font-size="9">DRAWING NO.</text>
   <text x="736" y="497" font-size="12" font-weight="bold">SS-002</text>
   <text x="778" y="494" font-size="9">SHEET</text>

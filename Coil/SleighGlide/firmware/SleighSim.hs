@@ -1,7 +1,7 @@
--- SleighSim.hs — simulation proof of SantaGlide Rev C (SS-005).
+-- SleighSim.hs — simulation proof of SleighGlide Rev C (SS-005).
 -- Run from the clash-h2 environment (has clash-prelude on the path):
 --   cd Oracle/clash-h2 && cabal exec -- runghc \
---     ../../Coil/SantaGlide/firmware/SleighSim.hs
+--     ../../Coil/SleighGlide/firmware/SleighSim.hs
 --
 -- Checks, mostly on the PURE transition functions (fast):
 --   1. rxT+linkT decode a real 250 kbaud (div 200) waveform of (A5,spd)
@@ -15,7 +15,7 @@ import Clash.Prelude
 import qualified Prelude as P
 import qualified Data.List as L
 import System.Exit (exitFailure, exitSuccess)
-import SantaGlide
+import SleighGlide
 
 check :: Bool -> P.String -> IO Bool
 check ok m = putStrLn ((if ok then "PASS: " else "FAIL: ") P.++ m) >> P.pure ok
@@ -78,5 +78,5 @@ main = do
                && P.length [d | d <- toList drv, d == Off] == 7)
               "paused output: Hold on the active coil, Off elsewhere"
   if P.and [r1, r2, r3, r4, r5]
-    then putStrLn "ALL PASS: SantaGlide Rev C" >> exitSuccess
+    then putStrLn "ALL PASS: SleighGlide Rev C" >> exitSuccess
     else exitFailure
