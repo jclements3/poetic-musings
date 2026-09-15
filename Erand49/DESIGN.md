@@ -18,7 +18,12 @@ harp frame itself — and exercises the library's *detection* set: multi-channel
 ADSSR from `PM.Synth`, `PM.HarpLink` (framed 8N1 event link, ✓) and a planned I²S
 serializer. The instrument is the mechanical layer (`LAYOUT.html`, `frame-spec.md`,
 `string-specs.md`); this file is the gateware and the gates. The CORDIC + CFAR pair
-is the same chain M uses for the snooker cue ball — one library, two sensors.
+is the same chain M uses for the snooker cue ball — one library, two sensors. In
+`../CLASH-LIBRARY-MAP.md` § Module list, E consumes the ✓ CORDIC, CFAR, SPI master and
+ADSSR, contributes the ✓ framed 8N1 event link (`PM.HarpLink`), and owns two ○ entries
+to write: the Karplus-Strong waveguide with allpass fractional delay (DSP core) and the
+I²S serializer (Audio). Staged purchases: `ORDERS.md`. The `MAIDEN/…` spec paths are
+the library source archive, a plain directory in this unified repo since 2026-09-15.
 
 ## Signal path
 
