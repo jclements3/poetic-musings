@@ -6,9 +6,17 @@ Ledger: personal (P).
 
 ## The FPGA board — ULX3S ECP5-85F
 
-Designer: Radiona (radiona.org/ulx3s). Buy from Mouser (Radiona brand) or Crowd
-Supply; Mouser is faster in the US. **Check stock on the 85F before ordering — the
-earlier order was cancelled for lack of stock; wait rather than downgrade.**
+Designer: Radiona (radiona.org/ulx3s). **Buy assembled** — the 85F is a BGA on a
+6-layer board; fabricating from the open-hardware files costs more than a unit.
+**Check stock on the 85F before ordering — the earlier order was cancelled for lack
+of stock; wait rather than downgrade.**
+
+| Where | Link | Note |
+|---|---|---|
+| **Mouser (US, first choice)** | https://www.mouser.com/ProductDetail/Radiona/CS-ULX3S-03 | Crowd Supply SKU `CS-ULX3S-03`; confirm the listing says **LFE5U-85F** and v3.1.x before checkout (the -01/-02 SKUs are the smaller parts) |
+| Crowd Supply | https://www.crowdsupply.com/radiona/ulx3s | batch sales; sign up for the next batch if the 85F is out; ships via Mouser anyway |
+| Radiona direct | https://radiona.org/ulx3s/ | EU shipping; slower to the US |
+| Tindie / eBay (used) | — | only if the photos show the 85F marking and a v3.1.x board |
 
 | Option | Choice | Why |
 |---|---|---|
