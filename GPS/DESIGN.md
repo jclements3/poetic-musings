@@ -12,7 +12,11 @@ u-blox + reference). Ledger: work (W).
 planned DPLL. Its main customer inside the box is the snooker demo: I stamps every
 camera frame and M every radar velocity record from the RTC this letter disciplines,
 so the 5 % speed-match gate in PLAN Phase 12 depends on G. The `MAIDEN/…` paths below
-are the library source archive, not a dependency on another program.
+are the library source archive — a plain directory in this unified repo since
+2026-09-15, not a dependency on another program. In `../CLASH-LIBRARY-MAP.md` § Module
+list, G contributes the NMEA `$GxRMC` time parser (I/O and links, ✓), the PPS
+discipline with 48-bit RTC and holdover watchdog (Timing, ◐ — port from
+`pps_discipline.vhd`), and the PPS-locked 10 MHz DPLL (Timing, ○).
 
 ## What is already built (harvest from MAIDEN/firmware/timebase)
 
