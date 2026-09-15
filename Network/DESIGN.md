@@ -10,8 +10,12 @@ is assumed (the old "L letter" skills — Ethernet without capture is a bad afte
 CRC32, async-FIFO CDC and the Ch.10 record framing. Its first real payload is the
 snooker demo (PLAN Phases 11–12): I's per-ball CENTROID records (≤32 per frame at
 200 fps, ≈110 KB/s) and M's velocity records, both IRIG-stamped, to the laptop that
-draws the table. The `MAIDEN/…` paths below are the library source archive, not a
-dependency on another program.
+draws the table. The `MAIDEN/…` paths below are the library source archive — a plain
+directory in this unified repo since 2026-09-15, not a dependency on another program.
+In `../CLASH-LIBRARY-MAP.md` § Module list, N contributes the RMII UDP/IPv4 transmitter
+with CRC32 (I/O and links, ✓), owns the ◐ Ch.10 tagged-record framing and record mux
+(port from the recorder `PROTOCOL.md` + Python), and the ○ RMII MAC receiver; the
+SDRAM controller it needs for elasticity is a shared ○ under Timing.
 
 ## What the archive gives us — and what it doesn't
 
