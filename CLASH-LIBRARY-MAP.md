@@ -110,6 +110,38 @@ how fast the cue ball left, IRIG aligns them on one screen (PLAN.md Phases 11–
 | Cue-ball departure (~1.3 kHz Doppler at 8 m/s) | CIC decimate → FFT512 → CA-CFAR → velocity record; radial-only, no ball identity | `Maiden.Cic`, `Theremin.Fft`, `Maiden.Cfar`, `doppler_core.vhd` | ✓ blocks · ◐ chain |
 | V0 one-screen view | Ball paths + velocity trace on the overlay strip, timestamps aligned by IRIG; gate = radar speed within 5 % of camera speed | overlay FB + `Theremin.Fft` tap | ○ overlay |
 
+## Status — 2026-09-15
+
+| Family | Verified ✓ | Awaiting port ◐ | To write ○ |
+|---|---|---|---|
+| DSP core | 11 | 1 | 4 |
+| Audio and synthesis | 6 | 0 | 4 |
+| I/O and links | 8 | 1 | 5 |
+| Timing and CDC | 4 | 2 | 2 |
+| Control and display | 4 | 0 | 1 |
+| **Total** | **33** | **4** | **16** |
+
+- **Verified** = hedgehog/assertion spec green in Clash sim, Verilog generated. Measured
+  ECP5 area exists for `ThereminTop`, `Theremin.Fft`, `IirNStage` and the text console;
+  every other ✓ still needs an area number after integration (Lesson 11: area is a
+  measurement).
+- **Awaiting port** = measured VHDL with a green GHDL testbench: Doppler chain, Ch.10
+  record framing, PPS discipline, strobe timestamp latch. Each ports when its spoke
+  starts (`LIBRARY.md` porting rule).
+- **To write** clusters in three spokes — Imaging (DVP capture, blob labeller,
+  centroids), Panel (LFOs, rhythm ROM, sequencer, overlay framebuffer), Erand49
+  (KS waveguide, I²S) — plus single blocks: DDC wiring + AM demod (S), Goertzel +
+  WSPR (U), MAC RX (N), DPLL and SDRAM controller (shared).
+- **Blockers:** none in gateware. ULX3S 85F on backorder until 2026-10-02
+  (`ORDERS.md` R1) — no new area measurements before then. Regression gate (theremin
+  suite) is green.
+- **Next moves in build order:** O and P add no new blocks but re-measure eight ✓
+  blocks on hardware; T re-measures the top; the first new writes are Panel's Audio
+  entries in Phase 5.
+
+Update this table whenever a block changes column; the per-family list below is the
+source of the counts.
+
 ## Module list — what the effort produces
 
 ✓ exists and is sim-verified · ◐ exists as measured VHDL, Clash port pending · ○ to be
