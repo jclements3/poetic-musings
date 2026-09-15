@@ -56,7 +56,7 @@ Execution plan with the demo that closes each phase: `PLAN.md`.
 ## Root files
 
 - `PROGRAM.md` — this index
-- `CLASH-LIBRARY-MAP.md` — every hardware part mapped to the Clash component it demonstrates
+- `CLASH-LIBRARY-MAP.md` — every hardware part mapped to the Clash component it demonstrates, plus the **module list** by family with status (≈35 ✓ · 5 ◐ · 15 ○)
 - `LIBRARY.md` — shared-block inventory: what exists (measured VHDL/Clash), where, and which spokes consume it
 - `PLAN.md` — phased execution plan: each phase ends in a demo
 - `HANDOFF.md` — session handoffs: 2026-09-15 reorientation (current) over the 2026-08-29 mobile session (historical)
@@ -71,13 +71,20 @@ Execution plan with the demo that closes each phase: `PLAN.md`.
 
 ## Notes / open items
 
-- `MAIDEN/` is a **library source archive**, not a spoke: it is the older work-project testbed
-  repo (own `.git`, tracked as a gitlink) where the measured Clash DSP blocks
-  (`Maiden.{Cic,Fir,Cordic,Cfar}`, the theremin port, doppler and timebase VHDL) were
-  born. Blocks are consumed in place or ported, never edited there. The 3-station
-  fusion program that used to be the M capstone is out of scope; M is now the Doppler
-  radar spoke.
-- `Theremin/` also keeps its own `.git`. Their `.venv`s were not copied.
+- **One unified repo (since 2026-09-15):** github.com/jclements3/poetic-musings is
+  self-contained. `MAIDEN/` and `Theremin/` are plain directories here (their old
+  standalone histories are archived outside the tree); the only external fetch is
+  `Oracle/forth-cpu-upstream/` (`Oracle/forth-cpu-notes.md`). Business/finance
+  material, tool state, build outputs and oversize renders are ignored by rule.
+- `MAIDEN/` is a **library source archive**, not a spoke: the older work-project
+  testbed where the measured Clash DSP blocks (`Maiden.{Cic,Fir,Cordic,Cfar}`, the
+  theremin port, doppler and timebase VHDL) were born. Blocks are consumed in place or
+  ported, never edited there. The 3-station fusion program that used to be the M
+  capstone is out of scope; M is now the Motion radar spoke. Next step: migrate the
+  measured blocks into a top-level `lib/` so the archive can go.
+- Every root and spoke directory has a `DESIGN.md` in one shape (plan summary ·
+  framing · signal path · registers/Forth · gates · out of scope) that names its
+  entries in the module list; Panel and Erand49 also have `ORDERS.md`.
 - Panel silk legends are still tied to the 1981 Casio VL-1; they need a mode-neutral
   layer since VL-1 synthesis is one mode among many.
 - Two boards total: ULX3S ECP5-85F in the box; Alchitry Cu runs Santa Glide standalone.
