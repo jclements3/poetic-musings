@@ -1,11 +1,11 @@
 # POETIC MUSINGS — program index
 
-**Mission:** one portable controller (the One Box, ULX3S ECP5-85F behind the 3D-printed
-49-key Piano panel with Oracle as the brains) that JC can carry anywhere to demonstrate,
-and teach the grandkids with, a family of FPGA projects: Santa's sleigh gliding a tube,
-harp optical sensors making MIDI sounds, a Forth computer playing games, a music
-synthesizer, a theremin, a CW transceiver, an SDR, and radar+camera fusion feeding an
-AI data stream (4 cameras + 2 radars) on the IRAD side.
+**Mission (reoriented 2026-09-15):** build up a measured, sim-verified **Clash FPGA
+signal-processing library**. The One Box (ULX3S ECP5-85F behind the 3D-printed 49-key
+Piano panel with Oracle as the brains) is the *demonstrator*: every piece of hardware on
+it — keys, sliders, speaker, harp sensors, theremin antennas, IRIG/GPS, display, radio,
+sleigh link, camera/radar — exists to exercise one or more library components. The
+hardware-to-component map is `CLASH-LIBRARY-MAP.md`; the block inventory is `LIBRARY.md`.
 
 Build rule: serial, finish before start. **C → I → O → T → P → E**, then IRAD
 **G → N → U → S → I → M** interleaved as funding allows. Details and gates:
@@ -37,6 +37,7 @@ Panel map: `README.html` (regenerate with `gen.py`).
 ## Root files
 
 - `PROGRAM.md` — this index
+- `CLASH-LIBRARY-MAP.md` — every hardware part of the One Box mapped to the Clash component it demonstrates (the reorientation)
 - `PLAN.md` — phased execution plan: each phase ends in a demo, culminating in the PM device
 - `LIBRARY.md` — shared-block inventory: what exists (measured VHDL/Clash), where, and which letters consume it
 - `HANDOFF.md` — 2026-08-29 mobile session handoff (decisions, corrections, PERT outcomes)
