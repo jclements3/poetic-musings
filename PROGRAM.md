@@ -41,7 +41,7 @@ MUSING                                                                (IRAD ledg
 | E | `Erand49/` | IR sensors, ADCs, harp frame | Cordic, Cfar, KS, HarpLink, I²S | `Erand49/DESIGN.md`; frame CAD done; gate 1 = one string |
 | T | `Theremin/` (older VHDL) · `MAIDEN/theremin/clash/` (measured Clash) | antennas + oscillator boards | full theremin suite — **regression gate for every library change** | `Theremin/DESIGN.md`; measured: 1,816 LUT4 |
 | I | `IRIG/` | IRIG-B out | DCLS framer | implemented + sim-verified |
-| C | `Coil/` | Santa Glide tube + Alchitry Cu | SleighSpeed | design done, Rev C rx on Cu |
+| C | `Coil/` | Santa Glide tube + Alchitry Cu (on the snooker table) | SleighSpeed, watchdog, pacer FSM, iCE40 flow | `Coil/DESIGN.md`; design done, Rev C rx on Cu |
 | M | `MAIDEN/firmware/doppler/` | **Motion radar** — Doppler front end | doppler_core (VHDL), reuses Cic/Fft/Cfar | measured VHDL, sim green |
 | U | `UHF/` | whip, PA | Keyer ✓, WSPR ○ | `DESIGN.md` |
 | S | `SDR/` | AD9226 ADC + relay | Cic, Fir, Fft ✓; DDC wiring ○ | `DESIGN.md` |
