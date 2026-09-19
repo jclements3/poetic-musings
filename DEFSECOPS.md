@@ -198,8 +198,16 @@ they're not silently missing from the study plan:
   against a live account/cluster to produce a scored compliance report. That needs a real
   account and a real cluster, respectively.
 - **GitLab specifically:** the JD calls out GitLab CI, repos, and backlog management by
-  name; this repo is on GitHub. Worth a separate exercise mirroring `.github/workflows/`
-  into `.gitlab-ci.yml` to get comfortable with GitLab's pipeline/backlog UI.
+  name; this repo is on GitHub. `.gitlab-ci.yml` at the repo root now mirrors
+  `security.yml`/`ci.yml` stage-for-stage (lint → test → security: gitleaks, bandit,
+  syft+pip-audit, trivy, tfsec, kube-linter), with `rules: exists:` standing in for the
+  GitHub version's path-existence no-ops, and notes on GitLab's managed
+  SAST/Secret-Detection/Dependency-Scanning/Container-Scanning templates as the
+  production alternative to hand-rolling each tool. It's only been YAML-syntax
+  validated locally (no GitLab runner here) — pushing it to a real GitLab.com project and
+  watching it run is still the actual exercise; this file is scaffolding for that, not a
+  substitute for it. Also still worth getting comfortable with GitLab's MR/backlog UI
+  directly, which no config file will teach.
 
 ---
 

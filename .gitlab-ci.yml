@@ -1,0 +1,178 @@
+# GitLab CI mirror of .github/workflows/{ci.yml,security.yml}
+#
+# Built as a training exercise for GitLab's pipeline dialect (see DEFSECOPS.md §5) —
+# same stages and same gating logic as the GitHub Actions pipeline, translated to
+# GitLab CI syntax. Every security job checks its target path exists before running,
+# same as the GitHub version, so this stays safe to run incrementally.
+#
+# Note: GitLab.com ships free "Security Scanning" CI/CD templates (Include:
+# Jobs/SAST.gitlab-ci.yml, Secret-Detection.gitlab-ci.yml, Dependency-Scanning.gitlab-ci.yml,
+# Container-Scanning.gitlab-ci.yml) that auto-detect languages and post results straight
+# into merge-request widgets. This file intentionally reimplements the scans with the
+# same explicit tools as the GitHub pipeline (gitleaks, bandit, syft, pip-audit, trivy,
+# tfsec, kube-linter) instead of the managed templates, so the two pipelines are
+# comparable line-for-line as a study aid. A `templates:` alternative is noted inline
+# where relevant.
+
+stages:
+  - lint
+  - test
+  - security
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+default:
+  interruptible: true
+
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+  paths:
+    - .cache/pip
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+
+# ---------------------------------------------------------------------------
+# lint / test  (mirrors ci.yml)
+# ---------------------------------------------------------------------------
+
+lint-python:
+  stage: lint
+  image: python:3.12-slim
+  script:
+    - pip install ruff
+    - |
+      if find app -name '*.py' 2>/dev/null | grep -q . || find . -maxdepth 1 -name '*.py' | grep -q .; then
+        ruff check app *.py
+      else
+        echo "No Python sources found; skipping."
+      fi
+    - |
+      echo "Haskell/Clash test suites exist elsewhere in this repo (e.g. under package dirs)."
+      echo "They are not run in this pipeline; run them locally via 'cabal test' / 'stack test' per package."
+
+python-tests:
+  stage: test
+  image: python:3.12-slim
+  needs: ["lint-python"]
+  script:
+    - |
+      if [ -f app/status-service/requirements.txt ]; then
+        pip install -r app/status-service/requirements.txt
+        if [ -d app/status-service/tests ] || find app/status-service -name 'test_*.py' | grep -q .; then
+          pip install pytest
+          pytest app/status-service -q
+        else
+          echo "No test suite found under app/status-service yet; skipping."
+        fi
+      else
+        echo "app/status-service/requirements.txt not present yet; skipping."
+      fi
+
+# ---------------------------------------------------------------------------
+# security  (mirrors security.yml)
+# ---------------------------------------------------------------------------
+
+secrets-scan:
+  stage: security
+  image:
+    name: zricethezav/gitleaks:latest
+    entrypoint: [""]
+  script:
+    - gitleaks detect --source . --log-opts="--all" --redact --exit-code 1
+  # GitLab-managed alternative: `include: - template: Jobs/Secret-Detection.gitlab-ci.yml`
+
+sast-python:
+  stage: security
+  image: python:3.12-slim
+  script:
+    - pip install "bandit[sarif]"
+    - mkdir -p .scan-out
+    - TARGETS="*.py"; [ -d app ] && TARGETS="app $TARGETS"
+    - bandit -r $TARGETS -f sarif -o .scan-out/bandit.sarif --exit-zero
+    - bandit -r $TARGETS -ll -x '**/tests/**'
+  artifacts:
+    when: always
+    paths:
+      - .scan-out/bandit.sarif
+    expire_in: 30 days
+  # GitLab-managed alternative: `include: - template: Jobs/SAST.gitlab-ci.yml`
+
+sbom-and-dependency-scan:
+  stage: security
+  image: python:3.12-slim
+  rules:
+    - exists:
+        - app/status-service/requirements.txt
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq curl
+    - curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+  script:
+    - syft app/status-service -o cyclonedx-json=sbom-status-service.cdx.json
+    - pip install pip-audit
+    - pip-audit -r app/status-service/requirements.txt -f json -o pip-audit-results.json
+  artifacts:
+    when: always
+    paths:
+      - sbom-status-service.cdx.json
+      - pip-audit-results.json
+    expire_in: 30 days
+  # GitLab-managed alternative: `include: - template: Jobs/Dependency-Scanning.gitlab-ci.yml`
+
+container-scan:
+  stage: security
+  image: docker:24-dind
+  services:
+    - docker:24-dind
+  rules:
+    - exists:
+        - app/status-service/Dockerfile
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  script:
+    - docker build -t status-service:ci -f app/status-service/Dockerfile app/status-service
+    - >
+      docker run --rm -v /var/run/docker.sock:/var/run/docker.sock
+      -v "$PWD:/work" aquasec/trivy:latest image
+      --format sarif --output /work/trivy-image.sarif
+      --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed
+      status-service:ci
+  artifacts:
+    when: always
+    paths:
+      - trivy-image.sarif
+    expire_in: 30 days
+  # GitLab-managed alternative: `include: - template: Jobs/Container-Scanning.gitlab-ci.yml`
+
+iac-scan:
+  stage: security
+  image:
+    name: aquasec/tfsec:latest
+    entrypoint: [""]
+  rules:
+    - exists:
+        - infra/terraform/**/*
+  script:
+    - tfsec infra/terraform --format sarif --out tfsec.sarif
+    - tfsec infra/terraform
+  artifacts:
+    when: always
+    paths:
+      - tfsec.sarif
+    expire_in: 30 days
+
+k8s-manifest-scan:
+  stage: security
+  image:
+    name: stackrox/kube-linter:latest
+    entrypoint: [""]
+  rules:
+    - exists:
+        - k8s/**/*.yaml
+        - k8s/**/*.yml
+  script:
+    - kube-linter lint k8s
