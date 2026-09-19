@@ -1,0 +1,51 @@
+# Default-deny all ingress and egress for this app's pods, then explicitly
+# allow only what the service needs: ingress on 8080 from anywhere in the
+# namespace, and egress limited to DNS. The app makes no outbound calls of
+# its own (it only reads a local file), so egress is locked down hard.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: status-service-default-deny
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: status-service
+  policyTypes:
+    - Ingress
+    - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: status-service-allow-ingress
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: status-service
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: status-service-allow-dns-egress
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: status-service
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53

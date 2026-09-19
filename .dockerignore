@@ -1,0 +1,8 @@
+**/.git
+**/__pycache__
+**/*.pyc
+**/.venv
+**/venv
+**/*.egg-info
+k8s
+!app/status-service/STATUS.md

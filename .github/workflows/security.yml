@@ -1,0 +1,235 @@
+name: DevSecOps Security Scans
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly scan to catch newly-disclosed CVEs against unchanged code
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  secrets-scan:
+    name: Secrets Detection (gitleaks)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: true
+        # gitleaks-action fails the job (non-zero exit) when leaks are found
+
+  sast-python:
+    name: SAST - Python (bandit)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install bandit
+        run: pip install "bandit[sarif]"
+
+      - name: Run bandit over app/ and root *.py
+        run: |
+          mkdir -p .scan-out
+          TARGETS="*.py"
+          if [ -d app ]; then TARGETS="app $TARGETS"; fi
+          bandit -r $TARGETS -f sarif -o .scan-out/bandit.sarif --exit-zero
+          bandit -r $TARGETS -ll -x '**/tests/**' || BANDIT_FAILED=1
+          if [ "${BANDIT_FAILED:-0}" = "1" ]; then
+            echo "Bandit found medium/high severity issues." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+      - name: Upload SARIF to code scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: .scan-out/bandit.sarif
+          category: bandit-python-sast
+
+  sbom-and-dependency-scan:
+    name: SBOM + Dependency Vulnerability Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check for requirements.txt
+        id: reqs
+        run: |
+          if [ -f app/status-service/requirements.txt ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Generate SBOM (Syft)
+        if: steps.reqs.outputs.found == 'true'
+        uses: anchore/sbom-action@v0
+        with:
+          path: app/status-service
+          format: cyclonedx-json
+          output-file: sbom-status-service.cdx.json
+          upload-artifact: true
+
+      - name: Set up Python
+        if: steps.reqs.outputs.found == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pip-audit
+        if: steps.reqs.outputs.found == 'true'
+        run: pip install pip-audit
+
+      - name: Run pip-audit
+        if: steps.reqs.outputs.found == 'true'
+        run: pip-audit -r app/status-service/requirements.txt -f json -o pip-audit-results.json || (cat pip-audit-results.json && exit 1)
+
+      - name: Skip notice
+        if: steps.reqs.outputs.found != 'true'
+        run: echo "app/status-service/requirements.txt not present yet; skipping SBOM/dependency scan." >> "$GITHUB_STEP_SUMMARY"
+
+  container-scan:
+    name: Container Image Scan (Trivy)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check for Dockerfile
+        id: dockerfile
+        run: |
+          if [ -f app/status-service/Dockerfile ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build image
+        if: steps.dockerfile.outputs.found == 'true'
+        run: docker build -t status-service:ci -f app/status-service/Dockerfile app/status-service
+
+      - name: Scan image with Trivy
+        if: steps.dockerfile.outputs.found == 'true'
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: status-service:ci
+          format: sarif
+          output: trivy-image.sarif
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+          ignore-unfixed: true
+
+      - name: Upload Trivy SARIF
+        if: always() && steps.dockerfile.outputs.found == 'true'
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-image.sarif
+          category: trivy-container
+
+      - name: Skip notice
+        if: steps.dockerfile.outputs.found != 'true'
+        run: echo "app/status-service/Dockerfile not present yet; skipping container scan." >> "$GITHUB_STEP_SUMMARY"
+
+  iac-scan:
+    name: IaC Scan - Terraform (tfsec)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check for Terraform
+        id: tf
+        run: |
+          if [ -d infra/terraform ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run tfsec
+        if: steps.tf.outputs.found == 'true'
+        uses: aquasecurity/tfsec-sarif-action@v0.1.4
+        with:
+          working_directory: infra/terraform
+          sarif_file: tfsec.sarif
+
+      - name: Upload tfsec SARIF
+        if: always() && steps.tf.outputs.found == 'true'
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: tfsec.sarif
+          category: tfsec-iac
+
+      - name: Fail on tfsec findings
+        if: steps.tf.outputs.found == 'true'
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          working_directory: infra/terraform
+
+      - name: Skip notice
+        if: steps.tf.outputs.found != 'true'
+        run: echo "infra/terraform not present yet; skipping IaC scan." >> "$GITHUB_STEP_SUMMARY"
+
+  k8s-manifest-scan:
+    name: K8s Manifest Scan (kube-linter)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check for k8s manifests
+        id: k8s
+        run: |
+          if [ -d k8s ] && find k8s -name '*.yml' -o -name '*.yaml' | grep -q .; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run kube-linter
+        if: steps.k8s.outputs.found == 'true'
+        uses: stackrox/kube-linter-action@v1.0.5
+        with:
+          directory: k8s
+
+      - name: Skip notice
+        if: steps.k8s.outputs.found != 'true'
+        run: echo "No k8s manifests found yet under k8s/; skipping manifest scan." >> "$GITHUB_STEP_SUMMARY"
