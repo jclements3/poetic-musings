@@ -7,6 +7,7 @@
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage{hyperref}
+\usepackage{pdfcomment}
 \usepackage{titlesec}
 \usepackage{enumitem}
 \usepackage{tabularx}
@@ -51,6 +52,29 @@
   showstringspaces=false,
   tabsize=2
 }
+
+% ---------------------------------------------------------------------
+% Acronym popups: every wrapped acronym is BOTH a clickable hyperlink
+% to its Glossary entry (works in every PDF viewer, including browsers)
+% AND a hover/click popup tooltip via pdfcomment (full support in Adobe
+% Acrobat/Reader; other viewers simply show the acronym as a plain link).
+% ---------------------------------------------------------------------
+\newcommand{\acr}[3]{\pdftooltip{\hyperlink{gls:#1}{#2}}{#3}}
+
+\newcommand{\AD}{\acr{AD}{AD}{Active Directory: Microsoft's directory service for identity, authentication, and authorization across an organization's users, computers, and groups.}}
+\newcommand{\CICD}{\acr{CICD}{CI/CD}{Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.}}
+\newcommand{\CIS}{\acr{CIS}{CIS}{Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems.}}
+\newcommand{\CVE}{\acr{CVE}{CVE}{Common Vulnerabilities and Exposures: the standard public naming/numbering system for disclosed security vulnerabilities.}}
+\newcommand{\IaC}{\acr{IaC}{IaC}{Infrastructure as Code: describing infrastructure in version-controlled text instead of manual console clicks.}}
+\newcommand{\IAM}{\acr{IAM}{IAM}{Identity and Access Management: the system for controlling who or what can do what to which resource.}}
+\newcommand{\IDP}{\acr{IDP}{IDP}{Internal Developer Platform: the shared infrastructure, pipelines, and tooling a platform team builds for every other team to build on.}}
+\newcommand{\KEightS}{\acr{K8s}{K8s}{Kubernetes: a system for running and automatically managing many containers across many machines.}}
+\newcommand{\MECM}{\acr{MECM}{MECM/SCCM}{Microsoft Endpoint Configuration Manager (formerly System Center Configuration Manager): tooling for managing on-premises Windows devices at scale.}}
+\newcommand{\SARIF}{\acr{SARIF}{SARIF}{Static Analysis Results Interchange Format: a standard format for security scan results so different tools' findings can be viewed in one place.}}
+\newcommand{\SAST}{\acr{SAST}{SAST}{Static Application Security Testing: analyzing source code for security-relevant patterns without running it.}}
+\newcommand{\SBOM}{\acr{SBOM}{SBOM}{Software Bill of Materials: a complete, machine-readable inventory of every dependency a piece of software uses.}}
+\newcommand{\GPO}{\acr{GPO}{GPO}{Group Policy Object: a declared configuration/security setting that Active Directory pushes automatically to computers or users in its scope.}}
+\newcommand{\SCA}{\acr{SCA}{SCA}{Software Composition Analysis: checking a dependency inventory against a database of known vulnerabilities.}}
 
 \newtcolorbox{note}[1][]{
   colback=sidebar, colframe=codekw, boxrule=0.6pt, arc=2pt,
@@ -119,7 +143,7 @@ deliberate order, because each phase is the foundation the next one stands on:
     storage, networking, identity) that are the same on every cloud, learned on AWS because
     it has the largest market share and therefore the highest odds of matching a real job
     description.
-  \item \textbf{Infrastructure as Code} --- Terraform, and more importantly the concept of
+  \item \IaC{} (\textbf{Infrastructure as Code}) --- Terraform, and more importantly the concept of
     describing infrastructure as reviewable, repeatable, version-controlled text instead of
     manual console clicks.
   \item \textbf{Containers and orchestration} --- Docker and Kubernetes, learned to the
@@ -557,7 +581,7 @@ instead, you are translating vocabulary, not relearning computer science.
     infrastructure; subnets divide that network into smaller pieces, some
     internet-facing (\emph{public}), some not (\emph{private}); security groups and
     network ACLs act as firewalls controlling exactly what traffic is allowed in and out.
-  \item \textbf{Identity and access management (IAM)} --- who (a person, or a piece of
+  \item \textbf{Identity and access management} (\IAM{}) --- who (a person, or a piece of
     software) is allowed to do what to which resource. This is arguably the single most
     security-critical concept in all of cloud computing, because a misconfigured
     permission is the most common root cause of real cloud security incidents.
@@ -676,7 +700,7 @@ somewhere else. This has real, recurring costs:
     person's click history the way you can against a text file.
 \end{itemize}
 
-\textbf{Infrastructure as Code} means describing the infrastructure you want in a text
+\IaC{} (\textbf{Infrastructure as Code}) means describing the infrastructure you want in a text
 file, checking that file into Git exactly like application code, and letting a tool read
 that description and make the real cloud match it. Change the file, and the next run makes
 the cloud match the new description. You get a full history of every infrastructure change,
@@ -943,7 +967,7 @@ path that needs it -- is exactly what the corresponding Kubernetes manifest does
 Running one container on one machine is easy. Running dozens of containers, across many
 machines, that need to survive crashes, scale up under load, roll out new versions without
 downtime, and be moved off a machine that needs maintenance -- doing all of that reliably
-by hand does not scale past a very small team. \textbf{Kubernetes} (often "K8s") is a
+by hand does not scale past a very small team. \textbf{Kubernetes} (often \KEightS{}) is a
 system that automates exactly this: you describe the \emph{desired state} ("I want three
 copies of this container running, each with these resource limits, exposed on this port"),
 and Kubernetes continuously works to make reality match that description, healing any
@@ -1127,7 +1151,7 @@ together by automation that runs on every code change, without a human rememberi
 trigger each step by hand. CI/CD is that wiring, which is why the road map this book
 follows treats it as the phase deserving the most sustained attention.
 
-\textbf{Continuous Integration (CI)} is the practice of automatically building and testing
+\CICD{} (\textbf{Continuous Integration (CI)}) is the practice of automatically building and testing
 every change, so problems are caught within minutes of being introduced. \textbf{Continuous
 Delivery} extends this to automatically leaving every passing change ready to deploy, with
 a human clicking a final button. \textbf{Continuous Deployment} goes one step further and
@@ -1190,7 +1214,7 @@ retrievable from history by anyone with read access, until it is rotated.
 
 \subsection{SAST -- Static Application Security Testing}
 
-Analyzes source code for security-relevant patterns \emph{without running it}: building a
+\SAST{} analyzes source code for security-relevant patterns \emph{without running it}: building a
 shell command by concatenating untrusted input (command injection risk), a hardcoded
 credential, a known-weak cryptographic function. This differs from a linter, which cares
 about style and correctness; a SAST tool specifically targets security-relevant code
@@ -1202,10 +1226,10 @@ bandit -r app -ll -f sarif -o bandit.sarif
 
 \subsection{SBOM and dependency scanning (SCA)}
 
-A \textbf{Software Bill of Materials (SBOM)} is a complete, machine-readable inventory of
+A \SBOM{} (\textbf{Software Bill of Materials}) is a complete, machine-readable inventory of
 every library your software depends on and its exact version -- an ingredient list.
-\textbf{Dependency scanning} (or Software Composition Analysis, SCA) checks that
-inventory against a database of known, publicly disclosed vulnerabilities (CVEs -- Common
+\textbf{Dependency scanning} (or \SCA{} (Software Composition Analysis)) checks that
+inventory against a database of known, publicly disclosed vulnerabilities (\CVE{}s -- Common
 Vulnerabilities and Exposures). The SBOM answers "what's in this artifact"; the dependency
 scan answers "does any of it have a known flaw."
 
@@ -1247,7 +1271,7 @@ kube-linter lint k8s/
     if that dependency's own repository is ever compromised, every pipeline pointing at its
     moving branch picks up the malicious change automatically and silently.
   \item \textbf{Centralize findings.} Several scanners can emit a standard format called
-    \textbf{SARIF} (Static Analysis Results Interchange Format); uploading all of them to
+    \SARIF{} (\textbf{Static Analysis} Results Interchange Format); uploading all of them to
     one dashboard means findings live in one place instead of being scattered across seven
     different job logs nobody reads.
   \item \textbf{Design for incremental rollout.} In a real organization, a platform
@@ -1401,7 +1425,7 @@ boundary, not just the cloud-native half.
 
 \section{Active Directory: the identity backbone}
 
-\textbf{Active Directory (AD)} is Microsoft's directory service: a database of every user,
+\AD{} (\textbf{Active Directory}) is Microsoft's directory service: a database of every user,
 computer, and group in an organization, along with the relationships and permissions
 between them, organized into a hierarchical structure of \emph{domains},
 \emph{organizational units (OUs)}, and \emph{forests} (a forest is a collection of one or
@@ -1421,7 +1445,7 @@ resources they are already authenticated for on the corporate network.
 
 \section{Group Policy Objects: configuration as (a kind of) code}
 
-A \textbf{Group Policy Object (GPO)} is a declared set of configuration settings --
+A \GPO{} (\textbf{Group Policy Object}) is a declared set of configuration settings --
 password complexity requirements, which applications are allowed to run, firewall rules,
 drive mappings, screen-lock timeouts -- that AD pushes out automatically to every computer
 or user account within its scope. Conceptually, this is the same idea as Infrastructure as
@@ -1433,7 +1457,7 @@ walking desk to desk configuring each laptop individually.
 
 \section{MECM/SCCM and Intune: the enforcement arm}
 
-\textbf{MECM} (Microsoft Endpoint Configuration Manager, the modern name for what was long
+\MECM{} (\textbf{Microsoft Endpoint Configuration Manager}, the modern name for what was long
 known as \textbf{SCCM}, System Center Configuration Manager) is the traditional tool for
 managing on-premises, domain-joined Windows devices at scale: pushing software installs
 and updates, enforcing configuration baselines, and reporting on device compliance across
@@ -1469,7 +1493,7 @@ this kind of self-directed study, with no production environment required.
 
 \section{What a CIS Benchmark actually is}
 
-The \textbf{Center for Internet Security (CIS)} publishes detailed, versioned, freely
+The \CIS{} (\textbf{Center for Internet Security}) publishes detailed, versioned, freely
 available hardening checklists -- called \textbf{CIS Benchmarks} -- for specific systems:
 one for Windows Server, one for a given Linux distribution, one for Kubernetes, one for
 each major cloud provider, and more. Each benchmark is a long, specific list of individual
@@ -1619,45 +1643,57 @@ is the actual skill this whole field rewards.
 \chapter*{Glossary}
 \addcontentsline{toc}{chapter}{Glossary}
 
+\begin{note}[How to use the acronym links in this book]
+Every acronym below that appears underlined and colored the first time it is introduced
+in the body text (for example \AD{} or \IAM{}) is a live PDF link: click it to jump here,
+and click ``Return'' (or use your viewer's back button) to jump back to where you were
+reading. In Adobe Acrobat or Adobe Reader specifically, hovering over one of these linked
+acronyms also opens a small popup with the full definition inline, without leaving the
+page -- other PDF viewers (browsers, Preview, most mobile readers) do not render that
+hover popup, and will simply behave as a normal link instead.
+\end{note}
+
 \begin{description}[leftmargin=2.2em,style=nextline]
-\item[AD (Active Directory)] Microsoft's directory service for identity, authentication,
+\item[\hypertarget{gls:AD}{AD (Active Directory)}] Microsoft's directory service for identity, authentication,
   and authorization across an organization's users, computers, and groups.
-\item[CI/CD] Continuous Integration / Continuous Delivery (or Deployment): automatically
+\item[\hypertarget{gls:CICD}{CI/CD}] Continuous Integration / Continuous Delivery (or Deployment): automatically
   building, testing, and (for Deployment) releasing code on every change.
-\item[CIS Benchmark] An industry-standard, detailed hardening checklist for a specific
+\item[\hypertarget{gls:CIS}{CIS Benchmark}] An industry-standard, detailed hardening checklist for a specific
   system, published by the Center for Internet Security.
 \item[Container] A packaged, portable unit of software including everything it needs to
   run, so it behaves identically across machines.
-\item[CVE] Common Vulnerabilities and Exposures: the standard public naming/numbering
+\item[\hypertarget{gls:CVE}{CVE}] Common Vulnerabilities and Exposures: the standard public naming/numbering
   system for disclosed security vulnerabilities.
 \item[DevSecOps] DevOps with security scanning built directly into the automated pipeline,
   rather than handled as a separate, later review.
 \item[Docker] The most common tool for building and running containers.
-\item[GPO (Group Policy Object)] A declared configuration/security setting that Active
+\item[\hypertarget{gls:GPO}{GPO (Group Policy Object)}] A declared configuration/security setting that Active
   Directory pushes automatically to computers or users in its scope.
-\item[IaC (Infrastructure as Code)] Describing infrastructure in version-controlled text
+\item[\hypertarget{gls:IaC}{IaC (Infrastructure as Code)}] Describing infrastructure in version-controlled text
   files instead of manual cloud-console clicks, so it is repeatable, reviewable, and
   recreatable.
-\item[IAM (Identity and Access Management)] The system for controlling who or what can do
+\item[\hypertarget{gls:IAM}{IAM (Identity and Access Management)}] The system for controlling who or what can do
   what to which resource.
-\item[IDP (Internal Developer Platform)] The shared infrastructure, pipelines, and tooling
+\item[\hypertarget{gls:IDP}{IDP (Internal Developer Platform)}] The shared infrastructure, pipelines, and tooling
   a platform team builds for every other team to build on.
-\item[Kubernetes (K8s)] A system for running and automatically managing many containers
+\item[\hypertarget{gls:K8s}{Kubernetes (K8s)}] A system for running and automatically managing many containers
   across many machines.
 \item[Least privilege] Granting exactly the access needed and no more, so a compromised
   credential or component causes the smallest possible damage.
-\item[MECM/SCCM] Microsoft Endpoint Configuration Manager (formerly System Center
+\item[\hypertarget{gls:MECM}{MECM/SCCM}] Microsoft Endpoint Configuration Manager (formerly System Center
   Configuration Manager): tooling for managing on-premises Windows devices at scale.
 \item[Module (Terraform)] A reusable, parameterized package of infrastructure resources.
 \item[PromQL] The query language used to ask questions of data stored in Prometheus.
 \item[Pod Security Standards] Kubernetes' three built-in security profiles for Pods:
   privileged, baseline, and restricted (strictest).
-\item[SARIF] Static Analysis Results Interchange Format: a standard format for security
+\item[\hypertarget{gls:SARIF}{SARIF}] Static Analysis Results Interchange Format: a standard format for security
   scan results, so different tools' findings can be viewed in one place.
-\item[SAST] Static Application Security Testing: analyzing source code for
+\item[\hypertarget{gls:SAST}{SAST}] Static Application Security Testing: analyzing source code for
   security-relevant patterns without running it.
-\item[SBOM] Software Bill of Materials: a complete, machine-readable inventory of every
+\item[\hypertarget{gls:SBOM}{SBOM}] Software Bill of Materials: a complete, machine-readable inventory of every
   dependency a piece of software uses.
+\item[\hypertarget{gls:SCA}{SCA (Software Composition Analysis)}] Checking a dependency inventory against a
+  database of known, publicly disclosed vulnerabilities; see also \SBOM{}.
 \item[Shift left] Moving security checks earlier in the development timeline (into the
   automated pipeline, at commit time) instead of as a late, pre-launch review.
 \item[State (Terraform)] Terraform's record of what infrastructure it has already created,
