@@ -59,7 +59,13 @@
 % AND a hover/click popup tooltip via pdfcomment (full support in Adobe
 % Acrobat/Reader; other viewers simply show the acronym as a plain link).
 % ---------------------------------------------------------------------
-\newcommand{\acr}[3]{\pdftooltip{\hyperlink{gls:#1}{#2}}{#3}}
+% NOTE: the tooltip icon must NOT overlap the hyperlink's own annotation
+% rectangle -- two annotations stacked on the same coordinates cause the
+% Link annotation to swallow the mouse-hover event in Acrobat, so the
+% comment popup never fires even though it exists in the PDF. Instead,
+% place the comment icon immediately after the linked text as its own,
+% separate, non-overlapping hit target.
+\newcommand{\acr}[3]{\hyperlink{gls:#1}{#2}\pdfcomment[icon=Comment,color=codekw,open=false]{#3}}
 
 \newcommand{\AD}{\acr{AD}{AD}{Active Directory: Microsoft's directory service for identity, authentication, and authorization across an organization's users, computers, and groups.}}
 \newcommand{\CICD}{\acr{CICD}{CI/CD}{Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.}}
@@ -1647,10 +1653,14 @@ is the actual skill this whole field rewards.
 Every acronym below that appears underlined and colored the first time it is introduced
 in the body text (for example \AD{} or \IAM{}) is a live PDF link: click it to jump here,
 and click ``Return'' (or use your viewer's back button) to jump back to where you were
-reading. In Adobe Acrobat or Adobe Reader specifically, hovering over one of these linked
-acronyms also opens a small popup with the full definition inline, without leaving the
-page -- other PDF viewers (browsers, Preview, most mobile readers) do not render that
-hover popup, and will simply behave as a normal link instead.
+reading. Immediately after each linked acronym is a small comment/note icon
+(\raisebox{-0.1em}{\pdfcomment[icon=Comment,color=codekw,open=false]{example}}); in Adobe
+Acrobat or Adobe Reader specifically, hovering over \emph{that icon} (not the link text
+itself) previews the full definition inline, and clicking it pins the popup open -- the
+icon is deliberately a separate click target from the link, since two overlapping
+annotations at the same coordinates would cause the link to swallow the hover event
+before the comment popup could ever fire. Other PDF viewers (browsers, Preview, most
+mobile readers) do not render that icon or its popup at all, and only the link will work.
 \end{note}
 
 \begin{description}[leftmargin=2.2em,style=nextline]
