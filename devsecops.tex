@@ -81,6 +81,20 @@
 \newcommand{\SBOM}{\acr{SBOM}{SBOM}{Software Bill of Materials: a complete, machine-readable inventory of every dependency a piece of software uses.}}
 \newcommand{\GPO}{\acr{GPO}{GPO}{Group Policy Object: a declared configuration/security setting that Active Directory pushes automatically to computers or users in its scope.}}
 \newcommand{\SCA}{\acr{SCA}{SCA}{Software Composition Analysis: checking a dependency inventory against a database of known vulnerabilities.}}
+\newcommand{\AWS}{\acr{AWS}{AWS}{Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.}}
+\newcommand{\VPC}{\acr{VPC}{VPC}{Virtual Private Cloud: your own private, isolated network inside a cloud provider's infrastructure.}}
+\newcommand{\ECTwo}{\acr{EC2}{EC2}{Elastic Compute Cloud: AWS's core virtual-machine (rentable server) service.}}
+\newcommand{\SThree}{\acr{S3}{S3}{Simple Storage Service: AWS's object storage service for files and blobs at effectively unlimited scale.}}
+\newcommand{\ECR}{\acr{ECR}{ECR}{Elastic Container Registry: AWS's managed registry for storing and scanning container images.}}
+\newcommand{\EKS}{\acr{EKS}{EKS}{Elastic Kubernetes Service: AWS's managed Kubernetes offering.}}
+\newcommand{\KMS}{\acr{KMS}{KMS}{Key Management Service: AWS's managed service for creating and rotating encryption keys.}}
+\newcommand{\HCL}{\acr{HCL}{HCL}{HashiCorp Configuration Language: the language Terraform configuration files are written in.}}
+\newcommand{\GPG}{\acr{GPG}{GPG}{GNU Privacy Guard: an implementation of the OpenPGP standard, commonly used to cryptographically sign git commits.}}
+\newcommand{\TLS}{\acr{TLS}{TLS}{Transport Layer Security: the cryptographic protocol that encrypts network traffic in transit (the successor to SSL).}}
+\newcommand{\DNS}{\acr{DNS}{DNS}{Domain Name System: translates human-readable hostnames into IP addresses.}}
+\newcommand{\SSH}{\acr{SSH}{SSH}{Secure Shell: an encrypted protocol for remote login and secure command execution, also used for signing git commits and authenticating to git remotes.}}
+\newcommand{\API}{\acr{API}{API}{Application Programming Interface: a defined way for one piece of software to request functionality or data from another.}}
+\newcommand{\VM}{\acr{VM}{VM}{Virtual Machine: a full virtualized computer, including its own kernel, distinct from the lighter-weight isolation a container provides.}}
 
 \newtcolorbox{note}[1][]{
   colback=sidebar, colframe=codekw, boxrule=0.6pt, arc=2pt,
@@ -123,7 +137,7 @@
 \addcontentsline{toc}{chapter}{Preface: Why This Book Exists}
 
 You are moving toward a Senior DevSecOps / Platform Engineer role. That role asks for a
-specific, wide stack of skills: Linux and scripting fluency, cloud operations on AWS and
+specific, wide stack of skills: Linux and scripting fluency, cloud operations on \AWS{} and
 Azure, Infrastructure as Code with Terraform, container orchestration with Kubernetes,
 CI/CD pipeline design, security scanning embedded into every stage of the pipeline,
 Windows Active Directory and endpoint management, and the judgment to know how all of
@@ -131,7 +145,7 @@ these pieces fit together into one coherent platform.
 
 Most people who try to learn this stack make the same mistake: they learn each piece in
 isolation. They take an AWS course here, a Docker course there, a Terraform tutorial
-somewhere else, and they never combine them. They can recite what a VPC is and what a
+somewhere else, and they never combine them. They can recite what a \VPC{} is and what a
 Kubernetes Pod is, but they have never watched a single commit travel from their laptop,
 through a security-scanning pipeline, into a built container image, into a running
 Kubernetes Deployment, on infrastructure that Terraform provisioned. That end-to-end
@@ -532,13 +546,13 @@ gate the automated scans run against.
 \section{The security-relevant Git habits}
 
 \begin{itemize}[leftmargin=2em]
-  \item \textbf{Never commit secrets.} A password, API key, or private key committed to
+  \item \textbf{Never commit secrets.} A password, \API{} key, or private key committed to
     Git is not truly deleted by a later commit that removes it --- it remains recoverable
     in history. The correct response to a leaked secret is always to rotate it (change it
     at the source) immediately, not merely to delete the line.
   \item \textbf{Use a \texttt{.gitignore} file} to stop build artifacts, local
     credentials, and editor scratch files from ever being staged in the first place.
-  \item \textbf{Sign your commits} in mature teams (GPG or SSH commit signing), so a
+  \item \textbf{Sign your commits} in mature teams (\GPG{} or \SSH{} commit signing), so a
     commit's authorship is cryptographically verifiable rather than merely a text field
     anyone could forge.
 \end{itemize}
@@ -575,11 +589,11 @@ instead, you are translating vocabulary, not relearning computer science.
 \section{The five concepts that matter}
 
 \begin{enumerate}[leftmargin=2em]
-  \item \textbf{Compute} --- a place your code actually runs: a virtual machine (AWS EC2),
+  \item \textbf{Compute} --- a place your code actually runs: a \VM{} (\AWS{} \ECTwo{}),
     a managed container platform, or a fully managed ``serverless'' function that only
     runs when invoked (AWS Lambda).
   \item \textbf{Storage} --- durable places to keep data: object storage for files and
-    blobs (AWS S3), block storage attached to a single virtual machine like a hard disk
+    blobs (\AWS{} \SThree{}), block storage attached to a single virtual machine like a hard disk
     (AWS EBS), and managed databases (AWS RDS for relational data, DynamoDB for key-value
     data at scale).
   \item \textbf{Networking} --- how things talk to each other and to the internet: a
@@ -621,7 +635,7 @@ before you touch anything else:
 \textbf{IAM} & Identity and Access Management: users, roles, and policies controlling
   exactly what any person or program is allowed to do in your account. \\
 \hline
-\textbf{ECR / EKS} & Elastic Container Registry (stores container images) and Elastic
+\textbf{\ECR{} / \EKS{}} & Elastic Container Registry (stores container images) and Elastic
   Kubernetes Service (managed Kubernetes) -- the on-ramp from "cloud basics" into Part~4
   of this book. \\
 \hline
@@ -714,7 +728,7 @@ code review on infrastructure changes, the ability to recreate an entire environ
 nothing, and -- critically for this book -- the ability to run automated security scanners
 against your infrastructure \emph{before} it is ever applied to a real account.
 
-\textbf{Terraform} (by HashiCorp) is the most widely used IaC tool. You write files in HCL
+\textbf{Terraform} (by HashiCorp) is the most widely used IaC tool. You write files in \HCL{}
 (HashiCorp Configuration Language) describing resources, and Terraform computes and
 executes the plan to create, update, or destroy real cloud resources to match what you
 described.
@@ -830,10 +844,10 @@ checkov -d infra/terraform/
 \begin{caseStudy}[a real Terraform layer, built for this book]
 Inside \texttt{poetic-musings}, a full \texttt{infra/terraform/} tree was built exactly
 along these lines: a root module wiring an \texttt{aws-platform} module (VPC across two
-Availability Zones, a KMS-encrypted and immutable-tagged ECR repository, an SSE-KMS
+Availability Zones, a \KMS{}-encrypted and immutable-tagged \ECR{} repository, an SSE-KMS
 encrypted and versioned S3 bucket with public access explicitly blocked, a least-privilege
 IAM role for CI) and an \texttt{azure-platform} module (a Premium Azure Container Registry
-with public access disabled, a geo-redundant storage account with TLS 1.2 minimum and
+with public access disabled, a geo-redundant storage account with \TLS{} 1.2 minimum and
 shared-key auth disabled), plus \texttt{environments/dev} and \texttt{environments/prod}
 directories showing the same module tree reused with different \texttt{.tfvars}.
 
@@ -1117,7 +1131,7 @@ kustomize build k8s/overlays/prod
 The \texttt{k8s/} directory in \texttt{poetic-musings} deploys the same status-service
 image from Chapter~\ref{ch:docker}: a \texttt{base/} with a Deployment implementing every
 control described above, a Service, three separate \texttt{NetworkPolicy} objects
-(default-deny, explicit ingress on 8080, explicit DNS egress), and a
+(default-deny, explicit ingress on 8080, explicit \DNS{} egress), and a
 \texttt{PodDisruptionBudget} with \texttt{minAvailable: 1}, paired with a 3-replica
 \texttt{overlays/prod} Kustomize overlay (\texttt{overlays/dev} runs 1 replica).
 
@@ -1666,6 +1680,10 @@ mobile readers) do not render that icon or its popup at all, and only the link w
 \begin{description}[leftmargin=2.2em,style=nextline]
 \item[\hypertarget{gls:AD}{AD (Active Directory)}] Microsoft's directory service for identity, authentication,
   and authorization across an organization's users, computers, and groups.
+\item[\hypertarget{gls:API}{API}] Application Programming Interface: a defined way for one piece of software to
+  request functionality or data from another.
+\item[\hypertarget{gls:AWS}{AWS}] Amazon Web Services: the cloud provider with the largest market share, used
+  as this book's primary example.
 \item[\hypertarget{gls:CICD}{CI/CD}] Continuous Integration / Continuous Delivery (or Deployment): automatically
   building, testing, and (for Deployment) releasing code on every change.
 \item[\hypertarget{gls:CIS}{CIS Benchmark}] An industry-standard, detailed hardening checklist for a specific
@@ -1676,9 +1694,18 @@ mobile readers) do not render that icon or its popup at all, and only the link w
   system for disclosed security vulnerabilities.
 \item[DevSecOps] DevOps with security scanning built directly into the automated pipeline,
   rather than handled as a separate, later review.
+\item[\hypertarget{gls:DNS}{DNS}] Domain Name System: translates human-readable hostnames into IP addresses.
 \item[Docker] The most common tool for building and running containers.
+\item[\hypertarget{gls:ECR}{ECR}] Elastic Container Registry: AWS's managed registry for storing and scanning
+  container images.
+\item[\hypertarget{gls:ECTwo}{EC2}] Elastic Compute Cloud: AWS's core virtual-machine (rentable server) service.
+\item[\hypertarget{gls:EKS}{EKS}] Elastic Kubernetes Service: AWS's managed Kubernetes offering.
+\item[\hypertarget{gls:GPG}{GPG}] GNU Privacy Guard: an implementation of the OpenPGP standard, commonly used
+  to cryptographically sign git commits.
 \item[\hypertarget{gls:GPO}{GPO (Group Policy Object)}] A declared configuration/security setting that Active
   Directory pushes automatically to computers or users in its scope.
+\item[\hypertarget{gls:HCL}{HCL}] HashiCorp Configuration Language: the language Terraform configuration
+  files are written in.
 \item[\hypertarget{gls:IaC}{IaC (Infrastructure as Code)}] Describing infrastructure in version-controlled text
   files instead of manual cloud-console clicks, so it is repeatable, reviewable, and
   recreatable.
@@ -1688,6 +1715,8 @@ mobile readers) do not render that icon or its popup at all, and only the link w
   a platform team builds for every other team to build on.
 \item[\hypertarget{gls:K8s}{Kubernetes (K8s)}] A system for running and automatically managing many containers
   across many machines.
+\item[\hypertarget{gls:KMS}{KMS}] Key Management Service: AWS's managed service for creating and rotating
+  encryption keys.
 \item[Least privilege] Granting exactly the access needed and no more, so a compromised
   credential or component causes the smallest possible damage.
 \item[\hypertarget{gls:MECM}{MECM/SCCM}] Microsoft Endpoint Configuration Manager (formerly System Center
@@ -1696,6 +1725,8 @@ mobile readers) do not render that icon or its popup at all, and only the link w
 \item[PromQL] The query language used to ask questions of data stored in Prometheus.
 \item[Pod Security Standards] Kubernetes' three built-in security profiles for Pods:
   privileged, baseline, and restricted (strictest).
+\item[\hypertarget{gls:SThree}{S3}] Simple Storage Service: AWS's object storage service for files and blobs
+  at effectively unlimited scale.
 \item[\hypertarget{gls:SARIF}{SARIF}] Static Analysis Results Interchange Format: a standard format for security
   scan results, so different tools' findings can be viewed in one place.
 \item[\hypertarget{gls:SAST}{SAST}] Static Application Security Testing: analyzing source code for
@@ -1706,9 +1737,17 @@ mobile readers) do not render that icon or its popup at all, and only the link w
   database of known, publicly disclosed vulnerabilities; see also \SBOM{}.
 \item[Shift left] Moving security checks earlier in the development timeline (into the
   automated pipeline, at commit time) instead of as a late, pre-launch review.
+\item[\hypertarget{gls:SSH}{SSH}] Secure Shell: an encrypted protocol for remote login and secure command
+  execution, also used for signing git commits and authenticating to git remotes.
 \item[State (Terraform)] Terraform's record of what infrastructure it has already created,
   used to compute what needs to change on the next run.
 \item[Terraform] The most widely used Infrastructure-as-Code tool, using the HCL language.
+\item[\hypertarget{gls:TLS}{TLS}] Transport Layer Security: the cryptographic protocol that encrypts network
+  traffic in transit (the successor to SSL).
+\item[\hypertarget{gls:VM}{VM}] Virtual Machine: a full virtualized computer, including its own kernel,
+  distinct from the lighter-weight isolation a container provides.
+\item[\hypertarget{gls:VPC}{VPC}] Virtual Private Cloud: your own private, isolated network inside a cloud
+  provider's infrastructure.
 \end{description}
 
 \chapter*{About This Book}
