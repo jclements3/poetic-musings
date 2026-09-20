@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The DevSecOps Field Book</title>
+<meta name="description" content="A complete, slow, honest path from Linux basics to Senior Platform Engineer, with every acronym linked and tooltipped in context.">
+<style>
+code span.al { color: #ff0000; font-weight: bold; }
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+code span.at { color: #7d9029; }
+code span.bn { color: #40a070; }
+code span.bu { color: #008000; }
+code span.cf { color: #007020; font-weight: bold; }
+code span.ch { color: #4070a0; }
+code span.cn { color: #880000; }
+code span.co { color: #60a0b0; font-style: italic; }
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+code span.do { color: #ba2121; font-style: italic; }
+code span.dt { color: #902000; }
+code span.dv { color: #40a070; }
+code span.er { color: #ff0000; font-weight: bold; }
+code span.ex { }
+code span.fl { color: #40a070; }
+code span.fu { color: #06287e; }
+code span.im { color: #008000; font-weight: bold; }
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+code span.kw { color: #007020; font-weight: bold; }
+code span.op { color: #666666; }
+code span.ot { color: #007020; }
+code span.pp { color: #bc7a00; }
+code span.sc { color: #4070a0; }
+code span.ss { color: #bb6688; }
+code span.st { color: #4070a0; }
+code span.va { color: #19177c; }
+code span.vs { color: #4070a0; }
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+
+:root {
+  --bg: #ffffff;
+  --fg: #1c1f24;
+  --muted: #5b6472;
+  --accent: #0a5a96;
+  --accent-soft: #eaf2fa;
+  --rule: #d8dee6;
+  --code-bg: #f5f5f5;
+  --note-border: #0a5a96;
+  --note-bg: #eaf2fa;
+  --case-border: #55606b;
+  --case-bg: #f4f5f6;
+  --gap-border: #a3313f;
+  --gap-bg: #fbecee;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15171a;
+    --fg: #e6e8eb;
+    --muted: #9aa4b2;
+    --accent: #6fb3e0;
+    --accent-soft: #16293a;
+    --rule: #333941;
+    --code-bg: #1e2126;
+    --note-border: #6fb3e0;
+    --note-bg: #16293a;
+    --case-border: #8f99a3;
+    --case-bg: #1e2126;
+    --gap-border: #e2828d;
+    --gap-bg: #2c1a1d;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  line-height: 1.65;
+}
+.page {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 6rem;
+}
+header.titleblock {
+  text-align: center;
+  padding: 3rem 1rem 2rem;
+  border-bottom: 3px double var(--rule);
+  margin-bottom: 2rem;
+}
+header.titleblock h1 { font-size: 2.1rem; margin: 0 0 0.25rem; }
+header.titleblock .subtitle { font-size: 1.15rem; color: var(--muted); margin-bottom: 1.25rem; }
+header.titleblock .byline { font-size: 1rem; color: var(--muted); }
+
+nav.toc {
+  background: var(--accent-soft);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 3rem;
+}
+nav.toc h2 { margin-top: 0; font-size: 1.1rem; }
+nav.toc ol.toc-parts { list-style: decimal; padding-left: 1.4rem; }
+nav.toc ol.toc-chapters { list-style: none; padding-left: 1.2rem; margin: 0.25rem 0 0.75rem; }
+nav.toc ol.toc-chapters li { margin: 0.15rem 0; }
+nav.toc a { text-decoration: none; color: var(--accent); }
+nav.toc a:hover { text-decoration: underline; }
+
+h1, h2, h3, h4 { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; line-height: 1.25; color: var(--fg); }
+h1 { font-size: 1.9rem; margin-top: 3.5rem; padding-top: 1.5rem; border-top: 3px double var(--rule); }
+h2 { font-size: 1.5rem; margin-top: 2.5rem; }
+h3 { font-size: 1.2rem; margin-top: 1.75rem; }
+h4 { font-size: 1.05rem; margin-top: 1.4rem; }
+p { margin: 0.9em 0; }
+a { color: var(--accent); }
+
+code, pre, .sourceCode { font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.85em; }
+p code, li code { background: var(--code-bg); padding: 0.1em 0.35em; border-radius: 3px; }
+div.sourceCode {
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  margin: 1.2rem 0;
+}
+div.sourceCode pre { margin: 0; }
+div.sourceCode a { text-decoration: none; color: inherit; }
+
+div.note, div.caseStudy, div.gap {
+  border-left: 4px solid var(--note-border);
+  background: var(--note-bg);
+  border-radius: 4px;
+  padding: 0.9rem 1.2rem;
+  margin: 1.5rem 0;
+}
+div.note strong:first-child, div.caseStudy strong:first-child, div.gap strong:first-child {
+  display: block; margin-bottom: 0.4rem; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+div.caseStudy { border-left-color: var(--case-border); background: var(--case-bg); }
+div.gap { border-left-color: var(--gap-border); background: var(--gap-bg); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.92rem;
+}
+th, td { border: 1px solid var(--rule); padding: 0.5rem 0.65rem; text-align: left; vertical-align: top; }
+th { background: var(--accent-soft); }
+
+a.acr {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
+  cursor: help;
+}
+a.acr:hover { background: var(--accent-soft); }
+
+figure.diagram {
+  margin: 1.75rem 0;
+  padding: 1rem;
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+}
+figure.diagram svg { width: 100%; height: auto; display: block; }
+figure.diagram figcaption {
+  font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.6rem;
+  text-align: center;
+}
+
+section#glossary dl.glossary { margin-top: 1.5rem; }
+section#glossary dt { font-weight: bold; margin-top: 1rem; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
+section#glossary dd { margin: 0.2rem 0 0; color: var(--fg); }
+p.gloss-note { color: var(--muted); font-style: italic; }
+
+.back-to-top {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.5rem 0.9rem;
+  text-decoration: none;
+  font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  opacity: 0.85;
+}
+.back-to-top:hover { opacity: 1; }
+
+@media (max-width: 600px) {
+  header.titleblock h1 { font-size: 1.5rem; }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+}
+
+</style>
+</head>
+<body>
+<div class="page">
+<header class="titleblock" id="top">
+  <h1>The DevSecOps Field Book</h1>
+  <div class="subtitle">A Complete, Slow, Honest Path from Linux Basics<br>to Senior Platform Engineer</div>
+  <div class="byline">James Clements III &middot; September 2026</div>
+</header>
+
+<nav class="toc" aria-label="Table of contents"><h2>Contents</h2><ol class="toc-parts"><li><a href="#preface-why-this-book-exists">Preface: Why
+This Book Exists</a></li><li><a href="#foundations">Foundations</a><ol class="toc-chapters"><li><a href="#how-to-use-this-road-map">How to Use This Road Map</a></li><li><a href="#linux-fundamentals">Linux Fundamentals</a></li><li><a href="#bash-scripting">Bash Scripting</a></li><li><a href="#git">Git</a></li></ol></li><li><a href="#cloud-basics">Cloud Basics</a><ol class="toc-chapters"><li><a href="#cloud-computing-concepts">Cloud Computing Concepts</a></li></ol></li><li><a href="#infrastructure-as-code">Infrastructure as Code</a><ol class="toc-chapters"><li><a href="#ch:terraform">Terraform and Infrastructure as Code</a></li></ol></li><li><a href="#containers-and-orchestration">Containers and Orchestration</a><ol class="toc-chapters"><li><a href="#ch:docker">Docker and Containers</a></li><li><a href="#ch:k8s">Kubernetes</a></li></ol></li><li><a href="#part:cicd">CI/CD and Security Automation</a><ol class="toc-chapters"><li><a href="#ch:cicd-pipeline">CI/CD: The Backbone of DevOps</a></li><li><a href="#ch:shiftleft">Shifting Security Left</a></li></ol></li><li><a href="#observability">Observability</a><ol class="toc-chapters"><li><a href="#prometheus-and-grafana">Prometheus and Grafana</a></li></ol></li><li><a href="#the-enterprise-layer-windows-identity-and-hardening-at-scale">The
+Enterprise Layer: Windows, Identity, and Hardening at Scale</a><ol class="toc-chapters"><li><a href="#active-directory-gpos-and-endpoint-management">Active Directory,
+GPOs, and Endpoint Management</a></li><li><a href="#cis-benchmarks-and-formal-hardening">CIS Benchmarks and Formal
+Hardening</a></li><li><a href="#managed-development-environments-coder">Managed Development
+Environments: Coder</a></li></ol></li><li><a href="#putting-it-all-together">Putting It All Together</a><ol class="toc-chapters"><li><a href="#avoiding-the-isolated-learning-trap-for-real">Avoiding the
+Isolated-Learning Trap, for Real</a></li><li><a href="#consolidated-gap-list-and-next-exercises">Consolidated Gap List
+and Next Exercises</a></li></ol></li><li><a href="#glossary">Glossary</a></li><li><a href="#about-this-book">About This Book</a></li></ol></nav>
+
+<h2 class="unnumbered" id="preface-why-this-book-exists">Preface: Why
+This Book Exists</h2>
+<p>You are moving toward a Senior DevSecOps / Platform Engineer role.
+That role asks for a specific, wide stack of skills: Linux and scripting
+fluency, cloud operations on <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> and Azure,
+Infrastructure as Code with Terraform, container orchestration with
+Kubernetes, <a class="acr" href="#gls-CICD" title="Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.">CI/CD</a> pipeline design, security scanning embedded into every
+stage of the pipeline, Windows Active Directory and endpoint management,
+and the judgment to know how all of these pieces fit together into one
+coherent platform.</p>
+<p>Most people who try to learn this stack make the same mistake: they
+learn each piece in isolation. They take an <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> course here, a Docker
+course there, a Terraform tutorial somewhere else, and they never
+combine them. They can recite what a <a class="acr" href="#gls-VPC" title="Virtual Private Cloud: your own private, isolated network inside a cloud provider's infrastructure.">VPC</a> is and
+what a Kubernetes Pod is, but they have never watched a single commit
+travel from their laptop, through a security-scanning pipeline, into a
+built container image, into a running Kubernetes Deployment, on
+infrastructure that Terraform provisioned. That end-to-end motion — not
+the vocabulary — is what separates a candidate who can pass a
+trivia-style interview from an engineer a platform team actually wants
+to hire.</p>
+<p>This book is built to avoid that trap. It follows a road map with
+five phases, in a deliberate order, because each phase is the foundation
+the next one stands on:</p>
+<ol>
+<li><p><strong>Foundations</strong> — Linux, the shell, and Git.
+Skipping this and jumping to "DevOps tools" is the single most common
+reason people stay stuck for years instead of months.</p></li>
+<li><p><strong>Cloud basics</strong> — not "<a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> trivia," but the five or
+six concepts (compute, storage, networking, identity) that are the same
+on every cloud, learned on <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> because it has the largest market share
+and therefore the highest odds of matching a real job
+description.</p></li>
+<li><p><a class="acr" href="#gls-IaC" title="Infrastructure as Code: describing infrastructure in version-controlled text instead of manual console clicks.">IaC</a> (<strong>Infrastructure as
+Code</strong>) — Terraform, and more importantly the concept of
+describing infrastructure as reviewable, repeatable, version-controlled
+text instead of manual console clicks.</p></li>
+<li><p><strong>Containers and orchestration</strong> — Docker and
+Kubernetes, learned to the 20% depth that covers 80% of real production
+use, not chased to expert-level trivia.</p></li>
+<li><p><strong><a class="acr" href="#gls-CICD" title="Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.">CI/CD</a></strong> — the backbone of DevOps. Pipelines that
+actually move a real commit to a real running system, with security
+scanning wired directly into every stage, not bolted on
+afterward.</p></li>
+</ol>
+<p>On top of that five-phase spine, this book adds the two things a
+<em>DevSecOps</em> specifically (rather than plain DevOps) role asks
+for: observability (Prometheus and Grafana, so you can see what your
+system is actually doing), and security as a first-class citizen at
+every phase rather than a separate audit at the end — secrets detection,
+static analysis, dependency and container scanning,
+Infrastructure-as-Code scanning, <a class="acr" href="#gls-CIS" title="Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems.">CIS</a> hardening baselines, and the
+enterprise Windows/Active Directory layer that a platform engineer is
+expected to operate alongside all of the cloud-native tooling.</p>
+<p>Every phase in this book is illustrated with a real, working case
+study: a small platform that was built from nothing, inside a git
+repository called <code>poetic-musings</code>, over the course of a few
+working sessions, specifically so you would have real code to read side
+by side with the explanation — not just theory. Where something
+genuinely could not be built in that environment (a real Windows Active
+Directory domain, a live Kubernetes cluster, a live cloud account), this
+book says so plainly, in a labeled “Honest Gap” box, and tells you
+exactly how to close it yourself, cheaply.</p>
+<p>Read this book slowly. It is meant to be read once for the mental
+model, and then kept next to you as a reference while you build. There
+is no shortcut past building things yourself — but there is a shortcut
+past confusion, and that shortcut is reading things in the right order,
+with the right amount of explanation, the first time. That is what this
+book tries to be.</p>
+<h1 id="foundations">Foundations</h1>
+<h2 id="how-to-use-this-road-map">How to Use This Road Map</h2>
+<h3 id="the-five-phase-sequence-and-why-order-matters">The five-phase
+sequence, and why order matters</h3>
+<figure class="diagram">
+<svg aria-labelledby="roadmap-title" role="img" viewbox="0 0 900 220" xmlns="http://www.w3.org/2000/svg">
+<title id="roadmap-title">The five-phase DevSecOps roadmap, in order, with the observability overlay above it</title>
+<style>
+  .rm-box { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+  .rm-box2 { fill: var(--case-bg); stroke: var(--case-border); stroke-width: 1.5; stroke-dasharray: 4 3; }
+  .rm-label { font: 600 13px -apple-system, sans-serif; fill: var(--fg); }
+  .rm-sub { font: 11px -apple-system, sans-serif; fill: var(--muted); }
+  .rm-arrow { stroke: var(--muted); stroke-width: 2; marker-end: url(#rm-arrowhead); }
+  .rm-num { font: 700 12px -apple-system, sans-serif; fill: var(--bg); }
+  .rm-circle { fill: var(--accent); }
+</style>
+<defs>
+<marker id="rm-arrowhead" markerheight="8" markerwidth="8" orient="auto" refx="6" refy="3">
+<path d="M0,0 L6,3 L0,6 Z" fill="var(--muted)"></path>
+</marker>
+</defs>
+<rect class="rm-box2" height="46" rx="6" width="780" x="60" y="30"></rect>
+<text class="rm-label" text-anchor="middle" x="450" y="49">Observability overlay (Prometheus + Grafana)</text>
+<text class="rm-sub" text-anchor="middle" x="450" y="65">watches everything the five phases below produce</text>
+<!-- five phase boxes -->
+<g>
+<rect class="rm-box" height="80" rx="6" width="150" x="30" y="110"></rect>
+<rect class="rm-box" height="80" rx="6" width="150" x="200" y="110"></rect>
+<rect class="rm-box" height="80" rx="6" width="150" x="370" y="110"></rect>
+<rect class="rm-box" height="80" rx="6" width="150" x="540" y="110"></rect>
+<rect class="rm-box" height="80" rx="6" width="160" x="710" y="110"></rect>
+</g>
+<g>
+<circle class="rm-circle" cx="45" cy="122" r="10"></circle><text class="rm-num" text-anchor="middle" x="45" y="126">1</text>
+<circle class="rm-circle" cx="215" cy="122" r="10"></circle><text class="rm-num" text-anchor="middle" x="215" y="126">2</text>
+<circle class="rm-circle" cx="385" cy="122" r="10"></circle><text class="rm-num" text-anchor="middle" x="385" y="126">3</text>
+<circle class="rm-circle" cx="555" cy="122" r="10"></circle><text class="rm-num" text-anchor="middle" x="555" y="126">4</text>
+<circle class="rm-circle" cx="725" cy="122" r="10"></circle><text class="rm-num" text-anchor="middle" x="725" y="126">5</text>
+</g>
+<text class="rm-label" text-anchor="middle" x="105" y="152">Foundations</text>
+<text class="rm-sub" text-anchor="middle" x="105" y="168">Linux, Bash, Git</text>
+<text class="rm-label" text-anchor="middle" x="275" y="152">Cloud Basics</text>
+<text class="rm-sub" text-anchor="middle" x="275" y="168">compute, storage, IAM</text>
+<text class="rm-label" text-anchor="middle" x="445" y="152">IaC</text>
+<text class="rm-sub" text-anchor="middle" x="445" y="168">Terraform</text>
+<text class="rm-label" text-anchor="middle" x="615" y="152">Containers</text>
+<text class="rm-sub" text-anchor="middle" x="615" y="168">Docker, Kubernetes</text>
+<text class="rm-label" text-anchor="middle" x="790" y="152">CI/CD</text>
+<text class="rm-sub" text-anchor="middle" x="790" y="168">pipelines + security gates</text>
+<line class="rm-arrow" x1="180" x2="198" y1="150" y2="150"></line>
+<line class="rm-arrow" x1="350" x2="368" y1="150" y2="150"></line>
+<line class="rm-arrow" x1="520" x2="538" y1="150" y2="150"></line>
+<line class="rm-arrow" x1="690" x2="708" y1="150" y2="150"></line>
+</svg>
+<figcaption>Figure: each phase is the foundation the next one stands on. Observability watches the whole stack once it exists.</figcaption>
+</figure>
+
+<p>Before any technical content, understand the shape of the whole
+journey, because the shape itself is the most important lesson in this
+book.</p>
+<div class="center">
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Phase</strong></th>
+<th style="text-align: left;"><strong>What you learn</strong></th>
+<th style="text-align: left;"><strong>Typical time</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1. Foundations</td>
+<td style="text-align: left;">Linux, Bash scripting, Git</td>
+<td style="text-align: left;">1–2 months</td>
+</tr>
+<tr>
+<td style="text-align: left;">2. Cloud basics</td>
+<td style="text-align: left;">Compute, storage, networking, identity (on
+<a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a>)</td>
+<td style="text-align: left;">1–2 months</td>
+</tr>
+<tr>
+<td style="text-align: left;">3. Infrastructure as Code</td>
+<td style="text-align: left;">Terraform concepts and provisioning</td>
+<td style="text-align: left;">~1 month</td>
+</tr>
+<tr>
+<td style="text-align: left;">4. Containers &amp; orchestration</td>
+<td style="text-align: left;">Docker, Kubernetes (the 20% that covers
+80%)</td>
+<td style="text-align: left;">1–2 months</td>
+</tr>
+<tr>
+<td style="text-align: left;">5. <a class="acr" href="#gls-CICD" title="Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.">CI/CD</a></td>
+<td style="text-align: left;">Automated pipelines, end to end, with
+security gates</td>
+<td style="text-align: left;">1–2 months</td>
+</tr>
+<tr>
+<td style="text-align: left;"><em>(overlay)</em> Observability</td>
+<td style="text-align: left;">Prometheus, Grafana</td>
+<td style="text-align: left;">~1 month</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Add that up and you get a genuinely achievable timeline: a few months
+of focused, sequenced effort, not years, and not a vague, sprawling
+“learn everything at once” approach. The key discipline is: <strong>do
+not skip phase one to get to the exciting parts.</strong> Everything in
+phases two through five assumes you are already comfortable at a Linux
+terminal, that you can write a Bash script without panicking, and that
+you understand Git well enough that branching and merging do not feel
+like magic. If those things are shaky, every later phase takes longer
+and hurts more, because you are simultaneously learning the new tool
+<em>and</em> the terminal skills you should already have.</p>
+<h3 id="the-mistake-almost-everyone-makes-learning-in-isolation">The
+mistake almost everyone makes: learning in isolation</h3>
+<p>There is a specific failure mode worth naming clearly, because naming
+it is most of the cure. People take a cloud course, then a Docker
+course, then a Terraform course, then a <a class="acr" href="#gls-CICD" title="Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.">CI/CD</a> course — each one in its
+own bubble, each one ending with a short quiz or a toy exercise that
+never touches the other tools. They can define what a container is. They
+cannot explain what happens, step by step, when a developer pushes a
+commit and, twelve minutes later, a new version of the application is
+serving real traffic. They have a vocabulary. They do not have the
+connective tissue.</p>
+<p>That connective tissue — the actual sequence of automated systems and
+hand-offs between them — is what makes an engineer valuable, because
+anyone can finish a Udemy course. Almost nobody, without deliberate
+practice, has actually built and watched an end-to-end pipeline with
+their own hands. The fix is simple to state and takes real effort to do:
+<strong>every time you learn a new tool, immediately combine it with
+everything you already know, on one continuously-growing project,
+instead of starting a new toy project from zero for every new
+tool.</strong></p>
+<p>This book follows that discipline itself. Every phase below builds
+onto the <em>same</em> project, so that by the end of Part <a data-reference="part:cicd" data-reference-type="ref" href="#part:cicd">“CI/CD and Security Automation”</a> you are not looking at five unrelated
+toy examples — you are looking at one small platform where the Terraform
+code provisions the registry the Docker image gets pushed to, which the
+Kubernetes manifests deploy, which the <a class="acr" href="#gls-CICD" title="Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.">CI/CD</a> pipeline wires together and
+scans for security issues at every step.</p>
+<h3 id="personalizing-the-road-map">Personalizing the road map</h3>
+<p>If you are coming into this with prior experience — as a software
+engineer, a QA/test automation engineer, a sysadmin, a network engineer,
+or a database administrator — you are not starting from zero. A software
+engineer already has Git instincts and scripting comfort; spend
+relatively less time in Phase 1 and more time in cloud and
+infrastructure concepts that are genuinely new. A sysadmin already
+understands servers, networking, and operational discipline; Phase 1 and
+much of Phase 2 will feel familiar, and the genuinely new territory is
+Infrastructure as Code, containers, and <a class="acr" href="#gls-CICD" title="Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.">CI/CD</a> automation. Use your
+existing strengths as a running start, but do not skip the phases you
+are weak in just because you are strong somewhere else — a platform
+engineer is expected to be credible end to end.</p>
+<h2 id="linux-fundamentals">Linux Fundamentals</h2>
+<h3 id="why-linux-is-the-actual-foundation">Why Linux is the actual
+foundation</h3>
+<p>Nearly every server, every container, every Kubernetes node, and
+every <a class="acr" href="#gls-CICD" title="Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.">CI/CD</a> runner you will ever touch in this career is running Linux.
+Not "usually." Essentially always. Learning DevOps without being fluent
+at a Linux terminal is like learning to drive without knowing how to
+work a clutch in a manual-transmission country — you can memorize
+directions to specific places, but you cannot actually operate the
+vehicle when something unexpected happens, and something unexpected
+<em>always</em> happens in production.</p>
+<h3 id="the-filesystem-and-permissions">The filesystem and
+permissions</h3>
+<p>Linux organizes everything — files, directories, devices, even
+running processes — as part of one single tree rooted at <code>/</code>.
+Unlike Windows, there is no “C: drive” or “D: drive” concept;
+everything, including a second hard disk, gets <em>mounted</em> at some
+point inside that one tree.</p>
+<div class="sourceCode" data-language="bash" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="ex">/</span>                <span class="co"># the root of everything</span></span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a><span class="ex">/etc</span>             <span class="co"># system-wide configuration files</span></span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a><span class="ex">/var</span>             <span class="co"># variable data: logs, caches, spool files</span></span>
+<span id="cb1-4"><a aria-hidden="true" href="#cb1-4" tabindex="-1"></a><span class="ex">/var/log</span>         <span class="co"># where most services write their logs</span></span>
+<span id="cb1-5"><a aria-hidden="true" href="#cb1-5" tabindex="-1"></a><span class="ex">/home/</span><span class="op">&lt;</span>user<span class="op">&gt;</span>     <span class="co"># a user's personal files</span></span>
+<span id="cb1-6"><a aria-hidden="true" href="#cb1-6" tabindex="-1"></a><span class="ex">/usr/bin</span>         <span class="co"># most installed programs live here</span></span>
+<span id="cb1-7"><a aria-hidden="true" href="#cb1-7" tabindex="-1"></a><span class="ex">/tmp</span>             <span class="co"># scratch space, often wiped on reboot</span></span></code></pre></div>
+<p>Every file and directory has an <strong>owner</strong> (a user), a
+<strong>group</strong>, and a set of <strong>permissions</strong> for
+three categories of people: the owner, the group, and everyone else.
+Permissions are read (<code>r</code>), write (<code>w</code>), and
+execute (<code>x</code>).</p>
+<div class="sourceCode" data-language="bash" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="ex">$</span> ls <span class="at">-l</span> app.py</span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="ex">-rwxr-xr--</span>  1 jclements  devteam  1420 Sep 19 10:02 app.py</span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a><span class="co"># owner (jclements): read, write, execute</span></span>
+<span id="cb2-4"><a aria-hidden="true" href="#cb2-4" tabindex="-1"></a><span class="co"># group  (devteam):  read, execute</span></span>
+<span id="cb2-5"><a aria-hidden="true" href="#cb2-5" tabindex="-1"></a><span class="co"># other:             read only</span></span></code></pre></div>
+<div class="note">
+<p><strong>Why this matters for security</strong></p>
+<p>Every hardening choice you will read about later in this book — a
+container running as a non-root user, a file that should not be
+world-writable, a private key that must not be readable by anyone but
+its owner — is an application of exactly this permission model. If you
+deeply understand <code>rwx</code> and ownership here, every later
+“security best practice” will make immediate, mechanical sense instead
+of feeling like an arbitrary rule to memorize.</p>
+</div>
+<h3 id="processes-and-services">Processes and services</h3>
+<p>A running program is a <strong>process</strong>. Linux gives every
+process a Process ID (PID), tracks its resource usage, and lets you
+inspect, signal, and kill it.</p>
+<div class="sourceCode" data-language="bash" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">ps</span> aux                 <span class="co"># list all running processes</span></span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a><span class="ex">top</span>                     <span class="co"># live, updating view of process activity</span></span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a><span class="bu">kill</span> <span class="at">-15</span> <span class="op">&lt;</span>pid<span class="op">&gt;</span>          <span class="co"># ask a process to terminate gracefully (SIGTERM)</span></span>
+<span id="cb3-4"><a aria-hidden="true" href="#cb3-4" tabindex="-1"></a><span class="bu">kill</span> <span class="at">-9</span>  <span class="op">&lt;</span>pid<span class="op">&gt;</span>           <span class="co"># force-terminate immediately (SIGKILL), last resort</span></span>
+<span id="cb3-5"><a aria-hidden="true" href="#cb3-5" tabindex="-1"></a><span class="ex">systemctl</span> status nginx   <span class="co"># check the status of a service managed by systemd</span></span>
+<span id="cb3-6"><a aria-hidden="true" href="#cb3-6" tabindex="-1"></a><span class="ex">systemctl</span> restart nginx  <span class="co"># restart a service</span></span>
+<span id="cb3-7"><a aria-hidden="true" href="#cb3-7" tabindex="-1"></a><span class="ex">journalctl</span> <span class="at">-u</span> nginx <span class="at">-f</span>   <span class="co"># follow a service's logs live</span></span></code></pre></div>
+<p><strong>systemd</strong> is the init system used by virtually every
+modern Linux distribution — it is the first process that starts when the
+machine boots, and it is responsible for starting, stopping, and
+supervising every other background service (a “daemon”). When you later
+read a Kubernetes liveness probe restarting a crashed container
+automatically, recognize that as the same idea as systemd restarting a
+crashed service — “keep this thing running, and if it dies, bring it
+back” is a pattern that repeats at every layer of this stack.</p>
+<h3 id="networking-basics-at-the-os-level">Networking basics at the OS
+level</h3>
+<div class="sourceCode" data-language="bash" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="ex">ip</span> addr show            <span class="co"># show this machine's network interfaces and IPs</span></span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a><span class="ex">ss</span> <span class="at">-tulpn</span>                <span class="co"># show listening ports and which process owns each one</span></span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-v</span> https://example.com   <span class="co"># make an HTTP request, verbosely, to debug connectivity</span></span>
+<span id="cb4-4"><a aria-hidden="true" href="#cb4-4" tabindex="-1"></a><span class="fu">ping</span> 8.8.8.8              <span class="co"># test basic reachability</span></span>
+<span id="cb4-5"><a aria-hidden="true" href="#cb4-5" tabindex="-1"></a><span class="ex">traceroute</span> example.com    <span class="co"># show the network hops to a destination</span></span>
+<span id="cb4-6"><a aria-hidden="true" href="#cb4-6" tabindex="-1"></a><span class="ex">dig</span> example.com            <span class="co"># query DNS for a hostname's IP address</span></span></code></pre></div>
+<p>When something in Kubernetes or the cloud "isn’t reachable," the
+first fifteen minutes of debugging almost always happen at this level:
+is the process even listening on the port you expect
+(<code>ss -tulpn</code>), can you reach it at all (<code>curl</code>,
+<code>ping</code>), and does the name resolve to the address you think
+it does (<code>dig</code>).</p>
+<h3 id="package-management">Package management</h3>
+<p>Linux distributions differ mainly in how they install software.
+Debian/Ubuntu uses <code>apt</code>; Red Hat/CentOS/Amazon Linux uses
+<code>yum</code> or <code>dnf</code>.</p>
+<div class="sourceCode" data-language="bash" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a aria-hidden="true" href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> apt update <span class="kw">&amp;&amp;</span> <span class="fu">sudo</span> apt install <span class="at">-y</span> curl git    <span class="co"># Debian/Ubuntu</span></span>
+<span id="cb5-2"><a aria-hidden="true" href="#cb5-2" tabindex="-1"></a><span class="fu">sudo</span> dnf install <span class="at">-y</span> curl git                        <span class="co"># Fedora / newer RHEL</span></span></code></pre></div>
+<div class="note">
+<p><strong>A DevSecOps-specific habit</strong></p>
+<p>Every package you install is code you did not write, running with
+real permissions on your system. Minimizing installed packages in a
+production image or server — installing only what is strictly required —
+is not laziness, it is a security control: fewer packages means a
+smaller <em>attack surface</em>, meaning fewer places a vulnerability
+could be hiding. You will see this exact instinct again in Chapter <a data-reference="ch:docker" data-reference-type="ref" href="#ch:docker">“Docker and Containers”</a> when we build a minimal container
+image.</p>
+</div>
+<h2 id="bash-scripting">Bash Scripting</h2>
+<h3 id="why-scripting-not-just-typing-commands">Why scripting, not just
+typing commands</h3>
+<p>The moment you find yourself typing the same three or four commands,
+in the same order, more than twice, that sequence should become a
+script. Scripts are how you turn manual, error-prone, forgettable
+procedures into repeatable, reviewable, shareable automation — which is
+the entire spirit of DevOps applied at the smallest possible scale.</p>
+<h3 id="a-first-real-script">A first real script</h3>
+<div class="sourceCode" data-language="bash" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a aria-hidden="true" href="#cb6-1" tabindex="-1"></a><span class="co">#!/usr/bin/env bash</span></span>
+<span id="cb6-2"><a aria-hidden="true" href="#cb6-2" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb6-3"><a aria-hidden="true" href="#cb6-3" tabindex="-1"></a><span class="co"># -e : exit immediately if any command fails</span></span>
+<span id="cb6-4"><a aria-hidden="true" href="#cb6-4" tabindex="-1"></a><span class="co"># -u : treat unset variables as an error, not a silent empty string</span></span>
+<span id="cb6-5"><a aria-hidden="true" href="#cb6-5" tabindex="-1"></a><span class="co"># -o pipefail : a pipeline fails if ANY command in it fails, not just the last one</span></span>
+<span id="cb6-6"><a aria-hidden="true" href="#cb6-6" tabindex="-1"></a></span>
+<span id="cb6-7"><a aria-hidden="true" href="#cb6-7" tabindex="-1"></a><span class="va">LOG_DIR</span><span class="op">=</span><span class="st">"/var/log/myapp"</span></span>
+<span id="cb6-8"><a aria-hidden="true" href="#cb6-8" tabindex="-1"></a><span class="va">RETENTION_DAYS</span><span class="op">=</span>14</span>
+<span id="cb6-9"><a aria-hidden="true" href="#cb6-9" tabindex="-1"></a></span>
+<span id="cb6-10"><a aria-hidden="true" href="#cb6-10" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-d</span> <span class="st">"</span><span class="va">$LOG_DIR</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb6-11"><a aria-hidden="true" href="#cb6-11" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"Log directory </span><span class="va">$LOG_DIR</span><span class="st"> does not exist"</span> <span class="op">&gt;&amp;</span><span class="dv">2</span></span>
+<span id="cb6-12"><a aria-hidden="true" href="#cb6-12" tabindex="-1"></a>  <span class="bu">exit</span> 1</span>
+<span id="cb6-13"><a aria-hidden="true" href="#cb6-13" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb6-14"><a aria-hidden="true" href="#cb6-14" tabindex="-1"></a></span>
+<span id="cb6-15"><a aria-hidden="true" href="#cb6-15" tabindex="-1"></a><span class="fu">find</span> <span class="st">"</span><span class="va">$LOG_DIR</span><span class="st">"</span> <span class="at">-type</span> f <span class="at">-mtime</span> +<span class="st">"</span><span class="va">$RETENTION_DAYS</span><span class="st">"</span> <span class="at">-name</span> <span class="st">'*.log'</span> <span class="at">-print</span> <span class="at">-delete</span></span>
+<span id="cb6-16"><a aria-hidden="true" href="#cb6-16" tabindex="-1"></a></span>
+<span id="cb6-17"><a aria-hidden="true" href="#cb6-17" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Cleaned logs older than </span><span class="va">$RETENTION_DAYS</span><span class="st"> days from </span><span class="va">$LOG_DIR</span><span class="st">"</span></span></code></pre></div>
+<div class="note">
+<p><strong><code>set -euo pipefail</code> is not optional</strong></p>
+<p>This single line is the difference between a script that fails loudly
+and immediately when something goes wrong, and a script that silently
+continues after a failure and does something worse three steps later.
+Get in the habit of starting every script with it. This is a small thing
+that experienced engineers do automatically and beginners routinely
+skip, and it is one of the fastest tells in a code review of who has
+been burned by its absence before.</p>
+</div>
+<h3 id="variables-conditionals-and-loops">Variables, conditionals, and
+loops</h3>
+<div class="sourceCode" data-language="bash" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a aria-hidden="true" href="#cb7-1" tabindex="-1"></a><span class="va">NAME</span><span class="op">=</span><span class="st">"poetic-musings"</span></span>
+<span id="cb7-2"><a aria-hidden="true" href="#cb7-2" tabindex="-1"></a><span class="va">COUNT</span><span class="op">=</span>3</span>
+<span id="cb7-3"><a aria-hidden="true" href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a aria-hidden="true" href="#cb7-4" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$COUNT</span><span class="st">"</span> <span class="ot">-gt</span> 0 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb7-5"><a aria-hidden="true" href="#cb7-5" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"</span><span class="va">$NAME</span><span class="st"> has </span><span class="va">$COUNT</span><span class="st"> pending items"</span></span>
+<span id="cb7-6"><a aria-hidden="true" href="#cb7-6" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb7-7"><a aria-hidden="true" href="#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a aria-hidden="true" href="#cb7-8" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>.yaml<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb7-9"><a aria-hidden="true" href="#cb7-9" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"Checking </span><span class="va">$f</span><span class="st">"</span></span>
+<span id="cb7-10"><a aria-hidden="true" href="#cb7-10" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb7-11"><a aria-hidden="true" href="#cb7-11" tabindex="-1"></a></span>
+<span id="cb7-12"><a aria-hidden="true" href="#cb7-12" tabindex="-1"></a><span class="cf">while</span> <span class="bu">read</span> <span class="at">-r</span> <span class="va">line</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb7-13"><a aria-hidden="true" href="#cb7-13" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"Line: </span><span class="va">$line</span><span class="st">"</span></span>
+<span id="cb7-14"><a aria-hidden="true" href="#cb7-14" tabindex="-1"></a><span class="cf">done</span> <span class="op">&lt;</span> input.txt</span></code></pre></div>
+<h3 id="functions-and-reusability">Functions and reusability</h3>
+<div class="sourceCode" data-language="bash" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="fu">log()</span> <span class="kw">{</span></span>
+<span id="cb8-2"><a aria-hidden="true" href="#cb8-2" tabindex="-1"></a>  <span class="bu">local</span> <span class="va">level</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span><span class="kw">;</span> <span class="bu">shift</span></span>
+<span id="cb8-3"><a aria-hidden="true" href="#cb8-3" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"[</span><span class="va">$(</span><span class="fu">date</span> <span class="at">-u</span> +%Y-%m-%dT%H:%M:%SZ<span class="va">)</span><span class="st">] [</span><span class="va">$level</span><span class="st">] </span><span class="va">$*</span><span class="st">"</span></span>
+<span id="cb8-4"><a aria-hidden="true" href="#cb8-4" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb8-5"><a aria-hidden="true" href="#cb8-5" tabindex="-1"></a></span>
+<span id="cb8-6"><a aria-hidden="true" href="#cb8-6" tabindex="-1"></a><span class="ex">log</span> INFO <span class="st">"Starting deployment"</span></span>
+<span id="cb8-7"><a aria-hidden="true" href="#cb8-7" tabindex="-1"></a><span class="ex">log</span> ERROR <span class="st">"Something went wrong"</span></span></code></pre></div>
+<h3 id="command-substitution-and-pipelines">Command substitution and
+pipelines</h3>
+<div class="sourceCode" data-language="bash" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="va">FILE_COUNT</span><span class="op">=</span><span class="va">$(</span><span class="fu">find</span> . <span class="at">-name</span> <span class="st">'*.py'</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span></span>
+<span id="cb9-2"><a aria-hidden="true" href="#cb9-2" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Found </span><span class="va">$FILE_COUNT</span><span class="st"> Python files"</span></span>
+<span id="cb9-3"><a aria-hidden="true" href="#cb9-3" tabindex="-1"></a></span>
+<span id="cb9-4"><a aria-hidden="true" href="#cb9-4" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-r</span> <span class="st">"TODO"</span> <span class="at">--include</span><span class="op">=</span><span class="st">"*.py"</span> . <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-rn</span></span></code></pre></div>
+<div class="note">
+<p><strong>Where this shows up later</strong></p>
+<p>Almost every <a class="acr" href="#gls-CICD" title="Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.">CI/CD</a> pipeline step you will write in Part <a data-reference="part:cicd" data-reference-type="ref" href="#part:cicd">“CI/CD and Security Automation”</a> is, underneath the YAML, a Bash script
+running on a CI runner. The YAML just decides <em>when</em> to run it
+and what environment to run it in. If Bash feels comfortable, <a class="acr" href="#gls-CICD" title="Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.">CI/CD</a>
+pipeline authoring will feel like writing scripts with slightly
+different plumbing, not like learning something entirely new.</p>
+</div>
+<h2 id="git">Git</h2>
+<h3 id="why-version-control-is-non-negotiable">Why version control is
+non-negotiable</h3>
+<p>Git tracks every change ever made to a set of files, who made it,
+when, and why (via a commit message), and lets many people work on the
+same codebase concurrently without overwriting each other’s work. In
+DevOps and DevSecOps specifically, Git is not just where application
+code lives — it is also where Infrastructure as Code, Kubernetes
+manifests, and <a class="acr" href="#gls-CICD" title="Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.">CI/CD</a> pipeline definitions live, which means <em>every
+infrastructure change also gets a full history, a diff, and a code
+review</em>, exactly like an application change. This is one of the
+central ideas of the whole book and it starts here.</p>
+<h3 id="the-core-mental-model">The core mental model</h3>
+<ul>
+<li><p>A <strong>repository</strong> is a directory whose history Git is
+tracking.</p></li>
+<li><p>A <strong>commit</strong> is a saved snapshot of the whole
+repository at one point in time, with a unique hash identifying it, a
+message describing it, and a pointer to the commit(s) that came before
+it.</p></li>
+<li><p>A <strong>branch</strong> is just a movable pointer to a commit —
+creating a branch is nearly free, which is why Git branching is so
+central to how teams work in parallel.</p></li>
+<li><p>The <strong>working tree</strong> is the files on disk right now;
+the <strong>staging area</strong> (or “index”) is what you have told Git
+you intend to include in the <em>next</em> commit; the
+<strong>repository</strong> (the <code>.git</code> directory) is the
+permanent history.</p></li>
+</ul>
+<div class="sourceCode" data-language="bash" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a aria-hidden="true" href="#cb10-1" tabindex="-1"></a><span class="fu">git</span> init                          <span class="co"># start tracking a new repository</span></span>
+<span id="cb10-2"><a aria-hidden="true" href="#cb10-2" tabindex="-1"></a><span class="fu">git</span> status                        <span class="co"># what's changed, what's staged, what's not</span></span>
+<span id="cb10-3"><a aria-hidden="true" href="#cb10-3" tabindex="-1"></a><span class="fu">git</span> add file.py                   <span class="co"># stage a specific file</span></span>
+<span id="cb10-4"><a aria-hidden="true" href="#cb10-4" tabindex="-1"></a><span class="fu">git</span> add <span class="at">-A</span>                        <span class="co"># stage everything (use with care -- review status first)</span></span>
+<span id="cb10-5"><a aria-hidden="true" href="#cb10-5" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Fix off-by-one in retry loop"</span></span>
+<span id="cb10-6"><a aria-hidden="true" href="#cb10-6" tabindex="-1"></a><span class="fu">git</span> log <span class="at">--oneline</span> <span class="at">--graph</span> <span class="at">--all</span>   <span class="co"># visualize history and branches</span></span></code></pre></div>
+<h3 id="branching-and-merging">Branching and merging</h3>
+<div class="sourceCode" data-language="bash" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a aria-hidden="true" href="#cb11-1" tabindex="-1"></a><span class="fu">git</span> branch feature/add-healthcheck</span>
+<span id="cb11-2"><a aria-hidden="true" href="#cb11-2" tabindex="-1"></a><span class="fu">git</span> checkout feature/add-healthcheck</span>
+<span id="cb11-3"><a aria-hidden="true" href="#cb11-3" tabindex="-1"></a><span class="co"># ...or in one step:</span></span>
+<span id="cb11-4"><a aria-hidden="true" href="#cb11-4" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> feature/add-healthcheck</span>
+<span id="cb11-5"><a aria-hidden="true" href="#cb11-5" tabindex="-1"></a></span>
+<span id="cb11-6"><a aria-hidden="true" href="#cb11-6" tabindex="-1"></a><span class="co"># work, commit, then bring it back into main:</span></span>
+<span id="cb11-7"><a aria-hidden="true" href="#cb11-7" tabindex="-1"></a><span class="fu">git</span> checkout main</span>
+<span id="cb11-8"><a aria-hidden="true" href="#cb11-8" tabindex="-1"></a><span class="fu">git</span> merge feature/add-healthcheck</span></code></pre></div>
+<p>A <strong>merge conflict</strong> happens when Git cannot
+automatically combine two sets of changes to the same lines of a file,
+and asks a human to decide. This is normal, not a failure state — open
+the conflicted file, look for the
+<code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> / <code>=======</code> /
+<code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> markers Git inserts, decide
+what the correct final content should be, remove the markers, then
+<code>git add</code> the file and complete the merge with
+<code>git commit</code>.</p>
+<h3 id="working-with-remotes-github-gitlab">Working with remotes
+(GitHub, GitLab)</h3>
+<div class="sourceCode" data-language="bash" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a aria-hidden="true" href="#cb12-1" tabindex="-1"></a><span class="fu">git</span> remote add origin https://github.com/you/your-repo.git</span>
+<span id="cb12-2"><a aria-hidden="true" href="#cb12-2" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin main       <span class="co"># push and remember this as the default upstream</span></span>
+<span id="cb12-3"><a aria-hidden="true" href="#cb12-3" tabindex="-1"></a><span class="fu">git</span> pull                       <span class="co"># fetch and merge the latest changes from the remote</span></span>
+<span id="cb12-4"><a aria-hidden="true" href="#cb12-4" tabindex="-1"></a><span class="fu">git</span> fetch                      <span class="co"># download remote changes without merging them yet</span></span></code></pre></div>
+<p>A <strong>pull request</strong> (GitHub’s term) or <strong>merge
+request</strong> (GitLab’s term) is a formal proposal to merge one
+branch into another, which is where code review, and in a mature
+pipeline, automated security scanning, happen <em>before</em> the code
+lands on the main branch. This is the actual mechanism that makes
+“shift-left security” (introduced properly in Chapter <a data-reference="ch:shiftleft" data-reference-type="ref" href="#ch:shiftleft">“Shifting Security Left”</a>) real rather than a slogan: the pull
+request is the gate the automated scans run against.</p>
+<h3 id="the-security-relevant-git-habits">The security-relevant Git
+habits</h3>
+<ul>
+<li><p><strong>Never commit secrets.</strong> A password, <a class="acr" href="#gls-API" title="Application Programming Interface: a defined way for one piece of software to request functionality or data from another.">API</a> key, or private key committed to Git is not
+truly deleted by a later commit that removes it — it remains recoverable
+in history. The correct response to a leaked secret is always to rotate
+it (change it at the source) immediately, not merely to delete the
+line.</p></li>
+<li><p><strong>Use a <code>.gitignore</code> file</strong> to stop build
+artifacts, local credentials, and editor scratch files from ever being
+staged in the first place.</p></li>
+<li><p><strong>Sign your commits</strong> in mature teams (<a class="acr" href="#gls-GPG" title="GNU Privacy Guard: an implementation of the OpenPGP standard, commonly used to cryptographically sign git commits.">GPG</a> or <a class="acr" href="#gls-SSH" title="Secure Shell: an encrypted protocol for remote login and secure command execution, also used for signing git commits and authenticating to git remotes.">SSH</a> commit signing),
+so a commit’s authorship is cryptographically verifiable rather than
+merely a text field anyone could forge.</p></li>
+</ul>
+<div class="caseStudy">
+<p><strong>a real lesson from this project</strong></p>
+<p>While preparing the security pipeline described later in this book, a
+stray Emacs autosave file, <code>#STATUS.md#</code>, was discovered to
+have been accidentally committed to the <code>poetic-musings</code>
+repository months earlier, and had been sitting in history ever since as
+a stale, forgotten duplicate of a real status file. It was harmless in
+this case, but it is exactly the class of mistake — something
+accidentally staged with <code>git add -A</code> and never noticed —
+that, with a real secret instead of a stale Markdown file, becomes a
+security incident. The fix was simply <code>git rm</code> and a commit
+explaining why, which is the same fix that applies to almost any “this
+should never have been committed” situation, secrets included (secrets
+additionally require rotation, as noted above).</p>
+</div>
+<h1 id="cloud-basics">Cloud Basics</h1>
+<h2 id="cloud-computing-concepts">Cloud Computing Concepts</h2>
+<h3 id="concepts-first-provider-second">Concepts first, provider
+second</h3>
+<p>The single biggest time-waster in learning cloud computing is
+treating it as “learning <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a>” or “learning Azure” from day one. Compute,
+storage, networking, and identity work the same <em>conceptually</em> on
+every major cloud — only the product names and exact button locations
+differ. Learn the concept, then learn how one specific provider (this
+book uses <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a>, because it has the largest market share and the highest
+odds of matching a real job posting) implements it. That way, when a
+future job uses Azure or Google Cloud instead, you are translating
+vocabulary, not relearning computer science.</p>
+<h3 id="the-five-concepts-that-matter">The five concepts that
+matter</h3>
+<ol>
+<li><p><strong>Compute</strong> — a place your code actually runs: a <a class="acr" href="#gls-VM" title="Virtual Machine: a full virtualized computer, including its own kernel, distinct from the lighter-weight isolation a container provides.">VM</a> (<a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> <a class="acr" href="#gls-ECTwo" title="Elastic Compute Cloud: AWS's core virtual-machine (rentable server) service.">EC2</a>), a managed container platform, or a fully
+managed “serverless” function that only runs when invoked (<a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a>
+Lambda).</p></li>
+<li><p><strong>Storage</strong> — durable places to keep data: object
+storage for files and blobs (<a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> <a class="acr" href="#gls-SThree" title="Simple Storage Service: AWS's object storage service for files and blobs at effectively unlimited scale.">S3</a>), block storage attached to a single virtual
+machine like a hard disk (<a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> EBS), and managed databases (<a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> RDS for
+relational data, DynamoDB for key-value data at scale).</p></li>
+<li><p><strong>Networking</strong> — how things talk to each other and
+to the internet: a Virtual Private Cloud (<a class="acr" href="#gls-VPC" title="Virtual Private Cloud: your own private, isolated network inside a cloud provider's infrastructure.">VPC</a>) is your own isolated
+network inside the provider’s infrastructure; subnets divide that
+network into smaller pieces, some internet-facing (<em>public</em>),
+some not (<em>private</em>); security groups and network ACLs act as
+firewalls controlling exactly what traffic is allowed in and
+out.</p></li>
+<li><p><strong>Identity and access management</strong> (<a class="acr" href="#gls-IAM" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a>) — who (a person, or a piece of software) is
+allowed to do what to which resource. This is arguably the single most
+security-critical concept in all of cloud computing, because a
+misconfigured permission is the most common root cause of real cloud
+security incidents.</p></li>
+<li><p><strong>Regions and Availability Zones</strong> — a
+<em>region</em> is a geographic area (e.g., <code>us-east-1</code>); an
+<em>Availability Zone</em> is one or more physically separate data
+centers within that region. Spreading resources across multiple
+Availability Zones is how you survive one data center having a bad day
+without your whole system going down.</p></li>
+</ol>
+<h3 id="the-five-aws-services-that-cover-80-of-real-use">The five AWS
+services that cover 80% of real use</h3>
+<p>If you log into the <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> console for the first time, you will see
+hundreds of services and feel instantly overwhelmed. Ignore nearly all
+of it at first. Master these five deeply before you touch anything
+else:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Service</strong></th>
+<th style="text-align: left;"><strong>What it is, in plain
+language</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><a class="acr" href="#gls-VPC" title="Virtual Private Cloud: your own private, isolated network inside a cloud provider's infrastructure.">VPC</a></strong></td>
+<td style="text-align: left;">Your own private, isolated network inside
+<a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a>. Everything else you launch lives inside a <a class="acr" href="#gls-VPC" title="Virtual Private Cloud: your own private, isolated network inside a cloud provider's infrastructure.">VPC</a> (or the account’s
+default one).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><a class="acr" href="#gls-ECTwo" title="Elastic Compute Cloud: AWS's core virtual-machine (rentable server) service.">EC2</a></strong></td>
+<td style="text-align: left;">Virtual machines. The classic "rent a
+server" compute option; still the foundation almost everything else
+(including Kubernetes nodes) ultimately runs on.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><a class="acr" href="#gls-SThree" title="Simple Storage Service: AWS's object storage service for files and blobs at effectively unlimited scale.">S3</a></strong></td>
+<td style="text-align: left;">Object storage: buckets holding files, at
+effectively unlimited scale, with encryption, versioning, and access
+controls as first-class features, not afterthoughts.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><a class="acr" href="#gls-IAM" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a></strong></td>
+<td style="text-align: left;">Identity and Access Management: users,
+roles, and policies controlling exactly what any person or program is
+allowed to do in your account.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><a class="acr" href="#gls-ECR" title="Elastic Container Registry: AWS's managed registry for storing and scanning container images.">ECR</a> / <a class="acr" href="#gls-EKS" title="Elastic Kubernetes Service: AWS's managed Kubernetes offering.">EKS</a></strong></td>
+<td style="text-align: left;">Elastic Container Registry (stores
+container images) and Elastic Kubernetes Service (managed Kubernetes) –
+the on-ramp from "cloud basics" into Part 4 of this book.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="iam-the-concept-that-will-follow-you-through-the-whole-book">IAM:
+the concept that will follow you through the whole book</h3>
+<p>An <a class="acr" href="#gls-IAM" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a> <strong>policy</strong> is a document (in JSON) describing
+what actions are allowed or denied on which resources. An <a class="acr" href="#gls-IAM" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a>
+<strong>role</strong> is an identity that something (a person, an <a class="acr" href="#gls-ECTwo" title="Elastic Compute Cloud: AWS's core virtual-machine (rentable server) service.">EC2</a>
+instance, a CI pipeline) can <em>assume</em> temporarily to gain those
+permissions, without needing a permanent, long-lived secret key. The
+single most important habit to build here is <strong>least
+privilege</strong>: grant exactly the permissions a task needs, scoped
+to the exact resources it needs them on, and nothing more.</p>
+<div class="sourceCode" data-language="json" id="cb13"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb13-1"><a aria-hidden="true" href="#cb13-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb13-2"><a aria-hidden="true" href="#cb13-2" tabindex="-1"></a>  <span class="dt">"Version"</span><span class="fu">:</span> <span class="st">"2012-10-17"</span><span class="fu">,</span></span>
+<span id="cb13-3"><a aria-hidden="true" href="#cb13-3" tabindex="-1"></a>  <span class="dt">"Statement"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb13-4"><a aria-hidden="true" href="#cb13-4" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb13-5"><a aria-hidden="true" href="#cb13-5" tabindex="-1"></a>      <span class="dt">"Effect"</span><span class="fu">:</span> <span class="st">"Allow"</span><span class="fu">,</span></span>
+<span id="cb13-6"><a aria-hidden="true" href="#cb13-6" tabindex="-1"></a>      <span class="dt">"Action"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"s3:PutObject"</span><span class="ot">,</span> <span class="st">"s3:GetObject"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb13-7"><a aria-hidden="true" href="#cb13-7" tabindex="-1"></a>      <span class="dt">"Resource"</span><span class="fu">:</span> <span class="st">"arn:aws:s3:::my-artifact-bucket/*"</span></span>
+<span id="cb13-8"><a aria-hidden="true" href="#cb13-8" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb13-9"><a aria-hidden="true" href="#cb13-9" tabindex="-1"></a>  <span class="ot">]</span></span>
+<span id="cb13-10"><a aria-hidden="true" href="#cb13-10" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>Compare that to a lazy, dangerous alternative:</p>
+<div class="sourceCode" data-language="json" id="cb14"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb14-1"><a aria-hidden="true" href="#cb14-1" tabindex="-1"></a><span class="fu">{</span> <span class="dt">"Effect"</span><span class="fu">:</span> <span class="st">"Allow"</span><span class="fu">,</span> <span class="dt">"Action"</span><span class="fu">:</span> <span class="st">"*"</span><span class="fu">,</span> <span class="dt">"Resource"</span><span class="fu">:</span> <span class="st">"*"</span> <span class="fu">}</span></span></code></pre></div>
+<p>The second policy grants every possible action on every possible
+resource. If the credentials attached to that policy ever leak —
+committed to Git by accident, stolen from a compromised laptop,
+exfiltrated from a misconfigured CI pipeline — the damage an attacker
+can do is limited only by what <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> itself allows, not by anything you
+designed. The first policy, scoped to one action on one specific bucket,
+limits the blast radius of that exact same leak to almost nothing. This
+single idea, applied consistently, is worth more to your security
+posture than almost any tool you will install.</p>
+<div class="caseStudy">
+<p><strong>least privilege, in real Terraform</strong></p>
+<p>In the <code>poetic-musings</code> platform build described
+throughout this book, the CI pipeline’s <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> <a class="acr" href="#gls-IAM" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a> role (defined in
+<code>infra/terraform/modules/aws-platform/iam.tf</code>) is scoped to
+the exact ARNs of the one <a class="acr" href="#gls-ECR" title="Elastic Container Registry: AWS's managed registry for storing and scanning container images.">ECR</a> repository and one <a class="acr" href="#gls-SThree" title="Simple Storage Service: AWS's object storage service for files and blobs at effectively unlimited scale.">S3</a> bucket that module
+creates – never a wildcard <code>Resource: "*"</code>. If those pipeline
+credentials ever leaked, the damage would be limited to that one
+registry and one bucket, not the whole <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> account. This is the <a class="acr" href="#gls-IAM" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a>
+policy shown above, applied for real.</p>
+</div>
+<h3 id="certifications-after-proof-not-instead-of-it">Certifications:
+after proof, not instead of it</h3>
+<p>A common and expensive mistake is chasing a certification before
+building anything real. Certifications are valuable as a
+<em>confirmation</em> of knowledge you have already demonstrated through
+hands-on projects, not as a substitute for that hands-on work.
+Interviewers at a serious platform engineering team will ask you to
+explain a design decision or debug a scenario, not recite a
+multiple-choice answer. Build first. Certify second, if at all, to
+formalize what you already know.</p>
+<h1 id="infrastructure-as-code">Infrastructure as Code</h1>
+<h2 id="ch:terraform">Terraform and Infrastructure as Code</h2>
+<h3 id="the-problem-iac-solves">The problem IaC solves</h3>
+<p>Before Infrastructure as Code was normal practice, provisioning cloud
+infrastructure meant a human clicking through a web console: creating a
+<a class="acr" href="#gls-VPC" title="Virtual Private Cloud: your own private, isolated network inside a cloud provider's infrastructure.">VPC</a> here, a bucket there, an <a class="acr" href="#gls-IAM" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a> role somewhere else. This has real,
+recurring costs:</p>
+<ul>
+<li><p><strong>Not repeatable.</strong> Nobody remembers exactly what
+they clicked six months ago, so rebuilding an environment from scratch
+is slow and error-prone.</p></li>
+<li><p><strong>Not reviewable.</strong> You cannot put a sequence of
+mouse clicks through a code review the way you can a pull
+request.</p></li>
+<li><p><strong>Drift.</strong> Environments that started identical
+slowly diverge as different people make different manual tweaks over
+time, until nobody is fully sure what is actually running.</p></li>
+<li><p><strong>Not scannable.</strong> You cannot run an automated
+security scanner against a person’s click history the way you can
+against a text file.</p></li>
+</ul>
+<p><a class="acr" href="#gls-IaC" title="Infrastructure as Code: describing infrastructure in version-controlled text instead of manual console clicks.">IaC</a> (<strong>Infrastructure as Code</strong>)
+means describing the infrastructure you want in a text file, checking
+that file into Git exactly like application code, and letting a tool
+read that description and make the real cloud match it. Change the file,
+and the next run makes the cloud match the new description. You get a
+full history of every infrastructure change, code review on
+infrastructure changes, the ability to recreate an entire environment
+from nothing, and – critically for this book – the ability to run
+automated security scanners against your infrastructure <em>before</em>
+it is ever applied to a real account.</p>
+<p><strong>Terraform</strong> (by HashiCorp) is the most widely used <a class="acr" href="#gls-IaC" title="Infrastructure as Code: describing infrastructure in version-controlled text instead of manual console clicks.">IaC</a>
+tool. You write files in <a class="acr" href="#gls-HCL" title="HashiCorp Configuration Language: the language Terraform configuration files are written in.">HCL</a> (HashiCorp
+Configuration Language) describing resources, and Terraform computes and
+executes the plan to create, update, or destroy real cloud resources to
+match what you described.</p>
+<h3 id="state-terraforms-memory">State: Terraform’s memory</h3>
+<p>When Terraform creates real infrastructure, it needs to remember what
+it created, so a future run can tell the difference between "this
+already exists, leave it alone" and "this is new, create it." That
+memory is called <strong>state</strong>. By default it lives in a local
+file, which is dangerous the moment more than one person or pipeline
+needs to run Terraform concurrently – two simultaneous runs with two
+different local state files can corrupt real infrastructure. The fix is
+a <strong>remote backend</strong>: state stored in a shared location (an
+<a class="acr" href="#gls-SThree" title="Simple Storage Service: AWS's object storage service for files and blobs at effectively unlimited scale.">S3</a> bucket is common on <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a>), with a lock (often a DynamoDB table)
+preventing two runs from stepping on each other at once.</p>
+<h3 id="providers-resources-and-modules">Providers, resources, and
+modules</h3>
+<div class="sourceCode" data-language="bash" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a aria-hidden="true" href="#cb15-1" tabindex="-1"></a><span class="co"># providers.tf</span></span>
+<span id="cb15-2"><a aria-hidden="true" href="#cb15-2" tabindex="-1"></a><span class="ex">terraform</span> {</span>
+<span id="cb15-3"><a aria-hidden="true" href="#cb15-3" tabindex="-1"></a>  <span class="ex">required_providers</span> {</span>
+<span id="cb15-4"><a aria-hidden="true" href="#cb15-4" tabindex="-1"></a>    <span class="ex">aws</span> = {</span>
+<span id="cb15-5"><a aria-hidden="true" href="#cb15-5" tabindex="-1"></a>      <span class="bu">source</span>  = <span class="st">"hashicorp/aws"</span></span>
+<span id="cb15-6"><a aria-hidden="true" href="#cb15-6" tabindex="-1"></a>      <span class="ex">version</span> = <span class="st">"~&gt; 5.60"</span></span>
+<span id="cb15-7"><a aria-hidden="true" href="#cb15-7" tabindex="-1"></a>    <span class="er">}</span></span>
+<span id="cb15-8"><a aria-hidden="true" href="#cb15-8" tabindex="-1"></a>  <span class="er">}</span></span>
+<span id="cb15-9"><a aria-hidden="true" href="#cb15-9" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb15-10"><a aria-hidden="true" href="#cb15-10" tabindex="-1"></a><span class="ex">provider</span> <span class="st">"aws"</span> { region = <span class="st">"us-east-1"</span> }</span></code></pre></div>
+<p>A <strong>resource</strong> block describes one real thing you want
+to exist:</p>
+<div class="sourceCode" data-language="bash" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a aria-hidden="true" href="#cb16-1" tabindex="-1"></a><span class="ex">resource</span> <span class="st">"aws_s3_bucket"</span> <span class="st">"artifacts"</span> {</span>
+<span id="cb16-2"><a aria-hidden="true" href="#cb16-2" tabindex="-1"></a>  <span class="ex">bucket</span> = <span class="st">"my-team-artifacts"</span></span>
+<span id="cb16-3"><a aria-hidden="true" href="#cb16-3" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb16-4"><a aria-hidden="true" href="#cb16-4" tabindex="-1"></a></span>
+<span id="cb16-5"><a aria-hidden="true" href="#cb16-5" tabindex="-1"></a><span class="ex">resource</span> <span class="st">"aws_s3_bucket_versioning"</span> <span class="st">"artifacts"</span> {</span>
+<span id="cb16-6"><a aria-hidden="true" href="#cb16-6" tabindex="-1"></a>  <span class="ex">bucket</span> = aws_s3_bucket.artifacts.id</span>
+<span id="cb16-7"><a aria-hidden="true" href="#cb16-7" tabindex="-1"></a>  <span class="ex">versioning_configuration</span> { status = <span class="st">"Enabled"</span> }</span>
+<span id="cb16-8"><a aria-hidden="true" href="#cb16-8" tabindex="-1"></a><span class="er">}</span></span></code></pre></div>
+<p>A <strong>module</strong> is a reusable, parameterized package of
+resources – the Terraform equivalent of a function. Instead of
+copy-pasting "create a <a class="acr" href="#gls-VPC" title="Virtual Private Cloud: your own private, isolated network inside a cloud provider's infrastructure.">VPC</a>, an <a class="acr" href="#gls-ECR" title="Elastic Container Registry: AWS's managed registry for storing and scanning container images.">ECR</a> repo, an <a class="acr" href="#gls-SThree" title="Simple Storage Service: AWS's object storage service for files and blobs at effectively unlimited scale.">S3</a> bucket" into every
+environment’s configuration, you write that once as a module and call it
+multiple times with different inputs.</p>
+<div class="sourceCode" data-language="bash" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a aria-hidden="true" href="#cb17-1" tabindex="-1"></a><span class="ex">module</span> <span class="st">"aws_platform_dev"</span> {</span>
+<span id="cb17-2"><a aria-hidden="true" href="#cb17-2" tabindex="-1"></a>  <span class="bu">source</span>      = <span class="st">"./modules/aws-platform"</span></span>
+<span id="cb17-3"><a aria-hidden="true" href="#cb17-3" tabindex="-1"></a>  <span class="ex">environment</span> = <span class="st">"dev"</span></span>
+<span id="cb17-4"><a aria-hidden="true" href="#cb17-4" tabindex="-1"></a>  <span class="ex">vpc_cidr</span>    = <span class="st">"10.0.0.0/16"</span></span>
+<span id="cb17-5"><a aria-hidden="true" href="#cb17-5" tabindex="-1"></a><span class="er">}</span></span>
+<span id="cb17-6"><a aria-hidden="true" href="#cb17-6" tabindex="-1"></a></span>
+<span id="cb17-7"><a aria-hidden="true" href="#cb17-7" tabindex="-1"></a><span class="ex">module</span> <span class="st">"aws_platform_prod"</span> {</span>
+<span id="cb17-8"><a aria-hidden="true" href="#cb17-8" tabindex="-1"></a>  <span class="bu">source</span>      = <span class="st">"./modules/aws-platform"</span></span>
+<span id="cb17-9"><a aria-hidden="true" href="#cb17-9" tabindex="-1"></a>  <span class="ex">environment</span> = <span class="st">"prod"</span></span>
+<span id="cb17-10"><a aria-hidden="true" href="#cb17-10" tabindex="-1"></a>  <span class="ex">vpc_cidr</span>    = <span class="st">"10.1.0.0/16"</span></span>
+<span id="cb17-11"><a aria-hidden="true" href="#cb17-11" tabindex="-1"></a><span class="er">}</span></span></code></pre></div>
+<p>This is the core <a class="acr" href="#gls-IaC" title="Infrastructure as Code: describing infrastructure in version-controlled text instead of manual console clicks.">IaC</a> lesson worth repeating until it is automatic:
+<strong>do not copy-paste infrastructure definitions between
+environments – reuse them with different inputs.</strong></p>
+<h3 id="the-terraform-workflow">The Terraform workflow</h3>
+<div class="sourceCode" data-language="bash" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a aria-hidden="true" href="#cb18-1" tabindex="-1"></a><span class="ex">terraform</span> init      <span class="co"># download providers, set up the backend</span></span>
+<span id="cb18-2"><a aria-hidden="true" href="#cb18-2" tabindex="-1"></a><span class="ex">terraform</span> fmt        <span class="co"># auto-format code to a canonical style</span></span>
+<span id="cb18-3"><a aria-hidden="true" href="#cb18-3" tabindex="-1"></a><span class="ex">terraform</span> validate   <span class="co"># check syntax and internal consistency (no cloud calls)</span></span>
+<span id="cb18-4"><a aria-hidden="true" href="#cb18-4" tabindex="-1"></a><span class="ex">terraform</span> plan        <span class="co"># show exactly what would change, without changing anything</span></span>
+<span id="cb18-5"><a aria-hidden="true" href="#cb18-5" tabindex="-1"></a><span class="ex">terraform</span> apply        <span class="co"># actually make the real infrastructure match the code</span></span>
+<span id="cb18-6"><a aria-hidden="true" href="#cb18-6" tabindex="-1"></a><span class="ex">terraform</span> destroy       <span class="co"># tear down everything this configuration manages</span></span></code></pre></div>
+<p><code>terraform plan</code> is the single most important habit in
+this whole workflow: it is a dry run that tells you precisely what will
+be created, changed, or destroyed, before anything actually happens.
+Never apply a Terraform change you have not first read the plan output
+for, in the same way you would never merge a pull request without
+reading the diff.</p>
+<h3 id="hardening-iac-by-default">Hardening IaC by default</h3>
+<ul>
+<li><p><strong>Encrypt at rest by default</strong>, not as an opt-in
+flag – every storage resource should be encrypted unless there is a
+specific, documented reason not to be.</p></li>
+<li><p><strong>Block public access explicitly</strong>, at the resource
+level, rather than trusting that a resource happens to default to
+private.</p></li>
+<li><p><strong>Scope <a class="acr" href="#gls-IAM" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a> to specific resource ARNs</strong>, as covered
+in Chapter 5 – this applies to Terraform-managed roles exactly as much
+as console-created ones.</p></li>
+<li><p><strong>Use immutable, scanned container registries</strong> –
+once an image tag is pushed, prevent it from silently being overwritten,
+and scan every image automatically on push.</p></li>
+<li><p><strong>Tag everything consistently</strong> (project,
+environment, owner) so that cost allocation, ownership tracing, and
+automated policy enforcement are all possible later.</p></li>
+</ul>
+<h3 id="scanning-infrastructure-code-for-security-issues">Scanning
+infrastructure code for security issues</h3>
+<p>Just as application code gets scanned for security bugs (Chapter <a data-reference="ch:shiftleft" data-reference-type="ref" href="#ch:shiftleft">“Shifting Security Left”</a> covers this in depth),
+Infrastructure-as-Code should be scanned too. Tools like
+<strong>tfsec</strong> and <strong>checkov</strong> read your Terraform
+code and flag misconfigurations – a bucket without encryption, a
+security group open to the entire internet on a sensitive port, an <a class="acr" href="#gls-IAM" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a>
+policy with a wildcard resource – before that configuration is ever
+applied to a real account.</p>
+<div class="sourceCode" data-language="bash" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a aria-hidden="true" href="#cb19-1" tabindex="-1"></a><span class="ex">tfsec</span> infra/terraform/</span>
+<span id="cb19-2"><a aria-hidden="true" href="#cb19-2" tabindex="-1"></a><span class="ex">checkov</span> <span class="at">-d</span> infra/terraform/</span></code></pre></div>
+<div class="caseStudy">
+<p><strong>a real Terraform layer, built for this book</strong></p>
+<p>Inside <code>poetic-musings</code>, a full
+<code>infra/terraform/</code> tree was built exactly along these lines:
+a root module wiring an <code>aws-platform</code> module (<a class="acr" href="#gls-VPC" title="Virtual Private Cloud: your own private, isolated network inside a cloud provider's infrastructure.">VPC</a> across two
+Availability Zones, a <a class="acr" href="#gls-KMS" title="Key Management Service: AWS's managed service for creating and rotating encryption keys.">KMS</a>-encrypted and
+immutable-tagged <a class="acr" href="#gls-ECR" title="Elastic Container Registry: AWS's managed registry for storing and scanning container images.">ECR</a> repository, an SSE-<a class="acr" href="#gls-KMS" title="Key Management Service: AWS's managed service for creating and rotating encryption keys.">KMS</a>
+encrypted and versioned <a class="acr" href="#gls-SThree" title="Simple Storage Service: AWS's object storage service for files and blobs at effectively unlimited scale.">S3</a> bucket with public access explicitly blocked,
+a least-privilege <a class="acr" href="#gls-IAM" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a> role for CI) and an <code>azure-platform</code>
+module (a Premium Azure Container Registry with public access disabled,
+a geo-redundant storage account with <a class="acr" href="#gls-TLS" title="Transport Layer Security: the cryptographic protocol that encrypts network traffic in transit (the successor to SSL).">TLS</a> 1.2
+minimum and shared-key auth disabled), plus
+<code>environments/dev</code> and <code>environments/prod</code>
+directories showing the same module tree reused with different
+<code>.tfvars</code>.</p>
+<p>Neither <code>terraform</code> nor <code>tfsec</code> was installed
+on the machine this was authored on, so the code was validated by hand –
+brace-matching across every file, and catching one real, instructive
+mistake along the way: an Azure provider attribute name,
+<code>enable_https_traffic_only</code>, that had been renamed to
+<code>https_traffic_only_enabled</code> in a newer provider version.
+That is precisely the class of small, easy-to-miss error that
+<code>terraform validate</code> and <code>tfsec</code> catch
+automatically in seconds – which is why those checks now run in the
+project’s CI pipeline (Chapter <a data-reference="ch:cicd-pipeline" data-reference-type="ref" href="#ch:cicd-pipeline">“CI/CD: The Backbone of DevOps”</a>) on
+every push, rather than depending on a human proofreading <a class="acr" href="#gls-HCL" title="HashiCorp Configuration Language: the language Terraform configuration files are written in.">HCL</a> by hand
+forever.</p>
+</div>
+<div class="gap">
+<p><strong>this Terraform has never touched a real account</strong></p>
+<p>Everything above has been written to be structurally correct and
+reviewable. None of it has been run with <code>terraform apply</code>
+against a live <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> or Azure account. Writing correct Infrastructure as
+Code and <em>operating</em> it under real conditions – real <a class="acr" href="#gls-IAM" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a>
+federation with an identity provider, real multi-account structure, a
+real state-locking conflict during a busy release week – are different
+skills. If you are working through this book yourself, the single
+highest-value exercise in this entire chapter is: create a free-tier <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a>
+account, run <code>terraform plan</code> against code like this for
+real, read every line of the plan output, and only then run
+<code>apply</code>.</p>
+</div>
+<h1 id="containers-and-orchestration">Containers and Orchestration</h1>
+<h2 id="ch:docker">Docker and Containers</h2>
+<h3 id="the-problem-containers-solve">The problem containers solve</h3>
+<p>Before containers, "it works on my machine" was an constant,
+expensive headache, because "my machine" had a slightly different
+library version, a slightly different OS, a slightly different set of
+installed system packages than the production server. A
+<strong>container</strong> solves this by packaging an application
+together with absolutely everything it needs to run – the exact language
+runtime version, the exact libraries, the exact OS-level dependencies –
+into one portable, self-contained image that behaves identically
+everywhere: a laptop, a CI pipeline, or a production cluster.</p>
+<p>A container is <em>not</em> a lightweight virtual machine, even
+though it can feel like one. A virtual machine virtualizes an entire
+computer, including its own kernel. A container shares the host
+machine’s kernel and simply isolates a process’s view of the filesystem,
+network, and process table. This is why containers start in milliseconds
+where a <a class="acr" href="#gls-VM" title="Virtual Machine: a full virtualized computer, including its own kernel, distinct from the lighter-weight isolation a container provides.">VM</a> takes tens of seconds, and why they are the natural building
+block for the fast-moving, horizontally-scaled systems this entire book
+is about.</p>
+<h3 id="images-containers-and-the-dockerfile">Images, containers, and
+the Dockerfile</h3>
+<p>An <strong>image</strong> is a static, read-only package: a
+filesystem snapshot plus metadata about how to run it. A
+<strong>container</strong> is a live, running instance of that image –
+the relationship is the same as a class and an object in programming, or
+a recipe and the actual dish cooked from it. A
+<strong>Dockerfile</strong> is the recipe: a sequence of instructions
+describing how to build the image.</p>
+<div class="sourceCode" data-language="bash" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a aria-hidden="true" href="#cb20-1" tabindex="-1"></a><span class="co"># ---- build stage ----</span></span>
+<span id="cb20-2"><a aria-hidden="true" href="#cb20-2" tabindex="-1"></a><span class="ex">FROM</span> python:3.12-slim AS builder</span>
+<span id="cb20-3"><a aria-hidden="true" href="#cb20-3" tabindex="-1"></a><span class="ex">WORKDIR</span> /build</span>
+<span id="cb20-4"><a aria-hidden="true" href="#cb20-4" tabindex="-1"></a><span class="ex">COPY</span> requirements.txt .</span>
+<span id="cb20-5"><a aria-hidden="true" href="#cb20-5" tabindex="-1"></a><span class="ex">RUN</span> pip install <span class="at">--no-cache-dir</span> <span class="at">--prefix</span><span class="op">=</span>/install <span class="at">-r</span> requirements.txt</span>
+<span id="cb20-6"><a aria-hidden="true" href="#cb20-6" tabindex="-1"></a></span>
+<span id="cb20-7"><a aria-hidden="true" href="#cb20-7" tabindex="-1"></a><span class="co"># ---- runtime stage ----</span></span>
+<span id="cb20-8"><a aria-hidden="true" href="#cb20-8" tabindex="-1"></a><span class="ex">FROM</span> python:3.12-slim</span>
+<span id="cb20-9"><a aria-hidden="true" href="#cb20-9" tabindex="-1"></a><span class="ex">RUN</span> groupadd <span class="at">-g</span> 10001 appgroup <span class="kw">&amp;&amp;</span> <span class="ex">useradd</span> <span class="at">-u</span> 10001 <span class="at">-g</span> appgroup <span class="at">-M</span> appuser</span>
+<span id="cb20-10"><a aria-hidden="true" href="#cb20-10" tabindex="-1"></a><span class="ex">COPY</span> <span class="at">--from</span><span class="op">=</span>builder /install /usr/local</span>
+<span id="cb20-11"><a aria-hidden="true" href="#cb20-11" tabindex="-1"></a><span class="ex">WORKDIR</span> /app</span>
+<span id="cb20-12"><a aria-hidden="true" href="#cb20-12" tabindex="-1"></a><span class="ex">COPY</span> app.py .</span>
+<span id="cb20-13"><a aria-hidden="true" href="#cb20-13" tabindex="-1"></a><span class="ex">USER</span> 10001:10001</span>
+<span id="cb20-14"><a aria-hidden="true" href="#cb20-14" tabindex="-1"></a><span class="ex">EXPOSE</span> 8080</span>
+<span id="cb20-15"><a aria-hidden="true" href="#cb20-15" tabindex="-1"></a><span class="ex">HEALTHCHECK</span> CMD curl <span class="at">-f</span> http://localhost:8080/healthz <span class="kw">||</span> <span class="bu">exit</span> 1</span>
+<span id="cb20-16"><a aria-hidden="true" href="#cb20-16" tabindex="-1"></a><span class="ex">CMD</span> [<span class="st">"gunicorn"</span>, <span class="st">"-b"</span>, <span class="st">"0.0.0.0:8080"</span>, <span class="st">"app:app"</span>]</span></code></pre></div>
+<h3 id="why-every-line-above-is-a-deliberate-hardening-choice">Why every
+line above is a deliberate hardening choice</h3>
+<ul>
+<li><p><strong>Multi-stage build.</strong> The final image contains only
+the installed Python packages and application code – no compiler, no
+build tools, none of the packages only needed to <em>build</em>
+dependencies. Fewer tools present means fewer things an attacker who
+gets code execution inside the container could abuse.</p></li>
+<li><p><strong>A dedicated, unprivileged user.</strong> By default, a
+container runs as <code>root</code> – the most privileged Linux user. If
+application code is compromised, running as root gives an attacker far
+more to work with inside the container, and a (small but real) chance of
+breaking further out of it. Creating uid/gid 10001 and running as that
+user instead directly limits the blast radius.</p></li>
+<li><p><strong>Minimal base image.</strong>
+<code>python:3.12-slim</code> instead of the full default image strips
+out documentation, extra utilities, and anything not strictly needed to
+run Python – again, less installed means less that could be
+vulnerable.</p></li>
+<li><p><strong><code>HEALTHCHECK</code>.</strong> Docker’s own,
+container-level equivalent of the Kubernetes liveness probe introduced
+in Chapter <a data-reference="ch:k8s" data-reference-type="ref" href="#ch:k8s">“Kubernetes”</a> – a standard way to ask "is this container
+actually working," independent of whether Kubernetes is involved at
+all.</p></li>
+</ul>
+<div class="sourceCode" data-language="bash" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a aria-hidden="true" href="#cb21-1" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> status-service:demo .</span>
+<span id="cb21-2"><a aria-hidden="true" href="#cb21-2" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-p</span> 8080:8080 status-service:demo</span>
+<span id="cb21-3"><a aria-hidden="true" href="#cb21-3" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--read-only</span> <span class="at">--tmpfs</span> /tmp <span class="at">--user</span> 10001:10001 <span class="at">-p</span> 8080:8080 status-service:demo</span>
+<span id="cb21-4"><a aria-hidden="true" href="#cb21-4" tabindex="-1"></a><span class="ex">docker</span> images</span>
+<span id="cb21-5"><a aria-hidden="true" href="#cb21-5" tabindex="-1"></a><span class="ex">docker</span> ps</span>
+<span id="cb21-6"><a aria-hidden="true" href="#cb21-6" tabindex="-1"></a><span class="ex">docker</span> logs <span class="op">&lt;</span>container-id<span class="op">&gt;</span></span>
+<span id="cb21-7"><a aria-hidden="true" href="#cb21-7" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> <span class="op">&lt;</span>container-id<span class="op">&gt;</span> sh</span></code></pre></div>
+<div class="caseStudy">
+<p><strong>a real image, actually built and run</strong></p>
+<p>A real Flask application, <code>app/status-service/app.py</code>, was
+built inside <code>poetic-musings</code> specifically to have something
+genuine to containerize: it serves this repository’s status document as
+HTML and JSON, with <code>/healthz</code> (a liveness check that does no
+I/O) and <code>/readyz</code> (a readiness check that confirms the
+underlying status file exists) endpoints.</p>
+<p>The Dockerfile follows every pattern above – multi-stage, non-root
+uid/gid 10001, no unnecessary packages, pinned dependencies. It was not
+just written; it was actually built with <code>docker build</code>, and
+then <em>run</em> under the same restrictions a production Kubernetes
+cluster would impose:</p>
+<div class="sourceCode" data-language="bash" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a aria-hidden="true" href="#cb22-1" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--read-only</span> <span class="at">--tmpfs</span> /tmp <span class="at">--user</span> 10001:10001 status-service:demo</span></code></pre></div>
+<p>The very first attempt at this failed with
+<code>FileNotFoundError: No usable temporary directory</code>, because
+gunicorn needs <em>somewhere</em> writable even in an otherwise fully
+locked-down container. That is the honest, hands-on version of
+"hardening" – it is a negotiation between "as locked down as possible"
+and "the software still has to actually run," and you find the real
+boundary by testing, not by guessing or by copying a checklist you never
+verified. The fix – mounting a small writable <code>tmpfs</code> at
+exactly the one path that needs it – is exactly what the corresponding
+Kubernetes manifest does with an <code>emptyDir</code> volume, covered
+next in Chapter <a data-reference="ch:k8s" data-reference-type="ref" href="#ch:k8s">“Kubernetes”</a>.</p>
+</div>
+<h2 id="ch:k8s">Kubernetes</h2>
+<h3 id="the-problem-kubernetes-solves">The problem Kubernetes
+solves</h3>
+<p>Running one container on one machine is easy. Running dozens of
+containers, across many machines, that need to survive crashes, scale up
+under load, roll out new versions without downtime, and be moved off a
+machine that needs maintenance – doing all of that reliably by hand does
+not scale past a very small team. <strong>Kubernetes</strong> (often <a class="acr" href="#gls-K8s" title="Kubernetes: a system for running and automatically managing many containers across many machines.">K8s</a>) is a system that automates exactly this: you
+describe the <em>desired state</em> ("I want three copies of this
+container running, each with these resource limits, exposed on this
+port"), and Kubernetes continuously works to make reality match that
+description, healing any difference it finds automatically.</p>
+<h3 id="the-core-objects">The core objects</h3>
+<ul>
+<li><p><strong>Pod</strong> – the smallest deployable unit; usually one
+container (sometimes a small group of tightly coupled containers) plus
+shared storage and network.</p></li>
+<li><p><strong>Deployment</strong> – describes how many replicas of a
+Pod template should exist, and how to roll out changes to that template
+over time without downtime.</p></li>
+<li><p><strong>Service</strong> – a stable network address and name for
+a set of Pods, since individual Pods come and go (are rescheduled,
+restarted, replaced) and their individual IP addresses are not
+stable.</p></li>
+<li><p><strong>NetworkPolicy</strong> – a firewall for Pod-to-Pod
+traffic inside the cluster.</p></li>
+<li><p><strong>PodDisruptionBudget (PDB)</strong> – a guarantee that a
+<em>voluntary</em> disruption (a node drain for maintenance, a cluster
+upgrade) will not take down more replicas at once than you have declared
+acceptable.</p></li>
+</ul>
+<h3 id="liveness-vs.-readiness">Liveness vs. readiness</h3>
+<p>This distinction is asked about in interviews constantly, and is
+worth being able to explain crisply. A <strong>liveness probe</strong>
+answers "is this container still alive?" – if it fails, Kubernetes
+assumes the container is stuck or dead and restarts it. A
+<strong>readiness probe</strong> answers a different question: "is this
+container ready to serve real traffic <em>right now</em>?" – a container
+can be alive but not ready (for example, still loading data on startup),
+and Kubernetes will withhold traffic from it without restarting it.
+Liveness failing means <em>restart me</em>. Readiness failing means
+<em>don’t send me traffic yet, but leave me running</em>.</p>
+<div class="sourceCode" data-language="yaml" id="cb23"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb23-1"><a aria-hidden="true" href="#cb23-1" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
+<span id="cb23-2"><a aria-hidden="true" href="#cb23-2" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Deployment</span></span>
+<span id="cb23-3"><a aria-hidden="true" href="#cb23-3" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb23-4"><a aria-hidden="true" href="#cb23-4" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> status-service</span></span>
+<span id="cb23-5"><a aria-hidden="true" href="#cb23-5" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb23-6"><a aria-hidden="true" href="#cb23-6" tabindex="-1"></a><span class="at">  </span><span class="fu">replicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb23-7"><a aria-hidden="true" href="#cb23-7" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb23-8"><a aria-hidden="true" href="#cb23-8" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">app</span><span class="kw">:</span><span class="at"> status-service </span><span class="kw">}</span></span>
+<span id="cb23-9"><a aria-hidden="true" href="#cb23-9" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span></span>
+<span id="cb23-10"><a aria-hidden="true" href="#cb23-10" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb23-11"><a aria-hidden="true" href="#cb23-11" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">app</span><span class="kw">:</span><span class="at"> status-service </span><span class="kw">}</span></span>
+<span id="cb23-12"><a aria-hidden="true" href="#cb23-12" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb23-13"><a aria-hidden="true" href="#cb23-13" tabindex="-1"></a><span class="at">      </span><span class="fu">securityContext</span><span class="kw">:</span></span>
+<span id="cb23-14"><a aria-hidden="true" href="#cb23-14" tabindex="-1"></a><span class="at">        </span><span class="fu">runAsNonRoot</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb23-15"><a aria-hidden="true" href="#cb23-15" tabindex="-1"></a><span class="at">        </span><span class="fu">seccompProfile</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> RuntimeDefault </span><span class="kw">}</span></span>
+<span id="cb23-16"><a aria-hidden="true" href="#cb23-16" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb23-17"><a aria-hidden="true" href="#cb23-17" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> status-service</span></span>
+<span id="cb23-18"><a aria-hidden="true" href="#cb23-18" tabindex="-1"></a><span class="at">          </span><span class="fu">image</span><span class="kw">:</span><span class="at"> registry.example.com/status-service:v1.0.0</span></span>
+<span id="cb23-19"><a aria-hidden="true" href="#cb23-19" tabindex="-1"></a><span class="at">          </span><span class="fu">ports</span><span class="kw">:</span><span class="at"> </span><span class="kw">[{</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span><span class="at"> </span><span class="kw">}]</span></span>
+<span id="cb23-20"><a aria-hidden="true" href="#cb23-20" tabindex="-1"></a><span class="at">          </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb23-21"><a aria-hidden="true" href="#cb23-21" tabindex="-1"></a><span class="at">            </span><span class="fu">requests</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">"100m"</span><span class="kw">,</span><span class="at"> </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">"128Mi"</span><span class="at"> </span><span class="kw">}</span></span>
+<span id="cb23-22"><a aria-hidden="true" href="#cb23-22" tabindex="-1"></a><span class="at">            </span><span class="fu">limits</span><span class="kw">:</span><span class="at">   </span><span class="kw">{</span><span class="at"> </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">"250m"</span><span class="kw">,</span><span class="at"> </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">"256Mi"</span><span class="at"> </span><span class="kw">}</span></span>
+<span id="cb23-23"><a aria-hidden="true" href="#cb23-23" tabindex="-1"></a><span class="at">          </span><span class="fu">securityContext</span><span class="kw">:</span></span>
+<span id="cb23-24"><a aria-hidden="true" href="#cb23-24" tabindex="-1"></a><span class="at">            </span><span class="fu">readOnlyRootFilesystem</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb23-25"><a aria-hidden="true" href="#cb23-25" tabindex="-1"></a><span class="at">            </span><span class="fu">allowPrivilegeEscalation</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb23-26"><a aria-hidden="true" href="#cb23-26" tabindex="-1"></a><span class="at">            </span><span class="fu">capabilities</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">drop</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"ALL"</span><span class="kw">]</span><span class="at"> </span><span class="kw">}</span></span>
+<span id="cb23-27"><a aria-hidden="true" href="#cb23-27" tabindex="-1"></a><span class="at">          </span><span class="fu">livenessProbe</span><span class="kw">:</span></span>
+<span id="cb23-28"><a aria-hidden="true" href="#cb23-28" tabindex="-1"></a><span class="at">            </span><span class="fu">httpGet</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /healthz</span><span class="kw">,</span><span class="at"> </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span><span class="at"> </span><span class="kw">}</span></span>
+<span id="cb23-29"><a aria-hidden="true" href="#cb23-29" tabindex="-1"></a><span class="at">            </span><span class="fu">initialDelaySeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb23-30"><a aria-hidden="true" href="#cb23-30" tabindex="-1"></a><span class="at">            </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb23-31"><a aria-hidden="true" href="#cb23-31" tabindex="-1"></a><span class="at">          </span><span class="fu">readinessProbe</span><span class="kw">:</span></span>
+<span id="cb23-32"><a aria-hidden="true" href="#cb23-32" tabindex="-1"></a><span class="at">            </span><span class="fu">httpGet</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /readyz</span><span class="kw">,</span><span class="at"> </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span><span class="at"> </span><span class="kw">}</span></span>
+<span id="cb23-33"><a aria-hidden="true" href="#cb23-33" tabindex="-1"></a><span class="at">            </span><span class="fu">initialDelaySeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
+<span id="cb23-34"><a aria-hidden="true" href="#cb23-34" tabindex="-1"></a><span class="at">            </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb23-35"><a aria-hidden="true" href="#cb23-35" tabindex="-1"></a><span class="at">          </span><span class="fu">volumeMounts</span><span class="kw">:</span></span>
+<span id="cb23-36"><a aria-hidden="true" href="#cb23-36" tabindex="-1"></a><span class="at">            </span><span class="kw">-</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> tmp</span><span class="kw">,</span><span class="at"> </span><span class="fu">mountPath</span><span class="kw">:</span><span class="at"> /tmp </span><span class="kw">}</span></span>
+<span id="cb23-37"><a aria-hidden="true" href="#cb23-37" tabindex="-1"></a><span class="at">      </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb23-38"><a aria-hidden="true" href="#cb23-38" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> tmp</span></span>
+<span id="cb23-39"><a aria-hidden="true" href="#cb23-39" tabindex="-1"></a><span class="at">          </span><span class="fu">emptyDir</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span></code></pre></div>
+<h3 id="the-restricted-pod-security-standard-explained-line-by-line">The
+restricted Pod Security Standard, explained line by line</h3>
+<figure class="diagram">
+<svg aria-labelledby="k8s-title" role="img" viewbox="0 0 700 320" xmlns="http://www.w3.org/2000/svg">
+<title id="k8s-title">Layered Kubernetes hardening, from the cluster boundary down to a single container</title>
+<style>
+  .k8-outer { fill: none; stroke: var(--rule); stroke-width: 1.5; stroke-dasharray: 5 4; }
+  .k8-ns { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+  .k8-pod { fill: var(--case-bg); stroke: var(--case-border); stroke-width: 1.5; }
+  .k8-ctr { fill: var(--note-bg); stroke: var(--note-border); stroke-width: 1.5; }
+  .k8-label { font: 600 12px -apple-system, sans-serif; fill: var(--fg); }
+  .k8-sub { font: 10.5px -apple-system, sans-serif; fill: var(--muted); }
+  .k8-tag { font: 700 10px -apple-system, sans-serif; fill: var(--muted); }
+</style>
+<rect class="k8-outer" height="280" rx="10" width="660" x="20" y="20"></rect>
+<text class="k8-tag" x="35" y="42">CLUSTER</text>
+<rect class="k8-ns" height="235" rx="8" width="600" x="50" y="55"></rect>
+<text class="k8-tag" x="65" y="77">NAMESPACE — default-deny NetworkPolicy applies here</text>
+<rect class="k8-pod" height="175" rx="8" width="540" x="80" y="95"></rect>
+<text class="k8-tag" x="95" y="117">POD — runAsNonRoot, seccompProfile: RuntimeDefault</text>
+<rect class="k8-ctr" height="115" rx="8" width="480" x="110" y="135"></rect>
+<text class="k8-tag" x="125" y="157">CONTAINER</text>
+<text class="k8-label" x="135" y="180">readOnlyRootFilesystem: true</text>
+<text class="k8-label" x="135" y="198">capabilities: drop [ALL]</text>
+<text class="k8-label" x="135" y="216">allowPrivilegeEscalation: false</text>
+<text class="k8-sub" x="135" y="234">+ one writable emptyDir at /tmp, nothing else</text>
+</svg>
+<figcaption>Figure: each layer adds its own restriction — a compromise at the container level still has to get past every outer layer too.</figcaption>
+</figure>
+
+<p>Every <code>securityContext</code> field above corresponds to a
+specific, named threat:</p>
+<ul>
+<li><p><code>runAsNonRoot: true</code> – a second, independent
+enforcement of the same non-root principle from the Dockerfile in
+Chapter <a data-reference="ch:docker" data-reference-type="ref" href="#ch:docker">“Docker and Containers”</a>. Defense in depth means never trusting
+a single layer to get a control right.</p></li>
+<li><p><code>readOnlyRootFilesystem: true</code> – the container’s
+filesystem cannot be written to at all, except for volumes explicitly
+mounted as writable (here, the <code>emptyDir</code> at
+<code>/tmp</code>). An attacker with code execution inside the container
+has (almost) nowhere to write a malicious file.</p></li>
+<li><p><code>capabilities.drop: ["ALL"]</code> – Linux capabilities are
+fine-grained permissions beyond simple root/non-root (binding
+low-numbered ports, changing file ownership, and so on). Dropping all of
+them removes every one of these extra powers unless a specific one is
+explicitly re-added – the same least-privilege instinct as the <a class="acr" href="#gls-IAM" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a>
+policy in Chapter 5, applied at the kernel-capability layer.</p></li>
+<li><p><code>allowPrivilegeEscalation: false</code> – prevents a process
+from gaining more privileges than it started with, for example via a
+<code>setuid</code> binary.</p></li>
+<li><p><code>seccompProfile: RuntimeDefault</code> – restricts which raw
+Linux system calls the container’s processes are allowed to make at all,
+to a sane, restrictive default set instead of everything the kernel
+supports.</p></li>
+</ul>
+<p>Together, these implement what Kubernetes calls the
+<strong>restricted</strong> Pod Security Standard – the strictest of its
+three built-in profiles (<em>privileged</em>, then <em>baseline</em>,
+then <em>restricted</em>). Being able to name this standard and explain
+each control’s purpose, unprompted, is a genuinely strong signal in an
+interview.</p>
+<h3 id="network-policy-default-deny">Network policy: default-deny</h3>
+<p>By default, every Pod in a Kubernetes cluster can talk to every other
+Pod, on any port. A <code>NetworkPolicy</code> turns that off. The
+correct pattern is <strong>default-deny, then explicit
+allow</strong>:</p>
+<div class="sourceCode" data-language="yaml" id="cb24"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb24-1"><a aria-hidden="true" href="#cb24-1" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> networking.k8s.io/v1</span></span>
+<span id="cb24-2"><a aria-hidden="true" href="#cb24-2" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> NetworkPolicy</span></span>
+<span id="cb24-3"><a aria-hidden="true" href="#cb24-3" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> default-deny-all </span><span class="kw">}</span></span>
+<span id="cb24-4"><a aria-hidden="true" href="#cb24-4" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb24-5"><a aria-hidden="true" href="#cb24-5" tabindex="-1"></a><span class="at">  </span><span class="fu">podSelector</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span>
+<span id="cb24-6"><a aria-hidden="true" href="#cb24-6" tabindex="-1"></a><span class="at">  </span><span class="fu">policyTypes</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">Ingress</span><span class="kw">,</span><span class="at"> Egress</span><span class="kw">]</span></span>
+<span id="cb24-7"><a aria-hidden="true" href="#cb24-7" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb24-8"><a aria-hidden="true" href="#cb24-8" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> networking.k8s.io/v1</span></span>
+<span id="cb24-9"><a aria-hidden="true" href="#cb24-9" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> NetworkPolicy</span></span>
+<span id="cb24-10"><a aria-hidden="true" href="#cb24-10" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> allow-status-service-ingress </span><span class="kw">}</span></span>
+<span id="cb24-11"><a aria-hidden="true" href="#cb24-11" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb24-12"><a aria-hidden="true" href="#cb24-12" tabindex="-1"></a><span class="at">  </span><span class="fu">podSelector</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">matchLabels</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">app</span><span class="kw">:</span><span class="at"> status-service </span><span class="kw">}</span><span class="at"> </span><span class="kw">}</span></span>
+<span id="cb24-13"><a aria-hidden="true" href="#cb24-13" tabindex="-1"></a><span class="at">  </span><span class="fu">policyTypes</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">Ingress</span><span class="kw">]</span></span>
+<span id="cb24-14"><a aria-hidden="true" href="#cb24-14" tabindex="-1"></a><span class="at">  </span><span class="fu">ingress</span><span class="kw">:</span></span>
+<span id="cb24-15"><a aria-hidden="true" href="#cb24-15" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">ports</span><span class="kw">:</span><span class="at"> </span><span class="kw">[{</span><span class="at"> </span><span class="fu">protocol</span><span class="kw">:</span><span class="at"> TCP</span><span class="kw">,</span><span class="at"> </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span><span class="at"> </span><span class="kw">}]</span></span></code></pre></div>
+<h3 id="kustomize-one-base-many-environments">Kustomize: one base, many
+environments</h3>
+<p>Exactly as Terraform modules avoid copy-pasting infrastructure
+between environments, <strong>Kustomize</strong> (built into
+<code>kubectl</code>) lets a <code>base/</code> set of manifests be
+patched per environment without duplicating the whole file.</p>
+<div class="sourceCode" data-language="bash" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a aria-hidden="true" href="#cb25-1" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-k</span> k8s/overlays/dev</span>
+<span id="cb25-2"><a aria-hidden="true" href="#cb25-2" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-k</span> k8s/overlays/prod</span>
+<span id="cb25-3"><a aria-hidden="true" href="#cb25-3" tabindex="-1"></a><span class="ex">kustomize</span> build k8s/overlays/prod</span></code></pre></div>
+<div class="caseStudy">
+<p><strong>a real, tested Kubernetes layer</strong></p>
+<p>The <code>k8s/</code> directory in <code>poetic-musings</code>
+deploys the same status-service image from Chapter <a data-reference="ch:docker" data-reference-type="ref" href="#ch:docker">“Docker and Containers”</a>: a
+<code>base/</code> with a Deployment implementing every control
+described above, a Service, three separate <code>NetworkPolicy</code>
+objects (default-deny, explicit ingress on 8080, explicit <a class="acr" href="#gls-DNS" title="Domain Name System: translates human-readable hostnames into IP addresses.">DNS</a> egress), and a <code>PodDisruptionBudget</code>
+with <code>minAvailable: 1</code>, paired with a 3-replica
+<code>overlays/prod</code> Kustomize overlay (<code>overlays/dev</code>
+runs 1 replica).</p>
+<p>No real Kubernetes cluster was available while building this, so the
+manifests were validated two other ways: every YAML file was parsed to
+confirm it is syntactically valid, and <code>kustomize build</code> was
+run against both overlays to confirm they render into complete, valid
+Kubernetes objects with no errors – which caught one real issue, a
+deprecated <code>commonLabels</code> Kustomize field that needed to
+become <code>labels</code> in newer Kustomize versions. That is the same
+lesson as the Terraform provider-attribute mistake in Chapter <a data-reference="ch:terraform" data-reference-type="ref" href="#ch:terraform">“Terraform and Infrastructure as Code”</a>: a tool designed to catch exactly
+this class of drift caught it, once it was actually run.</p>
+</div>
+<div class="gap">
+<p><strong>this has never scheduled a real Pod</strong></p>
+<p>Writing a correct manifest and watching Kubernetes actually enforce
+it, under real load, across real node failures, are different skills,
+and only the first is demonstrated here. The highest-value next
+exercise: install <code>kind</code> (Kubernetes-in-Docker, free, no
+cloud account required) and run
+<code>kubectl apply -k k8s/overlays/dev</code> against a real, if small,
+cluster. Watch the Pod actually schedule. Then deliberately break a
+security setting – remove <code>readOnlyRootFilesystem</code>, for
+instance – and observe exactly what changes, so the value of each
+control stops being theoretical.</p>
+</div>
+<h1 id="part:cicd">CI/CD and Security Automation</h1>
+<h2 id="ch:cicd-pipeline">CI/CD: The Backbone of DevOps</h2>
+<h3 id="why-this-is-the-highest-leverage-phase">Why this is the
+highest-leverage phase</h3>
+<p>Every earlier phase in this book – Terraform provisioning
+infrastructure, Docker building images, Kubernetes running them –
+becomes genuinely valuable only once it is wired together by automation
+that runs on every code change, without a human remembering to trigger
+each step by hand. <a class="acr" href="#gls-CICD" title="Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.">CI/CD</a> is that wiring, which is why the road map this
+book follows treats it as the phase deserving the most sustained
+attention.</p>
+<p><a class="acr" href="#gls-CICD" title="Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.">CI/CD</a> (<strong>Continuous Integration
+(CI)</strong>) is the practice of automatically building and testing
+every change, so problems are caught within minutes of being introduced.
+<strong>Continuous Delivery</strong> extends this to automatically
+leaving every passing change ready to deploy, with a human clicking a
+final button. <strong>Continuous Deployment</strong> goes one step
+further and deploys automatically, with no human step at all. Learn the
+concepts once; the specific tool (Jenkins, GitHub Actions, GitLab CI,
+Azure DevOps) is a dialect, not a different language.</p>
+<h3 id="the-anatomy-of-a-pipeline">The anatomy of a pipeline</h3>
+<p>A pipeline is a sequence of <strong>stages</strong>, each containing
+one or more <strong>jobs</strong>, triggered by an event – typically a
+push or a pull/merge request. A well-designed pipeline is staged for
+<strong>fail-fast</strong>: cheap, fast checks run before expensive,
+slow ones, so a broken build is caught in seconds, not after a
+ten-minute container build that was never going to matter.</p>
+<div class="sourceCode" data-language="bash" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a aria-hidden="true" href="#cb26-1" tabindex="-1"></a><span class="co"># The rough shape of a well-staged pipeline, tool-agnostic:</span></span>
+<span id="cb26-2"><a aria-hidden="true" href="#cb26-2" tabindex="-1"></a><span class="co">#   1. lint          (seconds)</span></span>
+<span id="cb26-3"><a aria-hidden="true" href="#cb26-3" tabindex="-1"></a><span class="co">#   2. unit tests     (tens of seconds)</span></span>
+<span id="cb26-4"><a aria-hidden="true" href="#cb26-4" tabindex="-1"></a><span class="co">#   3. secrets scan    (seconds, full git history)</span></span>
+<span id="cb26-5"><a aria-hidden="true" href="#cb26-5" tabindex="-1"></a><span class="co">#   4. SAST             (tens of seconds)</span></span>
+<span id="cb26-6"><a aria-hidden="true" href="#cb26-6" tabindex="-1"></a><span class="co">#   5. build the image   (a minute or two)</span></span>
+<span id="cb26-7"><a aria-hidden="true" href="#cb26-7" tabindex="-1"></a><span class="co">#   6. container scan     (a minute or two)</span></span>
+<span id="cb26-8"><a aria-hidden="true" href="#cb26-8" tabindex="-1"></a><span class="co">#   7. IaC / K8s manifest scans</span></span>
+<span id="cb26-9"><a aria-hidden="true" href="#cb26-9" tabindex="-1"></a><span class="co">#   8. deploy (gated on everything above passing)</span></span></code></pre></div>
+<h2 id="ch:shiftleft">Shifting Security Left</h2>
+<figure class="diagram">
+<svg aria-labelledby="pipeline-title" role="img" viewbox="0 0 900 260" xmlns="http://www.w3.org/2000/svg">
+<title id="pipeline-title">A shift-left CI/CD pipeline with security gates at every stage</title>
+<style>
+  .pl-fast { fill: var(--note-bg); stroke: var(--note-border); stroke-width: 1.5; }
+  .pl-scan { fill: var(--gap-bg); stroke: var(--gap-border); stroke-width: 1.5; }
+  .pl-deploy { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+  .pl-label { font: 600 12px -apple-system, sans-serif; fill: var(--fg); }
+  .pl-sub { font: 10px -apple-system, sans-serif; fill: var(--muted); }
+  .pl-arrow { stroke: var(--muted); stroke-width: 2; marker-end: url(#pl-arrowhead); }
+  .pl-group { font: 700 11px -apple-system, sans-serif; fill: var(--muted); }
+</style>
+<defs>
+<marker id="pl-arrowhead" markerheight="8" markerwidth="8" orient="auto" refx="6" refy="3">
+<path d="M0,0 L6,3 L0,6 Z" fill="var(--muted)"></path>
+</marker>
+</defs>
+<text class="pl-group" x="20" y="24">FAIL-FAST (seconds)</text>
+<rect class="pl-fast" height="60" rx="5" width="110" x="10" y="35"></rect>
+<text class="pl-label" text-anchor="middle" x="65" y="60">Lint / Test</text>
+<text class="pl-sub" text-anchor="middle" x="65" y="76">ruff, unit tests</text>
+<rect class="pl-fast" height="60" rx="5" width="110" x="140" y="35"></rect>
+<text class="pl-label" text-anchor="middle" x="195" y="60">Secrets Scan</text>
+<text class="pl-sub" text-anchor="middle" x="195" y="76">gitleaks, full history</text>
+<line class="pl-arrow" x1="120" x2="138" y1="65" y2="65"></line>
+<text class="pl-group" x="290" y="24">SECURITY GATES</text>
+<rect class="pl-scan" height="60" rx="5" width="110" x="280" y="35"></rect>
+<text class="pl-label" text-anchor="middle" x="335" y="60">SAST</text>
+<text class="pl-sub" text-anchor="middle" x="335" y="76">bandit → SARIF</text>
+<rect class="pl-scan" height="60" rx="5" width="110" x="410" y="35"></rect>
+<text class="pl-label" text-anchor="middle" x="465" y="60">SBOM + SCA</text>
+<text class="pl-sub" text-anchor="middle" x="465" y="76">syft, pip-audit</text>
+<line class="pl-arrow" x1="250" x2="278" y1="65" y2="65"></line>
+<line class="pl-arrow" x1="390" x2="408" y1="65" y2="65"></line>
+<rect class="pl-scan" height="60" rx="5" width="110" x="540" y="35"></rect>
+<text class="pl-label" text-anchor="middle" x="595" y="60">Container Scan</text>
+<text class="pl-sub" text-anchor="middle" x="595" y="76">trivy, HIGH/CRITICAL</text>
+<rect class="pl-scan" height="60" rx="5" width="110" x="670" y="35"></rect>
+<text class="pl-label" text-anchor="middle" x="725" y="60">IaC + K8s Scan</text>
+<text class="pl-sub" text-anchor="middle" x="725" y="76">tfsec, kube-linter</text>
+<line class="pl-arrow" x1="520" x2="538" y1="65" y2="65"></line>
+<line class="pl-arrow" x1="650" x2="668" y1="65" y2="65"></line>
+<line class="pl-arrow" x1="725" x2="725" y1="95" y2="150"></line>
+<text class="pl-group" x="20" y="140">ONLY IF EVERY GATE ABOVE PASSES</text>
+<rect class="pl-deploy" height="60" rx="5" width="260" x="300" y="150"></rect>
+<text class="pl-label" text-anchor="middle" x="430" y="175">Build + Push Image</text>
+<text class="pl-sub" text-anchor="middle" x="430" y="191">immutable, scanned tag → registry</text>
+<line class="pl-arrow" x1="560" x2="668" y1="180" y2="180"></line>
+<rect class="pl-deploy" height="60" rx="5" width="200" x="670" y="150"></rect>
+<text class="pl-label" text-anchor="middle" x="770" y="175">Deploy</text>
+<text class="pl-sub" text-anchor="middle" x="770" y="191">Kubernetes (kubectl / Kustomize)</text>
+</svg>
+<figcaption>Figure: fail-fast checks run first; every scan is a real gate, not an advisory report; deploy only happens if everything upstream is green.</figcaption>
+</figure>
+
+<h3 id="what-shift-left-actually-means">What “shift left” actually
+means</h3>
+<p>Historically, security review happened at the far right end of a
+project’s timeline: a separate team audited the software right before
+launch, often too late to fix anything without expensive rework, and
+often skipped entirely under deadline pressure. <strong>Shifting
+left</strong> means moving that review as early as possible – ideally
+into the same automated pipeline that runs on every single commit – so a
+mistake is caught in a thirty-second scan the moment it is introduced,
+rather than discovered by an attacker (or an auditor) months later. This
+is the defining idea of DevSecOps: security is not a gate at the end, it
+is a property enforced continuously, automatically, throughout.</p>
+<h3 id="the-layers-of-automated-security-scanning">The layers of
+automated security scanning</h3>
+<p>A mature pipeline stacks several different scanners, because no
+single tool catches everything – each is aimed at a different layer of
+the system, an approach usually called <strong>defense in
+depth</strong>.</p>
+<h4 id="secrets-detection">Secrets detection</h4>
+<p>Scans for anything that looks like a password, <a class="acr" href="#gls-API" title="Application Programming Interface: a defined way for one piece of software to request functionality or data from another.">API</a> key, or private
+key committed to the repository – critically, across the <em>entire git
+history</em>, not merely the current diff, because a secret committed
+and later "removed" in a subsequent commit is still retrievable from
+history by anyone with read access, until it is rotated.</p>
+<div class="sourceCode" data-language="yaml" id="cb27"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb27-1"><a aria-hidden="true" href="#cb27-1" tabindex="-1"></a><span class="co"># gitleaks, run against full history</span></span>
+<span id="cb27-2"><a aria-hidden="true" href="#cb27-2" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Secrets scan</span></span>
+<span id="cb27-3"><a aria-hidden="true" href="#cb27-3" tabindex="-1"></a><span class="at">  </span><span class="fu">run</span><span class="kw">:</span><span class="at"> gitleaks detect --source . --log-opts="--all" --exit-code 1</span></span></code></pre></div>
+<h4 id="sast-static-application-security-testing">SAST – Static
+Application Security Testing</h4>
+<p><a class="acr" href="#gls-SAST" title="Static Application Security Testing: analyzing source code for security-relevant patterns without running it.">SAST</a> analyzes source code for
+security-relevant patterns <em>without running it</em>: building a shell
+command by concatenating untrusted input (command injection risk), a
+hardcoded credential, a known-weak cryptographic function. This differs
+from a linter, which cares about style and correctness; a <a class="acr" href="#gls-SAST" title="Static Application Security Testing: analyzing source code for security-relevant patterns without running it.">SAST</a> tool
+specifically targets security-relevant code shapes.</p>
+<div class="sourceCode" data-language="bash" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a aria-hidden="true" href="#cb28-1" tabindex="-1"></a><span class="ex">bandit</span> <span class="at">-r</span> app <span class="at">-ll</span> <span class="at">-f</span> sarif <span class="at">-o</span> bandit.sarif</span></code></pre></div>
+<h4 id="sbom-and-dependency-scanning-sca">SBOM and dependency scanning
+(SCA)</h4>
+<p>A <a class="acr" href="#gls-SBOM" title="Software Bill of Materials: a complete, machine-readable inventory of every dependency a piece of software uses.">SBOM</a> (<strong>Software Bill of
+Materials</strong>) is a complete, machine-readable inventory of every
+library your software depends on and its exact version – an ingredient
+list. <strong>Dependency scanning</strong> (or <a class="acr" href="#gls-SCA" title="Software Composition Analysis: checking a dependency inventory against a database of known vulnerabilities.">SCA</a> (Software Composition Analysis)) checks that
+inventory against a database of known, publicly disclosed
+vulnerabilities (<a class="acr" href="#gls-CVE" title="Common Vulnerabilities and Exposures: the standard public naming/numbering system for disclosed security vulnerabilities.">CVE</a>s – Common Vulnerabilities
+and Exposures). The <a class="acr" href="#gls-SBOM" title="Software Bill of Materials: a complete, machine-readable inventory of every dependency a piece of software uses.">SBOM</a> answers "what’s in this artifact"; the
+dependency scan answers "does any of it have a known flaw."</p>
+<div class="sourceCode" data-language="bash" id="cb29"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a aria-hidden="true" href="#cb29-1" tabindex="-1"></a><span class="ex">syft</span> . <span class="at">-o</span> cyclonedx-json=sbom.cdx.json</span>
+<span id="cb29-2"><a aria-hidden="true" href="#cb29-2" tabindex="-1"></a><span class="ex">pip-audit</span> <span class="at">-r</span> requirements.txt</span></code></pre></div>
+<h4 id="container-image-scanning">Container image scanning</h4>
+<p>Scans the <em>built</em> container image – every layer, including the
+base OS image, not just your application’s direct dependencies. A
+vulnerability can exist in a system library baked into the base image
+that your dependency file never even mentions.</p>
+<div class="sourceCode" data-language="bash" id="cb30"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a aria-hidden="true" href="#cb30-1" tabindex="-1"></a><span class="ex">trivy</span> image <span class="at">--severity</span> HIGH,CRITICAL <span class="at">--exit-code</span> 1 <span class="at">--ignore-unfixed</span> my-app:ci</span></code></pre></div>
+<h4 id="iac-and-kubernetes-manifest-scanning">IaC and Kubernetes
+manifest scanning</h4>
+<p>The same category of check as <a class="acr" href="#gls-SAST" title="Static Application Security Testing: analyzing source code for security-relevant patterns without running it.">SAST</a>, aimed at infrastructure
+definitions and deployment manifests instead of application code, as
+introduced in Chapter <a data-reference="ch:terraform" data-reference-type="ref" href="#ch:terraform">“Terraform and Infrastructure as Code”</a> and Chapter <a data-reference="ch:k8s" data-reference-type="ref" href="#ch:k8s">“Kubernetes”</a>.</p>
+<div class="sourceCode" data-language="bash" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a aria-hidden="true" href="#cb31-1" tabindex="-1"></a><span class="ex">tfsec</span> infra/terraform/</span>
+<span id="cb31-2"><a aria-hidden="true" href="#cb31-2" tabindex="-1"></a><span class="ex">kube-linter</span> lint k8s/</span></code></pre></div>
+<h3 id="pipeline-design-habits-that-mark-seniority">Pipeline design
+habits that mark seniority</h3>
+<ul>
+<li><p><strong>Least-privilege pipeline permissions.</strong> Each job
+in the pipeline should declare exactly what it needs (read-only by
+default; write access to security-scanning results only on the specific
+jobs that upload them) – the CI equivalent of the <a class="acr" href="#gls-IAM" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a> scoping from
+Chapter 5, applied to the pipeline’s own credentials.</p></li>
+<li><p><strong>Pin third-party actions/plugins to a specific
+version</strong>, never to a floating branch like <code>@main</code>. An
+unpinned CI dependency is a supply-chain risk: if that dependency’s own
+repository is ever compromised, every pipeline pointing at its moving
+branch picks up the malicious change automatically and
+silently.</p></li>
+<li><p><strong>Centralize findings.</strong> Several scanners can emit a
+standard format called <a class="acr" href="#gls-SARIF" title="Static Analysis Results Interchange Format: a standard format for security scan results so different tools' findings can be viewed in one place.">SARIF</a> (<strong>Static
+Analysis</strong> Results Interchange Format); uploading all of them to
+one dashboard means findings live in one place instead of being
+scattered across seven different job logs nobody reads.</p></li>
+<li><p><strong>Design for incremental rollout.</strong> In a real
+organization, a platform pipeline is often adopted by different teams at
+different times. A well-designed pipeline checks whether the file or
+directory it needs even exists yet, and skips cleanly with a note rather
+than hard-failing, for teams that have not migrated onto a given piece
+yet.</p></li>
+<li><p><strong>Re-run on a schedule, not only on push.</strong> A
+dependency that was safe last week can have a newly disclosed <a class="acr" href="#gls-CVE" title="Common Vulnerabilities and Exposures: the standard public naming/numbering system for disclosed security vulnerabilities.">CVE</a> this
+week even though no code changed. Security scanning is not a one-time
+gate at commit time – vulnerability databases update continuously, so
+the scan needs to repeat on a schedule too.</p></li>
+</ul>
+<div class="caseStudy">
+<p><strong>a full security pipeline, built and validated</strong></p>
+<p>Two workflow files were built for <code>poetic-musings</code> in
+GitHub Actions: <code>ci.yml</code> (lint with <code>ruff</code>, run
+any unit tests) and <code>security.yml</code>, which runs on every push
+and pull request <em>and</em> on a weekly cron, implementing every layer
+above: <code>gitleaks</code> (full-history secrets scan),
+<code>bandit</code> (<a class="acr" href="#gls-SAST" title="Static Application Security Testing: analyzing source code for security-relevant patterns without running it.">SAST</a>, <a class="acr" href="#gls-SARIF" title="Static Analysis Results Interchange Format: a standard format for security scan results so different tools' findings can be viewed in one place.">SARIF</a> uploaded to GitHub code scanning),
+<code>syft</code> + <code>pip-audit</code> (<a class="acr" href="#gls-SBOM" title="Software Bill of Materials: a complete, machine-readable inventory of every dependency a piece of software uses.">SBOM</a> and dependency scan),
+<code>trivy</code> (container image scan, gated on HIGH/CRITICAL
+findings), <code>tfsec</code> (<a class="acr" href="#gls-IaC" title="Infrastructure as Code: describing infrastructure in version-controlled text instead of manual console clicks.">IaC</a> scan of the Terraform from Chapter <a data-reference="ch:terraform" data-reference-type="ref" href="#ch:terraform">“Terraform and Infrastructure as Code”</a>), and <code>kube-linter</code>
+(manifest scan of the Kubernetes YAML from Chapter <a data-reference="ch:k8s" data-reference-type="ref" href="#ch:k8s">“Kubernetes”</a>).</p>
+<p>Every job that touches a path another part of the platform owns (the
+Dockerfile, the Terraform tree, the Kubernetes manifests) checks that
+the path actually exists first, and skips cleanly with a step-summary
+note if it does not – so the pipeline was safe to land before every
+other piece of the platform existed yet, and self-activated as each one
+landed, exactly the incremental-rollout pattern described above.
+Permissions were scoped per job (read-only by default, write access to
+security findings only where a job actually uploads <a class="acr" href="#gls-SARIF" title="Static Analysis Results Interchange Format: a standard format for security scan results so different tools' findings can be viewed in one place.">SARIF</a> output), and
+every third-party action was pinned to a specific version.</p>
+<p>The same pipeline was then reproduced, stage for stage, as
+<code>.gitlab-ci.yml</code> using GitLab CI’s own syntax
+(<code>stages:</code>, <code>rules: exists:</code> standing in for the
+path-existence checks, GitLab’s built-in <code>artifacts:</code> blocks)
+– specifically because a real job posting for this kind of role is just
+as likely to name GitLab as GitHub, and the fastest way to confirm the
+underlying concepts really did transfer, rather than merely memorizing
+one tool’s YAML dialect, is to rebuild the same pipeline in a second
+one.</p>
+</div>
+<div class="gap">
+<p><strong>none of these pipelines have executed against a real
+runner</strong></p>
+<p>Both pipeline files were validated for correct YAML syntax and
+reviewed by hand for structure, permissions scoping, and action pinning
+– but neither has actually executed end to end on a real GitHub Actions
+or GitLab CI runner, which is the only way to prove a pipeline truly
+works rather than merely reads correctly. Pushing this code to a real
+GitHub repository and a real free-tier GitLab project, and watching both
+pipelines run for real, is the concrete next step – and it is genuinely
+inexpensive: GitHub Actions and GitLab.com both include a meaningful
+amount of free CI minutes for exactly this kind of practice.</p>
+</div>
+<h1 id="observability">Observability</h1>
+<h2 id="prometheus-and-grafana">Prometheus and Grafana</h2>
+<h3 id="why-observability-is-the-natural-last-step">Why observability is
+the natural last step</h3>
+<p>Everything built so far – infrastructure, containers, deployments,
+pipelines – can, and eventually will, misbehave in production.
+<strong>Observability</strong> is the practice of being able to answer
+"what is my system actually doing right now, and why," without having to
+guess or manually <a class="acr" href="#gls-SSH" title="Secure Shell: an encrypted protocol for remote login and secure command execution, also used for signing git commits and authenticating to git remotes.">SSH</a> into a machine to poke around. It is deliberately
+the last phase in this road map, because it is most useful once you
+already have real, running systems (from Parts 4 and 5) worth
+observing.</p>
+<h3 id="metrics-the-core-concept">Metrics, the core concept</h3>
+<p>A <strong>metric</strong> is a numeric measurement of your system
+over time – requests per second, error rate, CPU usage, memory
+consumption, queue depth. <strong>Prometheus</strong> is the dominant
+open-source system for collecting and storing these metrics: it
+periodically <em>scrapes</em> (pulls) metrics from every service you
+configure it to watch, over HTTP, and stores them as a time series.</p>
+<div class="sourceCode" data-language="bash" id="cb32"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb32-1"><a aria-hidden="true" href="#cb32-1" tabindex="-1"></a><span class="co"># A minimal application exposes metrics at a well-known path:</span></span>
+<span id="cb32-2"><a aria-hidden="true" href="#cb32-2" tabindex="-1"></a><span class="ex">GET</span> /metrics</span>
+<span id="cb32-3"><a aria-hidden="true" href="#cb32-3" tabindex="-1"></a><span class="co"># http_requests_total{method="GET",status="200"} 1523</span></span>
+<span id="cb32-4"><a aria-hidden="true" href="#cb32-4" tabindex="-1"></a><span class="co"># http_request_duration_seconds_bucket{le="0.1"} 1400</span></span></code></pre></div>
+<p>Prometheus’s own query language, <strong>PromQL</strong>, lets you
+ask questions of that stored data:</p>
+<div class="sourceCode" data-language="bash" id="cb33"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a aria-hidden="true" href="#cb33-1" tabindex="-1"></a><span class="ex">rate</span><span class="er">(</span><span class="ex">http_requests_total{status=</span><span class="st">"500"</span><span class="ex">}[5m]</span><span class="kw">)</span>   <span class="co"># error rate over the last 5 minutes</span></span>
+<span id="cb33-2"><a aria-hidden="true" href="#cb33-2" tabindex="-1"></a><span class="ex">histogram_quantile</span><span class="er">(</span><span class="ex">0.95,</span> http_request_duration_seconds_bucket<span class="kw">)</span>  <span class="co"># p95 latency</span></span></code></pre></div>
+<p><strong>Grafana</strong> is the visualization layer on top: it
+queries Prometheus (and other data sources) and renders the results as
+dashboards – graphs, gauges, alert states – that a human (or an on-call
+engineer at 2am) can actually read at a glance, rather than staring at
+raw numbers.</p>
+<h3 id="alerting-the-point-of-all-of-it">Alerting: the point of all of
+it</h3>
+<p>Metrics and dashboards are only useful if someone is looking at them
+at the right moment, which is why the practical endpoint of
+observability is <strong>alerting</strong>: a rule that says "if this
+condition holds for this long, notify a human," typically via
+<strong>Alertmanager</strong> (Prometheus’s companion alerting
+component) routing to email, Slack, or a paging system.</p>
+<div class="sourceCode" data-language="yaml" id="cb34"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb34-1"><a aria-hidden="true" href="#cb34-1" tabindex="-1"></a><span class="fu">groups</span><span class="kw">:</span></span>
+<span id="cb34-2"><a aria-hidden="true" href="#cb34-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> status-service</span></span>
+<span id="cb34-3"><a aria-hidden="true" href="#cb34-3" tabindex="-1"></a><span class="at">    </span><span class="fu">rules</span><span class="kw">:</span></span>
+<span id="cb34-4"><a aria-hidden="true" href="#cb34-4" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">alert</span><span class="kw">:</span><span class="at"> HighErrorRate</span></span>
+<span id="cb34-5"><a aria-hidden="true" href="#cb34-5" tabindex="-1"></a><span class="at">        </span><span class="fu">expr</span><span class="kw">:</span><span class="at"> rate(http_requests_total{status=~"5.."}[5m]) &gt; 0.05</span></span>
+<span id="cb34-6"><a aria-hidden="true" href="#cb34-6" tabindex="-1"></a><span class="at">        </span><span class="fu">for</span><span class="kw">:</span><span class="at"> 10m</span></span>
+<span id="cb34-7"><a aria-hidden="true" href="#cb34-7" tabindex="-1"></a><span class="at">        </span><span class="fu">labels</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">severity</span><span class="kw">:</span><span class="at"> warning </span><span class="kw">}</span></span>
+<span id="cb34-8"><a aria-hidden="true" href="#cb34-8" tabindex="-1"></a><span class="at">        </span><span class="fu">annotations</span><span class="kw">:</span></span>
+<span id="cb34-9"><a aria-hidden="true" href="#cb34-9" tabindex="-1"></a><span class="at">          </span><span class="fu">summary</span><span class="kw">:</span><span class="at"> </span><span class="st">"Error rate above 5% for 10 minutes"</span></span></code></pre></div>
+<div class="note">
+<p><strong>The security connection</strong></p>
+<p>Observability is not only about performance. The same metrics
+pipeline that alerts on elevated error rates can alert on a spike in
+failed authentication attempts, an unusual volume of requests from one
+source, or a container restarting far more often than normal – all of
+which can be early signals of an attack in progress, not merely a
+performance problem. A platform engineer who treats observability purely
+as a "site reliability" concern, separate from security, is missing half
+of its real value.</p>
+</div>
+<div class="gap">
+<p><strong>not yet built in this project</strong></p>
+<p>No Prometheus/Grafana stack has been built inside
+<code>poetic-musings</code> as of this writing – the status-service
+application from Chapter <a data-reference="ch:docker" data-reference-type="ref" href="#ch:docker">“Docker and Containers”</a> does not yet expose a
+<code>/metrics</code> endpoint, and no Prometheus scrape configuration
+or Grafana dashboard exists for it. This is a deliberately honest, named
+gap rather than a claimed accomplishment. The natural next exercise: add
+a metrics library (for Flask, commonly <code>prometheus_client</code>)
+to the status-service, expose request-count and latency metrics at
+<code>/metrics</code>, run a local Prometheus and Grafana via Docker
+Compose, and build one real dashboard showing that application’s live
+traffic.</p>
+</div>
+<h1 id="the-enterprise-layer-windows-identity-and-hardening-at-scale">The
+Enterprise Layer: Windows, Identity, and Hardening at Scale</h1>
+<h2 id="active-directory-gpos-and-endpoint-management">Active Directory,
+GPOs, and Endpoint Management</h2>
+<h3 id="why-this-belongs-in-a-cloud-native-book">Why this belongs in a
+cloud-native book</h3>
+<p>Everything in Parts 2 through 6 of this book is cloud-native and
+Linux-centric, which mirrors most of modern platform engineering. But
+the job this book is aimed at also explicitly asks for Windows Server
+administration, Active Directory, Group Policy Objects, and endpoint
+management tooling (<a class="acr" href="#gls-MECM" title="Microsoft Endpoint Configuration Manager (formerly System Center Configuration Manager): tooling for managing on-premises Windows devices at scale.">MECM/SCCM</a>, Intune) – because most real enterprises
+are hybrid: cloud-native workloads running alongside a Windows-based
+corporate identity and endpoint fleet that predates (and will likely
+outlive) any single cloud migration. A platform engineer is expected to
+be credible across that whole boundary, not just the cloud-native
+half.</p>
+<h3 id="active-directory-the-identity-backbone">Active Directory: the
+identity backbone</h3>
+<p><a class="acr" href="#gls-AD" title="Active Directory: Microsoft's directory service for identity, authentication, and authorization across an organization's users, computers, and groups.">AD</a> (<strong>Active Directory</strong>) is
+Microsoft’s directory service: a database of every user, computer, and
+group in an organization, along with the relationships and permissions
+between them, organized into a hierarchical structure of
+<em>domains</em>, <em>organizational units (OUs)</em>, and
+<em>forests</em> (a forest is a collection of one or more domains that
+trust each other). When an employee logs into their laptop, or a service
+account authenticates to an internal application, <a class="acr" href="#gls-AD" title="Active Directory: Microsoft's directory service for identity, authentication, and authorization across an organization's users, computers, and groups.">AD</a> is very often the
+system answering "is this really who they claim to be, and what are they
+allowed to do."</p>
+<p><strong>Azure <a class="acr" href="#gls-AD" title="Active Directory: Microsoft's directory service for identity, authentication, and authorization across an organization's users, computers, and groups.">AD</a> Connect</strong> (now more often referred to under
+the Microsoft Entra ID branding) is the bridge between an on-premises <a class="acr" href="#gls-AD" title="Active Directory: Microsoft's directory service for identity, authentication, and authorization across an organization's users, computers, and groups.">AD</a>
+and its cloud equivalent: it synchronizes users and groups from the
+on-prem directory into the cloud directory, most commonly via
+<em>password hash synchronization</em> (a one-way hash of each user’s
+password is synced, so the cloud can authenticate them without storing
+their plaintext password) or <em>pass-through authentication</em> (the
+cloud actually validates the credential against the on-prem domain
+controller in real time), often paired with <em>seamless single
+sign-on</em> so a user on a domain-joined machine is not prompted to log
+in again for cloud resources they are already authenticated for on the
+corporate network.</p>
+<h3 id="group-policy-objects-configuration-as-a-kind-of-code">Group
+Policy Objects: configuration as (a kind of) code</h3>
+<p>A <a class="acr" href="#gls-GPO" title="Group Policy Object: a declared configuration/security setting that Active Directory pushes automatically to computers or users in its scope.">GPO</a> (<strong>Group Policy Object</strong>)
+is a declared set of configuration settings – password complexity
+requirements, which applications are allowed to run, firewall rules,
+drive mappings, screen-lock timeouts – that <a class="acr" href="#gls-AD" title="Active Directory: Microsoft's directory service for identity, authentication, and authorization across an organization's users, computers, and groups.">AD</a> pushes out automatically
+to every computer or user account within its scope. Conceptually, this
+is the same idea as Infrastructure as Code from Chapter <a data-reference="ch:terraform" data-reference-type="ref" href="#ch:terraform">“Terraform and Infrastructure as Code”</a>, applied to endpoint configuration
+instead of cloud resources: a declared desired state, enforced
+automatically across a whole fleet, instead of a human configuring each
+machine by hand one at a time. If you already understand why Terraform
+beats manual console clicks, you already understand why <a class="acr" href="#gls-GPO" title="Group Policy Object: a declared configuration/security setting that Active Directory pushes automatically to computers or users in its scope.">GPOs</a> beat a
+technician walking desk to desk configuring each laptop
+individually.</p>
+<h3 id="mecmsccm-and-intune-the-enforcement-arm">MECM/SCCM and Intune:
+the enforcement arm</h3>
+<p><a class="acr" href="#gls-MECM" title="Microsoft Endpoint Configuration Manager (formerly System Center Configuration Manager): tooling for managing on-premises Windows devices at scale.">MECM/SCCM</a> (<strong>Microsoft Endpoint
+Configuration Manager</strong>, the modern name for what was long known
+as <strong>SCCM</strong>, System Center Configuration Manager) is the
+traditional tool for managing on-premises, domain-joined Windows devices
+at scale: pushing software installs and updates, enforcing configuration
+baselines, and reporting on device compliance across potentially tens of
+thousands of machines. <strong>Intune</strong> is Microsoft’s
+cloud-native counterpart, managing devices – including mobile devices –
+without requiring them to be on the corporate network or domain-joined
+at all, which has made it increasingly central as workforces became more
+remote and hybrid. Many enterprises run both, side by side, in a
+"co-management" configuration during a multi-year migration from one to
+the other.</p>
+<p>These tools are the endpoint-level enforcement arm of exactly the
+same hardening philosophy running through every other chapter of this
+book: a <a class="acr" href="#gls-GPO" title="Group Policy Object: a declared configuration/security setting that Active Directory pushes automatically to computers or users in its scope.">GPO</a> or an Intune configuration profile that disables a legacy,
+insecure protocol on every laptop in the company is the same instinct as
+the <a class="acr" href="#gls-SThree" title="Simple Storage Service: AWS's object storage service for files and blobs at effectively unlimited scale.">S3</a> public-access block in Chapter 5, or the
+<code>readOnlyRootFilesystem</code> setting in Chapter <a data-reference="ch:k8s" data-reference-type="ref" href="#ch:k8s">“Kubernetes”</a> – make the safe
+behavior the automatically-enforced default, everywhere, rather than a
+policy document nobody reads.</p>
+<div class="gap">
+<p><strong>no real Windows domain exists in this project</strong></p>
+<p>None of this chapter’s material has a natural home inside a
+Linux-based git repository the way Terraform or Kubernetes manifests do
+– it genuinely requires real (or lab) Windows Server infrastructure to
+practice hands-on. The single highest-value exercise for closing this
+specific gap, and arguably the highest-value exercise in this entire
+book, given how much of the target job description it covers: build a
+small home lab. Two or three virtual machines (VirtualBox, Hyper-V, or a
+low-cost cloud <a class="acr" href="#gls-VM" title="Virtual Machine: a full virtualized computer, including its own kernel, distinct from the lighter-weight isolation a container provides.">VM</a>) are enough – one running Windows Server with the
+Active Directory Domain Services role installed and a new forest
+promoted, a second machine joined to that domain as a member. From
+there, practice creating organizational units, users, and groups; author
+one real <a class="acr" href="#gls-GPO" title="Group Policy Object: a declared configuration/security setting that Active Directory pushes automatically to computers or users in its scope.">GPO</a> (for example, enforcing a password-complexity policy or a
+screen-lock timeout) and confirm on the joined machine that it actually
+applied. Microsoft also offers free trial access to Intune specifically
+for this kind of self-directed study, with no production environment
+required.</p>
+</div>
+<h2 id="cis-benchmarks-and-formal-hardening">CIS Benchmarks and Formal
+Hardening</h2>
+<h3 id="what-a-cis-benchmark-actually-is">What a CIS Benchmark actually
+is</h3>
+<p>The <a class="acr" href="#gls-CIS" title="Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems.">CIS</a> (<strong>Center for Internet
+Security</strong>) publishes detailed, versioned, freely available
+hardening checklists – called <strong><a class="acr" href="#gls-CIS" title="Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems.">CIS</a> Benchmarks</strong> – for
+specific systems: one for Windows Server, one for a given Linux
+distribution, one for Kubernetes, one for each major cloud provider, and
+more. Each benchmark is a long, specific list of individual settings,
+each with a stated rationale and often two <em>levels</em>: Level 1
+(basic hardening, broadly safe to apply almost everywhere) and Level 2
+(more restrictive, intended for genuinely high-security environments
+where the operational trade-offs are acceptable).</p>
+<h3 id="from-aligned-with-to-scored-against">From "aligned with" to
+"scored against"</h3>
+<p>Every hardening decision made throughout this book – encryption at
+rest by default, public access blocked explicitly, least-privilege <a class="acr" href="#gls-IAM" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a>,
+the restricted Kubernetes Pod Security Standard, non-root containers,
+default-deny networking – is <strong><a class="acr" href="#gls-CIS" title="Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems.">CIS</a>-aligned in spirit</strong>:
+each one reflects the same underlying philosophy the actual <a class="acr" href="#gls-CIS" title="Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems.">CIS</a>
+Benchmarks codify. That is meaningfully different from having been
+formally <strong>scored</strong> against an actual benchmark using a
+real scanning tool run against a live account or cluster, which produces
+a compliance percentage and an itemized list of exactly which specific
+benchmark controls pass and fail.</p>
+<div class="sourceCode" data-language="bash" id="cb35"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a aria-hidden="true" href="#cb35-1" tabindex="-1"></a><span class="co"># kube-bench: runs the CIS Kubernetes Benchmark against a live cluster</span></span>
+<span id="cb35-2"><a aria-hidden="true" href="#cb35-2" tabindex="-1"></a><span class="ex">kube-bench</span> run <span class="at">--targets</span> master,node</span>
+<span id="cb35-3"><a aria-hidden="true" href="#cb35-3" tabindex="-1"></a></span>
+<span id="cb35-4"><a aria-hidden="true" href="#cb35-4" tabindex="-1"></a><span class="co"># AWS: enable a CIS-aligned AWS Config conformance pack against a real account</span></span>
+<span id="cb35-5"><a aria-hidden="true" href="#cb35-5" tabindex="-1"></a><span class="co"># Azure: enable the CIS benchmark initiative under Azure Policy</span></span></code></pre></div>
+<div class="gap">
+<p><strong>no formal, scored compliance report exists yet</strong></p>
+<p>Nothing built for this book has been run through a formal <a class="acr" href="#gls-CIS" title="Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems.">CIS</a>
+Benchmark scanner against a live account or cluster – there is no live
+account or cluster to score. Once the Kubernetes gap from Chapter <a data-reference="ch:k8s" data-reference-type="ref" href="#ch:k8s">“Kubernetes”</a>
+and the Terraform gap from Chapter <a data-reference="ch:terraform" data-reference-type="ref" href="#ch:terraform">“Terraform and Infrastructure as Code”</a> are closed
+(a real <code>kind</code> cluster, a real <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> free-tier account),
+running <code>kube-bench</code> against that cluster and enabling a <a class="acr" href="#gls-CIS" title="Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems.">CIS</a>
+conformance pack in <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> Config against that account are natural,
+low-cost follow-on exercises, and would produce the first genuinely
+<em>scored</em> artifact in this whole learning path.</p>
+</div>
+<h2 id="managed-development-environments-coder">Managed Development
+Environments: Coder</h2>
+<p>The job this book is built around specifically names prior experience
+with <strong>Coder</strong>, a platform for provisioning and managing
+remote, browser-accessible development environments – the idea being
+that instead of every engineer configuring their own laptop by hand, a
+platform team defines standard, reproducible <em>workspace
+templates</em> (themselves often just Terraform, tying directly back to
+Chapter <a data-reference="ch:terraform" data-reference-type="ref" href="#ch:terraform">“Terraform and Infrastructure as Code”</a>) that provision a consistent, secure
+development environment for anyone on the team in minutes, running on
+the organization’s own infrastructure rather than an engineer’s personal
+machine.</p>
+<p>Coder itself is most commonly deployed onto Kubernetes via a Helm
+chart, which means the Kubernetes hardening patterns from Chapter <a data-reference="ch:k8s" data-reference-type="ref" href="#ch:k8s">“Kubernetes”</a> –
+NetworkPolicy, the restricted Pod Security Standard, resource limits,
+PodDisruptionBudgets – are directly reusable as the security baseline
+for the workspaces Coder provisions, not a separate skill to learn from
+scratch.</p>
+<div class="gap">
+<p><strong>not built in this project</strong></p>
+<p>No Coder deployment exists inside <code>poetic-musings</code>. Once
+the Kubernetes gap from Chapter <a data-reference="ch:k8s" data-reference-type="ref" href="#ch:k8s">“Kubernetes”</a> is closed with a
+real <code>kind</code> or cloud cluster, installing Coder’s Helm chart
+onto that same cluster and standing up one real workspace template is a
+direct, concrete next exercise, and one that would let this specific
+named requirement move from "understood conceptually" to "operated
+hands-on."</p>
+</div>
+<h1 id="putting-it-all-together">Putting It All Together</h1>
+<h2 id="avoiding-the-isolated-learning-trap-for-real">Avoiding the
+Isolated-Learning Trap, for Real</h2>
+<h3 id="the-mistake-restated">The mistake, restated</h3>
+<p>Chapter 1 named the central failure mode this book is built to avoid:
+learning each tool in its own bubble, never combining them, ending up
+with vocabulary instead of the connective tissue that actually makes an
+engineer valuable. It is worth restating now, at the end, because it is
+easy to read eleven chapters of concepts and case studies and still fall
+into exactly this trap in your own practice, if you treat this book
+itself as one more course to finish rather than a structure to build
+<em>inside of</em>.</p>
+<h3 id="the-discipline-that-fixes-it">The discipline that fixes it</h3>
+<ol>
+<li><p><strong>One project, continuously expanded.</strong> Every case
+study in this book built on the <em>same</em> small platform, in the
+same repository, rather than starting a fresh toy example for each tool.
+Do the same in your own practice: pick one project, and every new tool
+you learn gets applied to <em>it</em>, not to a disconnected new
+example.</p></li>
+<li><p><strong>Build before you certify.</strong> Certifications
+formalize knowledge you have already demonstrated hands-on; they are a
+poor substitute for that hands-on work, and interviewers can tell the
+difference immediately.</p></li>
+<li><p><strong>Notice the feeling of a knowledge gap, and go close
+it.</strong> That feeling of insecurity reading a job description, or
+freezing on an interview question, is diagnostic information, not a
+verdict on your ability – it is telling you precisely where to spend
+your next study session.</p></li>
+<li><p><strong>Say what you have not proven, plainly.</strong> Every
+"Honest Gap" box in this book exists because naming a limitation
+precisely is a mark of seniority, not weakness. A senior engineer who
+says "I have written this Terraform correctly, but I have not operated
+it against a live multi-account <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> org under real <a class="acr" href="#gls-IAM" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a> federation" is
+more credible, not less, than one who implies they have done
+everything.</p></li>
+</ol>
+<h2 id="consolidated-gap-list-and-next-exercises">Consolidated Gap List
+and Next Exercises</h2>
+<h3 id="every-honest-gap-named-in-this-book-in-one-place">Every honest
+gap named in this book, in one place</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Gap</strong></th>
+<th style="text-align: left;"><strong>Concrete next step</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Terraform never <code>apply</code>’d to a
+real account</td>
+<td style="text-align: left;">Create a free-tier <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> account; run
+<code>terraform plan</code>, read it fully, then <code>apply</code>
+against real (small, free-tier) resources.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Kubernetes manifests never scheduled on a
+real cluster</td>
+<td style="text-align: left;">Install <code>kind</code>; run
+<code>kubectl apply -k k8s/overlays/dev</code>; deliberately break one
+security setting and observe the effect.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a class="acr" href="#gls-CICD" title="Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.">CI/CD</a> pipelines never executed on a real
+runner</td>
+<td style="text-align: left;">Push to a real GitHub repository and a
+free GitLab.com project; watch both pipelines run end to end; fix
+whatever actually fails (something will).</td>
+</tr>
+<tr>
+<td style="text-align: left;">No observability stack built</td>
+<td style="text-align: left;">Add <code>/metrics</code> to the
+status-service; run Prometheus and Grafana locally via Docker Compose;
+build one real dashboard.</td>
+</tr>
+<tr>
+<td style="text-align: left;">No Windows <a class="acr" href="#gls-AD" title="Active Directory: Microsoft's directory service for identity, authentication, and authorization across an organization's users, computers, and groups.">AD</a> / <a class="acr" href="#gls-GPO" title="Group Policy Object: a declared configuration/security setting that Active Directory pushes automatically to computers or users in its scope.">GPO</a> / MECM / Intune
+hands-on</td>
+<td style="text-align: left;">Build a two-to-three <a class="acr" href="#gls-VM" title="Virtual Machine: a full virtualized computer, including its own kernel, distinct from the lighter-weight isolation a container provides.">VM</a> home lab: a domain
+controller, a joined member machine, one real <a class="acr" href="#gls-GPO" title="Group Policy Object: a declared configuration/security setting that Active Directory pushes automatically to computers or users in its scope.">GPO</a>, confirmed applied.
+Trial Intune separately.</td>
+</tr>
+<tr>
+<td style="text-align: left;">No formal, scored <a class="acr" href="#gls-CIS" title="Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems.">CIS</a> Benchmark compliance
+report</td>
+<td style="text-align: left;">Once a real cluster and account exist
+(above), run <code>kube-bench</code> and enable a <a class="acr" href="#gls-CIS" title="Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems.">CIS</a> conformance pack
+in <a class="acr" href="#gls-AWS" title="Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.">AWS</a> Config.</td>
+</tr>
+<tr>
+<td style="text-align: left;">No Coder deployment</td>
+<td style="text-align: left;">Once a real cluster exists, install
+Coder’s Helm chart onto it and stand up one workspace template.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="a-study-cadence">A study cadence</h3>
+<p>Following the road map’s own time estimates, a realistic, sustained
+cadence closing the gaps above, on top of everything already built for
+this book, is roughly ten to twelve additional weeks of deliberate,
+hands-on practice – not years, and not full-time, but consistent.
+Protect a fixed block of time for it every week, treat the gap list
+above as the backlog, and resist the pull to restart from a fresh
+tutorial instead of extending the one real project you already have.
+That, more than any single technology in this book, is the actual skill
+this whole field rewards.</p>
+
+
+
+
+
+
+
+<section id="glossary"><h1>Glossary</h1><p class="gloss-note">Every acronym elsewhere in this book is a live link: click it to jump here, or simply hover over it to preview the definition inline, right where you’re reading — no click required, and it works at <em>every</em> occurrence, not only the first.</p><dl class="glossary"><dt id="gls-AD">AD (Active Directory)</dt><dd>Active Directory: Microsoft's directory service for identity, authentication, and authorization across an organization's users, computers, and groups.</dd><dt id="gls-API">API</dt><dd>Application Programming Interface: a defined way for one piece of software to request functionality or data from another.</dd><dt id="gls-AWS">AWS</dt><dd>Amazon Web Services: the cloud provider with the largest market share, used as this book's primary example.</dd><dt id="gls-CICD">CI/CD</dt><dd>Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.</dd><dt id="gls-CIS">CIS Benchmark</dt><dd>Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems.</dd><dt>Container</dt><dd>A packaged, portable unit of software including everything it needs to run, so it behaves identically across machines.</dd><dt id="gls-CVE">CVE</dt><dd>Common Vulnerabilities and Exposures: the standard public naming/numbering system for disclosed security vulnerabilities.</dd><dt>DevSecOps</dt><dd>DevOps with security scanning built directly into the automated pipeline, rather than handled as a separate, later review.</dd><dt id="gls-DNS">DNS</dt><dd>Domain Name System: translates human-readable hostnames into IP addresses.</dd><dt>Docker</dt><dd>The most common tool for building and running containers.</dd><dt id="gls-ECTwo">EC2</dt><dd>Elastic Compute Cloud: AWS's core virtual-machine (rentable server) service.</dd><dt id="gls-ECR">ECR</dt><dd>Elastic Container Registry: AWS's managed registry for storing and scanning container images.</dd><dt id="gls-EKS">EKS</dt><dd>Elastic Kubernetes Service: AWS's managed Kubernetes offering.</dd><dt id="gls-GPG">GPG</dt><dd>GNU Privacy Guard: an implementation of the OpenPGP standard, commonly used to cryptographically sign git commits.</dd><dt id="gls-GPO">GPO (Group Policy Object)</dt><dd>Group Policy Object: a declared configuration/security setting that Active Directory pushes automatically to computers or users in its scope.</dd><dt id="gls-HCL">HCL</dt><dd>HashiCorp Configuration Language: the language Terraform configuration files are written in.</dd><dt id="gls-IaC">IaC (Infrastructure as Code)</dt><dd>Infrastructure as Code: describing infrastructure in version-controlled text instead of manual console clicks.</dd><dt id="gls-IAM">IAM (Identity and Access Management)</dt><dd>Identity and Access Management: the system for controlling who or what can do what to which resource.</dd><dt id="gls-IDP">IDP (Internal Developer Platform)</dt><dd>Internal Developer Platform: the shared infrastructure, pipelines, and tooling a platform team builds for every other team to build on.</dd><dt id="gls-KMS">KMS</dt><dd>Key Management Service: AWS's managed service for creating and rotating encryption keys.</dd><dt id="gls-K8s">Kubernetes (K8s)</dt><dd>Kubernetes: a system for running and automatically managing many containers across many machines.</dd><dt>Least privilege</dt><dd>Granting exactly the access needed and no more, so a compromised credential or component causes the smallest possible damage.</dd><dt id="gls-MECM">MECM/SCCM</dt><dd>Microsoft Endpoint Configuration Manager (formerly System Center Configuration Manager): tooling for managing on-premises Windows devices at scale.</dd><dt>Module (Terraform)</dt><dd>A reusable, parameterized package of infrastructure resources.</dd><dt>Pod Security Standards</dt><dd>Kubernetes' three built-in security profiles for Pods: privileged, baseline, and restricted (strictest).</dd><dt>PromQL</dt><dd>The query language used to ask questions of data stored in Prometheus.</dd><dt id="gls-SThree">S3</dt><dd>Simple Storage Service: AWS's object storage service for files and blobs at effectively unlimited scale.</dd><dt id="gls-SARIF">SARIF</dt><dd>Static Analysis Results Interchange Format: a standard format for security scan results so different tools' findings can be viewed in one place.</dd><dt id="gls-SAST">SAST</dt><dd>Static Application Security Testing: analyzing source code for security-relevant patterns without running it.</dd><dt id="gls-SBOM">SBOM</dt><dd>Software Bill of Materials: a complete, machine-readable inventory of every dependency a piece of software uses.</dd><dt id="gls-SCA">SCA (Software Composition Analysis)</dt><dd>Software Composition Analysis: checking a dependency inventory against a database of known vulnerabilities.</dd><dt>Shift left</dt><dd>Moving security checks earlier in the development timeline (into the automated pipeline, at commit time) instead of as a late, pre-launch review.</dd><dt id="gls-SSH">SSH</dt><dd>Secure Shell: an encrypted protocol for remote login and secure command execution, also used for signing git commits and authenticating to git remotes.</dd><dt>State (Terraform)</dt><dd>Terraform's record of what infrastructure it has already created, used to compute what needs to change on the next run.</dd><dt>Terraform</dt><dd>The most widely used Infrastructure as Code tool, using the HCL language.</dd><dt id="gls-TLS">TLS</dt><dd>Transport Layer Security: the cryptographic protocol that encrypts network traffic in transit (the successor to SSL).</dd><dt id="gls-VM">VM</dt><dd>Virtual Machine: a full virtualized computer, including its own kernel, distinct from the lighter-weight isolation a container provides.</dd><dt id="gls-VPC">VPC</dt><dd>Virtual Private Cloud: your own private, isolated network inside a cloud provider's infrastructure.</dd></dl></section>
+
+
+<section id="about-this-book"><h1>About This Book</h1>
+<p>This book was written as a hands-on companion to a real, working platform built inside
+the <code>poetic-musings</code> git repository &mdash; an FPGA/hardware/music hobby
+project that had no cloud or container footprint before this material was built into it,
+specifically to give every concept in this book something real to point at. The relevant
+paths in that repository are: <code>infra/terraform/</code>, <code>app/status-service/</code>,
+<code>k8s/</code>, <code>.github/workflows/</code>, <code>.gitlab-ci.yml</code>,
+<code>SECURITY.md</code>, and the companion documents <code>DEFSECOPS.md</code> and
+<code>DEVSECOPS.md</code>.</p>
+<p>This HTML edition links and tooltips every acronym at <em>every</em> occurrence
+throughout the text, not just the first use per chapter &mdash; hover any dotted-underlined
+acronym to preview its definition inline, or click it to jump to the full Glossary entry.</p>
+</section>
+
+
+</div>
+<a class="back-to-top" href="#top">&uarr; Top</a>
+</body>
+</html>
