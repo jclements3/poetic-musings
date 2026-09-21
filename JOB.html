@@ -49,8 +49,9 @@ button.badge-btn .badge { transition: box-shadow 0.12s ease, transform 0.12s eas
 button.badge-btn:hover .badge, button.badge-btn:focus-visible .badge { box-shadow: 0 0 0 2px var(--accent-soft); }
 button.badge-btn[aria-pressed="true"] .badge { box-shadow: 0 0 0 2px var(--accent); }
 
-.layout { display: grid; grid-template-columns: minmax(0, 620px) minmax(360px, 1fr); gap: 1.5rem; align-items: start; }
-@media (max-width: 1100px) { .layout { grid-template-columns: 1fr; } }
+.layout { display: grid; grid-template-columns: minmax(0, 520px) minmax(360px, 1fr) minmax(300px, 380px); gap: 1.2rem; align-items: start; }
+@media (max-width: 1500px) { .layout { grid-template-columns: minmax(0, 480px) minmax(340px, 1fr); } .panel2 { grid-column: 1 / -1; } }
+@media (max-width: 1100px) { .layout { grid-template-columns: 1fr; } .panel2 { grid-column: auto; } }
 
 .rows { display: flex; flex-direction: column; gap: 0.6rem; }
 .row {
@@ -90,6 +91,14 @@ button.badge-btn[aria-pressed="true"] .badge { box-shadow: 0 0 0 2px var(--accen
 .panel pre code { background: none; padding: 0; }
 .panel .close-btn { float: right; background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.85rem; }
 
+.panel2 { }
+.panel2 h4 { margin: 0.9rem 0 0.35rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
+.panel2 h4:first-child { margin-top: 0; }
+.panel2 p { margin: 0 0 0.6rem; font-size: 0.86rem; line-height: 1.5; }
+.panel2 ul { margin: 0; padding-left: 1.1rem; }
+.panel2 li { margin: 0.4rem 0; font-size: 0.86rem; }
+.panel2 li .tool-name { font-weight: 600; }
+
 ul.gaps { padding-left: 1.2rem; }
 ul.gaps li { margin: 0.4rem 0; }
 footer { margin-top: 2rem; color: var(--muted); font-size: 0.82rem; }
@@ -112,6 +121,9 @@ footer { margin-top: 2rem; color: var(--muted); font-size: 0.82rem; }
     <div class="panel" id="panel">
       <div class="placeholder">Click a status badge on the left to see the tools, commands, and verification steps behind that row.</div>
     </div>
+    <div class="panel panel2" id="panel2">
+      <div class="placeholder">Click a status badge to see where this fits in the overall DevSecOps approach, and other tools that could support this same requirement.</div>
+    </div>
   </div>
 
   <h2>Named gaps not claimed as covered</h2>
@@ -133,6 +145,13 @@ const ROWS = [
     where: "infra/terraform/",
     status: "ok", statusLabel: "Covered",
     summary: "I designed a multi-cloud Terraform layer — VPC, ECR, S3, KMS, least-privilege IAM — as one reusable module tree driven by per-environment tfvars, the standard pattern for dev/prod without duplicating code. I didn't stop at 'terraform plan looks clean': I applied it for real against a personal AWS account, hit a genuine access-denied error on CloudWatch Logs because the KMS key policy didn't grant the logs service permission, root-caused it, wrote a proper IAM policy document to fix it, re-applied, verified the resources existed via the live AWS API, then destroyed everything to avoid any ongoing cost. Azure is written and validated but intentionally not applied, since I didn't have a subscription — I'd say that directly rather than imply it was tested.",
+    fitsIn: "This is the foundation layer everything else sits on. In this repo's DevSecOps flow, Terraform provisions the account-level primitives (network, registry, storage, keys, IAM) that Kubernetes deploys onto, Ansible configures software on top of, and the CI/CD pipeline's IaC-scan gate (tfsec) checks on every push — provisioning, config management, and policy enforcement as three distinct, cooperating layers rather than one script doing everything.",
+    otherTools: [
+      {name: "Pulumi", note: "same IaC role, general-purpose language instead of HCL — worth knowing the tradeoff (more flexibility, smaller ecosystem) if asked why Terraform was chosen here."},
+      {name: "AWS CloudFormation / CDK", note: "AWS-native alternative — no multi-cloud story, but sometimes mandated on AWS-only contracts."},
+      {name: "Terragrunt", note: "a common layer on top of Terraform for DRY-ing up multi-environment configs at larger scale than tfvars alone."},
+      {name: "Checkov", note: "an alternative/complementary IaC scanner to tfsec, broader multi-cloud policy coverage."}
+    ],
     tools: ["Terraform (HCL)", "AWS provider ~>5.60", "azurerm provider ~>3.110", "AWS CLI"],
     steps: [
       "Wrote modules/aws-platform (VPC across 2 AZs, ECR, KMS-encrypted S3 artifacts + access-log bucket, least-priv IAM role) and modules/azure-platform, wired via one root module reused across environments/{dev,prod}/terraform.tfvars.",
@@ -153,6 +172,13 @@ const ROWS = [
     where: "k8s/",
     status: "ok", statusLabel: "Covered",
     summary: "I hardened Kubernetes manifests to the restricted Pod Security Standard — non-root, read-only root filesystem, default-deny NetworkPolicy, a PodDisruptionBudget and anti-affinity for real resilience — then didn't leave it at 'this should be compliant.' I stood up a real local kind cluster, deployed the actual manifests through Kustomize overlays, confirmed the rollout, service, network policies, and PDB were all genuinely live, and ran kube-bench against the real control plane: 62 pass, 11 fail, 48 warn. I can explain exactly why each fail exists — they're kind's own minimal control-plane defaults (no audit log, profiling left on), not gaps in my manifests — which is the kind of honest, specific answer that plays well in a technical interview.",
+    fitsIn: "This is the runtime layer the Terraform-provisioned infrastructure and the CI/CD-built container images land on. In a real IDDE-style environment this is where 'mission-critical workload resilience' actually gets enforced — PDBs, anti-affinity, and NetworkPolicy are the concrete mechanisms behind that phrase, not just a buzzword, and they're exactly what the CIS Benchmark scan and kube-linter CI gate both check for.",
+    otherTools: [
+      {name: "k3s / K3d", note: "a lighter alternative to kind for local/edge clusters — worth knowing if the target environment is resource-constrained."},
+      {name: "Helm", note: "the more common packaging tool alongside/instead of Kustomize for templated, versioned releases — not used here, but standard enough to speak to."},
+      {name: "OPA / Gatekeeper or Kyverno", note: "policy-as-code admission control — the natural next step beyond static Pod Security Standards for enforcing org-specific rules at the API server."},
+      {name: "EKS / AKS", note: "the real managed control planes this posting's 'hybrid AWS/Azure' language implies — kind proves the manifests, a managed cluster is the production target."}
+    ],
     tools: ["kind v0.24.0", "kubectl", "Kustomize", "kube-bench v0.9.4"],
     steps: [
       "Wrote k8s/base + overlays/{dev,prod} via Kustomize: Deployment (non-root, readOnlyRootFilesystem, restricted Pod Security Standard), Service, 2 NetworkPolicies (default-deny + explicit allow), PodDisruptionBudget, pod anti-affinity.",
@@ -174,6 +200,13 @@ const ROWS = [
     where: ".github/workflows/, .gitlab-ci.yml",
     status: "partial", statusLabel: "Partial",
     summary: "I built the same pipeline logic twice in two dialects — GitHub Actions and GitLab CI — lint/test then five security scanning gates on every push and PR, so the CI story isn't tied to one vendor. The first real run wasn't green: it caught five genuine failures I had to root-cause myself — an invalid action version tag, an overly broad lint glob scanning unrelated scripts, a real Flask CVE flagged by pip-audit, six Kubernetes hardening findings, and a scanner action hitting GitHub's own rate limit — and I fixed each one for the right reason, not by suppressing the check. What I can't claim is Jenkins or Azure DevOps pipeline experience; neither exists in this repo, and I'd name that gap directly rather than stretch the GitHub Actions work to cover it.",
+    fitsIn: "This is the automation spine everything else runs through — every other row on this page (Terraform, Kubernetes, security scanning, STIG, Ansible) is only proven 'real' because it's wired into one of these two pipelines and re-verified on every push, not run once by hand and screenshotted.",
+    otherTools: [
+      {name: "Jenkins", note: "the classic self-hosted orchestrator this posting names explicitly — not used here; the concepts (stages, gates, artifacts) transfer directly, but I'd be honest that the Jenkinsfile/Groovy specifics are unproven."},
+      {name: "Azure DevOps Pipelines", note: "named in the posting, likely relevant given the Azure side of this role — same gap as Jenkins, worth naming rather than glossing over."},
+      {name: "ArgoCD / Flux", note: "GitOps continuous-deployment tools that would naturally extend this pipeline's CI into actual cluster deployment, which today still ends at kubectl apply run by hand."},
+      {name: "Renovate / Dependabot", note: "automated dependency-update bots that would close the loop on the pip-audit/Trivy findings this pipeline already catches, rather than requiring manual bumps."}
+    ],
     tools: ["GitHub Actions", "GitLab CI"],
     steps: [
       "Two parallel pipelines, same stages, different dialects: lint/test, then five security scanning gates, on every push/PR.",
@@ -192,6 +225,12 @@ const ROWS = [
     where: "infra/terraform/modules/azure-platform/",
     status: "partial", statusLabel: "Partial",
     summary: "The AWS side of this is real end to end — applied against a live account, verified against the AWS API, a genuine bug caught and fixed, then destroyed cleanly. The Azure module is written to the same standard and passes terraform validate, but I never had a subscription to actually apply it against, and the azurerm provider itself requires live credentials just to initialize, which is a real, mildly annoying operational detail worth knowing about multi-cloud Terraform in practice. In an interview I'd lead with what's proven on AWS and be precise that Azure is design-complete, not operationally verified — overclaiming an unapplied module is the kind of thing that unravels under a follow-up question.",
+    fitsIn: "This posting explicitly calls out AWS and Azure both, inside a single 'hybrid cloud' IDDE environment — so this row is really about proving I understand how a single Terraform layer targets both clouds with parallel modules and per-environment tfvars, even though only one side has been operationally exercised here.",
+    otherTools: [
+      {name: "Azure DevOps + Terraform Cloud/Enterprise", note: "the more common enterprise pairing for governed, remote-state multi-cloud Terraform at this scale, versus local state used here."},
+      {name: "AWS Organizations / Azure Management Groups", note: "the account/subscription governance layer above individual Terraform applies — relevant once you're past a single free-tier account."},
+      {name: "Crossplane", note: "a Kubernetes-native alternative to Terraform for multi-cloud provisioning, worth knowing about if the org is already deep into GitOps."}
+    ],
     tools: ["Terraform azurerm provider"],
     steps: [
       "AWS side applied for real (see the Terraform row) — VPC, ECR, S3, KMS, IAM all verified against the live API and destroyed cleanly.",
@@ -208,6 +247,13 @@ const ROWS = [
     where: "ad-lab/",
     status: "partial", statusLabel: "Partial",
     summary: "Without a Windows license or a GUI/hypervisor available, I provisioned a real Active Directory domain controller using Samba4 — open-source, wire-compatible with real Windows clients, running real Kerberos, LDAP, DNS, and SYSVOL. I created real OUs, groups, a named user, and a GPO object linked to an OU, and proved it wasn't cosmetic by actually requesting a Kerberos ticket and inspecting it with klist. I hit two genuine bugs along the way — an ACL storage failure caused by Docker's overlay filesystem not supporting the xattrs Samba wanted, and a DNS resolution failure that broke GPO creation until I pointed the container at Samba's own internal DNS — and root-caused both. What I'd be upfront about: no Windows machine has actually joined this domain, so GPO *application*, not just creation, is unproven, and there's no real SCCM/MECM here at all.",
+    fitsIn: "This is the identity layer under everything else — in a real IDDE, AD/Entra ID is what Coder, GitLab, and the Kubernetes cluster's RBAC would all federate against for authentication, and it's the natural integration point I named but didn't build for the Coder deployment on this page.",
+    otherTools: [
+      {name: "RSAT / Group Policy Management Console", note: "the actual Windows admin tooling for authoring GPO policy settings — what's missing here is exactly this, run from a real Windows admin workstation."},
+      {name: "Microsoft Intune / Entra ID", note: "the cloud-native successor to on-prem AD + SCCM this posting also names — worth knowing the direction the ecosystem is moving even without hands-on Intune time here."},
+      {name: "PowerShell DSC", note: "Windows-native config management, the closest Windows-world analog to what Ansible does for the Linux side of this repo."},
+      {name: "Packer", note: "for building golden Windows/AD images as part of a real deployment pipeline, rather than manual server setup."}
+    ],
     tools: ["Samba4 AD DC", "samba-tool", "Kerberos (kinit/klist)", "Docker"],
     steps: [
       "Provisioned a real Active Directory forest/domain (poeticmusings.lab) via samba-tool domain provision — open-source, no Windows license, wire-compatible with real Windows clients.",
@@ -230,6 +276,13 @@ const ROWS = [
     where: "stig/",
     status: "ok", statusLabel: "Covered",
     summary: "I know the difference between CIS Benchmark and DISA STIG — they're related but distinct standards, and this posting names STIG specifically — so I didn't try to pass off the kube-bench CIS work as covering it. I ran a real oscap XCCDF evaluation using DISA's own published SCAP content against a genuine RHEL8 filesystem, since no official DISA STIG content exists for Ubuntu or Debian at all — that's a real, non-obvious fact about the standard I'd bring up unprompted. The scored result is 67 pass, 51 fail out of 409 rules in scope, and every failure is explainable: unconfigured PAM password policy, system crypto policy left at RHEL's default instead of DISA_STIG, RPM integrity checks not enforced — exactly the settings a real STIG remediation pass applies. What's not done yet is the remediation itself; this is the honest, unremediated baseline, and I'd frame the natural next step as a before/after remediation pass, which is exactly how a real DevSecOps STIG compliance pipeline operates.",
+    fitsIn: "This is the DoD-specific compliance layer this posting names by title — distinct from, but complementary to, the CIS Benchmark work on the Kubernetes row. A real GMD/IDDE environment would run both: CIS for general cloud-native hardening, STIG for DoD-mandated host/OS compliance, feeding the same kind of centralized findings the CI/CD security gates already produce for code-level scanning.",
+    otherTools: [
+      {name: "DISA STIG Viewer / Evaluate-STIG", note: "the official DISA GUI tooling for manual/checklist-driven STIG review — oscap is the automatable CLI equivalent used here."},
+      {name: "Ansible SSG remediation roles", note: "the natural next step named as a gap above — OpenSCAP's own project publishes Ansible playbooks that remediate exactly the failing rules found here."},
+      {name: "InSpec (Chef)", note: "an alternative compliance-as-code framework some DoD shops use instead of/alongside OpenSCAP."},
+      {name: "ACAS / Nessus", note: "the vulnerability-scanning counterpart commonly paired with STIG compliance in real DoD ATO packages — different from configuration-compliance scanning, worth distinguishing if asked."}
+    ],
     tools: ["OpenSCAP (oscap) 1.3.9", "DISA SCAP Security Guide (ssg-rhel8-ds.xml)", "Red Hat UBI8 (registry.access.redhat.com/ubi8/ubi)"],
     steps: [
       "DISA STIG is a distinct standard from CIS Benchmark — kube-bench (see the Kubernetes row) covers CIS, not STIG, so this closes a separate, real gap the posting names explicitly.",
@@ -252,6 +305,13 @@ const ROWS = [
     where: "dashboard Security Scanning Gates table",
     status: "ok", statusLabel: "Covered",
     summary: "This is shift-left done as seven layered, real gates on every push and PR — secrets detection, SAST, SBOM and dependency scanning, container scanning, IaC scanning, Kubernetes manifest linting, and CodeQL — with findings centralized as SARIF in GitHub code scanning so they're triaged in one place, not eight. None of these caught staged findings; the first real run surfaced a live Flask CVE via pip-audit that I fixed by bumping the dependency, six kube-linter findings I fixed with real manifest changes, legitimate tfsec findings I either fixed for real or explicitly documented as accepted risk with inline justification, and Trivy separately caught CVEs baked into the base container image's own bundled pip, which I fixed by stripping pip out of the runtime image entirely. That last one is the kind of finding that's easy to miss if you only scan your own application code.",
+    fitsIn: "This is the 'embed automated security and code scanning tools directly into the CI/CD pipelines' language from the posting, almost verbatim — the gate table on the dashboard is literally that requirement, implemented and exercised on real commits rather than described in a slide.",
+    otherTools: [
+      {name: "Snyk", note: "a commercial alternative covering SCA/container/IaC scanning in one platform, common in enterprise shops that want a single vendor instead of this repo's best-of-breed OSS stack."},
+      {name: "Semgrep", note: "a faster, more configurable SAST alternative/complement to bandit, especially for polyglot codebases beyond just Python."},
+      {name: "Grype / Clair", note: "alternative container vulnerability scanners to Trivy — worth knowing the landscape even though Trivy was the choice here."},
+      {name: "SonarQube", note: "adds code-quality/maintainability metrics alongside security findings — a common addition where DevSecOps overlaps with general code-quality gates."}
+    ],
     tools: ["gitleaks", "bandit", "Syft", "pip-audit", "Trivy", "tfsec", "kube-linter", "CodeQL"],
     steps: [
       "7 layered shift-left gates run on every push/PR: secrets detection, SAST, SBOM+SCA, container scan, IaC scan, K8s manifest scan, plus CodeQL — findings centralize as SARIF in GitHub code scanning.",
@@ -273,6 +333,13 @@ const ROWS = [
     where: "coder/",
     status: "ok", statusLabel: "Covered",
     summary: "I ran the official, unmodified Coder server image with its built-in PostgreSQL and didn't stop at 'the container is up' — I verified it against three real endpoints: the login page returning 200, the health endpoint returning 200, and the build-info API returning real, unfaked version data. That's the honest depth of what's proven: the control-plane server genuinely runs and is reachable. What I'd be clear about is that no workspace template was authored, so the actual value proposition of Coder — turning a template into on-demand dev environments — is unproven here, and there's no identity-provider integration with the AD lab I also built, even though that would be a natural pairing in a real deployment.",
+    fitsIn: "This is developer-experience tooling sitting on top of everything else — Coder workspaces would typically be provisioned by Terraform templates, run as containers/pods on the same Kubernetes cluster demonstrated on this page, and authenticate against the AD/Entra identity layer, which is why I called out that integration as a named gap rather than pretending it exists.",
+    otherTools: [
+      {name: "GitHub Codespaces", note: "the SaaS equivalent of what Coder self-hosts — worth contrasting if asked why self-hosted over managed."},
+      {name: "Gitpod", note: "another self-hostable cloud-dev-environment platform, direct alternative to Coder."},
+      {name: "DevContainers (VS Code)", note: "a lighter-weight, non-platform approach to reproducible dev environments — doesn't need a server at all, worth knowing the tradeoff."},
+      {name: "JetBrains Space / Fleet", note: "an alternative ecosystem some orgs standardize on instead of a Coder-style platform."}
+    ],
     tools: ["Coder (ghcr.io/coder/coder)", "Docker Compose"],
     steps: [
       "Ran the official, unmodified ghcr.io/coder/coder:latest image with its built-in PostgreSQL — a real running server, not a config file that was never started.",
@@ -291,6 +358,12 @@ const ROWS = [
     where: "ansible/",
     status: "ok", statusLabel: "Covered",
     summary: "Terraform answers whether the infrastructure exists; Ansible answers whether the right software is deployed and configured on it, every single time, idempotently — that's the actual distinction between provisioning and config management that comes up in a real interview, and I built something to back the answer instead of just stating it. The role deploys the observability stack through a real Docker Compose module, then verifies past 'the container is running': it polls the health endpoint, confirms the real Prometheus metric is present, and queries Prometheus's own API to confirm it actually scraped the target and marked it healthy — proving the whole pipeline, not just container liveness. I proved idempotency for real, not by assertion: tore the stack down, ran the playbook cold (changed=1), ran it again immediately (changed=0), and kept both logs. I also hit and fixed two real bugs along the way, including one where the fix generalized — a stray Jinja syntax broke GitHub Pages' Jekyll processor, and the correct fix (a .nojekyll file) was also just the right fix for a static site in general.",
+    fitsIn: "This closes the loop between 'infrastructure exists' (Terraform) and 'infrastructure is correctly configured and monitored' (Observability) — the posting's 'manage tool deployment, infrastructure configuration' language is exactly this row, and it's the layer that would also configure the AD lab, the Kubernetes nodes, or Coder in a fuller build-out.",
+    otherTools: [
+      {name: "Chef / Puppet / SaltStack", note: "the other major config-management families — Ansible's agentless, push-based model was the right fit here; worth knowing the pull-based alternatives exist for fleet-scale."},
+      {name: "Ansible Tower / AWX", note: "the enterprise orchestration layer on top of raw ansible-playbook for scheduling, RBAC, and audit trails at team scale."},
+      {name: "cloud-init", note: "a lighter-weight, boot-time-only alternative for simple VM bootstrapping, versus Ansible's ongoing convergence model."}
+    ],
     tools: ["Ansible / ansible-core", "community.docker collection"],
     steps: [
       "Terraform answers 'does the infrastructure exist'; this answers 'is the right software deployed and configured on it, every time, idempotently' — the real IaC-vs-config-management distinction.",
@@ -310,6 +383,7 @@ const ROWS = [
 
 const rowsEl = document.getElementById("rows");
 const panelEl = document.getElementById("panel");
+const panel2El = document.getElementById("panel2");
 
 function badgeClass(status) {
   return status === "ok" ? "ok" : status === "partial" ? "partial" : "progress";
@@ -361,11 +435,20 @@ function openPanel(i) {
     <ul>${stepsHtml}</ul>
     <h4>Representative commands</h4>
     <pre><code>${cmdsHtml.replace(/</g, "&lt;")}</code></pre>`;
+
+  const otherToolsHtml = r.otherTools.map(t => `<li><span class="tool-name">${t.name}</span> — ${t.note}</li>`).join("");
+  panel2El.innerHTML = `
+    <h4>Where this fits in the approach</h4>
+    <p>${r.fitsIn}</p>
+    <h4>Other tools that also fit this requirement</h4>
+    <ul>${otherToolsHtml}</ul>`;
+
   document.getElementById("closeBtn").addEventListener("click", (e) => {
     e.stopPropagation();
     document.querySelectorAll(".row").forEach(el => el.classList.remove("active"));
     document.querySelectorAll(".badge-btn").forEach(b => b.setAttribute("aria-pressed", "false"));
     panelEl.innerHTML = '<div class="placeholder">Click a status badge on the left to see the tools, commands, and verification steps behind that row.</div>';
+    panel2El.innerHTML = '<div class="placeholder">Click a status badge to see where this fits in the overall DevSecOps approach, and other tools that could support this same requirement.</div>';
   });
 }
 
