@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Docs — poetic-musings</title>
+<meta name="description" content="Official documentation links for every tool used in the poetic-musings DevSecOps pipeline, grouped by where each sits in the pipeline, with a priority list for the target job posting.">
+<style>
+:root {
+  --bg: #f7f8fa; --panel: #ffffff; --fg: #1c1f24; --muted: #5b6472;
+  --accent: #0a5a96; --accent-soft: #eaf2fa; --rule: #d8dee6; --code-bg: #f0f1f3;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161a; --panel: #1b1e24; --fg: #e6e8eb; --muted: #9aa4b2;
+    --accent: #6fb3e0; --accent-soft: #16293a; --rule: #2c3038; --code-bg: #22252b;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.5; font-size: clamp(0.95rem, 0.85rem + 0.2vw, 1.05rem);
+}
+.wrap { max-width: none; width: 100%; margin: 0 auto; padding: 1rem clamp(1rem, 3vw, 2.5rem) 2.5rem; }
+
+.pageheader {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: 0.4rem 1.5rem; margin: 0 0 1.2rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--rule);
+}
+.pageheader-left { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; min-width: 0; }
+h1 { font-size: 1.3rem; margin: 0; }
+.sub { color: var(--muted); margin: 0; font-size: 0.9rem; max-width: 72ch; }
+nav.links { display: flex; flex-wrap: wrap; gap: 0.9rem; font-size: 0.88rem; margin-left: auto; }
+nav.links a { color: var(--accent); text-decoration: none; }
+nav.links a:hover { text-decoration: underline; }
+
+h2.stripe {
+  font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--accent); background: var(--accent-soft);
+  padding: 0.45rem 0.85rem; margin: 1.8rem 0 0.8rem; border-radius: 6px; font-weight: 700;
+}
+
+.linklist { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 0.6rem; }
+.linkcard {
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 8px;
+  padding: 0.7rem 0.9rem; box-shadow: 0 1px 3px rgba(20,25,35,0.06);
+}
+.linkcard a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 0.98rem; }
+.linkcard a:hover { text-decoration: underline; }
+.linkcard .note { color: var(--muted); font-size: 0.85rem; margin-top: 0.3rem; }
+.linkcard.deprecated { border-left: 4px solid var(--accent); }
+
+.priority {
+  background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 10px;
+  padding: 1rem 1.2rem; margin: 2rem 0 1rem;
+}
+.priority-label {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--accent); font-weight: 700; margin-bottom: 0.4rem;
+}
+.priority p { margin: 0; font-size: 0.92rem; line-height: 1.6; }
+.priority code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.95em; background: var(--code-bg); padding: 0.05em 0.35em; border-radius: 3px; }
+
+footer.colophon {
+  margin-top: 2rem; padding-top: 0.8rem; border-top: 1px solid var(--rule);
+  color: var(--muted); font-size: 0.82rem;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="pageheader">
+    <div class="pageheader-left">
+      <h1>Docs</h1>
+      <p class="sub">Official documentation for every tool actually used (or evaluated) in this repo's DevSecOps pipeline, grouped by where each one sits.</p>
+    </div>
+    <nav class="links">
+      <a href="index.html">← Dashboard</a>
+      <a href="qrg.html">QRG / Help</a>
+      <a href="pipeline.html">DevSecOps Pipeline</a>
+      <a href="JOB.html">Job Req Mapping</a>
+      <a href="devsecops-explainer.html">DevSecOps Explained</a>
+      <a href="LAYOUT.html">Source Layout</a>
+    </nav>
+  </div>
+
+  <h2 class="stripe">Security Gates — the 7 in the dashboard's scanning table</h2>
+  <div class="linklist">
+    <div class="linkcard"><a href="https://github.com/gitleaks/gitleaks" target="_blank">gitleaks ↗</a><div class="note">Secrets detection across the whole git history.</div></div>
+    <div class="linkcard"><a href="https://bandit.readthedocs.io" target="_blank">bandit ↗</a><div class="note">Static Application Security Testing (SAST) for Python.</div></div>
+    <div class="linkcard"><a href="https://github.com/anchore/syft" target="_blank">Syft (SBOM) ↗</a><div class="note">Software Bill of Materials generation.</div></div>
+    <div class="linkcard"><a href="https://github.com/pypa/pip-audit" target="_blank">pip-audit ↗</a><div class="note">Known-CVE dependency scanning for Python.</div></div>
+    <div class="linkcard"><a href="https://trivy.dev/docs" target="_blank">Trivy ↗</a><div class="note">Container image and, as of recently, IaC misconfiguration scanning.</div></div>
+    <div class="linkcard deprecated"><a href="https://github.com/aquasecurity/tfsec" target="_blank">tfsec ↗</a><div class="note"><strong>Deprecated</strong> — merged into Trivy's <code>trivy config</code>. Master Trivy's misconfig scanning instead of tfsec directly.</div></div>
+    <div class="linkcard"><a href="https://docs.kubelinter.io" target="_blank">kube-linter ↗</a><div class="note">Kubernetes manifest hardening lint.</div></div>
+    <div class="linkcard"><a href="https://codeql.github.com/docs" target="_blank">CodeQL ↗</a><div class="note">Deep static analysis, results centralized in GitHub code scanning.</div></div>
+  </div>
+
+  <h2 class="stripe">Lint / Test</h2>
+  <div class="linklist">
+    <div class="linkcard"><a href="https://docs.astral.sh/ruff" target="_blank">ruff ↗</a><div class="note">Python lint.</div></div>
+    <div class="linkcard"><a href="https://docs.pytest.org" target="_blank">pytest ↗</a><div class="note">Python unit tests.</div></div>
+  </div>
+
+  <h2 class="stripe">CI Dialects</h2>
+  <div class="linklist">
+    <div class="linkcard"><a href="https://docs.github.com/actions" target="_blank">GitHub Actions ↗</a><div class="note">Primary CI/CD platform used in this repo.</div></div>
+    <div class="linkcard"><a href="https://docs.gitlab.com/ee/ci/" target="_blank">GitLab CI ↗</a><div class="note">Mirrored pipeline (<code>.gitlab-ci.yml</code>), proving vendor independence.</div></div>
+  </div>
+
+  <h2 class="stripe">Infra</h2>
+  <div class="linklist">
+    <div class="linkcard"><a href="https://developer.hashicorp.com/terraform/docs" target="_blank">Terraform ↗</a><div class="note">Infrastructure as Code, applied for real against AWS.</div></div>
+    <div class="linkcard"><a href="https://docs.ansible.com" target="_blank">Ansible ↗</a><div class="note">Config management on top of Terraform-provisioned infra.</div></div>
+    <div class="linkcard"><a href="https://kubernetes.io/docs" target="_blank">Kubernetes ↗</a><div class="note">Container orchestration.</div></div>
+    <div class="linkcard"><a href="https://kind.sigs.k8s.io" target="_blank">kind ↗</a><div class="note">Kubernetes-in-Docker — the real local cluster this repo deploys to.</div></div>
+    <div class="linkcard"><a href="https://github.com/aquasecurity/kube-bench" target="_blank">kube-bench ↗</a><div class="note">CIS Kubernetes Benchmark scanner — the real 62 pass/11 fail scan.</div></div>
+  </div>
+
+  <h2 class="stripe">Compliance / Hardening</h2>
+  <div class="linklist">
+    <div class="linkcard"><a href="https://www.open-scap.org/resources/documentation/" target="_blank">OpenSCAP (<code>oscap</code>) ↗</a><div class="note">The real STIG scanner used: 67 pass/51 fail against DISA's RHEL8 profile.</div></div>
+    <div class="linkcard"><a href="https://complianceascode.readthedocs.io" target="_blank">ComplianceAsCode (SSG) ↗</a><div class="note">Publishes the Ansible remediation roles for the failing STIG rules — the natural next step for the biggest named gap.</div></div>
+    <div class="linkcard"><a href="https://public.cyber.mil/stigs/" target="_blank">DISA STIGs ↗</a><div class="note">The official DoD compliance checklists themselves.</div></div>
+  </div>
+
+  <h2 class="stripe">Misc — from the Job Req Mapping</h2>
+  <div class="linklist">
+    <div class="linkcard"><a href="https://coder.com/docs" target="_blank">Coder ↗</a><div class="note">Self-hosted dev environments — the real server deployed and verified.</div></div>
+    <div class="linkcard"><a href="https://wiki.samba.org" target="_blank">Samba AD ↗</a><div class="note">The real Active Directory domain controller in <code>ad-lab/</code>.</div></div>
+  </div>
+
+  <div class="priority">
+    <div class="priority-label">Priority for the Valkyrie posting</div>
+    <p><strong>Trivy</strong> (absorbs tfsec), <strong>Terraform</strong>, <strong>Kubernetes</strong>, <strong>GitLab CI</strong>, <strong>OpenSCAP remediation</strong> — that last one closes the biggest named gap: the STIG scan shows the real unremediated baseline (67 pass / 51 fail), and applying <code>ComplianceAsCode</code>'s remediation roles then re-scanning is the single highest-value next step on this whole page.</p>
+  </div>
+
+  <footer class="colophon">
+    These are official upstream docs for tools this repo actually uses, evaluated, or names as a real gap — not a generic tool list. See <a href="JOB.html">Job Req Mapping</a> for exactly how each one was verified here.
+  </footer>
+</div>
+</body>
+</html>
