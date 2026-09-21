@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QRG — DevSecOps Field Reference (condensed)</title>
+<meta name="description" content="One-screen condensed DevSecOps Quick Reference Guide: the 40-function index and the four-question troubleshooting triage.">
+<style>
+:root {
+  --bg: #f7f8fa;
+  --panel: #ffffff;
+  --fg: #1c1f24;
+  --muted: #5b6472;
+  --accent: #0a5a96;
+  --accent-soft: #eaf2fa;
+  --rule: #d8dee6;
+  --code-bg: #f0f1f3;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161a;
+    --panel: #1b1e24;
+    --fg: #e6e8eb;
+    --muted: #9aa4b2;
+    --accent: #6fb3e0;
+    --accent-soft: #16293a;
+    --rule: #2c3038;
+    --code-bg: #22252b;
+  }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+.wrap { max-width: none; padding: 0.75rem clamp(0.75rem, 2vw, 2rem) 1rem; }
+
+header.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem 1.25rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
+  border-bottom: 2px solid var(--rule);
+}
+header.top h1 { margin: 0; font-size: 1.15rem; }
+header.top .sub { color: var(--muted); font-size: 0.78rem; }
+header.top .links a { color: var(--accent); text-decoration: none; font-size: 0.78rem; margin-left: 0.9rem; }
+header.top .links a:hover { text-decoration: underline; }
+
+h2.stripe {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 0.25rem 0.6rem;
+  margin: 0.75rem 0 0.4rem;
+  border-radius: 4px;
+}
+
+/* ---- Function Index: compact rows ---- */
+.index-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0.15rem 1.5rem;
+}
+.index-row {
+  padding: 0.28rem 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.79rem;
+}
+.index-row .cat { font-weight: 700; color: var(--fg); }
+.index-row .desc { color: var(--muted); font-style: italic; }
+.index-row .items { color: var(--fg); opacity: 0.85; }
+
+/* ---- Triage: Q1-Q4 in a tight grid ---- */
+.triage-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+}
+.q-card {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 0.5rem 0.6rem;
+}
+.q-card h3 { margin: 0 0 0.2rem; font-size: 0.85rem; color: var(--accent); }
+.q-card .when { margin: 0 0 0.3rem; color: var(--muted); font-size: 0.72rem; font-style: italic; }
+.q-card pre {
+  margin: 0 0 0.3rem;
+  background: var(--code-bg);
+  border-radius: 4px;
+  padding: 0.35rem 0.45rem;
+  font-size: 0.68rem;
+  line-height: 1.3;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.q-card code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; }
+.q-card .note { margin: 0; color: var(--muted); font-size: 0.7rem; }
+
+/* ---- bottom row: rules + pipeline decode ---- */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+.mini-panel {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.76rem;
+}
+.mini-panel h3 { margin: 0 0 0.35rem; font-size: 0.82rem; color: var(--accent); }
+.mini-panel ul { margin: 0; padding-left: 1.1rem; }
+.mini-panel li { margin: 0.15rem 0; }
+.mini-panel .stage { font-weight: 700; }
+
+footer.colophon {
+  margin-top: 0.6rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
+@media (max-width: 1100px) {
+  .triage-grid { grid-template-columns: repeat(2, 1fr); }
+  .bottom-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div>
+    <h1>DevSecOps Field Reference — condensed QRG</h1>
+    <div class="sub">Prioritized one-screen view: what exists (Function Index) and what to do when something breaks (Q1–Q4 triage). Full 9-category detail lives in the printed QRG.</div>
+  </div>
+  <nav class="links">
+    <a href="index.html">← Dashboard</a>
+    <a href="DEVSECOPS.html">Full book</a>
+    <a href="DEVSECOPS.pdf">Full book (PDF)</a>
+  </nav>
+</header>
+
+<h2 class="stripe">Function Index — what is compared where (40 functions, 1.1–9.6)</h2>
+<div class="index-grid">
+  <div class="index-row"><span class="cat">1 PLAN &amp; SOURCE</span> — <span class="desc">where work is defined and code lives</span> — <span class="items">1.1 Open an MR from the CLI</span></div>
+  <div class="index-row"><span class="cat">2 DEVELOP</span> — <span class="desc">standardized workspaces kill toolchain drift</span> — <span class="items">2.1 Provision a dev workspace · 2.2 Pre-commit hook</span></div>
+  <div class="index-row"><span class="cat">3 BUILD</span> — <span class="desc">source to artifacts, repeatably, on shared runners</span> — <span class="items">3.1 CI pipeline · 3.2 Path-filtered jobs · 3.3 Inject a secret · 3.4 Schedules · 3.5 Artifacts &amp; cache · 3.6 Build an image · 3.7 Air-gap transfer</span></div>
+  <div class="index-row"><span class="cat">4 TEST</span> — <span class="desc">correctness gates; cheapest checks first</span> — <span class="items">4.1 SAST (§5.1) · 4.2 Ephemeral integration tests · 4.3 Coverage gate</span></div>
+  <div class="index-row"><span class="cat">5 SECURE</span> — <span class="desc">the shift-left gates; every category a pipeline stage</span> — <span class="items">5.1 SAST · 5.2 SBOM · 5.3 Dependency updates · 5.4 Image CVE scan · 5.5 Secret detection · 5.6 Compliance scan · 5.7 Runtime secret · 5.8 Admission policy · 5.9 Sign/verify image</span></div>
+  <div class="index-row"><span class="cat">6 PROVISION</span> — <span class="desc">declare the environment; reviewed diff = executed diff</span> — <span class="items">6.1 Declare a resource · 6.2 IaC verbs · 6.3 Drift · 6.4 Modules · 6.5 Configure a host · 6.6 Windows config · 6.7 Read-only access · 6.8 Workload identity</span></div>
+  <div class="index-row"><span class="cat">7 DEPLOY &amp; ORCHESTRATE</span> — <span class="desc">desired state plus a reconciliation loop</span> — <span class="items">7.1 Create a cluster · 7.2 Deploy to K8s · 7.3 Roll back · 7.4 Progressive delivery · 7.5 Expose a service · 7.6 Autoscale</span></div>
+  <div class="index-row"><span class="cat">8 OPERATE &amp; OBSERVE</span> — <span class="desc">see what changed without SSH spelunking</span> — <span class="items">8.1 Query telemetry · 8.2 Define an alert · 8.3 Administer an AD user · 8.4 Windows config (§6.6)</span></div>
+  <div class="index-row"><span class="cat">9 EVIDENCE &amp; GOVERN</span> — <span class="desc">engineering activity turned into accreditation evidence</span> — <span class="items">9.1 Compliance scan (§5.6) · 9.2 SBOM (§5.2) · 9.3 Air gap (§3.7) · 9.4 Sign/verify (§5.9) · 9.5 TLS cert · 9.6 Network intent</span></div>
+</div>
+
+<h2 class="stripe">Troubleshooting Triage — the four questions, in order</h2>
+<div class="triage-grid">
+
+  <div class="q-card">
+    <h3>Q1 — Blast radius?</h3>
+    <p class="when">First 120 seconds; scope decides urgency.</p>
+    <pre><code>kubectl get pods -A | grep -v 'Running\|Completed'
+systemctl --failed
+kubectl get nodes
+df -h</code></pre>
+    <p class="note">One pod, one user, one host — or everything? Ask a second human. Write the answer down.</p>
+  </div>
+
+  <div class="q-card">
+    <h3>Q2 — What changed?</h3>
+    <p class="when">Highest-yield question; run the whole battery.</p>
+    <pre><code>kubectl get events -A --sort-by=.lastTimestamp | tail -30
+kubectl rollout history deployment/&lt;n&gt; -n &lt;ns&gt;
+helm history &lt;rel&gt; -n &lt;ns&gt;
+git log --oneline --since="24 hours ago"
+terraform plan -detailed-exitcode
+journalctl --since "-24h" -p warning | tail -40</code></pre>
+    <p class="note">Something almost always changed. Nothing found usually means the wrong layer, not no cause.</p>
+  </div>
+
+  <div class="q-card">
+    <h3>Q3 — Which layer?</h3>
+    <p class="when">Walk the request path, half-split.</p>
+    <pre><code>dig &lt;name&gt;
+curl -v https://&lt;host&gt;/health
+kubectl get endpoints &lt;svc&gt; -n &lt;ns&gt;
+kubectl get pods -n &lt;ns&gt;
+kubectl logs &lt;pod&gt; -n &lt;ns&gt; --previous</code></pre>
+    <p class="note">DNS → LB → ingress → service → endpoints → pod → app. Start at endpoints, half-split.</p>
+  </div>
+
+  <div class="q-card">
+    <h3>Q4 — Fastest safe rollback?</h3>
+    <p class="when">Answer before any fix attempt.</p>
+    <pre><code>helm rollback &lt;release&gt; -n &lt;ns&gt;
+kubectl rollout undo deployment/&lt;n&gt; -n &lt;ns&gt;
+git revert &lt;sha&gt; &amp;&amp; git push</code></pre>
+    <p class="note">Stabilize first, root-cause second. If Q2 found the change and a rollback exists, take it.</p>
+  </div>
+
+</div>
+
+<div class="bottom-grid">
+  <div class="mini-panel">
+    <h3>Rules of engagement on an unknown system</h3>
+    <ul>
+      <li><strong>Read-only first</strong> — get/describe/logs/history/status before any mutating verb.</li>
+      <li><strong>Snapshot before touching</strong> — <code>kubectl get ... -o yaml &gt; was.yaml</code> · <code>terraform state pull &gt; state.backup.json</code></li>
+      <li><strong>Log the terminal</strong> — <code>script -a /tmp/incident-$(date +%F-%H%M).log</code></li>
+      <li><strong>One change at a time</strong> — change, verify, record, then next.</li>
+      <li><strong>Stop and escalate</strong> when the fix touches a security/ATO-boundary config, risks data loss, or 30 minutes pass with no hypothesis.</li>
+    </ul>
+  </div>
+  <div class="mini-panel">
+    <h3>Pipeline is red — decode by stage</h3>
+    <ul>
+      <li><span class="stage">BUILD</span> fails: read the <em>first</em> error only.</li>
+      <li><span class="stage">TEST</span> fails: rerun once at most — twice-failed is real.</li>
+      <li><span class="stage">SCAN</span> fails, no code change: the CVE database moved.</li>
+      <li><span class="stage">DEPLOY</span> fails: ask what changed on the <em>target</em>, not the repo.</li>
+    </ul>
+  </div>
+</div>
+
+<footer class="colophon">
+  Condensed from the printed DevSecOps QRG (<code>~/projects/Resume/devsecops/qrg-print.pdf</code>, <code>qrg-web.html</code>) — Part I's 40-function detail and Part II §2–§7 live there in full. This page keeps only what's highest-value at a glance: the index of what exists, and the triage sequence for when something breaks.
+</footer>
+
+</div>
+</body>
+</html>
