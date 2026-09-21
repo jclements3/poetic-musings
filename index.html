@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>poetic-musings — DevSecOps Dashboard</title>
+<meta name="description" content="Status dashboard of the DevSecOps platform layer built inside poetic-musings: IaC, containers, Kubernetes, CI/CD, and security scanning, with hover definitions for every acronym.">
+<style>
+:root {
+  --bg: #f7f8fa;
+  --panel: #ffffff;
+  --fg: #1c1f24;
+  --muted: #5b6472;
+  --accent: #0a5a96;
+  --accent-soft: #eaf2fa;
+  --rule: #d8dee6;
+  --ok-border: #2f8f4e;
+  --ok-bg: #eaf7ee;
+  --partial-border: #b8860b;
+  --partial-bg: #fbf3df;
+  --gap-border: #a3313f;
+  --gap-bg: #fbecee;
+  --code-bg: #f0f1f3;
+  --shadow: 0 1px 3px rgba(20,25,35,0.08), 0 1px 2px rgba(20,25,35,0.06);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161a;
+    --panel: #1b1e24;
+    --fg: #e6e8eb;
+    --muted: #9aa4b2;
+    --accent: #6fb3e0;
+    --accent-soft: #16293a;
+    --rule: #2c3038;
+    --ok-border: #4caf72;
+    --ok-bg: #16261c;
+    --partial-border: #d9a441;
+    --partial-bg: #2b2413;
+    --gap-border: #e2828d;
+    --gap-bg: #2c1a1d;
+    --code-bg: #22252b;
+    --shadow: 0 1px 3px rgba(0,0,0,0.4);
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
+
+header.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.75rem;
+  border-bottom: 3px double var(--rule);
+}
+header.top h1 { margin: 0; font-size: 1.6rem; }
+header.top .sub { color: var(--muted); font-size: 0.95rem; }
+header.top .links a {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.88rem;
+  margin-left: 1rem;
+}
+header.top .links a:hover { text-decoration: underline; }
+
+.summary-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+.pill {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.pill.ok { background: var(--ok-bg); color: var(--ok-border); border: 1px solid var(--ok-border); }
+.pill.partial { background: var(--partial-bg); color: var(--partial-border); border: 1px solid var(--partial-border); }
+.pill.gap { background: var(--gap-bg); color: var(--gap-border); border: 1px solid var(--gap-border); }
+
+h2.section-title {
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin: 2.5rem 0 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 1.1rem 1.25rem 1.25rem;
+  box-shadow: var(--shadow);
+  border-top: 4px solid var(--rule);
+}
+.card.status-ok { border-top-color: var(--ok-border); }
+.card.status-partial { border-top-color: var(--partial-border); }
+.card.status-gap { border-top-color: var(--gap-border); }
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.card h3 { margin: 0; font-size: 1.05rem; }
+.badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.badge.ok { background: var(--ok-bg); color: var(--ok-border); }
+.badge.partial { background: var(--partial-bg); color: var(--partial-border); }
+.badge.gap { background: var(--gap-bg); color: var(--gap-border); }
+
+.card p { margin: 0.5rem 0; font-size: 0.92rem; color: var(--fg); }
+.card .desc { color: var(--muted); }
+
+.toolbadges { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.7rem 0; }
+.toolbadges span {
+  font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+  font-size: 0.76rem;
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+}
+
+.card .files {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.82rem;
+}
+.card .files code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; }
+.card .files a { color: var(--accent); text-decoration: none; }
+.card .files a:hover { text-decoration: underline; }
+
+table.scan-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.9rem;
+}
+table.scan-table th, table.scan-table td {
+  border-bottom: 1px solid var(--rule);
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+table.scan-table th { background: var(--accent-soft); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
+table.scan-table tr:last-child td { border-bottom: none; }
+table.scan-table code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.85em; background: var(--code-bg); padding: 0.05em 0.3em; border-radius: 3px; }
+
+/* Hover-tooltip terms: native `title` attribute, works everywhere, no JS */
+a.term {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
+  cursor: help;
+}
+a.term:hover { background: var(--accent-soft); }
+
+footer {
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+footer a { color: var(--accent); }
+
+@media (max-width: 560px) {
+  header.top .links { display: flex; flex-wrap: wrap; }
+  header.top .links a { margin-left: 0; margin-right: 1rem; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div>
+    <h1>poetic-musings — DevSecOps Dashboard</h1>
+    <div class="sub">A snapshot of the platform-engineering layer built on top of this repo. Hover any dotted-underlined term for its definition.</div>
+  </div>
+  <nav class="links">
+    <a href="DEVSECOPS.html">Full book (HTML)</a>
+    <a href="DEVSECOPS.pdf">Full book (PDF)</a>
+    <a href="DEFSECOPS.md">Build log (DEFSECOPS.md)</a>
+    <a href="SECURITY.md">SECURITY.md</a>
+  </nav>
+</header>
+
+<div class="summary-bar">
+  <span class="pill ok">4 pillars implemented</span>
+  <span class="pill partial">2 pillars design-complete, unverified live</span>
+  <span class="pill gap">3 pillars not started</span>
+</div>
+
+<h2 class="section-title">Platform Pillars</h2>
+<div class="grid">
+
+  <div class="card status-partial">
+    <div class="card-head"><h3><a class="term" href="#t-iac" title="Infrastructure as Code: describing infrastructure in version-controlled text instead of manual console clicks.">IaC</a> · Terraform</h3><span class="badge partial">Written, not applied</span></div>
+    <p class="desc">Dual-cloud platform module: <a class="term" href="#t-vpc" title="Virtual Private Cloud: your own private, isolated network inside a cloud provider's infrastructure.">VPC</a> across 2 AZs, KMS-encrypted immutable-tag <a class="term" href="#t-ecr" title="Elastic Container Registry: AWS's managed registry for storing and scanning container images.">ECR</a>, encrypted/versioned <a class="term" href="#t-s3" title="Simple Storage Service: AWS's object storage for files and blobs at effectively unlimited scale.">S3</a> with a separate access-log bucket, least-privilege <a class="term" href="#t-iam" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a> role for CI — plus an Azure module (ACR, geo-redundant storage). Never run against a live account.</p>
+    <div class="toolbadges"><span>Terraform</span><span>hashicorp/aws</span><span>hashicorp/azurerm</span><span>HCL</span></div>
+    <div class="files">📁 <a href="infra/terraform/">infra/terraform/</a> · <code>modules/aws-platform</code> · <code>modules/azure-platform</code> · <code>environments/{dev,prod}</code></div>
+  </div>
+
+  <div class="card status-ok">
+    <div class="card-head"><h3>Containers · Docker</h3><span class="badge ok">Built &amp; tested</span></div>
+    <p class="desc">Hardened multi-stage <code>Dockerfile</code>: minimal base, non-root uid/gid 10001, no build tools in the runtime layer. Actually built and run under <code>--read-only --user 10001:10001</code> to prove it — caught a real bug (gunicorn needs a writable <code>/tmp</code> even in a locked-down container).</p>
+    <div class="toolbadges"><span>Docker</span><span>python:3.12-slim</span><span>Flask</span><span>gunicorn</span></div>
+    <div class="files">📁 <a href="app/status-service/">app/status-service/</a></div>
+  </div>
+
+  <div class="card status-partial">
+    <div class="card-head"><h3><a class="term" href="#t-k8s" title="Kubernetes: a system for running and automatically managing many containers across many machines.">Kubernetes</a></h3><span class="badge partial">Validated, no live cluster</span></div>
+    <p class="desc">Restricted <a class="term" href="#t-pss" title="Kubernetes' three built-in security profiles for Pods: privileged, baseline, and restricted (strictest).">Pod Security Standard</a>: non-root, <code>readOnlyRootFilesystem</code>, all capabilities dropped, seccomp default. Default-deny <a class="term" href="#t-netpol" title="A Kubernetes firewall for Pod-to-Pod traffic, usually written as a default-deny rule plus explicit allows.">NetworkPolicy</a>, a <a class="term" href="#t-pdb" title="PodDisruptionBudget: guarantees a minimum number of replicas stay available during voluntary disruption like a node drain or cluster upgrade.">PodDisruptionBudget</a>, <a class="term" href="#t-kustomize" title="A kubectl-native tool for patching a shared base of Kubernetes manifests per environment, without duplicating YAML.">Kustomize</a> base + dev/prod overlays. Manifests parse and build cleanly; never scheduled on a real cluster.</p>
+    <div class="toolbadges"><span>Kubernetes</span><span>Kustomize</span><span>kubectl</span></div>
+    <div class="files">📁 <a href="k8s/">k8s/</a> · <code>base/</code> · <code>overlays/{dev,prod}</code></div>
+  </div>
+
+  <div class="card status-ok">
+    <div class="card-head"><h3><a class="term" href="#t-cicd" title="Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.">CI/CD</a></h3><span class="badge ok">Live on every push</span></div>
+    <p class="desc">Two parallel pipelines, same stages, different dialects: lint/test, then five security gates. Every scanning job checks its target path exists first and skips cleanly, so it's safe to land before every piece of the platform exists.</p>
+    <div class="toolbadges"><span>GitHub Actions</span><span>GitLab CI</span></div>
+    <div class="files">📁 <a href=".github/workflows/">.github/workflows/{ci,security}.yml</a> · <a href=".gitlab-ci.yml">.gitlab-ci.yml</a></div>
+  </div>
+
+  <div class="card status-ok">
+    <div class="card-head"><h3>Security Scanning</h3><span class="badge ok">7 gates, running</span></div>
+    <p class="desc">Layered <a class="term" href="#t-shiftleft" title="Moving security checks as early as possible in the development timeline, ideally into the automated pipeline at commit time, instead of a late pre-launch review.">shift-left</a> coverage — see the table below for what each gate actually catches.</p>
+    <div class="toolbadges"><span>gitleaks</span><span>bandit</span><span>Syft</span><span>pip-audit</span><span>Trivy</span><span>tfsec</span><span>kube-linter</span><span>CodeQL</span></div>
+    <div class="files">Findings centralize as <a class="term" href="#t-sarif" title="Static Analysis Results Interchange Format: a standard format for security scan results so different tools' findings can be viewed in one place." style="border-bottom:1px dotted var(--accent);cursor:help;">SARIF</a> in GitHub code scanning.</div>
+  </div>
+
+  <div class="card status-gap">
+    <div class="card-head"><h3>Observability</h3><span class="badge gap">Not started</span></div>
+    <p class="desc">No <a class="term" href="#t-prom" title="An open-source system that periodically scrapes and stores time-series metrics from configured targets.">Prometheus</a>/<a class="term" href="#t-grafana" title="A dashboard/visualization layer that queries Prometheus (and other sources) to render graphs, gauges, and alerts.">Grafana</a> stack yet — <code>status-service</code> doesn't expose <code>/metrics</code>. Next step: add <code>prometheus_client</code>, run Prometheus+Grafana locally via Docker Compose, build one real dashboard.</p>
+    <div class="toolbadges"><span>Prometheus</span><span>Grafana</span></div>
+  </div>
+
+  <div class="card status-gap">
+    <div class="card-head"><h3><a class="term" href="#t-ad" title="Active Directory: Microsoft's directory service for identity, authentication, and authorization across an organization's users, computers, and groups.">Windows / AD</a></h3><span class="badge gap">No lab exists</span></div>
+    <p class="desc">No Windows Server, <a class="term" href="#t-ad" title="Active Directory: Microsoft's directory service for identity, authentication, and authorization across an organization's users, computers, and groups.">AD</a>, <a class="term" href="#t-gpo" title="Group Policy Object: a declared configuration/security setting that Active Directory pushes automatically to computers or users in its scope.">GPO</a>, or <a class="term" href="#t-mecm" title="Microsoft Endpoint Configuration Manager (formerly SCCM): tooling for managing on-premises Windows devices at scale.">MECM/Intune</a> exists in this repo — genuinely requires a real or lab Windows domain. Highest-value gap to close with a 2–3 VM home lab.</p>
+    <div class="toolbadges"><span>Active Directory</span><span>GPO</span><span>MECM/SCCM</span><span>Intune</span></div>
+  </div>
+
+  <div class="card status-gap">
+    <div class="card-head"><h3>Coder &amp; Formal <a class="term" href="#t-cis" title="Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems." style="border-bottom:1px dotted var(--accent);cursor:help;">CIS</a></h3><span class="badge gap">Not started</span></div>
+    <p class="desc">Hardening choices throughout are CIS-<em>aligned</em> by construction, but never scored with a real CIS Benchmark scanner against a live cluster/account. No <a class="term" href="#t-coder" title="A platform for provisioning and managing remote, browser-accessible development environments from standard, version-controlled workspace templates." style="border-bottom:1px dotted var(--accent);cursor:help;">Coder</a> deployment either.</p>
+    <div class="toolbadges"><span>kube-bench</span><span>Coder</span></div>
+  </div>
+
+</div>
+
+<h2 class="section-title">Security Scanning Gates</h2>
+<table class="scan-table">
+  <thead><tr><th>Gate</th><th>Tool</th><th>Catches</th><th>Scope</th></tr></thead>
+  <tbody>
+    <tr><td>Secrets detection</td><td><code>gitleaks</code></td><td>Credentials committed anywhere in full git history</td><td>Whole repo</td></tr>
+    <tr><td><a class="term" href="#t-sast" title="Static Application Security Testing: analyzing source code for security-relevant patterns without running it.">SAST</a></td><td><code>bandit</code></td><td>Insecure code patterns in Python</td><td><code>app/</code>, root <code>*.py</code></td></tr>
+    <tr><td><a class="term" href="#t-sbom" title="Software Bill of Materials: a complete, machine-readable inventory of every dependency a piece of software uses.">SBOM</a> + <a class="term" href="#t-sca" title="Software Composition Analysis: checking a dependency inventory against a database of known vulnerabilities.">SCA</a></td><td><code>Syft</code> + <code>pip-audit</code></td><td>Known-<a class="term" href="#t-cve" title="Common Vulnerabilities and Exposures: the standard public naming/numbering system for disclosed security vulnerabilities.">CVE</a> dependencies, full inventory</td><td><code>requirements.txt</code></td></tr>
+    <tr><td>Container image scan</td><td><code>Trivy</code></td><td>Vulnerable OS/base-image layers, HIGH/CRITICAL gate</td><td>Built image</td></tr>
+    <tr><td><a class="term" href="#t-iac" title="Infrastructure as Code: describing infrastructure in version-controlled text instead of manual console clicks.">IaC</a> scan</td><td><code>tfsec</code></td><td>Terraform misconfigurations</td><td><code>infra/terraform/</code></td></tr>
+    <tr><td>K8s manifest scan</td><td><code>kube-linter</code></td><td>Missing hardening on Deployments/manifests</td><td><code>k8s/</code></td></tr>
+    <tr><td>Findings hub</td><td><code>CodeQL</code> SARIF sink</td><td>Centralizes bandit/Trivy/tfsec results in one dashboard</td><td>GitHub code scanning</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">Term Reference</h2>
+<p class="desc" style="max-width:60ch;">Every linked term above jumps here and hovers with its definition inline — the same convention used throughout the full book.</p>
+<table class="scan-table">
+  <tbody>
+    <tr id="t-iac"><td style="width:14ch"><strong>IaC</strong></td><td>Infrastructure as Code: describing infrastructure in version-controlled text instead of manual console clicks.</td></tr>
+    <tr id="t-vpc"><td><strong>VPC</strong></td><td>Virtual Private Cloud: your own private, isolated network inside a cloud provider's infrastructure.</td></tr>
+    <tr id="t-ecr"><td><strong>ECR</strong></td><td>Elastic Container Registry: AWS's managed registry for storing and scanning container images.</td></tr>
+    <tr id="t-s3"><td><strong>S3</strong></td><td>Simple Storage Service: AWS's object storage for files and blobs at effectively unlimited scale.</td></tr>
+    <tr id="t-iam"><td><strong>IAM</strong></td><td>Identity and Access Management: the system for controlling who or what can do what to which resource.</td></tr>
+    <tr id="t-k8s"><td><strong>Kubernetes (K8s)</strong></td><td>A system for running and automatically managing many containers across many machines.</td></tr>
+    <tr id="t-pss"><td><strong>Pod Security Standards</strong></td><td>Kubernetes' three built-in security profiles for Pods: privileged, baseline, and restricted (strictest).</td></tr>
+    <tr id="t-netpol"><td><strong>NetworkPolicy</strong></td><td>A Kubernetes firewall for Pod-to-Pod traffic, usually written as a default-deny rule plus explicit allows.</td></tr>
+    <tr id="t-pdb"><td><strong>PodDisruptionBudget</strong></td><td>Guarantees a minimum number of replicas stay available during voluntary disruption like a node drain or cluster upgrade.</td></tr>
+    <tr id="t-kustomize"><td><strong>Kustomize</strong></td><td>A kubectl-native tool for patching a shared base of Kubernetes manifests per environment, without duplicating YAML.</td></tr>
+    <tr id="t-cicd"><td><strong>CI/CD</strong></td><td>Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.</td></tr>
+    <tr id="t-shiftleft"><td><strong>Shift left</strong></td><td>Moving security checks as early as possible in the development timeline, ideally into the automated pipeline at commit time, instead of a late pre-launch review.</td></tr>
+    <tr id="t-sarif"><td><strong>SARIF</strong></td><td>Static Analysis Results Interchange Format: a standard format for security scan results so different tools' findings can be viewed in one place.</td></tr>
+    <tr id="t-sast"><td><strong>SAST</strong></td><td>Static Application Security Testing: analyzing source code for security-relevant patterns without running it.</td></tr>
+    <tr id="t-sbom"><td><strong>SBOM</strong></td><td>Software Bill of Materials: a complete, machine-readable inventory of every dependency a piece of software uses.</td></tr>
+    <tr id="t-sca"><td><strong>SCA</strong></td><td>Software Composition Analysis: checking a dependency inventory against a database of known vulnerabilities.</td></tr>
+    <tr id="t-cve"><td><strong>CVE</strong></td><td>Common Vulnerabilities and Exposures: the standard public naming/numbering system for disclosed security vulnerabilities.</td></tr>
+    <tr id="t-cis"><td><strong>CIS</strong></td><td>Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems.</td></tr>
+    <tr id="t-prom"><td><strong>Prometheus</strong></td><td>An open-source system that periodically scrapes and stores time-series metrics from configured targets.</td></tr>
+    <tr id="t-grafana"><td><strong>Grafana</strong></td><td>A dashboard/visualization layer that queries Prometheus (and other sources) to render graphs, gauges, and alerts.</td></tr>
+    <tr id="t-ad"><td><strong>AD</strong></td><td>Active Directory: Microsoft's directory service for identity, authentication, and authorization across an organization's users, computers, and groups.</td></tr>
+    <tr id="t-gpo"><td><strong>GPO</strong></td><td>Group Policy Object: a declared configuration/security setting that Active Directory pushes automatically to computers or users in its scope.</td></tr>
+    <tr id="t-mecm"><td><strong>MECM/SCCM</strong></td><td>Microsoft Endpoint Configuration Manager (formerly SCCM): tooling for managing on-premises Windows devices at scale.</td></tr>
+    <tr id="t-coder"><td><strong>Coder</strong></td><td>A platform for provisioning and managing remote, browser-accessible development environments from standard, version-controlled workspace templates.</td></tr>
+  </tbody>
+</table>
+
+<footer>
+  Built inside <code>poetic-musings</code> as a DevSecOps/Platform Engineering training exercise.
+  See the <a href="DEVSECOPS.html">full book</a> for the slow, chapter-by-chapter explanation behind every card above,
+  or <a href="DEFSECOPS.md">DEFSECOPS.md</a> for the terse build log.
+</footer>
+
+</div>
+</body>
+</html>
