@@ -1,0 +1,141 @@
+{
+  "coreConcepts": [
+    {
+      "term": "Jenkins (automation server)",
+      "explanation": "Jenkins is an open-source, self-hosted automation server originally built for CI, now used for CI/CD and general job orchestration (builds, tests, deploys, scheduled tasks). It runs as a Java process (WAR or Docker image) and exposes a web UI, REST API, and CLI. Unlike GitHub Actions, it is not tied to any one source host — it can build from GitHub, GitLab, Bitbucket, or on-prem SCM, which is a big reason regulated/legacy enterprises still run it."
+    },
+    {
+      "term": "Controller (master) vs. agent (node)",
+      "explanation": "The controller is the central Jenkins process that schedules jobs, serves the UI, and stores config/state. Agents (formerly 'slaves') are separate machines or containers that actually execute build steps, connected to the controller over JNLP/SSH. This split lets you keep the controller lightweight and run builds on many machines with different OSes/toolchains. Best practice is to never build directly on the controller."
+    },
+    {
+      "term": "Plugin ecosystem",
+      "explanation": "Jenkins' core is intentionally minimal; nearly all functionality (Git integration, Docker, Kubernetes, Slack notifications, credentials, security realms) comes from plugins — there are 1,800+. This is Jenkins' greatest strength (anything can be integrated) and its greatest liability: plugins are maintained by a loose community with wildly uneven quality, they frequently break on core upgrades, and CVEs in unmaintained plugins are one of the most common real-world Jenkins attack vectors. Managing plugin sprawl and update cadence is a real, ongoing operational cost."
+    },
+    {
+      "term": "Declarative vs. Scripted Pipeline",
+      "explanation": "Declarative Pipeline is a structured, opinionated Groovy DSL (pipeline { agent { } stages { } }) that's easier to read, lint, and restrict — the recommended default. Scripted Pipeline is full Groovy with a `node { }` block, giving complete programmatic control (loops, try/catch, dynamic stage generation) at the cost of readability and a larger security surface. Common answer: use Declarative for 90% of pipelines; drop into Scripted (or a `script { }` block inside Declarative) only when you need real programming logic Declarative can't express."
+    },
+    {
+      "term": "Jenkinsfile / Pipeline-as-Code",
+      "explanation": "A Jenkinsfile is a text file (checked into source control, usually the repo root) that defines the entire pipeline. This is Jenkins' equivalent of a GitHub Actions workflow YAML — it makes the pipeline versioned, code-reviewed, and reproducible instead of living as clickable config in the Jenkins UI (the old 'Freestyle job' model, now considered an anti-pattern for anything beyond trivial jobs)."
+    },
+    {
+      "term": "Stages and steps",
+      "explanation": "A pipeline is broken into `stages` (logical phases like Build, Test, Deploy, shown as blocks in the Jenkins UI's pipeline graph), and each stage contains `steps` (individual actions — shell commands, plugin-provided DSL calls like `sh`, `git`, `docker.build()`). This structure is what gives Jenkins its visual pipeline view and lets you gate/parallelize/retry at the stage level."
+    },
+    {
+      "term": "agent / node block",
+      "explanation": "The `agent` directive (Declarative) or `node` block (Scripted) tells Jenkins where to run a stage or the whole pipeline — `agent any` (whatever's free), `agent { label 'linux-docker' }` (a specific pool), or `agent { docker 'image:tag' }` (spin up a container). You can set a top-level agent and override it per-stage, which is how you mix e.g. a build stage on a beefy Linux agent with a deploy stage on a restricted, credential-scoped agent."
+    },
+    {
+      "term": "Post-build actions (`post`)",
+      "explanation": "The `post { }` block defines cleanup/notification logic that runs after stages complete, keyed on outcome: `always`, `success`, `failure`, `unstable`, `changed`, `aborted`. Typical uses: send Slack/email on failure, archive artifacts or test reports regardless of outcome, clean workspace. It's Jenkins' answer to GitHub Actions' `if: failure()` conditionals, but centralized in one block rather than scattered per-step."
+    },
+    {
+      "term": "Credentials binding",
+      "explanation": "The Credentials plugin stores secrets (usernames/passwords, SSH keys, API tokens, secret text) encrypted in the controller and injects them into pipelines by ID via `withCredentials { }` or `environment { CRED = credentials('id') }`, so secrets never appear in plaintext in the Jenkinsfile or job config. Masking also scrubs credential values from console log output. This is the direct equivalent of GitHub Actions secrets, but self-managed rather than platform-managed, which means you're responsible for its encryption-at-rest key rotation and access control (matrix authorization) yourself."
+    },
+    {
+      "term": "Triggers (webhook, poll, cron)",
+      "explanation": "Jenkins jobs can start on a webhook (SCM push notifies Jenkins immediately — needs Jenkins to be network-reachable from the SCM host), SCM polling (`pollSCM` — Jenkins periodically checks for changes, useful when webhooks aren't possible, e.g. Jenkins behind a firewall), or `cron`-style scheduled builds (`triggers { cron('H 2 * * *') }`). Webhooks are strongly preferred for latency and load; polling is a fallback."
+    },
+    {
+      "term": "Distributed builds / agent pools and labels",
+      "explanation": "Agents are tagged with labels (e.g. `linux`, `docker`, `gpu`, `windows`) and pipelines request a label rather than a specific machine, letting Jenkins load-balance across a pool. This is how Jenkins scales horizontally — add more agents (static VMs, or dynamic via the Kubernetes or EC2 plugin, which spins up ephemeral pod/instance agents per build and tears them down after) rather than scaling the controller itself."
+    },
+    {
+      "term": "Blue-green / canary deployment support",
+      "explanation": "Jenkins has no built-in deployment-strategy primitive — blue-green or canary rollout is implemented via pipeline logic plus plugins/integrations (Kubernetes plugin, Istio/Argo Rollouts CLI calls, cloud LB API calls in a `sh` step) that shift traffic between environments/versions and roll back on failed health checks. This is a meaningful contrast with more opinionated CD tools: Jenkins gives you the orchestration engine, but you (or a plugin) write the actual deployment strategy."
+    },
+    {
+      "term": "Shared Libraries",
+      "explanation": "A Shared Library is reusable Pipeline code (Groovy classes/functions plus custom pipeline steps) stored in its own Git repo and imported into any Jenkinsfile with `@Library('my-lib') _`. This is how organizations avoid copy-pasting the same 200-line Jenkinsfile across 40 repos — common stages (security scanning, artifact publishing, standard notification logic) live in one versioned place. It's the closest Jenkins equivalent to a GitHub Actions reusable workflow or composite action, but with the full power of a Groovy codebase behind it."
+    },
+    {
+      "term": "Security model (authorization, CSRF, script security)",
+      "explanation": "Jenkins security has three load-bearing pieces: matrix-based (or role-based, via plugin) authorization controlling which users/jobs can do what; CSRF protection (crumb issuer) to stop forged requests against the web UI/API; and the Groovy Script Security plugin's sandbox, which restricts what arbitrary Groovy in a Pipeline or Script Console can do (approved method whitelist) so a compromised or careless Jenkinsfile can't trivially escalate to controller-level code execution. Given Jenkins' history of CVEs, a DevSecOps candidate should be able to speak to running the controller with least privilege, restricting the Script Console, and keeping the plugin set minimal and patched."
+    }
+  ],
+  "jenkinsVsGithubActions": [
+    {
+      "dimension": "Hosting model",
+      "jenkins": "Self-hosted: you stand up and operate the controller (VM, container, or behind your firewall) plus your own agent fleet. Full control over network placement, data residency, and integration with internal systems.",
+      "githubActions": "Hosted by default (GitHub-managed runners), with self-hosted runners as an opt-in for cases needing custom hardware or network access. Near-zero infra to operate for the common case."
+    },
+    {
+      "dimension": "Config format",
+      "jenkins": "Groovy DSL in a Jenkinsfile (Declarative or Scripted). More expressive/programmable but a steeper learning curve and a real language to reason about (loops, closures, sandboxing).",
+      "githubActions": "YAML workflow files. Simpler and more constrained, less prone to accidental complexity, but you hit walls faster for genuinely dynamic pipeline logic and often end up shelling out to scripts anyway."
+    },
+    {
+      "dimension": "Extensibility",
+      "jenkins": "1,800+ plugins covering almost anything, community-maintained with uneven quality and a real ongoing patching/compatibility burden across controller upgrades.",
+      "githubActions": "Marketplace of Actions, generally simpler to vet (versioned, sandboxed per-job container), tightly integrated with GitHub's permission model, but the ecosystem is younger and thinner for legacy enterprise tooling."
+    },
+    {
+      "dimension": "Setup & maintenance burden",
+      "jenkins": "Significant: you patch the controller, manage plugin compatibility, provision and maintain agents, back up job configs/credentials. This is real infrastructure ownership.",
+      "githubActions": "Minimal for hosted runners — GitHub manages the runtime. Maintenance burden shifts to workflow file sprawl and secrets/permissions hygiene rather than infra ops."
+    },
+    {
+      "dimension": "Secrets management",
+      "jenkins": "Credentials plugin stores secrets on the controller; you own encryption-at-rest, rotation, and access-control policy (matrix auth) yourself.",
+      "githubActions": "Repo/org/environment-scoped encrypted secrets managed by GitHub, with environment protection rules (required reviewers, deployment branches) built in natively."
+    },
+    {
+      "dimension": "Scaling model",
+      "jenkins": "Horizontal via agent pools (static or dynamic via Kubernetes/EC2 plugins); controller itself can become a bottleneck and a single point of failure without HA setup.",
+      "githubActions": "Elastic hosted runner pool scales automatically; self-hosted runners can be autoscaled via tools like actions-runner-controller on Kubernetes, similar in spirit to Jenkins' Kubernetes plugin."
+    },
+    {
+      "dimension": "Typical enterprise fit",
+      "jenkins": "Long-established, regulated, or on-prem-heavy shops with existing Jenkins investment, multi-SCM environments, or compliance requirements that favor full infra control.",
+      "githubActions": "Cloud-native teams already centered on GitHub, wanting CI/CD tightly coupled to PRs/issues/repo permissions with minimal ops overhead."
+    },
+    {
+      "dimension": "Debugging & observability",
+      "jenkins": "Rich native pipeline visualization (stage view, Blue Ocean UI historically), full console log retention on the controller, replay of past builds with edited Jenkinsfile.",
+      "githubActions": "Log viewer is solid but less introspectable for complex pipelines; re-running requires re-triggering the workflow (though re-run-with-debug-logging exists) rather than an interactive replay."
+    }
+  ],
+  "commonInterviewQuestions": [
+    {
+      "question": "How do you handle secrets in a Jenkins pipeline?",
+      "strongAnswer": "Never hardcode secrets in the Jenkinsfile or job config. Store them in the Credentials plugin (scoped to folder/job where possible, not globally), and pull them into the pipeline with `withCredentials([...])` or an `environment` block referencing the credential ID. Jenkins automatically masks credential values in console output. For anything beyond basic use, I'd push further: integrate with an external secrets manager (Vault, AWS Secrets Manager) so the credential in Jenkins is itself just a short-lived token or reference rather than the long-lived secret, and restrict which jobs/agents can access which credential IDs via role-based authorization."
+    },
+    {
+      "question": "What's the difference between declarative and scripted pipelines, and when would you use each?",
+      "strongAnswer": "Declarative is a structured, opinionated DSL — `pipeline { agent {} stages {} post {} }` — that's easier to read, lint, and enforce standards on, and it plays nicer with the Blue Ocean-style visualization and pipeline linting. Scripted is raw Groovy with a `node {}` block and no fixed structure, giving full programmatic control — loops, conditionals, dynamic stage generation, try/catch around arbitrary logic. I default to Declarative for standardization and readability, and drop into a `script {}` block inside it (or full Scripted) only when I need real branching/looping logic that Declarative's directives can't express cleanly — e.g. dynamically generating parallel stages from a list computed at runtime."
+    },
+    {
+      "question": "How do you scale Jenkins for a large team?",
+      "strongAnswer": "Never build on the controller — keep it purely for orchestration/UI and push all execution to agents. Use labeled agent pools so pipelines request capability ('linux-docker', 'gpu') rather than a specific machine, and prefer dynamic agents (Kubernetes plugin spinning up per-build pods, or EC2 plugin) over a fixed static fleet so capacity matches load and you're not paying for idle agents. For the controller itself, watch job/plugin count as it grows — heavy plugin usage and huge build history can degrade controller performance, so I'd also plan for regular housekeeping (build log rotation, artifact retention policies) and consider Jenkins HA/backup strategy since the controller is a single point of failure without one."
+    },
+    {
+      "question": "What are the security risks of the Jenkins plugin ecosystem, and how do you mitigate them?",
+      "strongAnswer": "The plugin ecosystem is Jenkins' biggest attack surface: plugins run with the same privilege as Jenkins core, are maintained at wildly varying quality by community contributors, and historically account for a large share of published Jenkins CVEs — an outdated or abandoned plugin can give an attacker code execution on the controller. Mitigations: keep the installed plugin set minimal (audit and remove unused ones), track CVEs and patch cadence rather than 'set and forget,' pin plugin versions and test upgrades in a non-prod Jenkins instance before rolling to production, and restrict who can install plugins or use the Script Console via matrix-based authorization. I'd also lock down the Groovy script-security sandbox so untrusted pipeline code can't call unapproved methods."
+    },
+    {
+      "question": "How would you integrate Jenkins with a Kubernetes-based deployment?",
+      "strongAnswer": "Two layers: build-time and deploy-time. For build-time, the Kubernetes plugin lets Jenkins dynamically provision agent pods per build (defined via a pod template with the tool containers you need — Docker/Kaniko, kubectl, helm), which scales elastically and avoids maintaining a static agent fleet. For deploy-time, the pipeline's deploy stage runs `kubectl apply` / `helm upgrade` against the target cluster, authenticated via a kubeconfig or service-account token stored in Credentials, often gated behind a manual approval step (`input`) for production. For anything beyond basic rolling updates — canary, blue-green — I'd hand rollout strategy to a tool built for it (Argo Rollouts, Istio traffic splitting) invoked from the Jenkins stage rather than reinventing that logic in Groovy."
+    },
+    {
+      "question": "What's your experience with Jenkins shared libraries?",
+      "strongAnswer": "I understand the pattern and where it earns its keep: once you have more than a couple of repos with near-identical Jenkinsfiles (same build/scan/notify boilerplate), a Shared Library — a separate Git repo of reusable Groovy steps/classes, imported with `@Library('name') _` — lets you centralize that logic, version it, and update all consuming pipelines by bumping a tag instead of copy-pasting changes across dozens of files. I'd be honest that my hands-on Jenkins time is newer than my GitHub Actions experience, where I've built the equivalent (reusable/composite workflows) more extensively — the underlying problem and design tradeoffs (DRY pipeline logic vs. added indirection/debugging difficulty) are the same, and that's where I'd draw on that experience."
+    },
+    {
+      "question": "How do you handle Jenkins upgrades and plugin compatibility?",
+      "strongAnswer": "Treat the controller like production infrastructure, not a set-and-forget tool: stage upgrades in a non-prod Jenkins instance first, check the plugin compatibility matrix before bumping core version, and upgrade plugins incrementally rather than all at once so a breakage is traceable to one change. Back up the `JENKINS_HOME` (job configs, credentials store, plugin state) before any upgrade so you can roll back. Longer Lived Release (LTS) line of Jenkins core over weekly releases for production stability, and subscribe to security advisories so plugin patching isn't reactive."
+    },
+    {
+      "question": "Compare Jenkins CI/CD to what you've built with GitHub Actions.",
+      "strongAnswer": "Same underlying job — define stages, run them on triggers, gate deploys, manage secrets — but different tradeoffs. GitHub Actions gave me a fast, low-infra-overhead way to build pipelines tightly coupled to the repo (PR checks, environment protection rules, native secrets) with YAML I could iterate on quickly. Jenkins trades that simplicity for control: a real Groovy DSL for genuinely complex pipeline logic, self-hosted agents I can place wherever the network/compliance requirements demand, and a 1,800+ plugin ecosystem that can integrate with almost anything — at the cost of owning the infrastructure and patching burden myself. My Jenkins experience is newer, but the concepts transfer directly: stages/steps map to jobs/steps, Shared Libraries map to reusable workflows, Credentials plugin maps to encrypted secrets, and 'don't build on the controller' maps to 'don't put untrusted logic in privileged runners.'"
+    },
+    {
+      "question": "How do you decide whether a build/deploy step belongs in Jenkins vs. a downstream tool (e.g., ArgoCD, Terraform)?",
+      "strongAnswer": "Jenkins is good at orchestration and triggering — deciding when something runs and gluing systems together — but I try not to make it the source of truth for state it isn't built to own. For GitOps-style deployments, I'd have Jenkins build and push an artifact/image and update a manifest repo, then let ArgoCD (which reconciles cluster state continuously) own the actual apply, rather than having Jenkins run `kubectl apply` directly and hoping nothing drifts between runs. Similarly for infrastructure changes, Jenkins can trigger `terraform plan/apply` but the state and drift detection belong to Terraform/Terraform Cloud, not to pipeline logic. The general principle: Jenkins orchestrates and sequences; specialized tools should own the domain they're built for."
+    }
+  ],
+  "honestPositioning": "Here's the straight version: my GitHub Actions and GitLab CI experience is real and hands-on — I've built, debugged, and maintained working pipelines with those tools. My Jenkins experience is newer and comes more from focused study and smaller hands-on exercises than from running it in anger at scale in production. In an interview I'm not going to pretend otherwise, because that's a fast way to get caught out by a single follow-up question about plugin upgrade pain or controller HA that only comes from having lived through it. What I will say, honestly, is that the concepts transfer directly — pipeline-as-code, credential injection instead of plaintext secrets, agent/runner isolation, stage gating, reusable pipeline logic — because I've implemented every one of those patterns in another tool, and Jenkins is a different syntax on the same underlying problem. The move is to name the gap plainly, then immediately point at the adjacent thing I've actually built as evidence I can close it fast, not to inflate the Jenkins line item to sound like something it isn't."
+}
