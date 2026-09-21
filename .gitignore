@@ -72,3 +72,4 @@ crash.*.log
 # ad-lab: real passwords go in .env (gitignored), never the committed
 # .env.example placeholder.
 ad-lab/.env
+__pycache__/
