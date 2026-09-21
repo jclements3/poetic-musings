@@ -24,6 +24,16 @@ RUN groupadd --system --gid 10001 app \
 
 COPY --from=builder /install /usr/local
 
+# python:3.12-slim ships its own pip/setuptools/wheel in every stage,
+# independent of the --prefix=/install copy above -- the runtime image
+# never needs a package manager, so remove it entirely: smaller attack
+# surface, and no CVEs to track in a tool this image will never run.
+RUN python3 -m pip uninstall --yes pip setuptools wheel 2>/dev/null; \
+    rm -rf /usr/local/lib/python3.12/site-packages/pip* \
+           /usr/local/lib/python3.12/site-packages/setuptools* \
+           /usr/local/lib/python3.12/site-packages/wheel* \
+           /usr/local/bin/pip*
+
 WORKDIR /app
 COPY app.py .
 
