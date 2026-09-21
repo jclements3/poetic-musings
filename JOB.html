@@ -82,6 +82,7 @@ button.badge-btn[aria-pressed="true"] .badge { box-shadow: 0 0 0 2px var(--accen
 }
 .row.active { outline: 2px solid var(--accent); }
 .row .req { font-weight: 600; font-size: 0.92rem; }
+.row .req strong { color: var(--accent); font-weight: 700; }
 .row .where { color: var(--muted); font-size: 0.82rem; margin-top: 0.25rem; }
 .row .status-cell { text-align: right; }
 
@@ -454,7 +455,7 @@ function renderRows() {
     row.id = "row-" + i;
     row.innerHTML = `
       <div>
-        <div class="req">${r.req}</div>
+        <div class="req"><strong>${i + 1}) ${r.req}</strong></div>
         <div class="where"><code>${r.where}</code></div>
       </div>
       <div class="status-cell">
