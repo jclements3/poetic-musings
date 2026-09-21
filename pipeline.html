@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevSecOps Pipeline — poetic-musings</title>
+<meta name="description" content="The exact steps, in order, of the two GitHub Actions workflows that run on every push to poetic-musings.">
+<style>
+:root {
+  --bg: #f7f8fa;
+  --panel: #ffffff;
+  --fg: #1c1f24;
+  --muted: #5b6472;
+  --accent: #0a5a96;
+  --accent-soft: #eaf2fa;
+  --rule: #d8dee6;
+  --code-bg: #f0f1f3;
+  --ok-border: #2f8f4e;
+  --ok-bg: #eaf7ee;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161a;
+    --panel: #1b1e24;
+    --fg: #e6e8eb;
+    --muted: #9aa4b2;
+    --accent: #6fb3e0;
+    --accent-soft: #16293a;
+    --rule: #2c3038;
+    --code-bg: #22252b;
+    --ok-border: #4caf72;
+    --ok-bg: #16261c;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.45;
+  font-size: 0.95rem;
+}
+.wrap { max-width: 1100px; margin: 0 auto; padding: 1rem clamp(1.25rem, 4vw, 3rem) 3rem; }
+
+header.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 3px double var(--rule);
+}
+header.top h1 { margin: 0; font-size: 1.3rem; }
+header.top .sub { color: var(--muted); font-size: 0.85rem; margin-top: 0.15rem; }
+header.top .links a { color: var(--accent); text-decoration: none; font-size: 0.82rem; margin-left: 1rem; }
+header.top .links a:hover { text-decoration: underline; }
+
+.trigger {
+  background: var(--accent-soft);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.trigger code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; background: var(--code-bg); padding: 0.05em 0.35em; border-radius: 3px; color: var(--fg); }
+
+h2.stage {
+  font-size: 1.1rem;
+  margin: 2rem 0 0.25rem;
+  color: var(--accent);
+}
+p.stage-sub { color: var(--muted); font-size: 0.85rem; margin: 0 0 1rem; }
+
+.job {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--ok-border);
+  border-radius: 8px;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 1rem;
+}
+.job h3 {
+  margin: 0 0 0.15rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+.job h3 .badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  color: var(--muted);
+}
+.job .needs { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.5rem; }
+.job .needs code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; }
+
+ol.steps {
+  margin: 0.5rem 0 0;
+  padding-left: 1.4rem;
+}
+ol.steps li {
+  margin: 0.28rem 0;
+  font-size: 0.87rem;
+}
+ol.steps li .what { color: var(--muted); font-size: 0.82rem; }
+ol.steps li code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.85em; background: var(--code-bg); padding: 0.05em 0.35em; border-radius: 3px; }
+
+.parallel-note {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-style: italic;
+  margin: -0.5rem 0 1rem;
+}
+
+footer.colophon {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+footer.colophon a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div>
+    <h1>The DevSecOps Pipeline, Step by Step</h1>
+    <div class="sub">Exactly what runs, in order, on every push to <code>main</code> — pulled directly from the two live workflow files.</div>
+  </div>
+  <nav class="links">
+    <a href="index.html">← Dashboard</a>
+    <a href="qrg.html">QRG / Help</a>
+    <a href="https://github.com/jclements3/poetic-musings/actions" target="_blank">Live runs ↗</a>
+  </nav>
+</header>
+
+<h2 class="stage">Stage 1 — CI Build/Lint/Test</h2>
+<p class="stage-sub">File: <code>.github/workflows/ci.yml</code></p>
+<div class="trigger">Triggers on: <code>push</code> to <code>main</code>, and every <code>pull_request</code> targeting <code>main</code>.</div>
+
+<div class="job">
+  <h3>1. Lint Python (app/status-service) <span class="badge">runs first</span></h3>
+  <ol class="steps">
+    <li>Checkout <span class="what">— clone the commit being tested</span></li>
+    <li>Set up Python <span class="what">— Python 3.12</span></li>
+    <li>Install ruff</li>
+    <li>Check for Python sources <span class="what">— skip cleanly if <code>app/</code> has no <code>.py</code> files yet</span></li>
+    <li>Run ruff lint <span class="what">— scoped to <code>app/</code> only</span></li>
+    <li>Note on Haskell/Clash suites <span class="what">— points at the separate <code>cabal test</code>/<code>stack test</code> suites elsewhere in the repo, not run here</span></li>
+  </ol>
+</div>
+
+<div class="job">
+  <h3>2. Python unit tests (status-service)</h3>
+  <div class="needs">needs: <code>lint-python</code> — only runs if step 1 passes</div>
+  <ol class="steps">
+    <li>Checkout</li>
+    <li>Set up Python</li>
+    <li>Check for requirements file</li>
+    <li>Install dependencies <span class="what">— from <code>app/status-service/requirements.txt</code></span></li>
+    <li>Run tests <span class="what">— <code>pytest</code> if a test suite exists, skip notice otherwise</span></li>
+  </ol>
+</div>
+
+<h2 class="stage">Stage 2 — DevSecOps Security Scans</h2>
+<p class="stage-sub">File: <code>.github/workflows/security.yml</code></p>
+<div class="trigger">Triggers on: <code>push</code> to <code>main</code>, every <code>pull_request</code> targeting <code>main</code>, <strong>and</strong> a weekly cron (Mondays 06:00 UTC) — vulnerability databases move even when the code doesn't.</div>
+<p class="parallel-note">All 6 jobs below run in parallel, independent of each other and of Stage 1.</p>
+
+<div class="job">
+  <h3>Secrets Detection <span class="badge">gitleaks</span></h3>
+  <ol class="steps">
+    <li>Checkout <span class="what">— full git history (<code>fetch-depth: 0</code>), not just the diff</span></li>
+    <li>Run gitleaks <span class="what">— fails the job on any match; a secret "removed" in a later commit is still in history</span></li>
+  </ol>
+</div>
+
+<div class="job">
+  <h3>SAST — Python <span class="badge">bandit</span></h3>
+  <ol class="steps">
+    <li>Checkout</li>
+    <li>Set up Python</li>
+    <li>Install bandit</li>
+    <li>Run bandit over app/ <span class="what">— SARIF report generated, then a second pass fails the job on medium/high severity</span></li>
+    <li>Upload SARIF to code scanning</li>
+  </ol>
+</div>
+
+<div class="job">
+  <h3>SBOM + Dependency Vulnerability Scan <span class="badge">Syft + pip-audit</span></h3>
+  <ol class="steps">
+    <li>Checkout</li>
+    <li>Check for requirements.txt</li>
+    <li>Generate SBOM <span class="what">— Syft, CycloneDX format, uploaded as a workflow artifact</span></li>
+    <li>Set up Python</li>
+    <li>Install pip-audit</li>
+    <li>Run pip-audit <span class="what">— checks every pinned dependency against known-CVE databases</span></li>
+  </ol>
+</div>
+
+<div class="job">
+  <h3>Container Image Scan <span class="badge">Trivy</span></h3>
+  <ol class="steps">
+    <li>Checkout</li>
+    <li>Check for Dockerfile</li>
+    <li>Build image <span class="what">— <code>docker build</code> from <code>app/status-service/Dockerfile</code>, the exact image that would ship</span></li>
+    <li>Scan image with Trivy <span class="what">— HIGH/CRITICAL gate, unfixed findings ignored (nothing to remediate yet)</span></li>
+    <li>Upload Trivy SARIF to code scanning</li>
+  </ol>
+</div>
+
+<div class="job">
+  <h3>IaC Scan — Terraform <span class="badge">tfsec</span></h3>
+  <ol class="steps">
+    <li>Checkout</li>
+    <li>Check for Terraform</li>
+    <li>Run tfsec <span class="what">— one documented exclusion (<code>aws-iam-no-policy-wildcards</code>) for object/stream-scoped ARNs; every other finding is a real gate</span></li>
+    <li>Upload tfsec SARIF to code scanning</li>
+    <li>Fail on tfsec findings</li>
+  </ol>
+</div>
+
+<div class="job">
+  <h3>K8s Manifest Scan <span class="badge">kube-linter</span></h3>
+  <ol class="steps">
+    <li>Checkout</li>
+    <li>Check for k8s manifests</li>
+    <li>Run kube-linter <span class="what">— against every manifest under <code>k8s/</code></span></li>
+  </ol>
+</div>
+
+<footer class="colophon">
+  Every job above checks its target path exists before running and skips cleanly if not — safe to land before every
+  piece of the platform exists. The same stages run a second time, in GitLab CI's own syntax, via
+  <code>.gitlab-ci.yml</code>. See <a href="https://github.com/jclements3/poetic-musings/actions">the live runs</a>
+  for actual pass/fail history, or <a href="index.html">the dashboard</a> for current status.
+</footer>
+
+</div>
+</body>
+</html>
