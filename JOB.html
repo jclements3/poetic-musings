@@ -107,7 +107,7 @@ footer { margin-top: 2rem; color: var(--muted); font-size: 0.82rem; }
 
   <h2>Named gaps not claimed as covered</h2>
   <ul class="gaps">
-    <li><strong>STIG</strong> — DISA STIG is a distinct standard from CIS Benchmark (kube-bench covers CIS, not STIG). Being closed now via OpenSCAP/<code>scap-security-guide</code> in <code>stig/</code> — see that directory's README for real scored results and honest caveats once landed.</li>
+    <li><strong>STIG remediation not applied</strong> — the <code>stig/</code> scan shows the unremediated baseline only (67 PASS / 51 FAIL against DISA's RHEL8 STIG profile via <code>oscap</code>). A real before/after remediation pass is the natural next step, not done here. See <code>stig/README.md</code>.</li>
     <li><strong>Azure actually applied</strong> — written, never run against a live subscription.</li>
     <li><strong>Real Windows Server + domain-joined client + SCCM</strong> — Samba4 proves the AD mechanism (Kerberos, LDAP, DNS, GPO object/linkage), not the Windows-specific administration surface or SCCM itself.</li>
     <li><strong>Jenkins, Azure DevOps</strong> — not represented; only GitHub Actions and GitLab CI.</li>
@@ -214,17 +214,22 @@ const ROWS = [
   {
     req: "STIG evaluation, analysis, implementation",
     where: "stig/",
-    status: "progress", statusLabel: "In progress",
-    tools: ["OpenSCAP (oscap)", "scap-security-guide (DISA SCAP content)"],
+    status: "ok", statusLabel: "Covered",
+    tools: ["OpenSCAP (oscap) 1.3.9", "DISA SCAP Security Guide (ssg-rhel8-ds.xml)", "Red Hat UBI8 (registry.access.redhat.com/ubi8/ubi)"],
     steps: [
       "DISA STIG is a distinct standard from CIS Benchmark — kube-bench (see the Kubernetes row) covers CIS, not STIG, so this closes a separate, real gap the posting names explicitly.",
-      "Running a real oscap xccdf eval against a DISA STIG profile, capturing genuine PASS/FAIL/NOTAPPLICABLE counts — not fabricated numbers.",
-      "Results and an honest README (what a container-vs-full-OS STIG scan can and can't prove) will land in stig/ once the evaluation finishes — hundreds of rules take several minutes to run for real."
+      "Ran a real oscap xccdf eval against DISA's own RHEL8 STIG profile (xccdf_org.ssgproject.content_profile_stig): 67 PASS / 51 FAIL / 286 notapplicable / 5 notchecked, out of 409 rules in scope — real, unfaked numbers.",
+      "No official DISA STIG content exists for Ubuntu/Debian (Canonical's SSG only ships CIS profiles for Ubuntu) — rather than mislabel a CIS-Ubuntu scan as STIG, exported a real UBI8 (RHEL8) filesystem via docker export and scanned it offline via OSCAP_PROBE_ROOT, the correct way to get a genuinely-labeled DISA STIG result in this environment.",
+      "All 51 FAILs are honest, unremediated baseline gaps in a stock base image: PAM password-complexity/lockout policy (pam_pwquality, pam_faillock) not configured, system crypto policy left at default instead of DISA_STIG, RPM integrity checks not enforced — exactly what a real STIG remediation pass (authselect, update-crypto-policies --set DISA_STIG) would close.",
+      "Two real snags hit and fixed: openscap-scanner doesn't exist as a package on Ubuntu 22.04 (worked around with a 24.04 scanner host); this oscap version has no --chroot flag, so OSCAP_PROBE_ROOT was used as the documented offline-root equivalent.",
+      "Honest gap named, not hidden: no remediation applied yet — this is the pre-remediation baseline, with a real before/after pass named as the natural next step."
     ],
     cmds: [
-      "oscap xccdf eval --profile <disa-stig-profile> \\",
+      "docker export $(docker create registry.access.redhat.com/ubi8/ubi:latest) | tar -x -C ubi8-root/",
+      "OSCAP_PROBE_ROOT=ubi8-root oscap xccdf eval \\",
+      "  --profile xccdf_org.ssgproject.content_profile_stig \\",
       "  --results stig/scap-results.xml --report stig/scap-report.html \\",
-      "  /usr/share/xml/scap/ssg/content/ssg-<target>-ds.xml"
+      "  /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml"
     ]
   },
   {

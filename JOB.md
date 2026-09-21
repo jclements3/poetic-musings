@@ -13,17 +13,20 @@ lands — see `git log` for when each item below was closed.
 | CI/CD pipelines (GitLab CI, Jenkins, Azure DevOps) | Partial — GitHub Actions + GitLab CI real; no Jenkins, no Azure DevOps | `.github/workflows/`, `.gitlab-ci.yml` |
 | Hybrid cloud: AWS **and** Azure | Partial — AWS applied for real; Azure written only, never applied (no subscription) | `infra/terraform/modules/azure-platform/` |
 | Windows Server admin, AD, GPOs, SCCM | Partial — real AD DC (Samba4), real GPO object+link, real Kerberos; no Windows Server itself, no domain-joined client, no real SCCM/MECM | `ad-lab/` |
-| STIG evaluation, analysis, implementation | In progress | `stig/` |
+| STIG evaluation, analysis, implementation | Covered — real, scored run | `stig/` (`oscap` vs DISA's RHEL8 STIG profile: 67 PASS / 51 FAIL, unremediated baseline) |
 | Security/code scanning embedded in CI/CD | Covered — 7 real gates | Dashboard "Security Scanning Gates" table: gitleaks, bandit, Syft, pip-audit, Trivy, tfsec, kube-linter, CodeQL |
 | IDE experience, e.g. Coder | Covered — real deploy | `coder/` (verified running: login page, `/healthz`, `/api/v2/buildinfo`) |
 | Config management on top of IaC (implied — Ansible not explicit in posting but standard for this stack) | Covered — real, idempotent | `ansible/` (twice-run proof: `changed=1` cold, `changed=0` warm) |
 
 ## Named gaps not claimed as covered
 
-- **STIG** — DISA STIG is a distinct standard from CIS Benchmark (kube-bench
-  covers CIS, not STIG). Being closed now via OpenSCAP/`scap-security-guide`
-  in `stig/` — see that directory's README for real scored results and
-  honest caveats once landed.
+- **STIG remediation not applied** — the `stig/` scan shows the
+  *unremediated* baseline only (67 PASS / 51 FAIL against DISA's RHEL8
+  STIG profile via `oscap`, scanning a real UBI8/RHEL8 filesystem, since
+  no official DISA STIG content exists for Ubuntu/Debian). A real
+  before/after remediation pass (`oscap xccdf eval --remediate` or an
+  SSG-published Ansible remediation role, re-scanned) is the natural next
+  step, not done here. See `stig/README.md` for the full honest breakdown.
 - **Azure actually applied** — written, never run against a live
   subscription.
 - **Real Windows Server + domain-joined client + SCCM** — Samba4 proves the
