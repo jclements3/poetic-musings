@@ -1,0 +1,7 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: broken}
+spec:
+  replicas: "two"
+  template:
+    spec: {containers: [{name: x, image: x}]}

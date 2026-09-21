@@ -1,0 +1,6 @@
+# app deps
+requests==2.32.3
+numpy>=1.26          # unpinned on purpose
+pydantic[email]==2.9.2
+flask~=3.0,!=3.0.1
+hypothesis

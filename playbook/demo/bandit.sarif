@@ -1,0 +1,7 @@
+{"version":"2.1.0","runs":[{"tool":{"driver":{"name":"bandit"}},"results":[
+ {"ruleId":"B105","level":"warning","locations":[{"physicalLocation":{"artifactLocation":{"uri":"app/config.py"}}}]},
+ {"ruleId":"B602","level":"error","locations":[{"physicalLocation":{"artifactLocation":{"uri":"app/run.py"}}}]},
+ {"ruleId":"B602","level":"error","locations":[{"physicalLocation":{"artifactLocation":{"uri":"app/run.py"}}}]},
+ {"ruleId":"B404","level":"note","locations":[{"physicalLocation":{"artifactLocation":{"uri":"app/util.py"}}}]},
+ {"ruleId":"B999","level":"warning"}
+]}]}

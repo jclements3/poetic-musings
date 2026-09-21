@@ -1,0 +1,2 @@
+[{"rule": "B602", "path": "app/run.py", "reason": "vetted subprocess use", "expires": "2026-12-31"},
+ {"rule": "B105", "path": "", "reason": "expired example", "expires": "2025-01-01"}]

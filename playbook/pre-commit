@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# zone 2: pre-commit gate -- secrets + pins before anything leaves the workstation.
+# install: cp hooks/pre-commit .git/hooks/ && chmod +x .git/hooks/pre-commit
+TOOLS="$(cd "$(dirname "$(readlink -f "$0")")/../../tools" 2>/dev/null && pwd)"
+[ -n "$TOOLS" ] || TOOLS="tools"
+python3 "$TOOLS/secrets.py" . || exit 1
+[ -f requirements.txt ] && { python3 "$TOOLS/deps.py" requirements.txt || exit 1; }
+exit 0

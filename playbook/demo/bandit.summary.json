@@ -1,0 +1,24 @@
+{
+  "tool": "bandit",
+  "total": 4,
+  "by_level": {
+    "warning": 1,
+    "error": 2,
+    "note": 1
+  },
+  "top_rules": [
+    [
+      "B602",
+      2
+    ],
+    [
+      "B105",
+      1
+    ],
+    [
+      "B404",
+      1
+    ]
+  ],
+  "worst": 3
+}
