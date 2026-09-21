@@ -1,24 +1,57 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=6, user-scalable=yes">
 <title>PM controller — final layout</title>
+<meta name="description" content="PM controller final layout: panel, connectors, board layout, and the signal-processing component map, with live-generated diagrams.">
 <style>
-html,body{margin:0;background:#fff !important;color:#111 !important;font:16px/1.5 ui-monospace,Menlo,Consolas,monospace}
+:root {
+  --bg: #f7f8fa; --panel: #ffffff; --fg: #1c1f24; --muted: #5b6472;
+  --accent: #0a5a96; --accent-soft: #eaf2fa; --rule: #d8dee6; --code-bg: #f0f1f3;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161a; --panel: #1b1e24; --fg: #e6e8eb; --muted: #9aa4b2;
+    --accent: #6fb3e0; --accent-soft: #16293a; --rule: #2c3038; --code-bg: #22252b;
+  }
+}
+* { box-sizing: border-box; }
+html,body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 ui-monospace,Menlo,Consolas,monospace}
 main{max-width:1100px;margin:0 auto;padding:16px}
-h1{font-size:22px;margin:0 0 4px} h2{font-size:17px;margin:28px 0 8px;border-bottom:2px solid #111;padding-bottom:4px}
-p{margin:0 0 10px} .sub{color:#444}
-table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;padding:6px 8px;border-bottom:1px solid #999;vertical-align:top} th{background:#eee}
-.wrap{overflow:auto;border:1px solid #ccc;margin:8px 0} .wrap svg{min-width:900px}
-.chain{font-size:15px;font-weight:700;letter-spacing:.04em;padding:10px;background:#f4f1e8;border-left:6px solid #a8700f}
+header.top {
+  display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
+  gap:0.5rem 1.5rem;padding-bottom:10px;margin-bottom:10px;border-bottom:2px solid var(--rule);
+}
+header.top h1{margin:0;font-size:20px}
+header.top .links a{color:var(--accent);text-decoration:none;font-size:13px;margin-left:14px}
+header.top .links a:hover{text-decoration:underline}
+h2{font-size:17px;margin:28px 0 8px;border-bottom:2px solid var(--rule);padding-bottom:4px;color:var(--fg)}
+p{margin:0 0 10px} .sub{color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--rule);vertical-align:top} th{background:var(--accent-soft)}
+.wrap{overflow:auto;border:1px solid var(--rule);margin:8px 0;background:var(--panel)} .wrap svg{min-width:900px}
+.chain{font-size:15px;font-weight:700;letter-spacing:.04em;padding:10px;background:var(--accent-soft);border-left:6px solid var(--accent)}
 .k{font-weight:700}
-.srcnav{font-size:13px;background:#f4f1e8;border:1px solid #a8700f;border-radius:4px;padding:10px 12px;margin:10px 0}
-.srcnav .lbl2{color:#a8700f;font-weight:700;margin-right:6px}
-.srcnav a{color:#111;text-decoration:none;border-bottom:1px solid #a8700f;margin:0 2px}
-.srcnav a:hover{background:#eee}
+.srcnav{font-size:13px;background:var(--accent-soft);border:1px solid var(--accent);border-radius:4px;padding:10px 12px;margin:10px 0}
+.srcnav .lbl2{color:var(--accent);font-weight:700;margin-right:6px}
+.srcnav a{color:var(--fg);text-decoration:none;border-bottom:1px solid var(--accent);margin:0 2px}
+.srcnav a:hover{background:var(--code-bg)}
 .srcnav .grp{margin:4px 0}
-a.src{color:#111;text-decoration:none;border-bottom:1px dotted #a8700f}
-a.src:hover{background:#eee}
+a.src{color:var(--fg);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a.src:hover{background:var(--code-bg)}
+@media (max-width: 560px) {
+  header.top .links{display:flex;flex-wrap:wrap}
+  header.top .links a{margin-left:0;margin-right:14px}
+}
 </style></head><body><main>
-<h1>PM CONTROLLER — FINAL LAYOUT</h1>
+<header class="top">
+  <h1>PM CONTROLLER — FINAL LAYOUT</h1>
+  <nav class="links">
+    <a href="index.html">← Dashboard</a>
+    <a href="qrg.html">QRG / Help</a>
+    <a href="pipeline.html">DevSecOps</a>
+    <a href="JOB.html">Job Req Mapping</a>
+    <a href="https://jclements3.github.io/poetic-musings/" target="_blank">Live site ↗</a>
+    <a href="https://github.com/jclements3/poetic-musings" target="_blank">Repo ↗</a>
+  </nav>
+</header>
 <p class="sub">One portable controller: 3D-printed 49-key panel (~504 × 150 mm face, 16 mm key pitch), ULX3S ECP5-85F inside,
 Oracle as the brains. Boots to a mode menu on the bar TFT; every demonstration reachable in under a
 minute, no laptop. Sleigh Glide travels alongside (tube + driver board, gate ribbon to the box); the Erand49 harp is a separate
