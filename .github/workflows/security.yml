@@ -210,6 +210,7 @@ jobs:
         with:
           working_directory: infra/terraform
           additional_args: --exclude aws-iam-no-policy-wildcards
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Skip notice
         if: steps.tf.outputs.found != 'true'
