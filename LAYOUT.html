@@ -56,6 +56,25 @@ Every spoke takes its knobs from S0–S4 and the keys and shows its output on V0
 </div>
 </div>
 
+<h2>Inside the box — what connects where</h2>
+<table>
+<tr><th>Item</th><th>Where</th><th>Connects</th></tr>
+<tr><td>Battery bay + USB power bank</td><td>center-left, underside door</td><td>USB-C stub to power board; bank is removable — swap mid-demo, charge at home</td></tr>
+<tr><td class="k">ULX3S ECP5-85F</td><td>center, under display band</td><td>everything; GPDI→TFT driver, SDRAM/microSD/USB onboard</td></tr>
+<tr><td>TFT + HDMI driver (matched kit)</td><td>display band, 55 mm</td><td>GPDI from ULX3S — verify active area before cutting</td></tr>
+<tr><td>Key/button matrix (8×8)</td><td>under keybed</td><td>49 keys A0–G7 + P0–P9 fold into one scan</td></tr>
+<tr><td>Slider board</td><td>top-right</td><td>S0/S1 → 2 ADC ch; S2–S4 → GPIO</td></tr>
+<tr><td>Audio: ΣΔ/PWM DAC → RC LP → amp</td><td>left wall</td><td>speaker (underside) + LINE OUT; CW sidetone mixed in</td></tr>
+<tr><td>Colpitts oscillator boards ×2</td><td>at antenna posts</td><td>theremin <a class="src" href="Theremin/">T</a>; relay to AD9226 ADC for <a class="src" href="SDR/">SDR S</a></td></tr>
+<tr><td>AD9226-class ADC</td><td>rear, at antennas</td><td>direct-sampling HF for <a class="src" href="SDR/">S</a></td></tr>
+<tr><td>u-blox GPS + PPS</td><td>rear, at SMA</td><td>disciplines <a class="src" href="IRIG/">IRIG</a> clock (<a class="src" href="GPS/">G</a>→<a class="src" href="IRIG/">I</a>)</td></tr>
+<tr><td>RMII PHY PMOD</td><td>rear, at RJ45</td><td><a class="src" href="Network/">N</a>: UDP/Ch.10</td></tr>
+<tr><td>UHF beacon PA (<a class="src" href="UHF/">U</a>)</td><td>rear, shielded corner</td><td>GPS-disciplined CW/WSPR → TX SMA</td></tr>
+<tr><td>Sleigh gates (<a class="src" href="Coil/SleighGlide/">C</a>)</td><td>rear SLEIGH 10-pin, TIME/NET group</td><td>8 gate lines (3.3 V, 100 Ω series) + show-switch sense + ground → MOSFET driver board at the tube; ribbon out = pulldowns park the sleigh; 24 V stays at the tube</td></tr>
+<tr><td>Snooker camera (<a class="src" href="Imaging/">I</a>) — OV9281 on an overhead mount</td><td>external; DVP ribbon + strobe/trigger line to rear</td><td>DVP capture + <code>strobe_latch</code> IRIG stamp; per-ball centroids over N</td></tr>
+<tr><td>Snooker Doppler module (<a class="src" href="MAIDEN/firmware/doppler/">M</a>) — CDM324-class 24 GHz + SPI ADC</td><td>external, aimed down the table; header at rear</td><td>CIC → FFT → CFAR → velocity records on V0 and over N</td></tr>
+</table>
+
 <h2>Top — player's view</h2>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="49-key VL-1 derivative panel layout"><style>.t{font-size:8px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}.tt{font-size:6px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}.tw{font-size:7px;font-weight:700;fill:#ffffff;font-family:ui-monospace,Menlo,Consolas,monospace}.lbl{font-size:6px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}.sh{font-size:6px;fill:#555;font-family:ui-monospace,Menlo,Consolas,monospace}.bk{font-size:8px;font-weight:700;fill:#fff;font-family:ui-monospace,Menlo,Consolas,monospace}.bks{font-size:7px;font-weight:700;fill:#ffffff;font-family:ui-monospace,Menlo,Consolas,monospace}.hp{font-size:6px;font-weight:700;fill:#a8700f;font-family:ui-monospace,Menlo,Consolas,monospace}.hpb{font-size:6px;font-weight:700;fill:#f2c14e;font-family:ui-monospace,Menlo,Consolas,monospace}.id{font-size:6px;fill:#b3341c;font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700}</style>
 <rect x="5" y="5" width="1290" height="320" rx="12" fill="#e9e4d6" stroke="#b9b3a3" stroke-width="1.5"/>
@@ -290,26 +309,6 @@ underside, rear-ported. Silk legends shown are VL-1 mode; final silk gets a mode
 <text x="190" y="235" class="us" text-anchor="middle">JC · Laceys Spring, AL</text>
 <text x="25" y="445" class="us">Loading: coin-turn the latch, slide the door off its tabs, drop the bank in USB-end first onto the foam pads, plug the captive USB-C stub into the bank, door back on. The stub reaches the power board's OR-diode, so the bank and wall brick can both be connected — the box just keeps running. Bank charges at home on its own charger; a spare bank in the lid pocket is the "battery swap".</text>
 </svg></div>
-<h2>Inside the box — what connects where</h2>
-<table>
-<tr><th>Item</th><th>Where</th><th>Connects</th></tr>
-<tr><td>Battery bay + USB power bank</td><td>center-left, underside door</td><td>USB-C stub to power board; bank is removable — swap mid-demo, charge at home</td></tr>
-<tr><td class="k">ULX3S ECP5-85F</td><td>center, under display band</td><td>everything; GPDI→TFT driver, SDRAM/microSD/USB onboard</td></tr>
-<tr><td>TFT + HDMI driver (matched kit)</td><td>display band, 55 mm</td><td>GPDI from ULX3S — verify active area before cutting</td></tr>
-<tr><td>Key/button matrix (8×8)</td><td>under keybed</td><td>49 keys A0–G7 + P0–P9 fold into one scan</td></tr>
-<tr><td>Slider board</td><td>top-right</td><td>S0/S1 → 2 ADC ch; S2–S4 → GPIO</td></tr>
-<tr><td>Audio: ΣΔ/PWM DAC → RC LP → amp</td><td>left wall</td><td>speaker (underside) + LINE OUT; CW sidetone mixed in</td></tr>
-<tr><td>Colpitts oscillator boards ×2</td><td>at antenna posts</td><td>theremin <a class="src" href="Theremin/">T</a>; relay to AD9226 ADC for <a class="src" href="SDR/">SDR S</a></td></tr>
-<tr><td>AD9226-class ADC</td><td>rear, at antennas</td><td>direct-sampling HF for <a class="src" href="SDR/">S</a></td></tr>
-<tr><td>u-blox GPS + PPS</td><td>rear, at SMA</td><td>disciplines <a class="src" href="IRIG/">IRIG</a> clock (<a class="src" href="GPS/">G</a>→<a class="src" href="IRIG/">I</a>)</td></tr>
-<tr><td>RMII PHY PMOD</td><td>rear, at RJ45</td><td><a class="src" href="Network/">N</a>: UDP/Ch.10</td></tr>
-<tr><td>UHF beacon PA (<a class="src" href="UHF/">U</a>)</td><td>rear, shielded corner</td><td>GPS-disciplined CW/WSPR → TX SMA</td></tr>
-<tr><td>Sleigh gates (<a class="src" href="Coil/SleighGlide/">C</a>)</td><td>rear SLEIGH 10-pin, TIME/NET group</td><td>8 gate lines (3.3 V, 100 Ω series) + show-switch sense + ground → MOSFET driver board at the tube; ribbon out = pulldowns park the sleigh; 24 V stays at the tube</td></tr>
-<tr><td>Snooker camera (<a class="src" href="Imaging/">I</a>) — OV9281 on an overhead mount</td><td>external; DVP ribbon + strobe/trigger line to rear</td><td>DVP capture + <code>strobe_latch</code> IRIG stamp; per-ball centroids over N</td></tr>
-<tr><td>Snooker Doppler module (<a class="src" href="MAIDEN/firmware/doppler/">M</a>) — CDM324-class 24 GHz + SPI ADC</td><td>external, aimed down the table; header at rear</td><td>CIC → FFT → CFAR → velocity records on V0 and over N</td></tr>
-</table>
-
-
 <h2>Power</h2>
 <p class="sub">One rule: <b>nothing above 5 V inside the PM box, ever.</b> Mains stays in a sealed wall
 brick; Sleigh Glide's 24 V coil supply is a different rig and never travels in this case.</p>
