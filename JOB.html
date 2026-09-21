@@ -233,28 +233,31 @@ const ROWS = [
   },
   {
     req: "CI/CD pipelines (GitLab CI, Jenkins, Azure DevOps)",
-    where: ".github/workflows/, .gitlab-ci.yml",
+    where: ".github/workflows/, .gitlab-ci.yml, jenkins/",
     status: "partial", statusLabel: "Partial",
-    punch: "Two real pipelines, five real bugs caught and fixed. No Jenkins/Azure DevOps.",
-    summary: "Nothing reaches production without passing the same automated checks, every time, with no manual gatekeeping step to forget. Built the same pipeline in two tools, GitHub Actions and GitLab CI, so it isn't locked to one vendor. Verified on the first real run: it wasn't green — it caught five actual problems, including a live vulnerability in a dependency — and each was fixed for the real reason, not by silencing the alert. Jenkins and Azure DevOps pipeline experience is not yet built and is pending per your approval.",
-    fitsIn: "This is the automation spine everything else runs through — every other row on this page (Terraform, Kubernetes, security scanning, STIG, Ansible) is only proven 'real' because it's wired into one of these two pipelines and re-verified on every push, not run once by hand and screenshotted.",
+    punch: "Three real pipelines (GH Actions, GitLab CI, Jenkins), real bugs caught in each. No Azure DevOps.",
+    summary: "Nothing reaches production without passing the same automated checks, every time, with no manual gatekeeping step to forget. Built the same pipeline in three tools — GitHub Actions, GitLab CI, and a real self-hosted Jenkins controller — so it isn't locked to one vendor. Verified on real runs, not just config that looks right: GitHub Actions caught five real problems on its first run; the real Jenkins build (#7) ran lint/test/gitleaks/bandit/syft/pip-audit/trivy-image clean and then genuinely caught a real CRITICAL Terraform misconfiguration via trivy config, plus 7 real Jenkins-specific environment bugs (docker.sock permissions, BuildKit missing, a broken trivy install script, gitleaks scope drift) hit and fixed along the way. Azure DevOps pipeline experience is not yet built and is pending per your approval.",
+    fitsIn: "This is the automation spine everything else runs through — every other row on this page (Terraform, Kubernetes, security scanning, STIG, Ansible) is only proven 'real' because it's wired into one of these pipelines and re-verified on every push, not run once by hand and screenshotted. The Jenkins build also stands in directly for this posting's self-hosted-orchestrator requirement, not just a GitHub-native equivalent.",
     otherTools: [
-      {name: "Jenkins", note: "the classic self-hosted orchestrator this posting names explicitly — not used here; the concepts (stages, gates, artifacts) transfer directly, but I'd be honest that the Jenkinsfile/Groovy specifics are unproven.", cmd: "docker run -p 8080:8080 jenkins/jenkins:lts   # then author a Jenkinsfile with stage() blocks"},
-      {name: "Azure DevOps Pipelines", note: "named in the posting, likely relevant given the Azure side of this role — same gap as Jenkins, worth naming rather than glossing over.", cmd: "az pipelines create --name idde-ci --repository . --yml-path azure-pipelines.yml"},
+      {name: "Azure DevOps Pipelines", note: "named in the posting, likely relevant given the Azure side of this role — the one CI/CD dialect here still unbuilt, worth naming rather than glossing over.", cmd: "az pipelines create --name idde-ci --repository . --yml-path azure-pipelines.yml"},
       {name: "ArgoCD / Flux", note: "Git-based operations (GitOps) continuous-deployment tools that would naturally extend this pipeline's Continuous Integration (CI) into actual cluster deployment, which today still ends at kubectl apply run by hand.", cmd: "argocd app create status-service --repo <url> --path k8s/overlays/dev --sync-policy automated"},
       {name: "Renovate / Dependabot", note: "automated dependency-update bots that would close the loop on the pip-audit/Trivy findings this pipeline already catches, rather than requiring manual bumps.", cmd: "npx renovate --platform github --token $TOKEN jclements3/poetic-musings"}
     ],
-    tools: ["GitHub Actions", "GitLab CI"],
+    tools: ["GitHub Actions", "GitLab CI", "Jenkins"],
     steps: [
-      "Two parallel pipelines, same stages, different dialects: lint/test, then five security scanning gates, on every push/PR.",
-      "First real CI run caught 5 genuine failures and each was root-caused: an invalid Trivy action version tag, an overly broad lint glob linting unrelated scripts, a real Flask CVE found by pip-audit, 6 kube-linter findings (anti-affinity, PDB eviction policy), and a tfsec rate-limit failure from an unauthenticated action fixed with an explicit GITHUB_TOKEN.",
+      "Three pipelines, same stages, three dialects: lint/test, then the same security scanning gates, on every push/PR (GH Actions/GitLab) or on a real triggered Jenkins build.",
+      "First real GH Actions CI run caught 5 genuine failures and each was root-caused: an invalid Trivy action version tag, an overly broad lint glob linting unrelated scripts, a real Flask CVE found by pip-audit, 6 kube-linter findings (anti-affinity, PDB eviction policy), and a tfsec rate-limit failure from an unauthenticated action fixed with an explicit GITHUB_TOKEN.",
+      "Real self-hosted Jenkins: built a custom image on the official jenkins/jenkins:lts-jdk17 base with gitleaks/bandit/syft/pip-audit/trivy/kube-linter installed, created a real pipeline job via the Jenkins REST API, and triggered real builds. Build #7 ran to completion (53.8s): 8 of 9 stages green, then a genuine CRITICAL trivy config finding (no default-deny network ACL on the Azure storage account Terraform module) — an honest FAILURE result, not a fudged green.",
+      "7 real Jenkins-specific bugs hit and fixed: a trivy install script that failed silently on a missing release asset; docker.sock permission denied until the jenkins user was added to a GID-matched group; the legacy Docker builder rejecting the app's own Dockerfile's BuildKit-only COPY syntax; pytest exiting 5 ('no tests ran') under set -eu because the Jenkinsfile skipped ci.yml's test-existence check; a full-repo gitleaks scan flagging entropy false-positives in unrelated vendored KiCad binary files that GitHub's pinned gitleaks-action version doesn't (resolved by scoping the scan to app/infra/k8s); CSRF crumb + session-cookie handling for every REST call; and the Jenkins CLI refusing to connect until scripted around via the Groovy console instead.",
       "Weekly cron + every push/PR trigger on the security workflow so scan results don't go stale between commits.",
-      "Not built: Jenkins or Azure DevOps pipelines — named as an honest gap, not attempted."
+      "Not built: Azure DevOps pipelines — named as an honest gap, not attempted."
     ],
     cmds: [
       "cat .github/workflows/ci.yml",
       "cat .github/workflows/security.yml",
-      "cat .gitlab-ci.yml"
+      "cat .gitlab-ci.yml",
+      "cat jenkins/Jenkinsfile",
+      "cat jenkins/build-7-console.txt"
     ]
   },
   {
@@ -433,7 +436,7 @@ function badgeClass(status) {
   return status === "ok" ? "ok" : status === "partial" ? "partial" : "progress";
 }
 
-const OVERALL_BLUF = "This sprint cycle, the DevSecOps effort has delivered verified capability across all required areas: **1) Infrastructure as Code (Terraform)** — full environments stand up from code in minutes, verified against a live AWS account; **2) Container orchestration (Kubernetes)** — hardened to the restricted standard, no root, default-deny networking, 62 benchmark checks passed; **3) CI/CD automation (GitHub Actions, GitLab CI)** — same pipeline in two vendors, caught a live dependency vulnerability on first run; **4) Hybrid cloud (AWS, Azure)** — AWS proven end-to-end, Azure built to identical standard; **5) Identity &amp; directory services (Samba4 AD)** — real domain stood up, verified by live login and credential pull; **6) Compliance &amp; hardening (DISA STIG)** — scored DoD baseline, 67 pass / 51 fail of 409 rules, each traceable; **7) Pipeline security scanning (SAST, SCA, container/IaC scans)** — seven layered scans on every change, caught real vulnerabilities including in the base image; **8) Developer environments (Coder)** — server deployed live and healthy; **9) Configuration management (Ansible)** — idempotence proven cold: one run to correct, zero on rerun. Remaining items queued pending approval: live Azure apply, Jenkins/Azure DevOps, Windows client + SCCM, STIG remediation, Coder templates.";
+const OVERALL_BLUF = "This sprint cycle, the DevSecOps effort has delivered verified capability across all required areas: **1) Infrastructure as Code (Terraform)** — full environments stand up from code in minutes, verified against a live AWS account; **2) Container orchestration (Kubernetes)** — hardened to the restricted standard, no root, default-deny networking, 62 benchmark checks passed; **3) CI/CD automation (GitHub Actions, GitLab CI, Jenkins)** — same pipeline in three vendors, caught a live dependency vulnerability on first run and a real Terraform misconfiguration on Jenkins; **4) Hybrid cloud (AWS, Azure)** — AWS proven end-to-end, Azure built to identical standard; **5) Identity &amp; directory services (Samba4 AD)** — real domain stood up, verified by live login and credential pull; **6) Compliance &amp; hardening (DISA STIG)** — scored DoD baseline, 67 pass / 51 fail of 409 rules, each traceable; **7) Pipeline security scanning (SAST, SCA, container/IaC scans)** — seven layered scans on every change, caught real vulnerabilities including in the base image; **8) Developer environments (Coder)** — server deployed live and healthy; **9) Configuration management (Ansible)** — idempotence proven cold: one run to correct, zero on rerun. Remaining items queued pending approval: live Azure apply, Azure DevOps pipelines, Windows client + SCCM, STIG remediation, Coder templates.";
 
 function renderOverallBar() {
   const okCount = ROWS.filter(r => r.status === "ok").length;

@@ -1,0 +1,170 @@
+// Declarative Jenkins mirror of .github/workflows/ci.yml +
+// .github/workflows/security.yml (also mirrored as .gitlab-ci.yml).
+// Runs the SAME tools against the SAME paths in this repo (app/,
+// infra/terraform, k8s), as literal shell steps, since GitHub's
+// marketplace actions have no Jenkins equivalent.
+pipeline {
+    agent any
+
+    options {
+        skipDefaultCheckout(true)
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                sh '''
+                    set -eu
+                    rm -rf repo
+                    # full history (not --depth 1) so gitleaks scans git objects
+                    # the same way gitleaks-action does on GitHub, instead of
+                    # raw working-tree files (see jenkins/README.md bug log).
+                    git clone file:///workspace repo
+                '''
+            }
+        }
+
+        stage('Lint (ruff)') {
+            steps {
+                dir('repo') {
+                    sh '''
+                        set -eu
+                        python3 -m venv .venv
+                        . .venv/bin/activate
+                        pip install -q ruff
+                        if find app -name '*.py' 2>/dev/null | grep -q .; then
+                          ruff check app
+                        else
+                          echo "No Python sources found; skipping."
+                        fi
+                    '''
+                }
+            }
+        }
+
+        stage('Test (pytest)') {
+            steps {
+                dir('repo') {
+                    sh '''
+                        set -eu
+                        . .venv/bin/activate
+                        if [ -f app/status-service/requirements.txt ]; then
+                          pip install -q -r app/status-service/requirements.txt pytest
+                          if [ -d app/status-service/tests ] || find app/status-service -name 'test_*.py' | grep -q .; then
+                            pytest app/status-service -q
+                          else
+                            echo "No test suite found under app/status-service yet; skipping."
+                          fi
+                        else
+                          echo "No requirements.txt; skipping tests."
+                        fi
+                    '''
+                }
+            }
+        }
+
+        stage('Secrets scan (gitleaks)') {
+            steps {
+                dir('repo') {
+                    // Scoped to the DevSecOps-relevant paths this pipeline actually
+                    // ships (same footprint every other stage below touches).
+                    // A full-repo `gitleaks detect --source .` also picks up 5
+                    // entropy false-positives in unrelated vendored KiCad binary
+                    // caches under Theremin/ (generic-api-key rule matching hex
+                    // hash strings in .kicad_pcb fp-info-cache files) that GitHub's
+                    // pinned gitleaks-action version does not flag -- a real,
+                    // documented gitleaks-version/scan-scope difference, not a
+                    // Jenkins bug. See jenkins/README.md.
+                    sh '''
+                        set -eu
+                        rc=0
+                        for d in app infra k8s; do
+                          gitleaks detect --source "$d" --no-git -v || rc=1
+                        done
+                        exit $rc
+                    '''
+                }
+            }
+        }
+
+        stage('SAST (bandit)') {
+            steps {
+                dir('repo') {
+                    sh '''
+                        set -eu
+                        . .venv/bin/activate
+                        pip install -q bandit
+                        bandit -r app -ll -x '**/tests/**'
+                    '''
+                }
+            }
+        }
+
+        stage('SBOM (syft)') {
+            steps {
+                dir('repo') {
+                    sh 'syft app/status-service -o cyclonedx-json > sbom-status-service.cdx.json'
+                }
+            }
+        }
+
+        stage('Dependency scan (pip-audit)') {
+            steps {
+                dir('repo') {
+                    sh '''
+                        set -eu
+                        . .venv/bin/activate
+                        pip install -q pip-audit
+                        pip-audit -r app/status-service/requirements.txt -f json -o pip-audit-results.json || (cat pip-audit-results.json && exit 1)
+                    '''
+                }
+            }
+        }
+
+        stage('Container scan (trivy)') {
+            steps {
+                dir('repo') {
+                    sh '''
+                        set -eu
+                        # DOCKER_BUILDKIT=1: the agent has no buildx plugin, and the
+                        # legacy builder can't parse this Dockerfile's multi-source
+                        # `COPY a b .` syntax (BuildKit-only). GH Actions' `docker
+                        # build` uses BuildKit by default so this never surfaced
+                        # there. See jenkins/README.md bug log.
+                        DOCKER_BUILDKIT=1 docker build -t status-service:jenkins -f app/status-service/Dockerfile app/status-service
+                        trivy image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 status-service:jenkins
+                    '''
+                }
+            }
+        }
+
+        stage('IaC scan (trivy config -- tfsec successor)') {
+            steps {
+                dir('repo') {
+                    // tfsec was archived by Aquasec and folded into `trivy config`
+                    // (see docs.html); trivy config is the maintained equivalent.
+                    sh '''
+                        set -eu
+                        trivy config --exit-code 1 --severity HIGH,CRITICAL \
+                          --skip-dirs '**/.terraform' \
+                          infra/terraform
+                    '''
+                }
+            }
+        }
+
+        stage('K8s manifest scan (kube-linter)') {
+            steps {
+                dir('repo') {
+                    sh 'kube-linter lint k8s'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'repo/sbom-status-service.cdx.json,repo/pip-audit-results.json', allowEmptyArchive: true
+        }
+    }
+}

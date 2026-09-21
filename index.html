@@ -344,7 +344,7 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
 
   <div class="card status-ok">
     <div class="card-head"><h3><a class="term" title="Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.">CI/CD</a></h3><span class="badge ok">Live on every push</span></div>
-    <p class="desc">Two parallel pipelines, same stages, different dialects: lint/test, then five security gates. Every scanning job checks its target path exists first and skips cleanly, so it's safe to land before every piece of the platform exists.</p>
+    <p class="desc">Three dialects of the same pipeline: lint/test, then the same security gates. Every scanning job checks its target path exists first and skips cleanly, so it's safe to land before every piece of the platform exists. A real, self-hosted <a class="term" title="An open-source automation server for building CI/CD pipelines, typically self-hosted, using Groovy-based declarative Jenkinsfiles.">Jenkins</a> controller (official <code>jenkins/jenkins:lts-jdk17</code> image) was also stood up and a real pipeline job triggered against this repo — build #7 ran lint/test/gitleaks/bandit/syft/pip-audit/trivy image clean, then genuinely caught a real CRITICAL Terraform misconfiguration (no default-deny network ACL on the Azure storage account module) via <code>trivy config</code>, the maintained successor to the now-archived tfsec.</p>
     <ul class="reslist">
       <li>Jobs: <code>lint-python</code>, <code>python-tests</code></li>
       <li><code>secrets-scan</code>, <code>sast-python</code></li>
@@ -352,9 +352,10 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
       <li><code>container-scan</code>, <code>iac-scan</code></li>
       <li><code>k8s-manifest-scan</code></li>
       <li>Weekly cron + every push/PR</li>
+      <li>Jenkins build #7: 8/9 stages green, 1 real CRITICAL IaC finding — <a href="jenkins/build-7-console.txt">real console log</a></li>
     </ul>
-    <div class="toolbadges"><span>GitHub Actions</span><span>GitLab CI</span></div>
-    <div class="files">📁 <a href=".github/workflows/">.github/workflows/{ci,security}.yml</a> · <a href=".gitlab-ci.yml">.gitlab-ci.yml</a></div>
+    <div class="toolbadges"><span>GitHub Actions</span><span>GitLab CI</span><span title="An open-source automation server for building CI/CD pipelines, typically self-hosted, using Groovy-based declarative Jenkinsfiles.">Jenkins</span></div>
+    <div class="files">📁 <a href=".github/workflows/">.github/workflows/{ci,security}.yml</a> · <a href=".gitlab-ci.yml">.gitlab-ci.yml</a> · <a href="jenkins/">jenkins/</a></div>
   </div>
 
   <div class="card status-ok">

@@ -1,0 +1,24 @@
+services:
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Must match the host's `getent group docker` GID so the jenkins
+        # user can use the bind-mounted /var/run/docker.sock.
+        DOCKER_GID: "987"
+    image: poetic-musings-jenkins:local
+    ports:
+      - "8081:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      # repo checked out read-write so the container-scan stage can
+      # `docker build` app/status-service via the mounted host socket
+      - ../:/workspace:rw
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+
+volumes:
+  jenkins_home:

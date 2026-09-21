@@ -1,0 +1,446 @@
+Started by user unknown or anonymous
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/devsecops-pipeline
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] sh
++ set -eu
++ rm -rf repo
++ git clone file:///workspace repo
+Cloning into 'repo'...
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Lint (ruff))
+[Pipeline] dir
+Running in /var/jenkins_home/workspace/devsecops-pipeline/repo
+[Pipeline] {
+[Pipeline] sh
++ set -eu
++ python3 -m venv .venv
++ . .venv/bin/activate
++ deactivate nondestructive
++ [ -n  ]
++ [ -n  ]
++ hash -r
++ [ -n  ]
++ unset VIRTUAL_ENV
++ unset VIRTUAL_ENV_PROMPT
++ [ ! nondestructive = nondestructive ]
++ uname
++ export VIRTUAL_ENV=/var/jenkins_home/workspace/devsecops-pipeline/repo/.venv
++ _OLD_VIRTUAL_PATH=/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++ PATH=/var/jenkins_home/workspace/devsecops-pipeline/repo/.venv/bin:/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++ export PATH
++ VIRTUAL_ENV_PROMPT=.venv
++ export VIRTUAL_ENV_PROMPT
++ [ -n  ]
++ [ -z  ]
++ _OLD_VIRTUAL_PS1=$ 
++ PS1=(.venv) $ 
++ export PS1
++ hash -r
++ pip install -q ruff
++ find app -name *.py
++ grep -q .
++ ruff check app
+All checks passed!
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test (pytest))
+[Pipeline] dir
+Running in /var/jenkins_home/workspace/devsecops-pipeline/repo
+[Pipeline] {
+[Pipeline] sh
++ set -eu
++ . .venv/bin/activate
++ deactivate nondestructive
++ [ -n  ]
++ [ -n  ]
++ hash -r
++ [ -n  ]
++ unset VIRTUAL_ENV
++ unset VIRTUAL_ENV_PROMPT
++ [ ! nondestructive = nondestructive ]
++ uname
++ export VIRTUAL_ENV=/var/jenkins_home/workspace/devsecops-pipeline/repo/.venv
++ _OLD_VIRTUAL_PATH=/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++ PATH=/var/jenkins_home/workspace/devsecops-pipeline/repo/.venv/bin:/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++ export PATH
++ VIRTUAL_ENV_PROMPT=.venv
++ export VIRTUAL_ENV_PROMPT
++ [ -n  ]
++ [ -z  ]
++ _OLD_VIRTUAL_PS1=$ 
++ PS1=(.venv) $ 
++ export PS1
++ hash -r
++ [ -f app/status-service/requirements.txt ]
++ pip install -q -r app/status-service/requirements.txt pytest
++ [ -d app/status-service/tests ]
++ find app/status-service -name test_*.py
++ grep -q .
++ echo No test suite found under app/status-service yet; skipping.
+No test suite found under app/status-service yet; skipping.
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Secrets scan (gitleaks))
+[Pipeline] dir
+Running in /var/jenkins_home/workspace/devsecops-pipeline/repo
+[Pipeline] {
+[Pipeline] sh
++ set -eu
++ rc=0
++ gitleaks detect --source app --no-git -v
+
+    ○
+    │╲
+    │ ○
+    ○ ░
+    ░    gitleaks
+
+[90m10:15PM[0m [32mINF[0m scan completed in 11.6ms
+[90m10:15PM[0m [32mINF[0m no leaks found
++ gitleaks detect --source infra --no-git -v
+
+    ○
+    │╲
+    │ ○
+    ○ ░
+    ░    gitleaks
+
+[90m10:15PM[0m [32mINF[0m scan completed in 12.4ms
+[90m10:15PM[0m [32mINF[0m no leaks found
++ gitleaks detect --source k8s --no-git -v
+
+    ○
+    │╲
+    │ ○
+    ○ ░
+    ░    gitleaks
+
+[90m10:15PM[0m [32mINF[0m scan completed in 21.8ms
+[90m10:15PM[0m [32mINF[0m no leaks found
++ exit 0
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (SAST (bandit))
+[Pipeline] dir
+Running in /var/jenkins_home/workspace/devsecops-pipeline/repo
+[Pipeline] {
+[Pipeline] sh
++ set -eu
++ . .venv/bin/activate
++ deactivate nondestructive
++ [ -n  ]
++ [ -n  ]
++ hash -r
++ [ -n  ]
++ unset VIRTUAL_ENV
++ unset VIRTUAL_ENV_PROMPT
++ [ ! nondestructive = nondestructive ]
++ uname
++ export VIRTUAL_ENV=/var/jenkins_home/workspace/devsecops-pipeline/repo/.venv
++ _OLD_VIRTUAL_PATH=/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++ PATH=/var/jenkins_home/workspace/devsecops-pipeline/repo/.venv/bin:/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++ export PATH
++ VIRTUAL_ENV_PROMPT=.venv
++ export VIRTUAL_ENV_PROMPT
++ [ -n  ]
++ [ -z  ]
++ _OLD_VIRTUAL_PS1=$ 
++ PS1=(.venv) $ 
++ export PS1
++ hash -r
++ pip install -q bandit
++ bandit -r app -ll -x **/tests/**
+[main]	INFO	profile include tests: None
+[main]	INFO	profile exclude tests: None
+[main]	INFO	cli include tests: None
+[main]	INFO	cli exclude tests: None
+[main]	INFO	running on Python 3.13.5
+Run started:2026-09-21 22:15:55.679461+00:00
+
+Test results:
+	No issues identified.
+
+Code scanned:
+	Total lines of code: 161
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 1
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 0
+		Medium: 0
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 0
+		High: 0
+Files skipped (0):
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (SBOM (syft))
+[Pipeline] dir
+Running in /var/jenkins_home/workspace/devsecops-pipeline/repo
+[Pipeline] {
+[Pipeline] sh
++ syft app/status-service -o cyclonedx-json
+[0000]  WARN no explicit name and version provided for directory source, deriving artifact ID from the given path (which is not ideal)
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Dependency scan (pip-audit))
+[Pipeline] dir
+Running in /var/jenkins_home/workspace/devsecops-pipeline/repo
+[Pipeline] {
+[Pipeline] sh
++ set -eu
++ . .venv/bin/activate
++ deactivate nondestructive
++ [ -n  ]
++ [ -n  ]
++ hash -r
++ [ -n  ]
++ unset VIRTUAL_ENV
++ unset VIRTUAL_ENV_PROMPT
++ [ ! nondestructive = nondestructive ]
++ uname
++ export VIRTUAL_ENV=/var/jenkins_home/workspace/devsecops-pipeline/repo/.venv
++ _OLD_VIRTUAL_PATH=/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++ PATH=/var/jenkins_home/workspace/devsecops-pipeline/repo/.venv/bin:/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++ export PATH
++ VIRTUAL_ENV_PROMPT=.venv
++ export VIRTUAL_ENV_PROMPT
++ [ -n  ]
++ [ -z  ]
++ _OLD_VIRTUAL_PS1=$ 
++ PS1=(.venv) $ 
++ export PS1
++ hash -r
++ pip install -q pip-audit
++ pip-audit -r app/status-service/requirements.txt -f json -o pip-audit-results.json
+No known vulnerabilities found
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Container scan (trivy))
+[Pipeline] dir
+Running in /var/jenkins_home/workspace/devsecops-pipeline/repo
+[Pipeline] {
+[Pipeline] sh
++ set -eu
++ DOCKER_BUILDKIT=1 docker build -t status-service:jenkins -f app/status-service/Dockerfile app/status-service
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.57kB done
+#1 DONE 0.1s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.4s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:ecfaec9ed6d810b56388c508f4121597bfbba70d41a6dfeee4d8cad5f295fc32
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/python:3.12-slim
+#4 DONE 0.0s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.1s
+
+#6 [builder 1/4] FROM docker.io/library/python:3.12-slim
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 13.21kB done
+#7 DONE 0.1s
+
+#8 [builder 2/4] WORKDIR /build
+#8 CACHED
+
+#9 [builder 3/4] COPY requirements.txt .
+#9 CACHED
+
+#10 [runtime 4/7] RUN python3 -m pip uninstall --yes pip setuptools wheel 2>/dev/null;     rm -rf /usr/local/lib/python3.12/site-packages/pip*            /usr/local/lib/python3.12/site-packages/setuptools*            /usr/local/lib/python3.12/site-packages/wheel*            /usr/local/bin/pip*
+#10 CACHED
+
+#11 [builder 4/4] RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+#11 CACHED
+
+#12 [runtime 3/7] COPY --from=builder /install /usr/local
+#12 CACHED
+
+#13 [runtime 5/7] WORKDIR /app
+#13 CACHED
+
+#14 [runtime 6/7] COPY app.py gunicorn.conf.py .
+#14 CACHED
+
+#15 [runtime 2/7] RUN groupadd --system --gid 10001 app     && useradd --system --uid 10001 --gid app --no-create-home --shell /usr/sbin/nologin app
+#15 CACHED
+
+#16 [runtime 7/7] COPY STATUS.md /data/STATUS.md
+#16 CACHED
+
+#17 exporting to image
+#17 exporting layers done
+#17 writing image sha256:6c9f520d252d656803f392cbdce71ba10873e62e7d054948a01a15a43a2bfa67 done
+#17 naming to docker.io/library/status-service:jenkins 0.0s done
+#17 DONE 0.0s
++ trivy image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 status-service:jenkins
+2026-09-21T22:16:07Z	INFO	[vulndb] Need to update DB
+2026-09-21T22:16:07Z	INFO	[vulndb] Downloading vulnerability DB...
+2026-09-21T22:16:07Z	INFO	[vulndb] Downloading artifact...	repo="mirror.gcr.io/aquasec/trivy-db:2"
+1.65 MiB / 115.98 MiB [>_____________________________________________________________] 1.42% ? p/s ?6.08 MiB / 115.98 MiB [--->__________________________________________________________] 5.24% ? p/s ?10.88 MiB / 115.98 MiB [----->_______________________________________________________] 9.38% ? p/s ?15.22 MiB / 115.98 MiB [------>________________________________________] 13.13% 22.62 MiB p/s ETA 4s19.05 MiB / 115.98 MiB [------->_______________________________________] 16.43% 22.62 MiB p/s ETA 4s23.19 MiB / 115.98 MiB [--------->_____________________________________] 19.99% 22.62 MiB p/s ETA 4s27.70 MiB / 115.98 MiB [----------->___________________________________] 23.88% 22.50 MiB p/s ETA 3s31.10 MiB / 115.98 MiB [------------>__________________________________] 26.82% 22.50 MiB p/s ETA 3s36.37 MiB / 115.98 MiB [-------------->________________________________] 31.36% 22.50 MiB p/s ETA 3s41.26 MiB / 115.98 MiB [---------------->______________________________] 35.57% 22.51 MiB p/s ETA 3s43.39 MiB / 115.98 MiB [----------------->_____________________________] 37.41% 22.51 MiB p/s ETA 3s48.70 MiB / 115.98 MiB [------------------->___________________________] 41.99% 22.51 MiB p/s ETA 2s52.03 MiB / 115.98 MiB [--------------------->_________________________] 44.86% 22.22 MiB p/s ETA 2s56.81 MiB / 115.98 MiB [----------------------->_______________________] 48.99% 22.22 MiB p/s ETA 2s60.52 MiB / 115.98 MiB [------------------------>______________________] 52.19% 22.22 MiB p/s ETA 2s64.44 MiB / 115.98 MiB [-------------------------->____________________] 55.56% 22.12 MiB p/s ETA 2s67.67 MiB / 115.98 MiB [--------------------------->___________________] 58.35% 22.12 MiB p/s ETA 2s71.13 MiB / 115.98 MiB [---------------------------->__________________] 61.33% 22.12 MiB p/s ETA 2s75.52 MiB / 115.98 MiB [------------------------------>________________] 65.12% 21.88 MiB p/s ETA 1s80.16 MiB / 115.98 MiB [-------------------------------->______________] 69.12% 21.88 MiB p/s ETA 1s83.67 MiB / 115.98 MiB [--------------------------------->_____________] 72.14% 21.88 MiB p/s ETA 1s86.52 MiB / 115.98 MiB [----------------------------------->___________] 74.60% 21.65 MiB p/s ETA 1s89.26 MiB / 115.98 MiB [------------------------------------>__________] 76.96% 21.65 MiB p/s ETA 1s92.13 MiB / 115.98 MiB [------------------------------------->_________] 79.44% 21.65 MiB p/s ETA 1s94.26 MiB / 115.98 MiB [-------------------------------------->________] 81.27% 21.09 MiB p/s ETA 1s96.80 MiB / 115.98 MiB [--------------------------------------->_______] 83.47% 21.09 MiB p/s ETA 0s98.18 MiB / 115.98 MiB [--------------------------------------->_______] 84.66% 21.09 MiB p/s ETA 0s100.40 MiB / 115.98 MiB [--------------------------------------->______] 86.57% 20.39 MiB p/s ETA 0s103.42 MiB / 115.98 MiB [----------------------------------------->____] 89.17% 20.39 MiB p/s ETA 0s106.05 MiB / 115.98 MiB [------------------------------------------>___] 91.44% 20.39 MiB p/s ETA 0s108.83 MiB / 115.98 MiB [------------------------------------------->__] 93.83% 19.98 MiB p/s ETA 0s111.61 MiB / 115.98 MiB [-------------------------------------------->_] 96.24% 19.98 MiB p/s ETA 0s114.17 MiB / 115.98 MiB [--------------------------------------------->] 98.44% 19.98 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 19.46 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 19.46 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 19.46 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 18.20 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 18.20 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 18.20 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 17.03 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 17.03 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 17.03 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 15.93 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 15.93 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 15.93 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 14.90 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 14.90 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 14.90 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 13.94 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 13.94 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 13.94 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 13.04 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 13.04 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 13.04 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 12.20 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 12.20 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 12.20 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 11.41 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 11.41 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 11.41 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 10.68 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 10.68 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------->] 100.00% 10.68 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 9.99 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 9.99 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 9.99 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 9.34 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 9.34 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 9.34 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 8.74 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 8.74 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 8.74 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 8.18 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 8.18 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 8.18 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 7.65 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 7.65 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 7.65 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 7.16 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 7.16 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 7.16 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 6.69 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 6.69 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [--------------------------------------------->] 100.00% 6.69 MiB p/s ETA 0s115.98 MiB / 115.98 MiB [-------------------------------------------------] 100.00% 6.97 MiB p/s 17s2026-09-21T22:16:25Z	INFO	[vulndb] Artifact successfully downloaded	repo="mirror.gcr.io/aquasec/trivy-db:2"
+2026-09-21T22:16:25Z	INFO	[vuln] Vulnerability scanning is enabled
+2026-09-21T22:16:25Z	INFO	[secret] Secret scanning is enabled
+2026-09-21T22:16:25Z	INFO	[secret] If your scanning is slow, please try '--scanners vuln' to disable secret scanning
+2026-09-21T22:16:25Z	INFO	[secret] Please see https://trivy.dev/docs/v0.74/guide/scanner/secret#recommendation for faster secret detection
+2026-09-21T22:16:29Z	INFO	[python] Licenses acquired from one or more METADATA files may be subject to additional terms. Use `--debug` flag to see all affected packages.
+2026-09-21T22:16:29Z	INFO	Detected OS	family="debian" version="13.7"
+2026-09-21T22:16:29Z	INFO	[debian] Detecting vulnerabilities...	os_version="13" pkg_num=87
+2026-09-21T22:16:29Z	INFO	Number of language-specific files	num=1
+2026-09-21T22:16:29Z	INFO	[python-pkg] Detecting vulnerabilities...
+2026-09-21T22:16:29Z	WARN	Using severities from other vendors for some vulnerabilities. Read https://trivy.dev/docs/v0.74/guide/scanner/vulnerability#severity-selection for details.
+
+Report Summary
+
+┌──────────────────────────────────────────────────────────────────────────────────┬────────────┬─────────────────┬─────────┐
+│                                      Target                                      │    Type    │ Vulnerabilities │ Secrets │
+├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ status-service:jenkins (debian 13.7)                                             │   debian   │        0        │    -    │
+├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ usr/local/lib/python3.12/site-packages/blinker-1.9.0.dist-info/METADATA          │ python-pkg │        0        │    -    │
+├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ usr/local/lib/python3.12/site-packages/click-8.5.0.dist-info/METADATA            │ python-pkg │        0        │    -    │
+├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ usr/local/lib/python3.12/site-packages/flask-3.1.3.dist-info/METADATA            │ python-pkg │        0        │    -    │
+├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ usr/local/lib/python3.12/site-packages/gunicorn-22.0.0.dist-info/METADATA        │ python-pkg │        0        │    -    │
+├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ usr/local/lib/python3.12/site-packages/itsdangerous-2.2.0.dist-info/METADATA     │ python-pkg │        0        │    -    │
+├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ usr/local/lib/python3.12/site-packages/jinja2-3.1.6.dist-info/METADATA           │ python-pkg │        0        │    -    │
+├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ usr/local/lib/python3.12/site-packages/markupsafe-3.0.3.dist-info/METADATA       │ python-pkg │        0        │    -    │
+├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ usr/local/lib/python3.12/site-packages/packaging-26.3.dist-info/METADATA         │ python-pkg │        0        │    -    │
+├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ usr/local/lib/python3.12/site-packages/prometheus_client-0.21.1.dist-info/METAD- │ python-pkg │        0        │    -    │
+│ ATA                                                                              │            │                 │         │
+├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ usr/local/lib/python3.12/site-packages/werkzeug-3.1.8.dist-info/METADATA         │ python-pkg │        0        │    -    │
+└──────────────────────────────────────────────────────────────────────────────────┴────────────┴─────────────────┴─────────┘
+Legend:
+- '-': Not scanned
+- '0': Clean (no security findings detected)
+
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (IaC scan (trivy config -- tfsec successor))
+[Pipeline] dir
+Running in /var/jenkins_home/workspace/devsecops-pipeline/repo
+[Pipeline] {
+[Pipeline] sh
++ set -eu
++ trivy config --exit-code 1 --severity HIGH,CRITICAL --skip-dirs **/.terraform infra/terraform
+2026-09-21T22:16:30Z	INFO	[misconfig] Misconfiguration scanning is enabled
+2026-09-21T22:16:30Z	INFO	[checks-client] Need to update the checks bundle
+2026-09-21T22:16:30Z	INFO	[checks-client] Downloading the checks bundle...
+234.65 KiB / 234.65 KiB [------------------------------------------------------] 100.00% ? p/s 100ms2026-09-21T22:16:32Z	INFO	[terraform scanner] Scanning root module	file_path="."
+2026-09-21T22:16:32Z	WARN	[terraform parser] Variable values were not found in the environment or variable files. Evaluating may not work correctly.	module="root" variables="environment"
+2026-09-21T22:16:32Z	INFO	[terraform executor] Ignore finding	rule="aws-s3-encryption-customer-key" range="modules/aws-platform/s3.tf:70-78"
+2026-09-21T22:16:32Z	INFO	Detected config files	num=3
+
+Report Summary
+
+┌────────────────────────────────┬───────────┬───────────────────┐
+│             Target             │   Type    │ Misconfigurations │
+├────────────────────────────────┼───────────┼───────────────────┤
+│ .                              │ terraform │         0         │
+├────────────────────────────────┼───────────┼───────────────────┤
+│ modules/aws-platform/s3.tf     │ terraform │         0         │
+├────────────────────────────────┼───────────┼───────────────────┤
+│ modules/azure-platform/main.tf │ terraform │         1         │
+└────────────────────────────────┴───────────┴───────────────────┘
+Legend:
+- '-': Not scanned
+- '0': Clean (no security findings detected)
+
+
+modules/azure-platform/main.tf (terraform)
+==========================================
+Tests: 1 (SUCCESSES: 0, FAILURES: 1)
+Failures: 1 (HIGH: 0, CRITICAL: 1)
+
+AZU-0012 (CRITICAL): No network rules defined and default action allows access.
+════════════════════════════════════════
+The default_action for network rules should come into effect when no other rules are matched.
+The default action should be set to Deny.
+
+
+See https://avd.aquasec.com/misconfig/azu-0012
+────────────────────────────────────────
+ modules/azure-platform/main.tf:23-51
+   via main.tf:21-29 (module.azure_platform[0])
+────────────────────────────────────────
+  23 ┌ resource "azurerm_storage_account" "platform" {
+  24 │   name                = substr(replace("st${var.name_prefix}${random_id.suffix.hex}", "-", ""), 0, 24)
+  25 │   resource_group_name = azurerm_resource_group.platform.name
+  26 │   location            = azurerm_resource_group.platform.location
+  27 │ 
+  28 │   account_tier             = "Standard"
+  29 │   account_replication_type = "GRS"
+  30 │   account_kind             = "StorageV2"
+  31 └ 
+  ..   
+────────────────────────────────────────
+
+
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (K8s manifest scan (kube-linter))
+Stage "K8s manifest scan (kube-linter)" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] archiveArtifacts
+Archiving artifacts
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE
