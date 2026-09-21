@@ -198,8 +198,8 @@ exit 0) against the real working tree.
 
 5. **The demo fixture's fake secret tripped this repo's real CI gitleaks
    job.** `playbook/demo/config.py`'s original seeded value
-   (`API_KEY = "sk_live_9f8a7b6c5d4e3f2a1b0c"`) matches gitleaks' built-in
-   `stripe-access-token` rule (the `sk_live_` prefix is Stripe's real
+   (`API_KEY = "sk` + `_live_` + a plausible token suffix) matches gitleaks'
+   built-in `stripe-access-token` rule (the `sk` + `_live_` prefix is Stripe's real
    format), so `security.yml`'s gitleaks job correctly flagged it in this
    commit — genuinely caught, not a false positive on gitleaks' part.
    Fixed by changing the demo value to a shape that still exercises
