@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Job Requirement Mapping — poetic-musings</title>
+<meta name="description" content="Maps the GMD DevSecOps Engineer job posting requirements to what poetic-musings actually demonstrates, with honest gaps named.">
+<style>
+:root {
+  --bg: #f7f8fa; --panel: #ffffff; --fg: #1c1f24; --muted: #5b6472;
+  --accent: #0a5a96; --accent-soft: #eaf2fa; --rule: #d8dee6;
+  --ok-border: #2f8f4e; --ok-bg: #eaf7ee;
+  --partial-border: #b8860b; --partial-bg: #fbf3df;
+  --gap-border: #a3313f; --gap-bg: #fbecee;
+  --code-bg: #f0f1f3;
+  --shadow: 0 1px 3px rgba(20,25,35,0.08), 0 1px 2px rgba(20,25,35,0.06);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161a; --panel: #1b1e24; --fg: #e6e8eb; --muted: #9aa4b2;
+    --accent: #6fb3e0; --accent-soft: #16293a; --rule: #2c3038;
+    --ok-border: #4caf72; --ok-bg: #16261c;
+    --partial-border: #d9a441; --partial-bg: #2b2413;
+    --gap-border: #e2828d; --gap-bg: #2c1a1d;
+    --code-bg: #22252b;
+    --shadow: 0 1px 3px rgba(0,0,0,0.4);
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.5; font-size: clamp(0.92rem, 0.8rem + 0.25vw, 1.02rem);
+}
+.wrap { max-width: 980px; margin: 0 auto; padding: 1.5rem clamp(1.25rem, 4vw, 3rem) 3rem; }
+h1 { font-size: 1.4rem; margin: 0 0 0.2rem; }
+.sub { color: var(--muted); margin: 0 0 1.2rem; font-size: 0.92rem; }
+nav.links { margin: 0 0 1.5rem; display: flex; flex-wrap: wrap; gap: 0.9rem; font-size: 0.88rem; }
+nav.links a { color: var(--accent); text-decoration: none; }
+nav.links a:hover { text-decoration: underline; }
+h2 { font-size: 1.05rem; margin: 1.6rem 0 0.6rem; border-bottom: 1px solid var(--rule); padding-bottom: 0.3rem; }
+table { width: 100%; border-collapse: collapse; background: var(--panel); box-shadow: var(--shadow); border-radius: 8px; overflow: hidden; }
+th, td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--rule); vertical-align: top; font-size: 0.88rem; }
+th { background: var(--accent-soft); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
+tr:last-child td { border-bottom: none; }
+code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.85em; background: var(--code-bg); padding: 0.05em 0.35em; border-radius: 3px; }
+.badge { display: inline-block; padding: 0.12em 0.55em; border-radius: 4px; font-size: 0.76rem; font-weight: 600; white-space: nowrap; }
+.badge.ok { background: var(--ok-bg); color: var(--ok-border); border: 1px solid var(--ok-border); }
+.badge.partial { background: var(--partial-bg); color: var(--partial-border); border: 1px solid var(--partial-border); }
+.badge.progress { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+ul.gaps { padding-left: 1.2rem; }
+ul.gaps li { margin: 0.4rem 0; }
+footer { margin-top: 2rem; color: var(--muted); font-size: 0.82rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Job Requirement Mapping</h1>
+  <p class="sub">GMD DevSecOps Engineer — Valkyrie Enterprises, Job ID 4472. Tracks which technical requirements from this specific posting are actually demonstrated in this repo, and which are honest, named gaps. Source: <a href="JOB.md">JOB.md</a>.</p>
+
+  <nav class="links">
+    <a href="index.html">← Dashboard</a>
+    <a href="https://jclements3.github.io/poetic-musings/" target="_blank">Live site ↗</a>
+    <a href="https://github.com/jclements3/poetic-musings" target="_blank">Repo ↗</a>
+  </nav>
+
+  <h2>Requirement → repo mapping</h2>
+  <table>
+    <tr><th>Job requirement</th><th>Status</th><th>Where</th></tr>
+    <tr><td>Terraform for complex IaC deployments</td><td><span class="badge ok">Covered</span></td><td><code>infra/terraform/</code> — AWS applied &amp; destroyed for real; KMS/CloudWatch bug caught and fixed</td></tr>
+    <tr><td>Kubernetes: build, deploy, manage, HA/resilience</td><td><span class="badge ok">Covered</span></td><td><code>k8s/</code> manifests deployed to a real <code>kind</code> cluster; PDB, anti-affinity, NetworkPolicy</td></tr>
+    <tr><td>CI/CD pipelines (GitLab CI, Jenkins, Azure DevOps)</td><td><span class="badge partial">Partial</span></td><td>GitHub Actions + GitLab CI real; no Jenkins, no Azure DevOps — <code>.github/workflows/</code>, <code>.gitlab-ci.yml</code></td></tr>
+    <tr><td>Hybrid cloud: AWS <strong>and</strong> Azure</td><td><span class="badge partial">Partial</span></td><td>AWS applied for real; Azure written only, never applied (no subscription) — <code>infra/terraform/modules/azure-platform/</code></td></tr>
+    <tr><td>Windows Server admin, AD, GPOs, SCCM</td><td><span class="badge partial">Partial</span></td><td>Real AD DC (Samba4), real GPO object+link, real Kerberos; no Windows Server itself, no domain-joined client, no real SCCM/MECM — <code>ad-lab/</code></td></tr>
+    <tr><td>STIG evaluation, analysis, implementation</td><td><span class="badge progress">In progress</span></td><td><code>stig/</code></td></tr>
+    <tr><td>Security/code scanning embedded in CI/CD</td><td><span class="badge ok">Covered</span></td><td>7 real gates on the dashboard's Security Scanning Gates table: gitleaks, bandit, Syft, pip-audit, Trivy, tfsec, kube-linter, CodeQL</td></tr>
+    <tr><td>IDE experience, e.g. Coder</td><td><span class="badge ok">Covered</span></td><td><code>coder/</code> — verified running: login page, <code>/healthz</code>, <code>/api/v2/buildinfo</code></td></tr>
+    <tr><td>Config management on top of IaC (implied — Ansible not explicit in posting but standard for this stack)</td><td><span class="badge ok">Covered</span></td><td><code>ansible/</code> — real, idempotent (twice-run proof: <code>changed=1</code> cold, <code>changed=0</code> warm)</td></tr>
+  </table>
+
+  <h2>Named gaps not claimed as covered</h2>
+  <ul class="gaps">
+    <li><strong>STIG</strong> — DISA STIG is a distinct standard from CIS Benchmark (kube-bench covers CIS, not STIG). Being closed now via OpenSCAP/<code>scap-security-guide</code> in <code>stig/</code> — see that directory's README for real scored results and honest caveats once landed.</li>
+    <li><strong>Azure actually applied</strong> — written, never run against a live subscription.</li>
+    <li><strong>Real Windows Server + domain-joined client + SCCM</strong> — Samba4 proves the AD mechanism (Kerberos, LDAP, DNS, GPO object/linkage), not the Windows-specific administration surface or SCCM itself.</li>
+    <li><strong>Jenkins, Azure DevOps</strong> — not represented; only GitHub Actions and GitLab CI.</li>
+    <li><strong>CompTIA Security+, active clearance</strong> — personal credentials, not something a repo can demonstrate.</li>
+  </ul>
+
+  <footer>Kept in sync with <a href="JOB.md">JOB.md</a>. Updated as work lands — see <a href="https://github.com/jclements3/poetic-musings/commits/main" target="_blank">commit history ↗</a>.</footer>
+</div>
+</body>
+</html>
