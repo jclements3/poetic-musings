@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Playbook — poetic-musings</title>
+<meta name="description" content="The 9-zone DevSecOps playbook and haskell.py point-free functional-programming toolbox — poetic-musings' reference implementation for future projects.">
+<style>
+:root {
+  --bg: #f7f8fa; --panel: #ffffff; --fg: #1c1f24; --muted: #5b6472;
+  --accent: #0a5a96; --accent-soft: #eaf2fa; --rule: #d8dee6; --code-bg: #f0f1f3;
+  --ok-border: #2f8f4e; --ok-bg: #eaf7ee;
+  --partial-border: #b8860b; --partial-bg: #fbf3df;
+  --gap-border: #a3313f; --gap-bg: #fbecee;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161a; --panel: #1b1e24; --fg: #e6e8eb; --muted: #9aa4b2;
+    --accent: #6fb3e0; --accent-soft: #16293a; --rule: #2c3038; --code-bg: #22252b;
+    --ok-border: #4caf72; --ok-bg: #16261c;
+    --partial-border: #d9a441; --partial-bg: #2b2413;
+    --gap-border: #e2828d; --gap-bg: #2c1a1d;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.5; font-size: clamp(0.95rem, 0.85rem + 0.2vw, 1.05rem);
+}
+.wrap { max-width: none; width: 100%; margin: 0 auto; padding: 1rem clamp(1rem, 3vw, 2.5rem) 2.5rem; }
+
+.pageheader {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: 0.4rem 1.5rem; margin: 0 0 1.2rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--rule);
+}
+.pageheader-left { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; min-width: 0; }
+h1 { font-size: 1.3rem; margin: 0; }
+.sub { color: var(--muted); margin: 0; font-size: 0.9rem; max-width: 72ch; }
+nav.links { display: flex; flex-wrap: wrap; gap: 0.9rem; font-size: 0.88rem; margin-left: auto; }
+nav.links a { color: var(--accent); text-decoration: none; }
+nav.links a:hover { text-decoration: underline; }
+
+h2.stripe {
+  font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--accent); background: var(--accent-soft);
+  padding: 0.45rem 0.85rem; margin: 1.8rem 0 0.8rem; border-radius: 6px; font-weight: 700;
+}
+
+.hero {
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 10px;
+  padding: 1.1rem 1.3rem; margin: 0 0 1rem;
+}
+.hero p { margin: 0 0 0.6rem; font-size: 0.95rem; max-width: 84ch; }
+.hero p:last-child { margin-bottom: 0; }
+
+.badges { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.8rem 0; }
+.badge { display: inline-block; padding: 0.12em 0.55em; border-radius: 4px; font-size: 0.76rem; font-weight: 600; white-space: nowrap; }
+.badge.ok { background: var(--ok-bg); color: var(--ok-border); border: 1px solid var(--ok-border); }
+.badge.partial { background: var(--partial-bg); color: var(--partial-border); border: 1px solid var(--partial-border); }
+.badge.gap { background: var(--gap-bg); color: var(--gap-border); border: 1px solid var(--gap-border); }
+
+.linklist { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 0.6rem; }
+.linkcard {
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 8px;
+  padding: 0.7rem 0.9rem; box-shadow: 0 1px 3px rgba(20,25,35,0.06);
+}
+.linkcard .term { color: var(--accent); font-weight: 700; font-size: 0.92rem; margin-bottom: 0.3rem; }
+.linkcard p { margin: 0; font-size: 0.86rem; line-height: 1.5; color: var(--fg); }
+
+.whyfp {
+  background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 10px;
+  padding: 1rem 1.2rem; margin: 0.8rem 0;
+}
+.whyfp-label {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--accent); font-weight: 700; margin-bottom: 0.4rem;
+}
+.whyfp p { margin: 0; font-size: 0.92rem; line-height: 1.65; }
+
+pre.code {
+  background: var(--code-bg); border-radius: 8px; padding: 0.8rem 1rem;
+  overflow-x: auto; font-size: 0.82rem; line-height: 1.5; border: 1px solid var(--rule);
+}
+pre.code code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; }
+
+table.verify {
+  width: 100%; border-collapse: collapse; background: var(--panel);
+  border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; font-size: 0.86rem;
+}
+table.verify th, table.verify td { border-bottom: 1px solid var(--rule); padding: 0.5rem 0.7rem; text-align: left; vertical-align: top; }
+table.verify th { background: var(--accent-soft); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
+table.verify tr:last-child td { border-bottom: none; }
+table.verify code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.9em; background: var(--code-bg); padding: 0.05em 0.35em; border-radius: 3px; }
+
+ul.gaps { padding-left: 1.2rem; }
+ul.gaps li { margin: 0.4rem 0; font-size: 0.9rem; }
+
+.pitch {
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 10px;
+  padding: 1.1rem 1.3rem; margin: 0.8rem 0;
+}
+.pitch p { margin: 0; font-size: 0.95rem; line-height: 1.65; font-style: italic; }
+
+ol.roadmap { padding-left: 1.3rem; }
+ol.roadmap li { margin: 0.5rem 0; font-size: 0.9rem; }
+
+footer.colophon {
+  margin-top: 2rem; padding-top: 0.8rem; border-top: 1px solid var(--rule);
+  color: var(--muted); font-size: 0.82rem;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="pageheader">
+    <div class="pageheader-left">
+      <h1>Playbook</h1>
+      <p class="sub">The 9-zone DevSecOps playbook and the <code>haskell.py</code> point-free functional-programming toolbox built to run it — poetic-musings' reference implementation for every future project.</p>
+    </div>
+    <nav class="links">
+      <a href="index.html">← Dashboard</a>
+      <a href="docs.html">Docs</a>
+      <a href="JOB.html">Job Req Mapping</a>
+      <a href="jenkins-study.html">Jenkins Study Notes</a>
+      <a href="https://github.com/jclements3/poetic-musings/tree/main/playbook" target="_blank">Source ↗</a>
+    </nav>
+  </div>
+
+  <div class="hero">
+    <p>This Playbook is a 9-zone DevSecOps reference — Plan &amp; Source through Evidence &amp; Govern — built around haskell.py, a real, working functional-programming toolbox written in point-free Python. It exists so poetic-musings can be the reference implementation: the place a reusable DevSecOps toolchain gets proven once, honestly, instead of rebuilt from scratch on every future project. To be clear about where it stands today: this is the toolbox's first real home, not a track record. It is being integrated and re-verified in this repo right now, and every claim on this page will be checked against that integration before it's called done.</p>
+    <div class="badges">
+      <span class="badge ok">14 of 29 plays executed for real</span>
+      <span class="badge ok">0 bugs in haskell.py itself</span>
+      <span class="badge partial">21 unpinned Actions found (real, unfixed)</span>
+      <span class="badge gap">0 unit tests on haskell.py</span>
+    </div>
+  </div>
+
+  <div class="whyfp">
+    <div class="whyfp-label">Why functional / point-free Python, for DevSecOps specifically</div>
+    <p>DevSecOps scripting is mostly parsing untrusted, semi-structured text (requirements.txt, SARIF, lockfiles, scan output) and then deciding something (pass, fail, waive, escalate) based on what's in it — and that combination is exactly where imperative Python gets fragile: nested try/except blocks around every network call and file read, ad hoc string-splitting that breaks the first time a tool changes its output format, and policy logic that's tangled up with I/O so it's hard to test without mocking half the world. Point-free composition and Maybe/Either monads push error handling into the return type instead of scattering it across exception handlers, so a parser or a gate either produces a value or explains why it didn't, uniformly, without a caller ever forgetting to catch something. Parser combinators let you build a SARIF or requirements.txt reader out of small, composable pieces instead of a wall of regex that silently misparses an edge case. And because the core functions are referentially transparent — same input, same output, no hidden state — they're trivially unit-testable: feed a scanner function a fixture, assert on the Either it returns, no live scan required. None of this is FP for its own sake; it's picking the tool that matches the actual shape of the problem: composing small, honest, testable steps over a pipeline of untrusted input.</p>
+  </div>
+
+  <h2 class="stripe">The Toolbox — haskell.py</h2>
+  <p style="max-width:84ch">A from-scratch Haskell-style functional core for Python: point-free combinators (<code>compose</code>/<code>pipe</code>, <code>curry</code>, <code>foldl</code>/<code>foldr</code>/<code>scanl</code>), a <code>Maybe</code> via a falsy <code>NOTHING</code> sentinel, an <code>Either</code> via <code>Ok</code>/<code>Err</code> tuples, do-notation for both, parser combinators, and monoids — zero external dependencies. Nine scripts are built on top of it, each one importing nothing but <code>from haskell import ...</code>, meant to be dropped into the next project standalone.</p>
+
+  <pre class="code"><code># deps.py — a real requirements.txt parser built entirely from haskell.py combinators
+name    = rx(r"[A-Za-z0-9][A-Za-z0-9._-]*")
+op      = rx(r"==|~=|&gt;=|&lt;=|!=|&lt;|&gt;")
+version = rx(r"[A-Za-z0-9.*+!_-]+")
+
+@doP
+def spec():
+    f = yield op
+    v = yield version
+    return f + v
+
+@doP
+def req():
+    n  = yield name
+    _  = yield opt(extras)
+    ss = yield sepBy(spec(), lit(","))
+    return (n, ss)</code></pre>
+
+  <h2 class="stripe">Real Verification Against poetic-musings Itself</h2>
+  <table class="verify">
+    <tr><th>Script</th><th>Real result</th></tr>
+    <tr><td><code>secrets.py</code></td><td>Scoped to <code>app/ infra/ k8s/ ansible/</code> — <strong>0 findings</strong>, exit 0</td></tr>
+    <tr><td><code>deps.py</code></td><td><code>app/status-service/requirements.txt</code> — <strong>3 pinned, 0 unpinned, 0 unparsed</strong>, exit 0</td></tr>
+    <tr><td><code>cve.py</code></td><td>Fed a live <code>pip-audit</code> run — <strong>0 known vulnerabilities</strong></td></tr>
+    <tr><td><code>actions_pin.py</code></td><td>Real, honest finding: <strong>21 <code>uses:</code> lines tag-pinned, not SHA-pinned</strong>, exit 1 — a genuine open gap, reported not fixed</td></tr>
+    <tr><td><code>triage.py</code></td><td>Fed a real <code>bandit</code> SARIF output — <strong>0 issues</strong>, matches the independently-verified Jenkins build result</td></tr>
+    <tr><td><code>gate.py</code></td><td>All 3 exit paths confirmed for real: 0 (pass), 1 (fail), 2 (bad input)</td></tr>
+    <tr><td><code>freshness.py</code></td><td>Real summaries, both <code>OK (0.0h)</code>, exit 0</td></tr>
+    <tr><td><code>sbom_diff.py</code></td><td>Honest gap — <code>syft</code> not installed here; verified against demo fixtures only</td></tr>
+    <tr><td>pre-commit hook</td><td>Verified twice: blocks a staged fake AWS key (exit 1), passes a clean tree (exit 0) — then installed for real at <code>.git/hooks/pre-commit</code></td></tr>
+  </table>
+
+  <h2 class="stripe">Zone 4 Regression Proof — reproduced</h2>
+  <p style="max-width:84ch">A gate that can't fail is decoration. <code>MASTER-PLAYBOOK.md</code> requires <code>./pipeline.sh demo</code> to exit 1 against seeded bad input — reproduced for real:</p>
+  <pre class="code"><code>$ ./playbook/pipeline.sh ./playbook/demo
+--- stage 1: secrets
+playbook/demo/config.py:2: generic-secret: API_KEY = "not-a-real-secret-abcdef123456"
+playbook/demo/config.py:3: aws-access-key: aws_key = "AKIAIOSFODNN7EXAMPLE"
+--- stage 2: dependency pins
+UNPINNED numpy &gt;=1.26
+UNPINNED flask ~=3.0,!=3.0.1
+UNPINNED hypothesis (any)
+2 pinned, 3 unpinned, 0 unparsed
+--- stage 4: policy gate
+$ echo $?
+1</code></pre>
+
+  <h2 class="stripe">The 9 Zones — why each matters to the reference-implementation vision</h2>
+  <div class="linklist">
+    <div class="linkcard"><div class="term">1 — PLAN &amp; SOURCE</div><p>The first zone sets the standard the rest of the playbook has to live up to: if source and dependency intake aren't handled consistently here, nothing built on top of it in future projects will be either. This is where the reference implementation earns the right to be reused.</p></div>
+    <div class="linkcard"><div class="term">2 — DEVELOP</div><p>Development-time checks are where the FP toolbox pays off first — small, composable, testable functions that a developer can run locally before anything hits CI, so the same logic that gates a pipeline later is already familiar and trusted.</p></div>
+    <div class="linkcard"><div class="term">3 — BUILD</div><p>A poster-child implementation has to prove its build step is reproducible and inspectable, not just green — this zone is where 'it built' gets replaced with 'it built, and here's exactly what's in it,' the standard every future project should inherit by default.</p></div>
+    <div class="linkcard"><div class="term">4 — TEST</div><p>Testing is where referential transparency stops being a talking point and becomes the reason the toolbox itself is crediblely testable — if haskell.py's own combinators aren't well-tested, nothing built on top of them can be trusted either.</p></div>
+    <div class="linkcard"><div class="term">5 — SECURE</div><p>This is the zone most likely to get reused verbatim in a future project: composable scanners and Either-typed triage logic mean a new codebase can plug into the same gating rules instead of every project inventing its own ad hoc policy script.</p></div>
+    <div class="linkcard"><div class="term">6 — PROVISION</div><p>Provisioning ties the playbook back to real, verified infrastructure (Terraform, Kubernetes) rather than leaving it as a scripting exercise — the reference implementation only matters if it stands up something real.</p></div>
+    <div class="linkcard"><div class="term">7 — DEPLOY &amp; ORCHESTRATE</div><p>Deploy and orchestrate is where the playbook has to survive contact with three real pipeline vendors (GitHub Actions, GitLab CI, Jenkins) — proving the toolbox isn't tied to one CI system is what makes it actually portable to the next project.</p></div>
+    <div class="linkcard"><div class="term">8 — OPERATE &amp; OBSERVE</div><p>A reusable standard has to outlive the initial build; this zone is the honest test of whether the toolbox's outputs are still useful once the pipeline is running unattended, not just on day one.</p></div>
+    <div class="linkcard"><div class="term">9 — EVIDENCE &amp; GOVERN</div><p>Evidence and governance is the zone that keeps every other claim on this page honest — traceable, re-checkable artifacts are what let 'reference implementation' mean something more than a label.</p></div>
+  </div>
+
+  <h2 class="stripe">Honest Gaps</h2>
+  <ul class="gaps">
+    <li><strong><code>haskell.py</code> has zero unit tests.</strong> Every function used by the 8 downstream scripts is exercised indirectly, but roughly 150 other combinators (streams, containers, strings) are untested.</li>
+    <li><strong>Not wired into live CI yet.</strong> <code>playbook/</code> is a standalone toolbox — <code>ci.yml</code>/<code>security.yml</code>/the Jenkins pipeline still run their scanners directly, unchanged.</li>
+    <li><strong><code>sbom_diff.py</code> only verified against demo fixtures</strong> — no <code>syft</code> in this environment to produce a real SBOM to diff.</li>
+    <li><strong>21 unpinned GitHub Actions, found and left unfixed</strong> — a real, legitimate follow-up, out of scope for this integration pass.</li>
+    <li><strong>The generic-secret regex has a real false-positive class</strong> (keyword + quoted string ≥12 chars, blind to literal-vs-variable) — scoped around here, not fixed in the regex.</li>
+  </ul>
+
+  <h2 class="stripe">The Pitch</h2>
+  <div class="pitch">
+    <p>poetic-musings started as an eclectic hobby repo — hardware, music, FPGA work — and that's actually part of the pitch: it's a real, messy, lived-in codebase, not a sanitized demo built to look good in an interview. What makes it a credible poster child isn't that everything in here is finished or battle-tested — it isn't, and I'd rather tell you that up front than have you find the gaps yourself. It's that everything marked verified actually is: a live Terraform apply, a hardened Kubernetes cluster, a real STIG scan with the fail count shown next to the pass count, three CI vendors running the same pipeline and catching real vulnerabilities. Now I'm carrying that same discipline into a reusable toolbox — haskell.py, a genuinely working point-free FP library for Maybe/Either error handling and parser combinators — because the scripting problems in DevSecOps are exactly the kind FP is good at: parsing untrusted structured text and making policy decisions you can actually test. It's brand new here, being integrated and re-verified right now, not something I'm claiming has years of mileage. But the plan is straightforward: prove it here first, on a real repo with real gaps named plainly, and then carry this exact toolbox and this exact standard of honesty into every project after this one.</p>
+  </div>
+
+  <h2 class="stripe">Roadmap</h2>
+  <ol class="roadmap">
+    <li>Wire playbook/ scripts into the live GitHub Actions, GitLab CI, and Jenkins pipelines as a fourth verification layer, not just a standalone toolbox run by hand</li>
+    <li>Add a property-based test suite for haskell.py itself using Hypothesis, so the combinators are verified the same way the rest of the repo insists everything else be verified</li>
+    <li>Extract playbook/ as its own versioned package once a second real project needs it, rather than copy-pasting it forward</li>
+    <li>Quarterly re-audit of the 9 zones against MASTER-PLAYBOOK.md's own scope statement, to keep the 'reference implementation' claim honest as the repo evolves</li>
+    <li>Replace remaining ad hoc parsing in existing scripts (cve.py, sbom_diff.py, deps.py) with haskell.py parser combinators one file at a time, tracked as visible progress rather than claimed all at once</li>
+    <li>Publish a short honest changelog of what in the playbook moved from 'integrated' to 'verified in production use' each quarter</li>
+  </ol>
+
+  <footer class="colophon">
+    Full source, every script, and the complete real-bug list live in <a href="https://github.com/jclements3/poetic-musings/tree/main/playbook" target="_blank">playbook/</a> — see <code>playbook/README.md</code> for the unabridged verification log and <code>playbook/MASTER-PLAYBOOK.md</code> for the full 9-zone play-by-play.
+  </footer>
+</div>
+</body>
+</html>
