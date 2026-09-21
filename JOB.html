@@ -43,6 +43,23 @@ nav.links { display: flex; flex-wrap: wrap; gap: 0.8rem; font-size: 0.84rem; whi
 nav.links a { color: var(--accent); text-decoration: none; }
 nav.links a:hover { text-decoration: underline; }
 h2 { font-size: 1.05rem; margin: 1.6rem 0 0.6rem; border-bottom: 1px solid var(--rule); padding-bottom: 0.3rem; }
+
+.punchlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.3rem; }
+.punchlist li {
+  background: var(--panel); border: 1px solid var(--rule); border-left: 3px solid var(--rule);
+  border-radius: 6px; padding: 0.4rem 0.7rem; cursor: pointer;
+  display: flex; align-items: baseline; gap: 0.55rem; font-size: 0.83rem;
+}
+.punchlist li:hover { border-color: var(--accent); }
+.punchlist li.active { border-left-color: var(--accent); background: var(--accent-soft); }
+.punchlist .p-status { flex-shrink: 0; }
+.punchlist .p-status.ok { color: var(--ok-border); }
+.punchlist .p-status.partial { color: var(--partial-border); }
+.punchlist .p-req { font-weight: 600; flex-shrink: 0; }
+.punchlist .p-punch { color: var(--muted); }
+@media (min-width: 760px) {
+  .punchlist { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 0.4rem 0.7rem; }
+}
 code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.85em; background: var(--code-bg); padding: 0.05em 0.35em; border-radius: 3px; }
 .badge { display: inline-block; padding: 0.12em 0.55em; border-radius: 4px; font-size: 0.76rem; font-weight: 600; white-space: nowrap; }
 .badge.ok { background: var(--ok-bg); color: var(--ok-border); border: 1px solid var(--ok-border); }
@@ -120,6 +137,9 @@ footer { margin-top: 2rem; color: var(--muted); font-size: 0.82rem; }
     </nav>
   </div>
 
+  <h2>Punch-list overview — click any line for detail</h2>
+  <ul class="punchlist" id="punchlist"></ul>
+
   <h2>Requirement → repo mapping</h2>
   <div class="layout">
     <div class="rows" id="rows"></div>
@@ -149,6 +169,7 @@ const ROWS = [
     req: "Terraform for complex IaC deployments",
     where: "infra/terraform/",
     status: "ok", statusLabel: "Covered",
+    punch: "AWS applied for real, bug fixed, torn down clean. Azure written, not applied.",
     summary: "Bottom Line Up Front (BLUF) — now our environments would stand up in minutes, from version-controlled code, instead of manual console work — and they'd be identical every time. Used Terraform, using one reusable set of modules for the network, container registry, storage, and encryption keys, driven by a separate config file per environment so dev and prod never drift out of sync. Verified against a live Amazon Web Services (AWS) account, hit a real access-control gap, fixed the root cause, verified it against AWS's own systems, then tore it down clean. Azure is built to the same standard but not yet applied and is pending per your approval.",
     fitsIn: "This is the foundation layer everything else sits on. In this repo's DevSecOps flow, Terraform provisions the account-level primitives (network, registry, storage, keys, IAM) that Kubernetes deploys onto, Ansible configures software on top of, and the CI/CD pipeline's IaC-scan gate (tfsec) checks on every push — provisioning, config management, and policy enforcement as three distinct, cooperating layers rather than one script doing everything.",
     otherTools: [
@@ -176,6 +197,7 @@ const ROWS = [
     req: "Kubernetes: build, deploy, manage, HA/resilience",
     where: "k8s/",
     status: "ok", statusLabel: "Covered",
+    punch: "Hardened manifests on a real cluster, CIS-scanned: 62 pass / 11 fail.",
     summary: "BLUF — workloads stay up through a node failure or a rolling update instead of dropping traffic. Used Kubernetes with the restricted security standard: no pod runs as root, none can write to its own filesystem, network traffic is default-denied unless explicitly allowed, and a minimum number of healthy replicas is enforced through any disruption. Verified against a real running cluster with an industry-standard benchmark scan — 62 checks passed. The 11 that failed are the cluster tooling's own defaults, not the configuration, and are named individually with cause.",
     fitsIn: "This is the runtime layer the Terraform-provisioned infrastructure and the CI/CD-built container images land on. In a real IDDE-style environment this is where 'mission-critical workload resilience' actually gets enforced — PDBs, anti-affinity, and NetworkPolicy are the concrete mechanisms behind that phrase, not just a buzzword, and they're exactly what the CIS Benchmark scan and kube-linter CI gate both check for.",
     otherTools: [
@@ -204,6 +226,7 @@ const ROWS = [
     req: "CI/CD pipelines (GitLab CI, Jenkins, Azure DevOps)",
     where: ".github/workflows/, .gitlab-ci.yml",
     status: "partial", statusLabel: "Partial",
+    punch: "Two real pipelines, five real bugs caught and fixed. No Jenkins/Azure DevOps.",
     summary: "BLUF — nothing reaches production without passing the same automated checks, every time, with no manual gatekeeping step to forget. Built the same pipeline in two tools, GitHub Actions and GitLab CI, so it isn't locked to one vendor. Verified on the first real run: it wasn't green — it caught five actual problems, including a live vulnerability in a dependency — and each was fixed for the real reason, not by silencing the alert. Jenkins and Azure DevOps pipeline experience is not yet built and is pending per your approval.",
     fitsIn: "This is the automation spine everything else runs through — every other row on this page (Terraform, Kubernetes, security scanning, STIG, Ansible) is only proven 'real' because it's wired into one of these two pipelines and re-verified on every push, not run once by hand and screenshotted.",
     otherTools: [
@@ -229,6 +252,7 @@ const ROWS = [
     req: "Hybrid cloud: AWS and Azure",
     where: "infra/terraform/modules/azure-platform/",
     status: "partial", statusLabel: "Partial",
+    punch: "AWS proven live. Azure design-complete, awaiting a subscription to apply.",
     summary: "BLUF — no lock-in to one cloud vendor's pricing or outages. Used Terraform for Amazon Web Services (AWS), proven end to end — live account, verified, torn down clean. Built Microsoft Azure to the identical standard, passing every automated check. Azure is not yet applied against a live subscription and is pending per your approval.",
     fitsIn: "This posting explicitly calls out AWS and Azure both, inside a single 'hybrid cloud' IDDE environment — so this row is really about proving I understand how a single Terraform layer targets both clouds with parallel modules and per-environment tfvars, even though only one side has been operationally exercised here.",
     otherTools: [
@@ -251,6 +275,7 @@ const ROWS = [
     req: "Windows Server admin, AD, GPOs, SCCM",
     where: "ad-lab/",
     status: "partial", statusLabel: "Partial",
+    punch: "Real AD domain, real Kerberos, real GPO. No Windows client or SCCM.",
     summary: "BLUF — this is the identity backbone every other system in the environment would trust for who's allowed to do what. Used Samba4 to stand up a real Active Directory (AD) domain — real authentication, real directory, real policy objects. Verified by actually logging in and pulling a live credential, not just confirming the service was running; two real provisioning problems were hit and root-caused. A domain-joined Windows client and System Center Configuration Manager (SCCM), now Microsoft Endpoint Configuration Manager (MECM), are not yet built and are pending per your approval.",
     fitsIn: "This is the identity layer under everything else — in a real IDDE, AD/Entra ID is what Coder, GitLab, and the Kubernetes cluster's RBAC would all federate against for authentication, and it's the natural integration point I named but didn't build for the Coder deployment on this page.",
     otherTools: [
@@ -280,6 +305,7 @@ const ROWS = [
     req: "STIG evaluation, analysis, implementation",
     where: "stig/",
     status: "ok", statusLabel: "Covered",
+    punch: "Real DISA STIG scan, scored: 67 pass / 51 fail. Remediation not yet applied.",
     summary: "BLUF — a documented, scored compliance baseline ready to hand to an auditor. A Security Technical Implementation Guide (STIG) is the specific Department of Defense standard, distinct from the general industry benchmark also run elsewhere on this page — a distinction that matters directly to this role. Used the government's own official scanning content against a real target. Verified with a genuine scored result: 67 passed, 51 failed, out of 409 rules in scope, each one traceable to a specific setting. Remediation of the 51 findings is not yet applied and is pending per your approval — this is the honest before picture, and remediation is the immediate next deliverable.",
     fitsIn: "This is the DoD-specific compliance layer this posting names by title — distinct from, but complementary to, the CIS Benchmark work on the Kubernetes row. A real GMD/IDDE environment would run both: CIS for general cloud-native hardening, STIG for DoD-mandated host/OS compliance, feeding the same kind of centralized findings the CI/CD security gates already produce for code-level scanning.",
     otherTools: [
@@ -309,6 +335,7 @@ const ROWS = [
     req: "Security/code scanning embedded in CI/CD",
     where: "dashboard Security Scanning Gates table",
     status: "ok", statusLabel: "Covered",
+    punch: "7 real gates on every push, real findings caught and fixed, not staged.",
     summary: "BLUF — security findings surface before code ships, not after an incident. Used seven layered scans on every single change — leaked credentials, insecure code patterns, vulnerable dependencies, vulnerable container images, misconfigured infrastructure, and unsafe Kubernetes settings — all rolled into one dashboard instead of eight disconnected tools. Verified on real runs, not staged: the first pass caught an actual known vulnerability in a live dependency, six real infrastructure hardening gaps, and vulnerabilities baked into the base container image itself — the kind of finding most teams miss because they only scan their own code. Every finding was fixed, with the specific fix documented.",
     fitsIn: "This is the 'embed automated security and code scanning tools directly into the CI/CD pipelines' language from the posting, almost verbatim — the gate table on the dashboard is literally that requirement, implemented and exercised on real commits rather than described in a slide.",
     otherTools: [
@@ -337,6 +364,7 @@ const ROWS = [
     req: "IDE experience, e.g. Coder",
     where: "coder/",
     status: "ok", statusLabel: "Covered",
+    punch: "Real Coder server, verified live and healthy. No workspace template yet.",
     summary: "BLUF — engineers get a ready-to-code environment in minutes instead of a day of local setup. Used the official Coder server image, deployed and running. Verified live and healthy against its own login page, health check, and version API — not just that the container started. A workspace template, the piece that turns this into engineers self-serving new environments on demand, is not yet built and is pending per your approval.",
     fitsIn: "This is developer-experience tooling sitting on top of everything else — Coder workspaces would typically be provisioned by Terraform templates, run as containers/pods on the same Kubernetes cluster demonstrated on this page, and authenticate against the AD/Entra identity layer, which is why I called out that integration as a named gap rather than pretending it exists.",
     otherTools: [
@@ -362,6 +390,7 @@ const ROWS = [
     req: "Config management on top of IaC (Ansible)",
     where: "ansible/",
     status: "ok", statusLabel: "Covered",
+    punch: "Real idempotency proven: cold run changed=1, warm run changed=0.",
     summary: "BLUF — systems stay in a known, correct configuration automatically, instead of drifting apart every time someone makes a manual change. Used Ansible for the layer above Terraform: Terraform answers whether the infrastructure exists, Ansible answers whether the right software is actually deployed and configured on it, every time. Verified with a real test, not a claim — tore the stack down, ran the automation cold, it made one real change; ran it again immediately, it made zero changes, exactly what correct, repeatable automation looks like. The full pipeline was confirmed working end to end, not just that a container was running.",
     fitsIn: "This closes the loop between 'infrastructure exists' (Terraform) and 'infrastructure is correctly configured and monitored' (Observability) — the posting's 'manage tool deployment, infrastructure configuration' language is exactly this row, and it's the layer that would also configure the AD lab, the Kubernetes nodes, or Coder in a fuller build-out.",
     otherTools: [
@@ -389,9 +418,24 @@ const ROWS = [
 const rowsEl = document.getElementById("rows");
 const panelEl = document.getElementById("panel");
 const panel2El = document.getElementById("panel2");
+const punchlistEl = document.getElementById("punchlist");
 
 function badgeClass(status) {
   return status === "ok" ? "ok" : status === "partial" ? "partial" : "progress";
+}
+
+function renderPunchlist() {
+  punchlistEl.innerHTML = "";
+  ROWS.forEach((r, i) => {
+    const li = document.createElement("li");
+    li.id = "punch-" + i;
+    li.innerHTML = `
+      <span class="p-status ${badgeClass(r.status)}">●</span>
+      <span class="p-req">${r.req.split(":")[0].split("(")[0].trim()}:</span>
+      <span class="p-punch">${r.punch}</span>`;
+    li.addEventListener("click", () => openPanel(i, true));
+    punchlistEl.appendChild(li);
+  });
 }
 
 function renderRows() {
@@ -415,12 +459,17 @@ function renderRows() {
   });
 }
 
-function openPanel(i) {
+function openPanel(i, scrollToRows) {
   const r = ROWS[i];
   document.querySelectorAll(".row").forEach(el => el.classList.remove("active"));
   document.getElementById("row-" + i).classList.add("active");
   document.querySelectorAll(".badge-btn").forEach(b => b.setAttribute("aria-pressed", "false"));
   document.querySelector('.badge-btn[data-idx="' + i + '"]').setAttribute("aria-pressed", "true");
+  document.querySelectorAll(".punchlist li").forEach(el => el.classList.remove("active"));
+  document.getElementById("punch-" + i).classList.add("active");
+  if (scrollToRows) {
+    document.getElementById("row-" + i).scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
 
   const toolsHtml = r.tools.map(t => `<li>${t}</li>`).join("");
   const stepsHtml = r.steps.map(s => `<li>${s}</li>`).join("");
@@ -452,11 +501,13 @@ function openPanel(i) {
     e.stopPropagation();
     document.querySelectorAll(".row").forEach(el => el.classList.remove("active"));
     document.querySelectorAll(".badge-btn").forEach(b => b.setAttribute("aria-pressed", "false"));
+    document.querySelectorAll(".punchlist li").forEach(el => el.classList.remove("active"));
     panelEl.innerHTML = '<div class="placeholder">Click a status badge on the left to see the tools, commands, and verification steps behind that row.</div>';
     panel2El.innerHTML = '<div class="placeholder">Click a status badge to see where this fits in the overall DevSecOps approach, and other tools that could support this same requirement.</div>';
   });
 }
 
+renderPunchlist();
 renderRows();
 </script>
 </body>
