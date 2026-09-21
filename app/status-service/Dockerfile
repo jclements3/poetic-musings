@@ -35,15 +35,20 @@ RUN python3 -m pip uninstall --yes pip setuptools wheel 2>/dev/null; \
            /usr/local/bin/pip*
 
 WORKDIR /app
-COPY app.py .
+COPY app.py gunicorn.conf.py .
 
 # STATUS.md is mounted read-only at /data in Kubernetes (see k8s/ manifests);
 # bake a copy in the image too so `docker run` works standalone.
 COPY STATUS.md /data/STATUS.md
 
+# PROMETHEUS_MULTIPROC_DIR must be writable by every gunicorn worker; it
+# lives under /tmp so it works under the same read-only-root-filesystem +
+# emptyDir-at-/tmp pattern the rest of this image already relies on (see
+# app.py's __main__ comment and k8s/base/deployment.yaml's tmp volume).
 ENV STATUS_MD_PATH=/data/STATUS.md \
     PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus_multiproc
 
 USER app
 EXPOSE 8080
@@ -51,5 +56,6 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/healthz', timeout=2)" || exit 1
 
-# Read-only root filesystem friendly: gunicorn needs no writable dirs for this app.
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "2", "--threads", "2", "app:app"]
+# Read-only root filesystem friendly: the only writes are gunicorn's own
+# temp needs and the Prometheus multiprocess dir, both under /tmp.
+CMD ["sh", "-c", "mkdir -p \"$PROMETHEUS_MULTIPROC_DIR\" && exec gunicorn --config gunicorn.conf.py --bind 0.0.0.0:8080 --workers 2 --threads 2 app:app"]

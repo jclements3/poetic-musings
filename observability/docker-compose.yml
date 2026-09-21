@@ -1,0 +1,55 @@
+# Local observability stack for app/status-service.
+#
+# Brings up the real service plus a real Prometheus scraping it and a
+# real Grafana with one provisioned dashboard -- not a mockup, a working
+# metrics pipeline you can point a browser at.
+#
+#   cd observability
+#   docker compose up --build
+#   # status-service : http://localhost:8080
+#   # Prometheus     : http://localhost:9090
+#   # Grafana         : http://localhost:3000  (admin / admin, change on first login)
+#
+#   docker compose down        # stop
+#   docker compose down -v     # stop and wipe Prometheus/Grafana volumes
+
+services:
+  status-service:
+    build:
+      context: ../app/status-service
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/healthz', timeout=2)"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    depends_on:
+      - status-service
+
+  grafana:
+    image: grafana/grafana:11.3.0
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+
+volumes:
+  prometheus-data:
+  grafana-data:

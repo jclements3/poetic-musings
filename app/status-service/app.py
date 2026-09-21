@@ -12,12 +12,66 @@ import re
 import time
 from pathlib import Path
 
-from flask import Flask, Response, jsonify
+from flask import Flask, Response, jsonify, request
+from prometheus_client import (
+    CONTENT_TYPE_LATEST,
+    CollectorRegistry,
+    Counter,
+    Histogram,
+    generate_latest,
+    multiprocess,
+)
 
 app = Flask(__name__)
 
 STATUS_MD_PATH = Path(os.environ.get("STATUS_MD_PATH", "/data/STATUS.md"))
 START_TIME = time.time()
+
+# --- Prometheus instrumentation -------------------------------------------
+# Two metrics cover what actually matters for this service: how many
+# requests, and how long they take, broken down by route and status code.
+# /metrics itself is excluded from both so scraping the service doesn't
+# skew its own numbers.
+REQUEST_COUNT = Counter(
+    "http_requests_total",
+    "Total HTTP requests received",
+    ["method", "path", "status"],
+)
+REQUEST_LATENCY = Histogram(
+    "http_request_duration_seconds",
+    "HTTP request latency in seconds",
+    ["method", "path"],
+)
+
+
+@app.before_request
+def _start_timer():
+    request._start_time = time.time()
+
+
+@app.after_request
+def _record_metrics(response):
+    if request.path != "/metrics":
+        elapsed = time.time() - getattr(request, "_start_time", time.time())
+        REQUEST_LATENCY.labels(request.method, request.path).observe(elapsed)
+        REQUEST_COUNT.labels(request.method, request.path, response.status_code).inc()
+    return response
+
+
+@app.get("/metrics")
+def metrics():
+    # gunicorn runs multiple worker processes (see Dockerfile CMD); the
+    # default prometheus_client registry lives in-process, so a scrape
+    # hitting one worker would only ever see that worker's own counters.
+    # PROMETHEUS_MULTIPROC_DIR (set in the Dockerfile, cleaned up by
+    # gunicorn.conf.py's child_exit hook) makes every worker write to
+    # shared files instead, and MultiProcessCollector merges them here so
+    # one /metrics response reflects all workers' traffic combined.
+    if "PROMETHEUS_MULTIPROC_DIR" in os.environ:
+        registry = CollectorRegistry()
+        multiprocess.MultiProcessCollector(registry)
+        return Response(generate_latest(registry), mimetype=CONTENT_TYPE_LATEST)
+    return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)
 
 
 def _read_status_md() -> str:
