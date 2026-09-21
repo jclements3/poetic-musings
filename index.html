@@ -48,27 +48,27 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-  line-height: 1.55;
-  font-size: clamp(1rem, 0.85rem + 0.3vw, 1.15rem);
+  line-height: 1.42;
+  font-size: clamp(0.92rem, 0.8rem + 0.25vw, 1.02rem);
 }
-.wrap { max-width: none; width: 100%; margin: 0 auto; padding: 1.25rem clamp(1.25rem, 4vw, 4rem) 3rem; }
+.wrap { max-width: none; width: 100%; margin: 0 auto; padding: 0.85rem clamp(1.25rem, 4vw, 4rem) 1.75rem; }
 
 header.top {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.75rem 1.5rem;
-  padding-bottom: 0.85rem;
-  margin-bottom: 1rem;
+  gap: 0.5rem 1.5rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
   border-bottom: 3px double var(--rule);
 }
-header.top h1 { margin: 0; font-size: 1.6rem; }
-header.top .sub { color: var(--muted); font-size: 0.95rem; }
+header.top h1 { margin: 0; font-size: 1.35rem; }
+header.top .sub { color: var(--muted); font-size: 0.78rem; }
 header.top .links a {
   color: var(--accent);
   text-decoration: none;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   margin-left: 1rem;
 }
 header.top .links a:hover { text-decoration: underline; }
@@ -76,13 +76,13 @@ header.top .links a:hover { text-decoration: underline; }
 .summary-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-bottom: 1.25rem;
+  gap: 0.5rem;
+  margin-bottom: 0.7rem;
 }
 .pill {
-  font-size: 0.8rem;
+  font-size: 0.74rem;
   font-weight: 600;
-  padding: 0.3rem 0.7rem;
+  padding: 0.2rem 0.6rem;
   border-radius: 999px;
   white-space: nowrap;
 }
@@ -91,17 +91,20 @@ header.top .links a:hover { text-decoration: underline; }
 .pill.gap { background: var(--gap-bg); color: var(--gap-border); border: 1px solid var(--gap-border); }
 
 h2.section-title {
-  font-size: 1.05rem;
+  font-size: 0.76rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--muted);
-  margin: 1.75rem 0 0.85rem;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 0.22rem 0.6rem;
+  margin: 0.85rem 0 0.5rem;
+  border-radius: 4px;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.25rem;
+  gap: 0.7rem;
 }
 @media (min-width: 1400px) {
   .grid { grid-template-columns: repeat(4, 1fr); }
@@ -113,8 +116,8 @@ h2.section-title {
 .card {
   background: var(--panel);
   border: 1px solid var(--rule);
-  border-radius: 10px;
-  padding: 1.1rem 1.25rem 1.25rem;
+  border-radius: 8px;
+  padding: 0.65rem 0.8rem 0.75rem;
   box-shadow: var(--shadow);
   border-top: 4px solid var(--rule);
 }
@@ -127,15 +130,15 @@ h2.section-title {
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
 }
-.card h3 { margin: 0; font-size: 1.05rem; }
+.card h3 { margin: 0; font-size: 0.92rem; }
 .badge {
-  font-size: 0.72rem;
+  font-size: 0.64rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  padding: 0.15rem 0.5rem;
+  padding: 0.12rem 0.4rem;
   border-radius: 4px;
   flex-shrink: 0;
 }
@@ -143,24 +146,35 @@ h2.section-title {
 .badge.partial { background: var(--partial-bg); color: var(--partial-border); }
 .badge.gap { background: var(--gap-bg); color: var(--gap-border); }
 
-.card p { margin: 0.5rem 0; font-size: 0.92rem; color: var(--fg); }
+.card p { margin: 0.35rem 0; font-size: 0.81rem; color: var(--fg); }
 .card .desc { color: var(--muted); }
 
-.toolbadges { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.7rem 0; }
+.card ul.reslist {
+  margin: 0.35rem 0;
+  padding-left: 1.05rem;
+  font-size: 0.76rem;
+  color: var(--fg);
+  opacity: 0.9;
+  columns: 2 9rem;
+}
+.card ul.reslist li { margin: 0.05rem 0; break-inside: avoid; }
+.card ul.reslist code { font-size: 0.95em; }
+
+.toolbadges { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.45rem 0; }
 .toolbadges span {
   font-family: "SFMono-Regular", Consolas, Menlo, monospace;
-  font-size: 0.76rem;
+  font-size: 0.7rem;
   background: var(--code-bg);
   border: 1px solid var(--rule);
   border-radius: 4px;
-  padding: 0.15rem 0.4rem;
+  padding: 0.1rem 0.35rem;
 }
 
 .card .files {
-  margin-top: 0.6rem;
-  padding-top: 0.6rem;
+  margin-top: 0.4rem;
+  padding-top: 0.4rem;
   border-top: 1px solid var(--rule);
-  font-size: 0.82rem;
+  font-size: 0.75rem;
 }
 .card .files code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; }
 .card .files a { color: var(--accent); text-decoration: none; }
@@ -173,11 +187,11 @@ table.scan-table {
   border: 1px solid var(--rule);
   border-radius: 8px;
   overflow: hidden;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 table.scan-table th, table.scan-table td {
   border-bottom: 1px solid var(--rule);
-  padding: 0.55rem 0.75rem;
+  padding: 0.35rem 0.6rem;
   text-align: left;
   vertical-align: top;
 }
@@ -245,7 +259,7 @@ footer a { color: var(--accent); }
 <header class="top">
   <div>
     <h1>poetic-musings — DevSecOps Dashboard</h1>
-    <div class="sub">A snapshot of the platform-engineering layer built on top of this repo. Hover any dotted-underlined term for its definition.</div>
+    <div class="sub">Hover any dotted-underlined term for its definition.</div>
   </div>
   <nav class="links">
     <a href="qrg.html" style="font-weight:700;">📖 QRG / Help</a>
@@ -268,6 +282,17 @@ footer a { color: var(--accent); }
   <div class="card status-partial">
     <div class="card-head"><h3><a class="term" href="#t-iac" title="Infrastructure as Code: describing infrastructure in version-controlled text instead of manual console clicks.">IaC</a> · Terraform</h3><span class="badge partial">Written, not applied</span></div>
     <p class="desc">Dual-cloud platform module: <a class="term" href="#t-vpc" title="Virtual Private Cloud: your own private, isolated network inside a cloud provider's infrastructure.">VPC</a> across 2 AZs, KMS-encrypted immutable-tag <a class="term" href="#t-ecr" title="Elastic Container Registry: AWS's managed registry for storing and scanning container images.">ECR</a>, encrypted/versioned <a class="term" href="#t-s3" title="Simple Storage Service: AWS's object storage for files and blobs at effectively unlimited scale.">S3</a> with a separate access-log bucket, least-privilege <a class="term" href="#t-iam" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a> role for CI — plus an Azure module (ACR, geo-redundant storage). Never run against a live account.</p>
+    <ul class="reslist">
+      <li><code>aws_vpc</code> + public/private <code>aws_subnet</code></li>
+      <li><code>aws_internet_gateway</code>, <code>aws_route_table</code></li>
+      <li><code>aws_ecr_repository</code> + lifecycle policy</li>
+      <li><code>aws_kms_key</code> + alias (rotating)</li>
+      <li><code>aws_s3_bucket</code> ×2 (artifacts, access-logs)</li>
+      <li><code>aws_iam_role</code> + role policy (CI push)</li>
+      <li><code>azurerm_resource_group</code></li>
+      <li><code>azurerm_container_registry</code> (Premium)</li>
+      <li><code>azurerm_storage_account</code> + container</li>
+    </ul>
     <div class="toolbadges"><span>Terraform</span><span>hashicorp/aws</span><span>hashicorp/azurerm</span><span>HCL</span></div>
     <div class="files">📁 <a href="infra/terraform/">infra/terraform/</a> · <code>modules/aws-platform</code> · <code>modules/azure-platform</code> · <code>environments/{dev,prod}</code></div>
   </div>
@@ -275,6 +300,12 @@ footer a { color: var(--accent); }
   <div class="card status-ok">
     <div class="card-head"><h3>Containers · Docker</h3><span class="badge ok">Built &amp; tested</span></div>
     <p class="desc">Hardened multi-stage <code>Dockerfile</code>: minimal base, non-root uid/gid 10001, no build tools in the runtime layer. Actually built and run under <code>--read-only --user 10001:10001</code> to prove it — caught a real bug (gunicorn needs a writable <code>/tmp</code> even in a locked-down container).</p>
+    <ul class="reslist">
+      <li>2-stage build: <code>builder</code> → <code>runtime</code></li>
+      <li>Endpoints: <code>/</code>, <code>/status.json</code></li>
+      <li><code>/healthz</code> (liveness), <code>/readyz</code> (readiness)</li>
+      <li>Pinned: <code>flask==3.0.3</code>, <code>gunicorn==22.0.0</code></li>
+    </ul>
     <div class="toolbadges"><span>Docker</span><span>python:3.12-slim</span><span>Flask</span><span>gunicorn</span></div>
     <div class="files">📁 <a href="app/status-service/">app/status-service/</a></div>
   </div>
@@ -282,6 +313,12 @@ footer a { color: var(--accent); }
   <div class="card status-partial">
     <div class="card-head"><h3><a class="term" href="#t-k8s" title="Kubernetes: a system for running and automatically managing many containers across many machines.">Kubernetes</a></h3><span class="badge partial">Validated, no live cluster</span></div>
     <p class="desc">Restricted <a class="term" href="#t-pss" title="Kubernetes' three built-in security profiles for Pods: privileged, baseline, and restricted (strictest).">Pod Security Standard</a>: non-root, <code>readOnlyRootFilesystem</code>, all capabilities dropped, seccomp default. Default-deny <a class="term" href="#t-netpol" title="A Kubernetes firewall for Pod-to-Pod traffic, usually written as a default-deny rule plus explicit allows.">NetworkPolicy</a>, a <a class="term" href="#t-pdb" title="PodDisruptionBudget: guarantees a minimum number of replicas stay available during voluntary disruption like a node drain or cluster upgrade.">PodDisruptionBudget</a>, <a class="term" href="#t-kustomize" title="A kubectl-native tool for patching a shared base of Kubernetes manifests per environment, without duplicating YAML.">Kustomize</a> base + dev/prod overlays. Manifests parse and build cleanly; never scheduled on a real cluster.</p>
+    <ul class="reslist">
+      <li>1 <code>Deployment</code>, 1 <code>Service</code></li>
+      <li>3 <code>NetworkPolicy</code> (deny, ingress, DNS)</li>
+      <li>1 <code>PodDisruptionBudget</code></li>
+      <li>dev: 1 replica · prod: 3 replicas</li>
+    </ul>
     <div class="toolbadges"><span>Kubernetes</span><span>Kustomize</span><span>kubectl</span></div>
     <div class="files">📁 <a href="k8s/">k8s/</a> · <code>base/</code> · <code>overlays/{dev,prod}</code></div>
   </div>
@@ -289,6 +326,14 @@ footer a { color: var(--accent); }
   <div class="card status-ok">
     <div class="card-head"><h3><a class="term" href="#t-cicd" title="Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.">CI/CD</a></h3><span class="badge ok">Live on every push</span></div>
     <p class="desc">Two parallel pipelines, same stages, different dialects: lint/test, then five security gates. Every scanning job checks its target path exists first and skips cleanly, so it's safe to land before every piece of the platform exists.</p>
+    <ul class="reslist">
+      <li>Jobs: <code>lint-python</code>, <code>python-tests</code></li>
+      <li><code>secrets-scan</code>, <code>sast-python</code></li>
+      <li><code>sbom-and-dependency-scan</code></li>
+      <li><code>container-scan</code>, <code>iac-scan</code></li>
+      <li><code>k8s-manifest-scan</code></li>
+      <li>Weekly cron + every push/PR</li>
+    </ul>
     <div class="toolbadges"><span>GitHub Actions</span><span>GitLab CI</span></div>
     <div class="files">📁 <a href=".github/workflows/">.github/workflows/{ci,security}.yml</a> · <a href=".gitlab-ci.yml">.gitlab-ci.yml</a></div>
   </div>
