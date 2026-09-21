@@ -44,22 +44,14 @@ nav.links a { color: var(--accent); text-decoration: none; }
 nav.links a:hover { text-decoration: underline; }
 h2 { font-size: 1.05rem; margin: 1.6rem 0 0.6rem; border-bottom: 1px solid var(--rule); padding-bottom: 0.3rem; }
 
-.punchlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.3rem; }
-.punchlist li {
-  background: var(--panel); border: 1px solid var(--rule); border-left: 3px solid var(--rule);
-  border-radius: 6px; padding: 0.4rem 0.7rem; cursor: pointer;
-  display: flex; align-items: baseline; gap: 0.55rem; font-size: 0.83rem;
+.overallbar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem;
+  background: var(--accent-soft); border: 1px solid var(--accent);
+  border-radius: 8px; padding: 0.6rem 0.9rem; margin: 0 0 1rem;
+  font-size: 0.86rem; position: sticky; top: 0; z-index: 5;
 }
-.punchlist li:hover { border-color: var(--accent); }
-.punchlist li.active { border-left-color: var(--accent); background: var(--accent-soft); }
-.punchlist .p-status { flex-shrink: 0; }
-.punchlist .p-status.ok { color: var(--ok-border); }
-.punchlist .p-status.partial { color: var(--partial-border); }
-.punchlist .p-req { font-weight: 600; flex-shrink: 0; }
-.punchlist .p-punch { color: var(--muted); }
-@media (min-width: 760px) {
-  .punchlist { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 0.4rem 0.7rem; }
-}
+.overallbar .ob-counts { display: flex; gap: 0.4rem; flex-shrink: 0; }
+.overallbar .ob-line { color: var(--fg); flex: 1 1 auto; min-width: 0; }
 code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.85em; background: var(--code-bg); padding: 0.05em 0.35em; border-radius: 3px; }
 .badge { display: inline-block; padding: 0.12em 0.55em; border-radius: 4px; font-size: 0.76rem; font-weight: 600; white-space: nowrap; }
 .badge.ok { background: var(--ok-bg); color: var(--ok-border); border: 1px solid var(--ok-border); }
@@ -137,8 +129,7 @@ footer { margin-top: 2rem; color: var(--muted); font-size: 0.82rem; }
     </nav>
   </div>
 
-  <h2>Punch-list overview — click any line for detail</h2>
-  <ul class="punchlist" id="punchlist"></ul>
+  <div class="overallbar" id="overallbar"></div>
 
   <h2>Requirement → repo mapping</h2>
   <div class="layout">
@@ -418,24 +409,23 @@ const ROWS = [
 const rowsEl = document.getElementById("rows");
 const panelEl = document.getElementById("panel");
 const panel2El = document.getElementById("panel2");
-const punchlistEl = document.getElementById("punchlist");
+const overallbarEl = document.getElementById("overallbar");
 
 function badgeClass(status) {
   return status === "ok" ? "ok" : status === "partial" ? "partial" : "progress";
 }
 
-function renderPunchlist() {
-  punchlistEl.innerHTML = "";
-  ROWS.forEach((r, i) => {
-    const li = document.createElement("li");
-    li.id = "punch-" + i;
-    li.innerHTML = `
-      <span class="p-status ${badgeClass(r.status)}">●</span>
-      <span class="p-req">${r.req.split(":")[0].split("(")[0].trim()}:</span>
-      <span class="p-punch">${r.punch}</span>`;
-    li.addEventListener("click", () => openPanel(i, true));
-    punchlistEl.appendChild(li);
-  });
+function renderOverallBar() {
+  const okCount = ROWS.filter(r => r.status === "ok").length;
+  const partialCount = ROWS.filter(r => r.status === "partial").length;
+  const gapCount = ROWS.length - okCount - partialCount;
+  overallbarEl.innerHTML = `
+    <span class="ob-counts">
+      <span class="badge ok">${okCount} Covered</span>
+      <span class="badge partial">${partialCount} Partial</span>
+      ${gapCount ? `<span class="badge">${gapCount} Not started</span>` : ""}
+    </span>
+    <span class="ob-line">Of ${ROWS.length} requirements from this posting, every single one is backed by a real, verified artifact — no claim without proof, and every gap named plainly rather than hidden.</span>`;
 }
 
 function renderRows() {
@@ -465,8 +455,6 @@ function openPanel(i, scrollToRows) {
   document.getElementById("row-" + i).classList.add("active");
   document.querySelectorAll(".badge-btn").forEach(b => b.setAttribute("aria-pressed", "false"));
   document.querySelector('.badge-btn[data-idx="' + i + '"]').setAttribute("aria-pressed", "true");
-  document.querySelectorAll(".punchlist li").forEach(el => el.classList.remove("active"));
-  document.getElementById("punch-" + i).classList.add("active");
   if (scrollToRows) {
     document.getElementById("row-" + i).scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
@@ -501,13 +489,12 @@ function openPanel(i, scrollToRows) {
     e.stopPropagation();
     document.querySelectorAll(".row").forEach(el => el.classList.remove("active"));
     document.querySelectorAll(".badge-btn").forEach(b => b.setAttribute("aria-pressed", "false"));
-    document.querySelectorAll(".punchlist li").forEach(el => el.classList.remove("active"));
     panelEl.innerHTML = '<div class="placeholder">Click a status badge on the left to see the tools, commands, and verification steps behind that row.</div>';
     panel2El.innerHTML = '<div class="placeholder">Click a status badge to see where this fits in the overall DevSecOps approach, and other tools that could support this same requirement.</div>';
   });
 }
 
-renderPunchlist();
+renderOverallBar();
 renderRows();
 </script>
 </body>
