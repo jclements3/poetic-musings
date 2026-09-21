@@ -255,9 +255,9 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
 <header class="top">
   <h1>poetic-musings — DevSecOps Dashboard</h1>
   <div class="summary-bar">
-    <span class="pill ok">4 pillars implemented</span>
+    <span class="pill ok">5 pillars implemented</span>
     <span class="pill partial">2 pillars design-complete, unverified live</span>
-    <span class="pill gap">3 pillars not started</span>
+    <span class="pill gap">2 pillars not started</span>
     <a href="https://github.com/jclements3/poetic-musings/actions/workflows/ci.yml" title="Click through to the live run on GitHub Actions">
       <img src="https://github.com/jclements3/poetic-musings/actions/workflows/ci.yml/badge.svg" alt="CI Build/Lint/Test status" style="vertical-align:middle;">
     </a>
@@ -360,10 +360,16 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
     <div class="files">Findings centralize as <a class="term" title="Static Analysis Results Interchange Format: a standard format for security scan results so different tools' findings can be viewed in one place." style="border-bottom:1px dotted var(--accent);cursor:help;">SARIF</a> in GitHub code scanning.</div>
   </div>
 
-  <div class="card status-gap">
-    <div class="card-head"><h3>Observability</h3><span class="badge gap">Not started</span></div>
-    <p class="desc">No <a class="term" title="An open-source system that periodically scrapes and stores time-series metrics from configured targets.">Prometheus</a>/<a class="term" title="A dashboard/visualization layer that queries Prometheus (and other sources) to render graphs, gauges, and alerts.">Grafana</a> stack yet — <code>status-service</code> doesn't expose <code>/metrics</code>. Next step: add <code>prometheus_client</code>, run Prometheus+Grafana locally via Docker Compose, build one real dashboard.</p>
-    <div class="toolbadges"><span title="An open-source system that periodically scrapes and stores time-series metrics from configured targets.">Prometheus</span><span title="A dashboard/visualization layer that queries Prometheus (and other sources) to render graphs, gauges, and alerts.">Grafana</span></div>
+  <div class="card status-ok">
+    <div class="card-head"><h3>Observability</h3><span class="badge ok">Built &amp; verified locally</span></div>
+    <p class="desc"><code>status-service</code> exposes real <a class="term" title="An open-source system that periodically scrapes and stores time-series metrics from configured targets.">Prometheus</a> metrics; a real <a class="term" title="An open-source system that periodically scrapes and stores time-series metrics from configured targets.">Prometheus</a> scrapes them every 5s; a real <a class="term" title="A dashboard/visualization layer that queries Prometheus (and other sources) to render graphs, gauges, and alerts.">Grafana</a> dashboard renders them — no manual clicking, provisioned on first load. Caught a real bug: gunicorn's 2 workers don't share metrics by default (silently undercounted traffic ~50%); fixed with Prometheus multiprocess mode, re-verified 3 layers deep (app → Prometheus → Grafana, matching numbers).</p>
+    <ul class="reslist">
+      <li><code>http_requests_total</code>, <code>http_request_duration_seconds</code></li>
+      <li>4 dashboard panels: rate, p95 latency, status codes, 5m total</li>
+      <li>Local only — no ServiceMonitor wired into k8s/ yet</li>
+    </ul>
+    <div class="toolbadges"><span title="An open-source system that periodically scrapes and stores time-series metrics from configured targets.">Prometheus</span><span title="A dashboard/visualization layer that queries Prometheus (and other sources) to render graphs, gauges, and alerts.">Grafana</span><span>prometheus_client</span><span>Docker Compose</span></div>
+    <div class="files">📁 <a href="observability/">observability/</a></div>
   </div>
 
   <div class="card status-gap">
