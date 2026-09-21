@@ -32,7 +32,7 @@ body {
   font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
   line-height: 1.5; font-size: clamp(0.92rem, 0.8rem + 0.25vw, 1.02rem);
 }
-.wrap { max-width: none; width: 100%; margin: 0 auto; padding: 1.5rem clamp(1.25rem, 4vw, 3rem) 3rem; }
+.wrap { max-width: none; width: 100%; margin: 0 auto; padding: 1rem clamp(1rem, 3vw, 2rem) 1.5rem; }
 .pageheader {
   display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
   gap: 0.4rem 1.5rem; margin: 0 0 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--rule);
@@ -43,11 +43,11 @@ h1 { font-size: 1.15rem; margin: 0; white-space: nowrap; }
 nav.links { display: flex; flex-wrap: wrap; gap: 0.8rem; font-size: 0.84rem; white-space: nowrap; margin-left: auto; }
 nav.links a { color: var(--accent); text-decoration: none; }
 nav.links a:hover { text-decoration: underline; }
-h2 { font-size: 1.05rem; margin: 1.6rem 0 0.6rem; border-bottom: 1px solid var(--rule); padding-bottom: 0.3rem; }
+h2 { font-size: 1rem; margin: 1rem 0 0.45rem; border-bottom: 1px solid var(--rule); padding-bottom: 0.25rem; }
 
 .overallbar {
   background: var(--accent-soft); border: 1px solid var(--accent);
-  border-radius: 8px; padding: 0.75rem 1rem; margin: 0 0 1rem;
+  border-radius: 8px; padding: 0.6rem 0.85rem; margin: 0 0 0.7rem;
 }
 .overallbar .ob-counts { display: flex; gap: 0.4rem; flex-wrap: wrap; margin: 0 0 0.5rem; }
 .overallbar .ob-label {
@@ -66,14 +66,18 @@ button.badge-btn .badge { transition: box-shadow 0.12s ease, transform 0.12s eas
 button.badge-btn:hover .badge, button.badge-btn:focus-visible .badge { box-shadow: 0 0 0 2px var(--accent-soft); }
 button.badge-btn[aria-pressed="true"] .badge { box-shadow: 0 0 0 2px var(--accent); }
 
-.layout { display: grid; grid-template-columns: minmax(0, 320px) minmax(300px, 0.9fr) minmax(420px, 1.1fr); gap: 0.6rem 1.2rem; align-items: start; }
+.layout { display: grid; grid-template-columns: minmax(0, 300px) minmax(300px, 0.9fr) minmax(400px, 1.1fr); gap: 0.6rem 1rem; align-items: start; }
 @media (max-width: 1400px) { .layout { grid-template-columns: minmax(0, 300px) minmax(300px, 1fr); } .panel2 { grid-column: 1 / -1; } }
 @media (max-width: 1100px) { .layout { grid-template-columns: 1fr; } .panel2 { grid-column: auto; } }
 
-.rows { display: flex; flex-direction: column; gap: 0.6rem; }
+.rows {
+  display: flex; flex-direction: column; gap: 0.45rem;
+  position: sticky; top: 1.2rem; max-height: calc(100vh - 2.4rem);
+  overflow-y: auto; padding-right: 0.3rem;
+}
 .row {
   background: var(--panel); border: 1px solid var(--rule); border-radius: 8px;
-  box-shadow: var(--shadow); padding: 0.7rem 0.9rem; cursor: pointer;
+  box-shadow: var(--shadow); padding: 0.55rem 0.75rem; cursor: pointer;
   display: flex; justify-content: space-between; align-items: center; gap: 0.9rem;
 }
 .row.active { outline: 2px solid var(--accent); }
@@ -83,24 +87,24 @@ button.badge-btn[aria-pressed="true"] .badge { box-shadow: 0 0 0 2px var(--accen
 
 .panel {
   position: sticky; top: 1.2rem; background: var(--panel); border: 1px solid var(--rule);
-  border-radius: 8px; box-shadow: var(--shadow); padding: 1.2rem 1.4rem; min-height: 220px;
+  border-radius: 8px; box-shadow: var(--shadow); padding: 0.9rem 1.1rem; min-height: 220px;
   max-height: calc(100vh - 2.4rem); overflow-y: auto;
 }
 .panel .placeholder { color: var(--muted); font-size: 0.88rem; }
-.panel h3 { margin: 0 0 0.15rem; font-size: 1rem; }
-.panel .panel-status { margin: 0 0 0.9rem; }
+.panel h3 { margin: 0 0 0.15rem; font-size: 0.96rem; }
+.panel .panel-status { margin: 0 0 0.65rem; }
 .exec-summary {
   background: var(--accent-soft); border: 1px solid var(--accent);
-  border-radius: 6px; padding: 0.7rem 0.85rem; margin: 0 0 0.9rem;
+  border-radius: 6px; padding: 0.55rem 0.7rem; margin: 0 0 0.65rem;
 }
 .exec-summary .exec-label {
   font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em;
   color: var(--accent); font-weight: 700; margin-bottom: 0.3rem;
 }
 .exec-summary p { margin: 0; font-size: 0.87rem; line-height: 1.5; }
-.panel h4 { margin: 0.9rem 0 0.35rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
+.panel h4 { margin: 0.6rem 0 0.25rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
 .panel ul { margin: 0; padding-left: 1.1rem; }
-.panel li { margin: 0.35rem 0; font-size: 0.88rem; }
+.panel li { margin: 0.25rem 0; font-size: 0.88rem; }
 .panel pre {
   background: var(--code-bg); border-radius: 6px; padding: 0.6rem 0.7rem;
   overflow-x: auto; font-size: 0.8rem; margin: 0.3rem 0 0.7rem;
@@ -109,11 +113,11 @@ button.badge-btn[aria-pressed="true"] .badge { box-shadow: 0 0 0 2px var(--accen
 .panel .close-btn { float: right; background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.85rem; }
 
 .panel2 { }
-.panel2 h4 { margin: 0.9rem 0 0.35rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
+.panel2 h4 { margin: 0.6rem 0 0.25rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
 .panel2 h4:first-child { margin-top: 0; }
-.panel2 p { margin: 0 0 0.6rem; font-size: 0.86rem; line-height: 1.5; }
+.panel2 p { margin: 0 0 0.4rem; font-size: 0.86rem; line-height: 1.5; }
 .panel2 ul { margin: 0; padding-left: 1.1rem; }
-.panel2 li { margin: 0.4rem 0; font-size: 0.86rem; }
+.panel2 li { margin: 0.3rem 0; font-size: 0.86rem; }
 .panel2 li .tool-name { font-weight: 600; }
 .panel2 li pre {
   background: var(--code-bg); border-radius: 6px; padding: 0.45rem 0.6rem;
