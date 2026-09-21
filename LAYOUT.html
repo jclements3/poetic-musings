@@ -10,16 +10,51 @@ table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;
 .wrap{overflow:auto;border:1px solid #ccc;margin:8px 0} .wrap svg{min-width:900px}
 .chain{font-size:15px;font-weight:700;letter-spacing:.04em;padding:10px;background:#f4f1e8;border-left:6px solid #a8700f}
 .k{font-weight:700}
+.srcnav{font-size:13px;background:#f4f1e8;border:1px solid #a8700f;border-radius:4px;padding:10px 12px;margin:10px 0}
+.srcnav .lbl2{color:#a8700f;font-weight:700;margin-right:6px}
+.srcnav a{color:#111;text-decoration:none;border-bottom:1px solid #a8700f;margin:0 2px}
+.srcnav a:hover{background:#eee}
+.srcnav .grp{margin:4px 0}
+a.src{color:#111;text-decoration:none;border-bottom:1px dotted #a8700f}
+a.src:hover{background:#eee}
 </style></head><body><main>
 <h1>PM CONTROLLER — FINAL LAYOUT</h1>
 <p class="sub">One portable controller: 3D-printed 49-key panel (~504 × 150 mm face, 16 mm key pitch), ULX3S ECP5-85F inside,
 Oracle as the brains. Boots to a mode menu on the bar TFT; every demonstration reachable in under a
 minute, no laptop. Sleigh Glide travels alongside (tube + driver board, gate ribbon to the box); the Erand49 harp is a separate
 instrument that plugs into the rear port.</p>
-<p class="sub"><b>Root + spokes (PROGRAM.md):</b> this box is the <b>root</b> of the Clash library — Panel is the body,
-Oracle the brains. Each spoke adds one piece of hardware to it: antennas (T, U), AD9226 + relay (S), GPS (G),
-PHY (N), harp (E), sleigh link (C), and for the snooker demo an overhead camera (I) and a 24 GHz Doppler module (M).
+<p class="sub"><b>Root + spokes (PROGRAM.md):</b> this box is the <b>root</b> of the Clash library — <a class="src" href="Panel/">Panel</a> is the body,
+<a class="src" href="Oracle/">Oracle</a> the brains. Each spoke adds one piece of hardware to it: antennas (T <a class="src" href="Theremin/">Theremin</a>,
+U <a class="src" href="UHF/">UHF</a>), AD9226 + relay (S <a class="src" href="SDR/">SDR</a>), GPS (G <a class="src" href="GPS/">GPS</a>),
+PHY (N <a class="src" href="Network/">Network</a>), harp (E <a class="src" href="Erand49/">Erand49</a>), sleigh link (C <a class="src" href="Coil/">Coil</a>),
+and for the snooker demo an overhead camera (I <a class="src" href="Imaging/">Imaging</a>) and a 24 GHz Doppler module (M <a class="src" href="MAIDEN/firmware/doppler/">MAIDEN/firmware/doppler/</a>).
 Every spoke takes its knobs from S0–S4 and the keys and shows its output on V0.</p>
+
+<div class="srcnav">
+<div class="grp"><span class="lbl2">SOURCE — root:</span>
+<a href="Panel/">Panel/</a> (P — body)
+· <a href="Oracle/">Oracle/</a> (O — brains)
+</div>
+<div class="grp"><span class="lbl2">SOURCE — spokes:</span>
+<a href="Erand49/">Erand49/</a> (E) ·
+<a href="Theremin/">Theremin/</a> (T) ·
+<a href="IRIG/">IRIG/</a> (I, clock) ·
+<a href="Coil/">Coil/</a> incl. <a href="Coil/SleighGlide/">Coil/SleighGlide/</a> (C) ·
+<a href="UHF/">UHF/</a> (U) ·
+<a href="SDR/">SDR/</a> (S) ·
+<a href="Imaging/">Imaging/</a> (I, snooker camera) ·
+<a href="Network/">Network/</a> (N) ·
+<a href="GPS/">GPS/</a> (G) ·
+<a href="MAIDEN/firmware/doppler/">MAIDEN/firmware/doppler/</a> (M, motion radar — not yet a top-level dir)
+</div>
+<div class="grp"><span class="lbl2">SOURCE — maps and docs:</span>
+<a href="CLASH-LIBRARY-MAP.md">CLASH-LIBRARY-MAP.md</a> (hardware → Clash library component map) ·
+<a href="vl1-clash-module-tree.md">vl1-clash-module-tree.md</a> (root module tree) ·
+<a href="PROGRAM.md">PROGRAM.md</a> (program index) ·
+<a href="Erand49/DESIGN.md">Erand49/DESIGN.md</a> ·
+<a href="Erand49/frame-spec.md">Erand49/frame-spec.md</a>
+</div>
+</div>
 
 <h2>Top — player's view</h2>
 <div class="wrap"><svg style="width:100%;height:auto;display:block" viewBox="0 0 1300 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="49-key VL-1 derivative panel layout"><style>.t{font-size:8px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}.tt{font-size:6px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}.tw{font-size:7px;font-weight:700;fill:#ffffff;font-family:ui-monospace,Menlo,Consolas,monospace}.lbl{font-size:6px;font-weight:700;fill:#111;font-family:ui-monospace,Menlo,Consolas,monospace}.sh{font-size:6px;fill:#555;font-family:ui-monospace,Menlo,Consolas,monospace}.bk{font-size:8px;font-weight:700;fill:#fff;font-family:ui-monospace,Menlo,Consolas,monospace}.bks{font-size:7px;font-weight:700;fill:#ffffff;font-family:ui-monospace,Menlo,Consolas,monospace}.hp{font-size:6px;font-weight:700;fill:#a8700f;font-family:ui-monospace,Menlo,Consolas,monospace}.hpb{font-size:6px;font-weight:700;fill:#f2c14e;font-family:ui-monospace,Menlo,Consolas,monospace}.id{font-size:6px;fill:#b3341c;font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700}</style>
@@ -264,14 +299,14 @@ underside, rear-ported. Silk legends shown are VL-1 mode; final silk gets a mode
 <tr><td>Key/button matrix (8×8)</td><td>under keybed</td><td>49 keys A0–G7 + P0–P9 fold into one scan</td></tr>
 <tr><td>Slider board</td><td>top-right</td><td>S0/S1 → 2 ADC ch; S2–S4 → GPIO</td></tr>
 <tr><td>Audio: ΣΔ/PWM DAC → RC LP → amp</td><td>left wall</td><td>speaker (underside) + LINE OUT; CW sidetone mixed in</td></tr>
-<tr><td>Colpitts oscillator boards ×2</td><td>at antenna posts</td><td>theremin T; relay to AD9226 ADC for SDR S</td></tr>
-<tr><td>AD9226-class ADC</td><td>rear, at antennas</td><td>direct-sampling HF for S</td></tr>
-<tr><td>u-blox GPS + PPS</td><td>rear, at SMA</td><td>disciplines IRIG clock (G→I)</td></tr>
-<tr><td>RMII PHY PMOD</td><td>rear, at RJ45</td><td>N: UDP/Ch.10</td></tr>
-<tr><td>UHF beacon PA (U)</td><td>rear, shielded corner</td><td>GPS-disciplined CW/WSPR → TX SMA</td></tr>
-<tr><td>Sleigh gates (C)</td><td>rear SLEIGH 10-pin, TIME/NET group</td><td>8 gate lines (3.3 V, 100 Ω series) + show-switch sense + ground → MOSFET driver board at the tube; ribbon out = pulldowns park the sleigh; 24 V stays at the tube</td></tr>
-<tr><td>Snooker camera (I) — OV9281 on an overhead mount</td><td>external; DVP ribbon + strobe/trigger line to rear</td><td>DVP capture + <code>strobe_latch</code> IRIG stamp; per-ball centroids over N</td></tr>
-<tr><td>Snooker Doppler module (M) — CDM324-class 24 GHz + SPI ADC</td><td>external, aimed down the table; header at rear</td><td>CIC → FFT → CFAR → velocity records on V0 and over N</td></tr>
+<tr><td>Colpitts oscillator boards ×2</td><td>at antenna posts</td><td>theremin <a class="src" href="Theremin/">T</a>; relay to AD9226 ADC for <a class="src" href="SDR/">SDR S</a></td></tr>
+<tr><td>AD9226-class ADC</td><td>rear, at antennas</td><td>direct-sampling HF for <a class="src" href="SDR/">S</a></td></tr>
+<tr><td>u-blox GPS + PPS</td><td>rear, at SMA</td><td>disciplines <a class="src" href="IRIG/">IRIG</a> clock (<a class="src" href="GPS/">G</a>→<a class="src" href="IRIG/">I</a>)</td></tr>
+<tr><td>RMII PHY PMOD</td><td>rear, at RJ45</td><td><a class="src" href="Network/">N</a>: UDP/Ch.10</td></tr>
+<tr><td>UHF beacon PA (<a class="src" href="UHF/">U</a>)</td><td>rear, shielded corner</td><td>GPS-disciplined CW/WSPR → TX SMA</td></tr>
+<tr><td>Sleigh gates (<a class="src" href="Coil/SleighGlide/">C</a>)</td><td>rear SLEIGH 10-pin, TIME/NET group</td><td>8 gate lines (3.3 V, 100 Ω series) + show-switch sense + ground → MOSFET driver board at the tube; ribbon out = pulldowns park the sleigh; 24 V stays at the tube</td></tr>
+<tr><td>Snooker camera (<a class="src" href="Imaging/">I</a>) — OV9281 on an overhead mount</td><td>external; DVP ribbon + strobe/trigger line to rear</td><td>DVP capture + <code>strobe_latch</code> IRIG stamp; per-ball centroids over N</td></tr>
+<tr><td>Snooker Doppler module (<a class="src" href="MAIDEN/firmware/doppler/">M</a>) — CDM324-class 24 GHz + SPI ADC</td><td>external, aimed down the table; header at rear</td><td>CIC → FFT → CFAR → velocity records on V0 and over N</td></tr>
 </table>
 
 
@@ -309,12 +344,12 @@ whole musical world with you — and bringing it back next visit picks up where 
 <p class="chain">S3 MODE: P · O · E · T · I · C — the mnemonic is printed on the panel and the slider is the state</p>
 <table>
 <tr><th>Zone</th><th>Mode</th></tr>
-<tr><td class="k">P</td><td>Panel — control surface; VL-1 synth mode: voices, rhythms, sequencer, One Key Play. Voice select: MUSIC (P6) + black-key digit, shown on V0</td></tr>
-<tr><td class="k">O</td><td>Oracle — Forth console, games from SD, and the doorway to the spoke demo scripts (SDR waterfall, UHF beacon, network, imaging, radar)</td></tr>
-<tr><td class="k">E</td><td>Erand49 — harp mode (harp plugged into the rear HARP port)</td></tr>
-<tr><td class="k">T</td><td>Theremin — antennas live, envelope/spectrum on V0</td></tr>
-<tr><td class="k">I</td><td>IRIG/GPS clock — big time display, lock status, holdover vs disciplined</td></tr>
-<tr><td class="k">C</td><td>CW — keyer sends, decoder prints; UHF TX interlock lives here</td></tr>
+<tr><td class="k">P</td><td><a class="src" href="Panel/">Panel</a> — control surface; VL-1 synth mode: voices, rhythms, sequencer, One Key Play. Voice select: MUSIC (P6) + black-key digit, shown on V0</td></tr>
+<tr><td class="k">O</td><td><a class="src" href="Oracle/">Oracle</a> — Forth console, games from SD, and the doorway to the spoke demo scripts (SDR waterfall, UHF beacon, network, imaging, radar)</td></tr>
+<tr><td class="k">E</td><td><a class="src" href="Erand49/">Erand49</a> — harp mode (harp plugged into the rear HARP port)</td></tr>
+<tr><td class="k">T</td><td><a class="src" href="Theremin/">Theremin</a> — antennas live, envelope/spectrum on V0</td></tr>
+<tr><td class="k">I</td><td><a class="src" href="IRIG/">IRIG</a>/<a class="src" href="GPS/">GPS</a> clock — big time display, lock status, holdover vs disciplined</td></tr>
+<tr><td class="k">C</td><td>CW — keyer sends, decoder prints (<a class="src" href="UHF/">UHF</a> TX interlock lives here)</td></tr>
 </table>
 <p class="sub">A mode change takes effect after the slider rests ~1 s in the new zone, with a banner on V0
 during the handoff — a bumped slider never yanks a demo. S4 stays orthogonal within every mode:
@@ -350,10 +385,10 @@ keyboard instead.</p>
 <table>
 <tr><th>Piece</th><th>Carried</th><th>Hookup</th></tr>
 <tr><td class="k">PM box</td><td>the device</td><td>5 V brick or USB power bank</td></tr>
-<tr><td>Sleigh Glide</td><td>own case: driver board + coil tube, rolled, 10-wire ribbon</td><td>plugs into the rear SLEIGH connector; 24 V supply stays home unless the village travels</td></tr>
-<tr><td>Erand49 harp</td><td>rigid column case, strings stay tensioned, sensors potted in the neck rail</td><td>one locking cable to HARP port; CAL re-baselines sensors on site</td></tr>
+<tr><td><a class="src" href="Coil/SleighGlide/">Sleigh Glide</a></td><td>own case: driver board + coil tube, rolled, 10-wire ribbon</td><td>plugs into the rear SLEIGH connector; 24 V supply stays home unless the village travels</td></tr>
+<tr><td><a class="src" href="Erand49/">Erand49 harp</a></td><td>rigid column case, strings stay tensioned, sensors potted in the neck rail</td><td>one locking cable to HARP port; CAL re-baselines sensors on site</td></tr>
 <tr><td>Antenna rods</td><td>unscrew, clip inside lid</td><td>binding posts</td></tr>
-<tr><td>Snooker kit (I·M)</td><td>camera + lens + clamp mount, Doppler module, two cables — small pouch</td><td>DVP ribbon + strobe TRS, SPI header; the table itself stays home (Sleigh Glide's village sits on it)</td></tr>
+<tr><td>Snooker kit (<a class="src" href="Imaging/">I</a>·<a class="src" href="MAIDEN/firmware/doppler/">M</a>)</td><td>camera + lens + clamp mount, Doppler module, two cables — small pouch</td><td>DVP ribbon + strobe TRS, SPI header; the table itself stays home (Sleigh Glide's village sits on it)</td></tr>
 <tr><td>Cue card (paper)</td><td>lid pocket</td><td>per-mode checklist: what to say, what to show, how to reset</td></tr>
 <tr><td>Spare demo microSD</td><td>lid pocket</td><td>known-good clone — swap, not debug, mid-demo</td></tr>
 <tr><td>Spare battery bank</td><td>lid pocket</td><td>charged; this is the "battery swap"</td></tr>
