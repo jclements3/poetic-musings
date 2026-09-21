@@ -185,6 +185,36 @@ table.scan-table th { background: var(--accent-soft); font-size: 0.8rem; text-tr
 table.scan-table tr:last-child td { border-bottom: none; }
 table.scan-table code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.85em; background: var(--code-bg); padding: 0.05em 0.3em; border-radius: 3px; }
 
+dl.term-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 0.15rem 2rem;
+  margin: 0;
+}
+dl.term-grid > div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+dl.term-grid dt {
+  flex: 0 0 auto;
+  width: 11rem;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--fg);
+}
+dl.term-grid dd {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+@media (min-width: 1400px) {
+  dl.term-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
 /* Hover-tooltip terms: native `title` attribute, works everywhere, no JS */
 a.term {
   color: inherit;
@@ -305,34 +335,32 @@ footer a { color: var(--accent); }
 
 <h2 class="section-title">Term Reference</h2>
 <p class="desc" style="max-width:60ch;">Every linked term above jumps here and hovers with its definition inline — the same convention used throughout the full book.</p>
-<table class="scan-table">
-  <tbody>
-    <tr id="t-iac"><td style="width:14ch"><strong>IaC</strong></td><td>Infrastructure as Code: describing infrastructure in version-controlled text instead of manual console clicks.</td></tr>
-    <tr id="t-vpc"><td><strong>VPC</strong></td><td>Virtual Private Cloud: your own private, isolated network inside a cloud provider's infrastructure.</td></tr>
-    <tr id="t-ecr"><td><strong>ECR</strong></td><td>Elastic Container Registry: AWS's managed registry for storing and scanning container images.</td></tr>
-    <tr id="t-s3"><td><strong>S3</strong></td><td>Simple Storage Service: AWS's object storage for files and blobs at effectively unlimited scale.</td></tr>
-    <tr id="t-iam"><td><strong>IAM</strong></td><td>Identity and Access Management: the system for controlling who or what can do what to which resource.</td></tr>
-    <tr id="t-k8s"><td><strong>Kubernetes (K8s)</strong></td><td>A system for running and automatically managing many containers across many machines.</td></tr>
-    <tr id="t-pss"><td><strong>Pod Security Standards</strong></td><td>Kubernetes' three built-in security profiles for Pods: privileged, baseline, and restricted (strictest).</td></tr>
-    <tr id="t-netpol"><td><strong>NetworkPolicy</strong></td><td>A Kubernetes firewall for Pod-to-Pod traffic, usually written as a default-deny rule plus explicit allows.</td></tr>
-    <tr id="t-pdb"><td><strong>PodDisruptionBudget</strong></td><td>Guarantees a minimum number of replicas stay available during voluntary disruption like a node drain or cluster upgrade.</td></tr>
-    <tr id="t-kustomize"><td><strong>Kustomize</strong></td><td>A kubectl-native tool for patching a shared base of Kubernetes manifests per environment, without duplicating YAML.</td></tr>
-    <tr id="t-cicd"><td><strong>CI/CD</strong></td><td>Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.</td></tr>
-    <tr id="t-shiftleft"><td><strong>Shift left</strong></td><td>Moving security checks as early as possible in the development timeline, ideally into the automated pipeline at commit time, instead of a late pre-launch review.</td></tr>
-    <tr id="t-sarif"><td><strong>SARIF</strong></td><td>Static Analysis Results Interchange Format: a standard format for security scan results so different tools' findings can be viewed in one place.</td></tr>
-    <tr id="t-sast"><td><strong>SAST</strong></td><td>Static Application Security Testing: analyzing source code for security-relevant patterns without running it.</td></tr>
-    <tr id="t-sbom"><td><strong>SBOM</strong></td><td>Software Bill of Materials: a complete, machine-readable inventory of every dependency a piece of software uses.</td></tr>
-    <tr id="t-sca"><td><strong>SCA</strong></td><td>Software Composition Analysis: checking a dependency inventory against a database of known vulnerabilities.</td></tr>
-    <tr id="t-cve"><td><strong>CVE</strong></td><td>Common Vulnerabilities and Exposures: the standard public naming/numbering system for disclosed security vulnerabilities.</td></tr>
-    <tr id="t-cis"><td><strong>CIS</strong></td><td>Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems.</td></tr>
-    <tr id="t-prom"><td><strong>Prometheus</strong></td><td>An open-source system that periodically scrapes and stores time-series metrics from configured targets.</td></tr>
-    <tr id="t-grafana"><td><strong>Grafana</strong></td><td>A dashboard/visualization layer that queries Prometheus (and other sources) to render graphs, gauges, and alerts.</td></tr>
-    <tr id="t-ad"><td><strong>AD</strong></td><td>Active Directory: Microsoft's directory service for identity, authentication, and authorization across an organization's users, computers, and groups.</td></tr>
-    <tr id="t-gpo"><td><strong>GPO</strong></td><td>Group Policy Object: a declared configuration/security setting that Active Directory pushes automatically to computers or users in its scope.</td></tr>
-    <tr id="t-mecm"><td><strong>MECM/SCCM</strong></td><td>Microsoft Endpoint Configuration Manager (formerly SCCM): tooling for managing on-premises Windows devices at scale.</td></tr>
-    <tr id="t-coder"><td><strong>Coder</strong></td><td>A platform for provisioning and managing remote, browser-accessible development environments from standard, version-controlled workspace templates.</td></tr>
-  </tbody>
-</table>
+<dl class="term-grid">
+    <div id="t-iac"><dt>IaC</dt><dd>Infrastructure as Code: describing infrastructure in version-controlled text instead of manual console clicks.</dd></div>
+    <div id="t-vpc"><dt>VPC</dt><dd>Virtual Private Cloud: your own private, isolated network inside a cloud provider's infrastructure.</dd></div>
+    <div id="t-ecr"><dt>ECR</dt><dd>Elastic Container Registry: AWS's managed registry for storing and scanning container images.</dd></div>
+    <div id="t-s3"><dt>S3</dt><dd>Simple Storage Service: AWS's object storage for files and blobs at effectively unlimited scale.</dd></div>
+    <div id="t-iam"><dt>IAM</dt><dd>Identity and Access Management: the system for controlling who or what can do what to which resource.</dd></div>
+    <div id="t-k8s"><dt>Kubernetes (K8s)</dt><dd>A system for running and automatically managing many containers across many machines.</dd></div>
+    <div id="t-pss"><dt>Pod Security Standards</dt><dd>Kubernetes' three built-in security profiles for Pods: privileged, baseline, and restricted (strictest).</dd></div>
+    <div id="t-netpol"><dt>NetworkPolicy</dt><dd>A Kubernetes firewall for Pod-to-Pod traffic, usually written as a default-deny rule plus explicit allows.</dd></div>
+    <div id="t-pdb"><dt>PodDisruptionBudget</dt><dd>Guarantees a minimum number of replicas stay available during voluntary disruption like a node drain or cluster upgrade.</dd></div>
+    <div id="t-kustomize"><dt>Kustomize</dt><dd>A kubectl-native tool for patching a shared base of Kubernetes manifests per environment, without duplicating YAML.</dd></div>
+    <div id="t-cicd"><dt>CI/CD</dt><dd>Continuous Integration / Continuous Delivery (or Deployment): automatically building, testing, and releasing code on every change.</dd></div>
+    <div id="t-shiftleft"><dt>Shift left</dt><dd>Moving security checks as early as possible in the development timeline, ideally into the automated pipeline at commit time, instead of a late pre-launch review.</dd></div>
+    <div id="t-sarif"><dt>SARIF</dt><dd>Static Analysis Results Interchange Format: a standard format for security scan results so different tools' findings can be viewed in one place.</dd></div>
+    <div id="t-sast"><dt>SAST</dt><dd>Static Application Security Testing: analyzing source code for security-relevant patterns without running it.</dd></div>
+    <div id="t-sbom"><dt>SBOM</dt><dd>Software Bill of Materials: a complete, machine-readable inventory of every dependency a piece of software uses.</dd></div>
+    <div id="t-sca"><dt>SCA</dt><dd>Software Composition Analysis: checking a dependency inventory against a database of known vulnerabilities.</dd></div>
+    <div id="t-cve"><dt>CVE</dt><dd>Common Vulnerabilities and Exposures: the standard public naming/numbering system for disclosed security vulnerabilities.</dd></div>
+    <div id="t-cis"><dt>CIS</dt><dd>Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems.</dd></div>
+    <div id="t-prom"><dt>Prometheus</dt><dd>An open-source system that periodically scrapes and stores time-series metrics from configured targets.</dd></div>
+    <div id="t-grafana"><dt>Grafana</dt><dd>A dashboard/visualization layer that queries Prometheus (and other sources) to render graphs, gauges, and alerts.</dd></div>
+    <div id="t-ad"><dt>AD</dt><dd>Active Directory: Microsoft's directory service for identity, authentication, and authorization across an organization's users, computers, and groups.</dd></div>
+    <div id="t-gpo"><dt>GPO</dt><dd>Group Policy Object: a declared configuration/security setting that Active Directory pushes automatically to computers or users in its scope.</dd></div>
+    <div id="t-mecm"><dt>MECM/SCCM</dt><dd>Microsoft Endpoint Configuration Manager (formerly SCCM): tooling for managing on-premises Windows devices at scale.</dd></div>
+    <div id="t-coder"><dt>Coder</dt><dd>A platform for provisioning and managing remote, browser-accessible development environments from standard, version-controlled workspace templates.</dd></div>
+</dl>
 
 <footer>
   Built inside <code>poetic-musings</code> as a DevSecOps/Platform Engineering training exercise.
