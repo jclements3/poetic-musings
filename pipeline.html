@@ -76,13 +76,26 @@ h2.stage {
 }
 p.stage-sub { color: var(--muted); font-size: 0.85rem; margin: 0 0 1rem; }
 
+.jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+@media (max-width: 900px) {
+  .jobs-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .jobs-grid { grid-template-columns: 1fr; }
+}
+
 .job {
   background: var(--panel);
   border: 1px solid var(--rule);
   border-left: 4px solid var(--ok-border);
   border-radius: 8px;
   padding: 0.9rem 1.1rem;
-  margin-bottom: 1rem;
 }
 .job h3 {
   margin: 0 0 0.15rem;
@@ -102,6 +115,28 @@ p.stage-sub { color: var(--muted); font-size: 0.85rem; margin: 0 0 1rem; }
   padding: 0.1rem 0.4rem;
   color: var(--muted);
 }
+
+/* Live status dots: colored client-side from the GitHub Actions API,
+   read-only, no auth, no backend. Gray = not checked yet / unreachable. */
+.dot {
+  display: inline-block;
+  width: 0.62em;
+  height: 0.62em;
+  border-radius: 50%;
+  background: #9aa4b2;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.dot[data-state="success"] { background: #2f8f4e; }
+.dot[data-state="failure"] { background: #c0392b; }
+.dot[data-state="pending"] { background: #d9a441; }
+.status-strip {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin: -0.5rem 0 1rem;
+}
+.status-strip a { color: var(--accent); text-decoration: none; cursor: pointer; }
+.status-strip a:hover { text-decoration: underline; }
 .job .needs { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.5rem; }
 .job .needs code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; }
 
@@ -151,9 +186,13 @@ footer.colophon a { color: var(--accent); }
 <h2 class="stage">Stage 1 — CI Build/Lint/Test</h2>
 <p class="stage-sub">File: <code>.github/workflows/ci.yml</code></p>
 <div class="trigger">Triggers on: <code>push</code> to <code>main</code>, and every <code>pull_request</code> targeting <code>main</code>.</div>
+<p class="status-strip" id="status-line">
+  🟢 passing &nbsp; 🟡 running &nbsp; 🔴 failing &nbsp; ⚪ unknown — <a id="refresh-status">refresh</a><span id="status-stamp"></span>
+</p>
 
+<div class="jobs-grid">
 <div class="job">
-  <h3>1. Lint Python (app/status-service) <span class="badge">runs first</span></h3>
+  <h3 data-job="Lint Python (app/status-service)">1. Lint Python (app/status-service) <span class="badge">runs first</span><span class="dot" data-state="" title="Checking live status…"></span></h3>
   <ol class="steps">
     <li>Checkout <span class="what">— clone the commit being tested</span></li>
     <li>Set up Python <span class="what">— Python 3.12</span></li>
@@ -165,7 +204,7 @@ footer.colophon a { color: var(--accent); }
 </div>
 
 <div class="job">
-  <h3>2. Python unit tests (status-service)</h3>
+  <h3 data-job="Python unit tests (status-service)">2. Python unit tests (status-service)<span class="dot" data-state="" title="Checking live status…"></span></h3>
   <div class="needs">needs: <code>lint-python</code> — only runs if step 1 passes</div>
   <ol class="steps">
     <li>Checkout</li>
@@ -175,14 +214,16 @@ footer.colophon a { color: var(--accent); }
     <li>Run tests <span class="what">— <code>pytest</code> if a test suite exists, skip notice otherwise</span></li>
   </ol>
 </div>
+</div>
 
 <h2 class="stage">Stage 2 — DevSecOps Security Scans</h2>
 <p class="stage-sub">File: <code>.github/workflows/security.yml</code></p>
 <div class="trigger">Triggers on: <code>push</code> to <code>main</code>, every <code>pull_request</code> targeting <code>main</code>, <strong>and</strong> a weekly cron (Mondays 06:00 UTC) — vulnerability databases move even when the code doesn't.</div>
 <p class="parallel-note">All 6 jobs below run in parallel, independent of each other and of Stage 1.</p>
 
+<div class="jobs-grid">
 <div class="job">
-  <h3>Secrets Detection <span class="badge">gitleaks</span></h3>
+  <h3 data-job="Secrets Detection (gitleaks)">Secrets Detection <span class="badge">gitleaks</span><span class="dot" data-state="" title="Checking live status…"></span></h3>
   <ol class="steps">
     <li>Checkout <span class="what">— full git history (<code>fetch-depth: 0</code>), not just the diff</span></li>
     <li>Run gitleaks <span class="what">— fails the job on any match; a secret "removed" in a later commit is still in history</span></li>
@@ -190,7 +231,7 @@ footer.colophon a { color: var(--accent); }
 </div>
 
 <div class="job">
-  <h3>SAST — Python <span class="badge">bandit</span></h3>
+  <h3 data-job="SAST - Python (bandit)">SAST — Python <span class="badge">bandit</span><span class="dot" data-state="" title="Checking live status…"></span></h3>
   <ol class="steps">
     <li>Checkout</li>
     <li>Set up Python</li>
@@ -201,7 +242,7 @@ footer.colophon a { color: var(--accent); }
 </div>
 
 <div class="job">
-  <h3>SBOM + Dependency Vulnerability Scan <span class="badge">Syft + pip-audit</span></h3>
+  <h3 data-job="SBOM + Dependency Vulnerability Scan">SBOM + Dependency Vulnerability Scan <span class="badge">Syft + pip-audit</span><span class="dot" data-state="" title="Checking live status…"></span></h3>
   <ol class="steps">
     <li>Checkout</li>
     <li>Check for requirements.txt</li>
@@ -213,7 +254,7 @@ footer.colophon a { color: var(--accent); }
 </div>
 
 <div class="job">
-  <h3>Container Image Scan <span class="badge">Trivy</span></h3>
+  <h3 data-job="Container Image Scan (Trivy)">Container Image Scan <span class="badge">Trivy</span><span class="dot" data-state="" title="Checking live status…"></span></h3>
   <ol class="steps">
     <li>Checkout</li>
     <li>Check for Dockerfile</li>
@@ -224,7 +265,7 @@ footer.colophon a { color: var(--accent); }
 </div>
 
 <div class="job">
-  <h3>IaC Scan — Terraform <span class="badge">tfsec</span></h3>
+  <h3 data-job="IaC Scan - Terraform (tfsec)">IaC Scan — Terraform <span class="badge">tfsec</span><span class="dot" data-state="" title="Checking live status…"></span></h3>
   <ol class="steps">
     <li>Checkout</li>
     <li>Check for Terraform</li>
@@ -235,12 +276,13 @@ footer.colophon a { color: var(--accent); }
 </div>
 
 <div class="job">
-  <h3>K8s Manifest Scan <span class="badge">kube-linter</span></h3>
+  <h3 data-job="K8s Manifest Scan (kube-linter)">K8s Manifest Scan <span class="badge">kube-linter</span><span class="dot" data-state="" title="Checking live status…"></span></h3>
   <ol class="steps">
     <li>Checkout</li>
     <li>Check for k8s manifests</li>
     <li>Run kube-linter <span class="what">— against every manifest under <code>k8s/</code></span></li>
   </ol>
+</div>
 </div>
 
 <footer class="colophon">
@@ -249,6 +291,54 @@ footer.colophon a { color: var(--accent); }
   <code>.gitlab-ci.yml</code>. See <a href="https://github.com/jclements3/poetic-musings/actions">the live runs</a>
   for actual pass/fail history, or <a href="index.html">the dashboard</a> for current status.
 </footer>
+
+<script>
+(function () {
+  const REPO = "jclements3/poetic-musings";
+  const WORKFLOW_FILES = ["ci.yml", "security.yml"];
+
+  async function loadStatuses() {
+    const dots = document.querySelectorAll(".dot");
+    dots.forEach(d => { d.dataset.state = ""; d.title = "Checking live status…"; });
+
+    for (const file of WORKFLOW_FILES) {
+      try {
+        const runsRes = await fetch(
+          `https://api.github.com/repos/${REPO}/actions/workflows/${file}/runs?branch=main&per_page=1`
+        );
+        if (!runsRes.ok) throw new Error(runsRes.status);
+        const runsData = await runsRes.json();
+        const run = runsData.workflow_runs && runsData.workflow_runs[0];
+        if (!run) continue;
+
+        const jobsRes = await fetch(run.jobs_url);
+        if (!jobsRes.ok) throw new Error(jobsRes.status);
+        const jobsData = await jobsRes.json();
+
+        jobsData.jobs.forEach(job => {
+          const el = document.querySelector(`[data-job="${CSS.escape(job.name)}"] .dot`);
+          if (!el) return;
+          let state = "unknown";
+          if (job.status !== "completed") state = "pending";
+          else if (job.conclusion === "success" || job.conclusion === "skipped") state = "success";
+          else if (job.conclusion === "failure" || job.conclusion === "cancelled" || job.conclusion === "timed_out") state = "failure";
+          el.dataset.state = state === "unknown" ? "" : state;
+          el.title = `${job.name}: ${job.conclusion || job.status} (run started ${new Date(run.run_started_at).toLocaleString()})`;
+        });
+      } catch (err) {
+        // Network/CORS/rate-limit failure: leave dots gray, don't break the page.
+        console.warn("Live status fetch failed for", file, err);
+      }
+    }
+
+    document.getElementById("status-stamp").textContent =
+      " — last checked " + new Date().toLocaleTimeString();
+  }
+
+  document.getElementById("refresh-status").addEventListener("click", loadStatuses);
+  loadStatuses();
+})();
+</script>
 
 </div>
 </body>
