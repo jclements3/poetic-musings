@@ -49,8 +49,9 @@ body {
   color: var(--fg);
   font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
   line-height: 1.55;
+  font-size: clamp(1rem, 0.85rem + 0.3vw, 1.15rem);
 }
-.wrap { max-width: 1080px; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
+.wrap { max-width: none; width: 100%; margin: 0 auto; padding: 2rem clamp(1.25rem, 4vw, 4rem) 5rem; }
 
 header.top {
   display: flex;
@@ -99,8 +100,8 @@ h2.section-title {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
 }
 
 .card {
