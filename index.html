@@ -224,9 +224,19 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
     <span class="pill ok">4 pillars implemented</span>
     <span class="pill partial">2 pillars design-complete, unverified live</span>
     <span class="pill gap">3 pillars not started</span>
+    <a href="https://github.com/jclements3/poetic-musings/actions/workflows/ci.yml" title="Click through to the live run on GitHub Actions">
+      <img src="https://github.com/jclements3/poetic-musings/actions/workflows/ci.yml/badge.svg" alt="CI Build/Lint/Test status" style="vertical-align:middle;">
+    </a>
+    <a href="https://github.com/jclements3/poetic-musings/actions/workflows/security.yml" title="Click through to the live run on GitHub Actions">
+      <img src="https://github.com/jclements3/poetic-musings/actions/workflows/security.yml/badge.svg" alt="DevSecOps Security Scans status" style="vertical-align:middle;">
+    </a>
   </div>
   <nav class="links">
     <a href="qrg.html" style="font-weight:700;">📖 QRG / Help</a>
+    <a href="https://jclements3.github.io/poetic-musings/" target="_blank" style="font-weight:700;">🌐 Live site ↗</a>
+    <a href="https://github.com/jclements3/poetic-musings" target="_blank">Repo ↗</a>
+    <a href="https://github.com/jclements3/poetic-musings/actions" target="_blank">Actions ↗</a>
+    <a href="https://github.com/jclements3/poetic-musings/security/code-scanning" target="_blank">Code scanning ↗</a>
     <a href="DEVSECOPS.html">Full book (HTML)</a>
     <a href="DEVSECOPS.pdf">Full book (PDF)</a>
     <a href="DEFSECOPS.md">Build log (DEFSECOPS.md)</a>
@@ -297,8 +307,8 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
   </div>
 
   <div class="card status-ok">
-    <div class="card-head"><h3>Security Scanning</h3><span class="badge ok">7 gates, running</span></div>
-    <p class="desc">Layered <a class="term" title="Moving security checks as early as possible in the development timeline, ideally into the automated pipeline at commit time, instead of a late pre-launch review.">shift-left</a> coverage — see the table below for what each gate actually catches.</p>
+    <div class="card-head"><h3>Security Scanning</h3><span class="badge ok">7 gates, passing live</span></div>
+    <p class="desc">Layered <a class="term" title="Moving security checks as early as possible in the development timeline, ideally into the automated pipeline at commit time, instead of a late pre-launch review.">shift-left</a> coverage — see the table below for what each gate actually catches. First real run caught a live Flask CVE, 6 K8s hardening gaps, and an outdated pip baked into the container base image — all fixed and re-verified green.</p>
     <div class="toolbadges"><span>gitleaks</span><span>bandit</span><span>Syft</span><span>pip-audit</span><span>Trivy</span><span>tfsec</span><span>kube-linter</span><span>CodeQL</span></div>
     <div class="files">Findings centralize as <a class="term" title="Static Analysis Results Interchange Format: a standard format for security scan results so different tools' findings can be viewed in one place." style="border-bottom:1px dotted var(--accent);cursor:help;">SARIF</a> in GitHub code scanning.</div>
   </div>
