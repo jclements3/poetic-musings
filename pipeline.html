@@ -76,6 +76,16 @@ h2.stage {
 }
 p.stage-sub { color: var(--muted); font-size: 0.85rem; margin: 0 0 1rem; }
 
+.stages-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.75rem;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .stages-row { grid-template-columns: 1fr; }
+}
+
 .jobs-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -177,12 +187,16 @@ footer.colophon a { color: var(--accent); }
   </nav>
 </header>
 
-<h2 class="stage">Stage 1 — CI Build/Lint/Test</h2>
-<p class="stage-sub">File: <code>.github/workflows/ci.yml</code></p>
-<div class="trigger">Triggers on: <code>push</code> to <code>main</code>, and every <code>pull_request</code> targeting <code>main</code>.</div>
 <p class="status-strip" id="status-line">
   🟢 passing &nbsp; 🟡 running &nbsp; 🔴 failing &nbsp; ⚪ unknown — <a id="refresh-status">refresh</a><span id="status-stamp"></span>
 </p>
+
+<div class="stages-row">
+
+<div class="stage-col">
+<h2 class="stage">Stage 1 — CI Build/Lint/Test</h2>
+<p class="stage-sub">File: <code>.github/workflows/ci.yml</code></p>
+<div class="trigger">Triggers on: <code>push</code> to <code>main</code>, and every <code>pull_request</code> targeting <code>main</code>.</div>
 
 <div class="jobs-grid">
 <div class="job">
@@ -209,7 +223,9 @@ footer.colophon a { color: var(--accent); }
   </ol>
 </div>
 </div>
+</div>
 
+<div class="stage-col">
 <h2 class="stage">Stage 2 — DevSecOps Security Scans</h2>
 <p class="stage-sub">File: <code>.github/workflows/security.yml</code></p>
 <div class="trigger">Triggers on: <code>push</code> to <code>main</code>, every <code>pull_request</code> targeting <code>main</code>, <strong>and</strong> a weekly cron (Mondays 06:00 UTC) — vulnerability databases move even when the code doesn't.</div>
@@ -277,6 +293,9 @@ footer.colophon a { color: var(--accent); }
     <li>Run kube-linter <span class="what">— against every manifest under <code>k8s/</code></span></li>
   </ol>
 </div>
+</div>
+</div>
+
 </div>
 
 <footer class="colophon">
