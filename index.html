@@ -202,7 +202,7 @@ table.scan-table code { font-family: "SFMono-Regular", Consolas, Menlo, monospac
    the viewport -- so it stays dense whether it's full-width or sharing
    a row with the scanning-gates table */
 dl.term-grid {
-  columns: 2 16rem;
+  columns: 3 13rem;
   column-gap: 1.25rem;
   margin: 0;
 }
@@ -230,7 +230,7 @@ dl.term-grid dd {
 
 .two-col {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
+  grid-template-columns: 1fr 1.5fr;
   gap: 1.25rem;
   align-items: start;
 }
@@ -246,15 +246,6 @@ a.term {
   cursor: help;
 }
 a.term:hover { background: var(--accent-soft); }
-
-footer {
-  margin-top: 3rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--rule);
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-footer a { color: var(--accent); }
 
 @media (max-width: 560px) {
   header.top .links { display: flex; flex-wrap: wrap; }
@@ -418,12 +409,6 @@ footer a { color: var(--accent); }
 </dl>
 </div>
 </div>
-
-<footer>
-  Built inside <code>poetic-musings</code> as a DevSecOps/Platform Engineering training exercise.
-  See the <a href="DEVSECOPS.html">full book</a> for the slow, chapter-by-chapter explanation behind every card above,
-  or <a href="DEFSECOPS.md">DEFSECOPS.md</a> for the terse build log.
-</footer>
 
 </div>
 </body>
