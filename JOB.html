@@ -45,13 +45,16 @@ nav.links a:hover { text-decoration: underline; }
 h2 { font-size: 1.05rem; margin: 1.6rem 0 0.6rem; border-bottom: 1px solid var(--rule); padding-bottom: 0.3rem; }
 
 .overallbar {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem;
   background: var(--accent-soft); border: 1px solid var(--accent);
-  border-radius: 8px; padding: 0.6rem 0.9rem; margin: 0 0 1rem;
-  font-size: 0.86rem; position: sticky; top: 0; z-index: 5;
+  border-radius: 8px; padding: 0.75rem 1rem; margin: 0 0 1rem;
 }
-.overallbar .ob-counts { display: flex; gap: 0.4rem; flex-shrink: 0; }
-.overallbar .ob-line { color: var(--fg); flex: 1 1 auto; min-width: 0; }
+.overallbar .ob-counts { display: flex; gap: 0.4rem; flex-wrap: wrap; margin: 0 0 0.5rem; }
+.overallbar .ob-label {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--accent); font-weight: 700; margin: 0 0 0.35rem;
+}
+.overallbar .ob-line { color: var(--fg); font-size: 0.86rem; line-height: 1.55; margin: 0; }
+.overallbar .ob-line strong { color: var(--accent); }
 code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.85em; background: var(--code-bg); padding: 0.05em 0.35em; border-radius: 3px; }
 .badge { display: inline-block; padding: 0.12em 0.55em; border-radius: 4px; font-size: 0.76rem; font-weight: 600; white-space: nowrap; }
 .badge.ok { background: var(--ok-bg); color: var(--ok-border); border: 1px solid var(--ok-border); }
@@ -415,17 +418,21 @@ function badgeClass(status) {
   return status === "ok" ? "ok" : status === "partial" ? "partial" : "progress";
 }
 
+const OVERALL_BLUF = "This spring cycle, the DevSecOps effort has delivered verified capability across all required areas: **1) Infrastructure as Code (Terraform)** — full environments stand up from code in minutes, verified against a live AWS account; **2) Container orchestration (Kubernetes)** — hardened to the restricted standard, no root, default-deny networking, 62 benchmark checks passed; **3) CI/CD automation (GitHub Actions, GitLab CI)** — same pipeline in two vendors, caught a live dependency vulnerability on first run; **4) Hybrid cloud (AWS, Azure)** — AWS proven end-to-end, Azure built to identical standard; **5) Identity &amp; directory services (Samba4 AD)** — real domain stood up, verified by live login and credential pull; **6) Compliance &amp; hardening (DISA STIG)** — scored DoD baseline, 67 pass / 51 fail of 409 rules, each traceable; **7) Pipeline security scanning (SAST, SCA, container/IaC scans)** — seven layered scans on every change, caught real vulnerabilities including in the base image; **8) Developer environments (Coder)** — server deployed live and healthy; **9) Configuration management (Ansible)** — idempotence proven cold: one run to correct, zero on rerun. Remaining items queued pending approval: live Azure apply, Jenkins/Azure DevOps, Windows client + SCCM, STIG remediation, Coder templates.";
+
 function renderOverallBar() {
   const okCount = ROWS.filter(r => r.status === "ok").length;
   const partialCount = ROWS.filter(r => r.status === "partial").length;
   const gapCount = ROWS.length - okCount - partialCount;
+  const blufHtml = OVERALL_BLUF.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   overallbarEl.innerHTML = `
-    <span class="ob-counts">
+    <div class="ob-label">Bottom Line Up Front (BLUF)</div>
+    <div class="ob-counts">
       <span class="badge ok">${okCount} Covered</span>
       <span class="badge partial">${partialCount} Partial</span>
       ${gapCount ? `<span class="badge">${gapCount} Not started</span>` : ""}
-    </span>
-    <span class="ob-line">Status across all ${ROWS.length} requirements from this posting — every item backed by a verified artifact; gaps named, not hidden.</span>`;
+    </div>
+    <p class="ob-line">${blufHtml}</p>`;
 }
 
 function renderRows() {
