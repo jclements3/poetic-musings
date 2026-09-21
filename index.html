@@ -72,6 +72,40 @@ header.top .links a {
 }
 header.top .links a:hover { text-decoration: underline; }
 
+.live-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.76rem;
+}
+.live-strip-label { color: var(--muted); font-weight: 600; }
+.live-job {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+  color: var(--fg);
+}
+.live-job .dot {
+  display: inline-block;
+  width: 0.6em;
+  height: 0.6em;
+  border-radius: 50%;
+  background: #9aa4b2;
+}
+.live-job .dot[data-state="success"] { background: #2f8f4e; }
+.live-job .dot[data-state="failure"] { background: #c0392b; }
+.live-job .dot[data-state="pending"] { background: #d9a441; }
+.live-strip a { color: var(--accent); text-decoration: none; margin-left: auto; }
+.live-strip a:hover { text-decoration: underline; }
+#live-stamp { color: var(--muted); }
+
 .summary-bar {
   display: flex;
   flex-wrap: wrap;
@@ -244,6 +278,19 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
   </nav>
 </header>
 
+<div class="live-strip" id="live-strip">
+  <span class="live-strip-label">Live job status:</span>
+  <span class="live-job" data-job="Lint Python (app/status-service)">ruff<i class="dot"></i></span>
+  <span class="live-job" data-job="Python unit tests (status-service)">pytest<i class="dot"></i></span>
+  <span class="live-job" data-job="Secrets Detection (gitleaks)">gitleaks<i class="dot"></i></span>
+  <span class="live-job" data-job="SAST - Python (bandit)">bandit<i class="dot"></i></span>
+  <span class="live-job" data-job="SBOM + Dependency Vulnerability Scan">pip-audit<i class="dot"></i></span>
+  <span class="live-job" data-job="Container Image Scan (Trivy)">Trivy<i class="dot"></i></span>
+  <span class="live-job" data-job="IaC Scan - Terraform (tfsec)">tfsec<i class="dot"></i></span>
+  <span class="live-job" data-job="K8s Manifest Scan (kube-linter)">kube-linter<i class="dot"></i></span>
+  <a href="#" id="live-refresh">refresh</a><span id="live-stamp"></span>
+</div>
+
 <h2 class="section-title">Platform Pillars</h2>
 <div class="grid">
 
@@ -348,5 +395,53 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
 </table>
 
 </div>
+
+<script>
+(function () {
+  const REPO = "jclements3/poetic-musings";
+  const WORKFLOW_FILES = ["ci.yml", "security.yml"];
+
+  async function loadLiveStatus() {
+    document.querySelectorAll(".live-job .dot").forEach(d => { d.dataset.state = ""; });
+
+    for (const file of WORKFLOW_FILES) {
+      try {
+        const runsRes = await fetch(
+          `https://api.github.com/repos/${REPO}/actions/workflows/${file}/runs?branch=main&per_page=1`
+        );
+        if (!runsRes.ok) throw new Error(runsRes.status);
+        const runsData = await runsRes.json();
+        const run = runsData.workflow_runs && runsData.workflow_runs[0];
+        if (!run) continue;
+
+        const jobsRes = await fetch(run.jobs_url);
+        if (!jobsRes.ok) throw new Error(jobsRes.status);
+        const jobsData = await jobsRes.json();
+
+        jobsData.jobs.forEach(job => {
+          const el = document.querySelector(`.live-job[data-job="${CSS.escape(job.name)}"] .dot`);
+          if (!el) return;
+          let state = "";
+          if (job.status !== "completed") state = "pending";
+          else if (job.conclusion === "success" || job.conclusion === "skipped") state = "success";
+          else if (job.conclusion === "failure" || job.conclusion === "cancelled" || job.conclusion === "timed_out") state = "failure";
+          el.dataset.state = state;
+          el.parentElement.title = `${job.name}: ${job.conclusion || job.status}`;
+        });
+      } catch (err) {
+        console.warn("Live status fetch failed for", file, err);
+      }
+    }
+    document.getElementById("live-stamp").textContent = " " + new Date().toLocaleTimeString();
+  }
+
+  document.getElementById("live-refresh").addEventListener("click", function (e) {
+    e.preventDefault();
+    loadLiveStatus();
+  });
+  loadLiveStatus();
+})();
+</script>
+
 </body>
 </html>
