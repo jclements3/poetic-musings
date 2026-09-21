@@ -62,7 +62,7 @@ against `playbook/demo/`:
 ```
 $ ./playbook/pipeline.sh ./playbook/demo
 --- stage 1: secrets
-playbook/demo/config.py:2: generic-secret: API_KEY = "sk_live_9f8a7b6c5d4e3f2a1b0c"
+playbook/demo/config.py:2: generic-secret: API_KEY = "not-a-real-secret-abcdef123456"
 playbook/demo/config.py:3: aws-access-key: aws_key = "AKIAIOSFODNN7EXAMPLE"
 --- stage 2: dependency pins
 UNPINNED numpy >=1.26
@@ -195,6 +195,19 @@ exit 0) against the real working tree.
    `playbook/pre-commit` itself is left unmodified (portable to any repo
    using the `tools/` convention); the installed
    `.git/hooks/pre-commit` here is the repo-specific adaptation.
+
+5. **The demo fixture's fake secret tripped this repo's real CI gitleaks
+   job.** `playbook/demo/config.py`'s original seeded value
+   (`API_KEY = "sk_live_9f8a7b6c5d4e3f2a1b0c"`) matches gitleaks' built-in
+   `stripe-access-token` rule (the `sk_live_` prefix is Stripe's real
+   format), so `security.yml`'s gitleaks job correctly flagged it in this
+   commit — genuinely caught, not a false positive on gitleaks' part.
+   Fixed by changing the demo value to a shape that still exercises
+   `secrets.py`'s own `generic-secret` regex (a quoted string ≥12 chars
+   after `API_KEY =`) without colliding with any real provider's key
+   format: `API_KEY = "not-a-real-secret-abcdef123456"`. Re-verified
+   `secrets.py playbook/demo` still finds it (exit 1, same 2 findings) and
+   that no toolbox behavior changed — only the fixture's shape.
 
 No bugs were found in `haskell.py` itself or in the core logic of any
 script — every script ran correctly once pointed at the right paths.
