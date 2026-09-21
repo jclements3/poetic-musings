@@ -1,0 +1,32 @@
+# A real Samba4 Active Directory Domain Controller. See README.md for
+# what's actually verified real here and what the honest gaps are.
+#
+#   cd ad-lab
+#   cp .env.example .env   # then edit the passwords
+#   docker compose up -d --build
+#   docker compose logs -f    # watch it provision + seed on first run
+#
+#   docker compose down       # stop
+#   docker compose down -v    # stop and wipe the domain entirely
+
+services:
+  ad-dc:
+    build: .
+    hostname: dc1
+    environment:
+      AD_REALM: ${AD_REALM:-POETICMUSINGS.LAB}
+      AD_DOMAIN: ${AD_DOMAIN:-POETICM}
+      AD_ADMIN_PASSWORD: ${AD_ADMIN_PASSWORD:?set AD_ADMIN_PASSWORD in .env}
+      AD_USER_PASSWORD: ${AD_USER_PASSWORD:?set AD_USER_PASSWORD in .env}
+    ports:
+      - "8053:53/tcp"
+      - "8053:53/udp"
+      - "8088:88/tcp"
+      - "8389:389/tcp"
+      - "8445:445/tcp"
+      - "8636:636/tcp"
+    volumes:
+      - ad-data:/var/lib/samba
+
+volumes:
+  ad-data:
