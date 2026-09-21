@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Job Requirement Mapping — poetic-musings</title>
-<meta name="description" content="Maps the GMD DevSecOps Engineer job posting requirements to what poetic-musings actually demonstrates, with honest gaps named.">
+<meta name="description" content="Maps the GMD DevSecOps Engineer job posting requirements to what poetic-musings actually demonstrates, with a click-through side panel of the real tools/commands used for each row.">
 <style>
 :root {
   --bg: #f7f8fa; --panel: #ffffff; --fg: #1c1f24; --muted: #5b6472;
@@ -32,22 +32,55 @@ body {
   font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
   line-height: 1.5; font-size: clamp(0.92rem, 0.8rem + 0.25vw, 1.02rem);
 }
-.wrap { max-width: 980px; margin: 0 auto; padding: 1.5rem clamp(1.25rem, 4vw, 3rem) 3rem; }
+.wrap { max-width: none; width: 100%; margin: 0 auto; padding: 1.5rem clamp(1.25rem, 4vw, 3rem) 3rem; }
 h1 { font-size: 1.4rem; margin: 0 0 0.2rem; }
-.sub { color: var(--muted); margin: 0 0 1.2rem; font-size: 0.92rem; }
+.sub { color: var(--muted); margin: 0 0 1.2rem; font-size: 0.92rem; max-width: 74ch; }
 nav.links { margin: 0 0 1.5rem; display: flex; flex-wrap: wrap; gap: 0.9rem; font-size: 0.88rem; }
 nav.links a { color: var(--accent); text-decoration: none; }
 nav.links a:hover { text-decoration: underline; }
 h2 { font-size: 1.05rem; margin: 1.6rem 0 0.6rem; border-bottom: 1px solid var(--rule); padding-bottom: 0.3rem; }
-table { width: 100%; border-collapse: collapse; background: var(--panel); box-shadow: var(--shadow); border-radius: 8px; overflow: hidden; }
-th, td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--rule); vertical-align: top; font-size: 0.88rem; }
-th { background: var(--accent-soft); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
-tr:last-child td { border-bottom: none; }
 code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.85em; background: var(--code-bg); padding: 0.05em 0.35em; border-radius: 3px; }
 .badge { display: inline-block; padding: 0.12em 0.55em; border-radius: 4px; font-size: 0.76rem; font-weight: 600; white-space: nowrap; }
 .badge.ok { background: var(--ok-bg); color: var(--ok-border); border: 1px solid var(--ok-border); }
 .badge.partial { background: var(--partial-bg); color: var(--partial-border); border: 1px solid var(--partial-border); }
 .badge.progress { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+button.badge-btn { all: unset; cursor: pointer; }
+button.badge-btn .badge { transition: box-shadow 0.12s ease, transform 0.12s ease; }
+button.badge-btn:hover .badge, button.badge-btn:focus-visible .badge { box-shadow: 0 0 0 2px var(--accent-soft); }
+button.badge-btn[aria-pressed="true"] .badge { box-shadow: 0 0 0 2px var(--accent); }
+
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 380px); gap: 1.2rem; align-items: start; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+.rows { display: flex; flex-direction: column; gap: 0.6rem; }
+.row {
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 8px;
+  box-shadow: var(--shadow); padding: 0.7rem 0.9rem; cursor: pointer;
+  display: grid; grid-template-columns: 1fr auto; gap: 0.6rem 1rem; align-items: start;
+}
+.row.active { outline: 2px solid var(--accent); }
+.row .req { font-weight: 600; font-size: 0.92rem; }
+.row .where { color: var(--muted); font-size: 0.82rem; margin-top: 0.25rem; }
+.row .status-cell { text-align: right; }
+
+.panel {
+  position: sticky; top: 1.2rem; background: var(--panel); border: 1px solid var(--rule);
+  border-radius: 8px; box-shadow: var(--shadow); padding: 1rem 1.1rem; min-height: 220px;
+  max-height: calc(100vh - 2.4rem); overflow-y: auto;
+}
+.panel .placeholder { color: var(--muted); font-size: 0.88rem; }
+.panel h3 { margin: 0 0 0.15rem; font-size: 1rem; }
+.panel .panel-status { margin: 0 0 0.8rem; }
+.panel h4 { margin: 0.9rem 0 0.35rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
+.panel ul { margin: 0; padding-left: 1.1rem; }
+.panel li { margin: 0.35rem 0; font-size: 0.88rem; }
+.panel pre {
+  background: var(--code-bg); border-radius: 6px; padding: 0.6rem 0.7rem;
+  overflow-x: auto; font-size: 0.8rem; margin: 0.3rem 0 0.7rem;
+}
+.panel pre code { background: none; padding: 0; }
+.panel .close-btn { float: right; background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.85rem; }
+
 ul.gaps { padding-left: 1.2rem; }
 ul.gaps li { margin: 0.4rem 0; }
 footer { margin-top: 2rem; color: var(--muted); font-size: 0.82rem; }
@@ -56,7 +89,7 @@ footer { margin-top: 2rem; color: var(--muted); font-size: 0.82rem; }
 <body>
 <div class="wrap">
   <h1>Job Requirement Mapping</h1>
-  <p class="sub">GMD DevSecOps Engineer — Valkyrie Enterprises, Job ID 4472. Tracks which technical requirements from this specific posting are actually demonstrated in this repo, and which are honest, named gaps. Source: <a href="JOB.md">JOB.md</a>.</p>
+  <p class="sub">GMD DevSecOps Engineer — Valkyrie Enterprises, Job ID 4472. Click any status badge to see the real tools and commands behind that row. Source: <a href="JOB.md">JOB.md</a>.</p>
 
   <nav class="links">
     <a href="index.html">← Dashboard</a>
@@ -65,18 +98,12 @@ footer { margin-top: 2rem; color: var(--muted); font-size: 0.82rem; }
   </nav>
 
   <h2>Requirement → repo mapping</h2>
-  <table>
-    <tr><th>Job requirement</th><th>Status</th><th>Where</th></tr>
-    <tr><td>Terraform for complex IaC deployments</td><td><span class="badge ok">Covered</span></td><td><code>infra/terraform/</code> — AWS applied &amp; destroyed for real; KMS/CloudWatch bug caught and fixed</td></tr>
-    <tr><td>Kubernetes: build, deploy, manage, HA/resilience</td><td><span class="badge ok">Covered</span></td><td><code>k8s/</code> manifests deployed to a real <code>kind</code> cluster; PDB, anti-affinity, NetworkPolicy</td></tr>
-    <tr><td>CI/CD pipelines (GitLab CI, Jenkins, Azure DevOps)</td><td><span class="badge partial">Partial</span></td><td>GitHub Actions + GitLab CI real; no Jenkins, no Azure DevOps — <code>.github/workflows/</code>, <code>.gitlab-ci.yml</code></td></tr>
-    <tr><td>Hybrid cloud: AWS <strong>and</strong> Azure</td><td><span class="badge partial">Partial</span></td><td>AWS applied for real; Azure written only, never applied (no subscription) — <code>infra/terraform/modules/azure-platform/</code></td></tr>
-    <tr><td>Windows Server admin, AD, GPOs, SCCM</td><td><span class="badge partial">Partial</span></td><td>Real AD DC (Samba4), real GPO object+link, real Kerberos; no Windows Server itself, no domain-joined client, no real SCCM/MECM — <code>ad-lab/</code></td></tr>
-    <tr><td>STIG evaluation, analysis, implementation</td><td><span class="badge progress">In progress</span></td><td><code>stig/</code></td></tr>
-    <tr><td>Security/code scanning embedded in CI/CD</td><td><span class="badge ok">Covered</span></td><td>7 real gates on the dashboard's Security Scanning Gates table: gitleaks, bandit, Syft, pip-audit, Trivy, tfsec, kube-linter, CodeQL</td></tr>
-    <tr><td>IDE experience, e.g. Coder</td><td><span class="badge ok">Covered</span></td><td><code>coder/</code> — verified running: login page, <code>/healthz</code>, <code>/api/v2/buildinfo</code></td></tr>
-    <tr><td>Config management on top of IaC (implied — Ansible not explicit in posting but standard for this stack)</td><td><span class="badge ok">Covered</span></td><td><code>ansible/</code> — real, idempotent (twice-run proof: <code>changed=1</code> cold, <code>changed=0</code> warm)</td></tr>
-  </table>
+  <div class="layout">
+    <div class="rows" id="rows"></div>
+    <div class="panel" id="panel">
+      <div class="placeholder">Click a status badge on the left to see the tools, commands, and verification steps behind that row.</div>
+    </div>
+  </div>
 
   <h2>Named gaps not claimed as covered</h2>
   <ul class="gaps">
@@ -89,5 +116,233 @@ footer { margin-top: 2rem; color: var(--muted); font-size: 0.82rem; }
 
   <footer>Kept in sync with <a href="JOB.md">JOB.md</a>. Updated as work lands — see <a href="https://github.com/jclements3/poetic-musings/commits/main" target="_blank">commit history ↗</a>.</footer>
 </div>
+
+<script>
+const ROWS = [
+  {
+    req: "Terraform for complex IaC deployments",
+    where: "infra/terraform/",
+    status: "ok", statusLabel: "Covered",
+    tools: ["Terraform (HCL)", "AWS provider ~>5.60", "azurerm provider ~>3.110", "AWS CLI"],
+    steps: [
+      "Wrote modules/aws-platform (VPC across 2 AZs, ECR, KMS-encrypted S3 artifacts + access-log bucket, least-priv IAM role) and modules/azure-platform, wired via one root module reused across environments/{dev,prod}/terraform.tfvars.",
+      "Ran terraform init / plan / apply -var-file=environments/dev/terraform.tfvars against a real, personal free-tier AWS account (Azure provider block temporarily commented out since azurerm requires live auth even with zero resources planned — restored after).",
+      "Real bug caught mid-apply: aws_cloudwatch_log_group.vpc_flow_logs failed — AccessDeniedException, the KMS key had no policy statement granting logs.<region>.amazonaws.com permission. Fixed with a proper aws_iam_policy_document key policy.",
+      "Verified resources existed via the live AWS API (not just terraform state), then terraform destroy to tear everything down — zero ongoing cost.",
+      "Added missing filter{} blocks to aws_s3_bucket_lifecycle_configuration and renamed enable_https_traffic_only → https_traffic_only_enabled to clear provider deprecation warnings."
+    ],
+    cmds: [
+      "cd infra/terraform && terraform init",
+      "terraform plan  -var-file=environments/dev/terraform.tfvars",
+      "terraform apply -var-file=environments/dev/terraform.tfvars",
+      "terraform destroy -var-file=environments/dev/terraform.tfvars"
+    ]
+  },
+  {
+    req: "Kubernetes: build, deploy, manage, HA/resilience",
+    where: "k8s/",
+    status: "ok", statusLabel: "Covered",
+    tools: ["kind v0.24.0", "kubectl", "Kustomize", "kube-bench v0.9.4"],
+    steps: [
+      "Wrote k8s/base + overlays/{dev,prod} via Kustomize: Deployment (non-root, readOnlyRootFilesystem, restricted Pod Security Standard), Service, 2 NetworkPolicies (default-deny + explicit allow), PodDisruptionBudget, pod anti-affinity.",
+      "Stood up a real local kind cluster (1 control-plane + 1 worker, Kubernetes v1.31.0) — not a diagram, an actual running cluster.",
+      "Deployed this repo's real manifests to it and confirmed live: rollout Ready, Service reachable, both NetworkPolicy objects and the PDB present via kubectl get.",
+      "Ran kube-bench (CIS Kubernetes Benchmark) against the live control plane: 62 PASS / 11 FAIL / 48 WARN, all FAILs attributable to kind's own minimal control-plane defaults, documented honestly rather than hidden.",
+      "Cluster torn down after capture; kube-bench-report.txt kept as a committed artifact."
+    ],
+    cmds: [
+      "kind create cluster --config kind-config.yaml",
+      "kubectl kustomize k8s/overlays/dev | kubectl apply -f -",
+      "kubectl rollout status deployment/status-service",
+      "kubectl get networkpolicy,pdb",
+      "kube-bench --benchmark cis-1.24"
+    ]
+  },
+  {
+    req: "CI/CD pipelines (GitLab CI, Jenkins, Azure DevOps)",
+    where: ".github/workflows/, .gitlab-ci.yml",
+    status: "partial", statusLabel: "Partial",
+    tools: ["GitHub Actions", "GitLab CI"],
+    steps: [
+      "Two parallel pipelines, same stages, different dialects: lint/test, then five security scanning gates, on every push/PR.",
+      "First real CI run caught 5 genuine failures and each was root-caused: an invalid Trivy action version tag, an overly broad lint glob linting unrelated scripts, a real Flask CVE found by pip-audit, 6 kube-linter findings (anti-affinity, PDB eviction policy), and a tfsec rate-limit failure from an unauthenticated action fixed with an explicit GITHUB_TOKEN.",
+      "Weekly cron + every push/PR trigger on the security workflow so scan results don't go stale between commits.",
+      "Not built: Jenkins or Azure DevOps pipelines — named as an honest gap, not attempted."
+    ],
+    cmds: [
+      "cat .github/workflows/ci.yml",
+      "cat .github/workflows/security.yml",
+      "cat .gitlab-ci.yml"
+    ]
+  },
+  {
+    req: "Hybrid cloud: AWS and Azure",
+    where: "infra/terraform/modules/azure-platform/",
+    status: "partial", statusLabel: "Partial",
+    tools: ["Terraform azurerm provider"],
+    steps: [
+      "AWS side applied for real (see the Terraform row) — VPC, ECR, S3, KMS, IAM all verified against the live API and destroyed cleanly.",
+      "Azure side (Resource Group, ACR, Storage Account) is written and terraform validate-clean, but never terraform apply'd — no Azure subscription was available.",
+      "The azurerm provider block itself required live credentials just to configure, even with zero Azure resources planned, so it was temporarily commented out for the AWS-only apply and restored to its committed state afterward (verified via git diff showing no residual change)."
+    ],
+    cmds: [
+      "terraform validate   # azure-platform module",
+      "terraform plan -var-file=environments/dev/terraform.tfvars   # written, not applied"
+    ]
+  },
+  {
+    req: "Windows Server admin, AD, GPOs, SCCM",
+    where: "ad-lab/",
+    status: "partial", statusLabel: "Partial",
+    tools: ["Samba4 AD DC", "samba-tool", "Kerberos (kinit/klist)", "Docker"],
+    steps: [
+      "Provisioned a real Active Directory forest/domain (poeticmusings.lab) via samba-tool domain provision — open-source, no Windows license, wire-compatible with real Windows clients.",
+      "Created real objects: 2 OUs, 2 security groups, a named user, and a GPO created via samba-tool gpo create and linked to an OU via gpo setlink — confirmed with gpo getlink.",
+      "Real bug 1: SYSVOL provisioning failed with NT_STATUS_ACCESS_DENIED — Docker's overlay filesystem doesn't reliably support the xattrs Samba needs for NT ACLs. Fixed with --option=\"posix:eadb=...\" to emulate ACLs via TDB.",
+      "Real bug 2: gpo create failed with 'object name not found' — the container's /etc/resolv.conf didn't know the domain's own DNS. Fixed by pointing resolv.conf at Samba's internal DNS before seeding.",
+      "Verified with a genuine kinit jclements@POETICMUSINGS.LAB producing a real Kerberos TGT, klist, and external dig against the domain's DNS SRV/A records.",
+      "Honest gap: no domain-joined Windows client (no GUI/hypervisor in this environment), so GPO application — not just creation — is unproven, and no real SCCM/MECM exists."
+    ],
+    cmds: [
+      "docker run -d --name ad-dc ... poeticmusings-ad-dc",
+      "docker exec ad-dc samba-tool domain info 127.0.0.1",
+      "docker exec ad-dc samba-tool gpo getlink 'OU=IT,DC=poeticmusings,DC=lab'",
+      "docker exec ad-dc bash -c \"echo '<pw>' | kinit jclements@POETICMUSINGS.LAB\"",
+      "docker exec ad-dc klist"
+    ]
+  },
+  {
+    req: "STIG evaluation, analysis, implementation",
+    where: "stig/",
+    status: "progress", statusLabel: "In progress",
+    tools: ["OpenSCAP (oscap)", "scap-security-guide (DISA SCAP content)"],
+    steps: [
+      "DISA STIG is a distinct standard from CIS Benchmark — kube-bench (see the Kubernetes row) covers CIS, not STIG, so this closes a separate, real gap the posting names explicitly.",
+      "Running a real oscap xccdf eval against a DISA STIG profile, capturing genuine PASS/FAIL/NOTAPPLICABLE counts — not fabricated numbers.",
+      "Results and an honest README (what a container-vs-full-OS STIG scan can and can't prove) will land in stig/ once the evaluation finishes — hundreds of rules take several minutes to run for real."
+    ],
+    cmds: [
+      "oscap xccdf eval --profile <disa-stig-profile> \\",
+      "  --results stig/scap-results.xml --report stig/scap-report.html \\",
+      "  /usr/share/xml/scap/ssg/content/ssg-<target>-ds.xml"
+    ]
+  },
+  {
+    req: "Security/code scanning embedded in CI/CD",
+    where: "dashboard Security Scanning Gates table",
+    status: "ok", statusLabel: "Covered",
+    tools: ["gitleaks", "bandit", "Syft", "pip-audit", "Trivy", "tfsec", "kube-linter", "CodeQL"],
+    steps: [
+      "7 layered shift-left gates run on every push/PR: secrets detection, SAST, SBOM+SCA, container scan, IaC scan, K8s manifest scan, plus CodeQL — findings centralize as SARIF in GitHub code scanning.",
+      "First real run caught genuine findings, not staged ones: a live Flask CVE (missing Vary: Cookie header) via pip-audit, fixed by bumping flask 3.0.3→3.1.3; 6 kube-linter findings fixed with anti-affinity and PDB eviction-policy changes; legitimate tfsec HIGH/MEDIUM findings either fixed for real (VPC Flow Logs implemented) or explicitly documented with #tfsec:ignore: justification comments.",
+      "Trivy separately caught 6 CVEs baked into the base python:3.12-slim image's own bundled pip — fixed by stripping pip/setuptools/wheel from the runtime image entirely."
+    ],
+    cmds: [
+      "gitleaks detect --source . --no-git=false",
+      "bandit -r app/",
+      "syft app/status-service -o cyclonedx-json",
+      "pip-audit -r app/status-service/requirements.txt",
+      "trivy image poetic-musings/status-service:latest",
+      "tfsec infra/terraform/ --exclude aws-iam-no-policy-wildcards",
+      "kube-linter lint k8s/"
+    ]
+  },
+  {
+    req: "IDE experience, e.g. Coder",
+    where: "coder/",
+    status: "ok", statusLabel: "Covered",
+    tools: ["Coder (ghcr.io/coder/coder)", "Docker Compose"],
+    steps: [
+      "Ran the official, unmodified ghcr.io/coder/coder:latest image with its built-in PostgreSQL — a real running server, not a config file that was never started.",
+      "Verified live against three real endpoints: login page (200), /healthz (200), and /api/v2/buildinfo returning real, unfaked version data.",
+      "Honest gaps documented: no workspace template authored (so the full provisioning flow is unproven, only the control-plane server), no identity-provider integration with the ad-lab AD domain, container removed after verification — docker compose up -d is the intended persistent entrypoint."
+    ],
+    cmds: [
+      "docker run ghcr.io/coder/coder:latest",
+      "curl -s -o /dev/null -w '%{http_code}' http://localhost:7080/",
+      "curl -s http://localhost:7080/healthz",
+      "curl -s http://localhost:7080/api/v2/buildinfo"
+    ]
+  },
+  {
+    req: "Config management on top of IaC (Ansible)",
+    where: "ansible/",
+    status: "ok", statusLabel: "Covered",
+    tools: ["Ansible / ansible-core", "community.docker collection"],
+    steps: [
+      "Terraform answers 'does the infrastructure exist'; this answers 'is the right software deployed and configured on it, every time, idempotently' — the real IaC-vs-config-management distinction.",
+      "The observability_stack role deploys observability/'s real Prometheus+Grafana+status-service stack via the community.docker.docker_compose_v2 module (a real module, not a shell: wrapper).",
+      "Verification goes past 'container is running': polls /healthz, asserts the real http_requests_total metric is present, then queries Prometheus's own /api/v1/targets and confirms it actually scraped status-service (health: up) — proving the whole metrics pipeline end to end.",
+      "Real idempotency proof: docker compose down then run → ok=10 changed=1 (run-cold.txt); immediate re-run → ok=10 changed=0 (run-idempotent.txt).",
+      "Real bug hit and fixed: ansible-playbook failed on non-blocking stdin in this shell, fixed with < /dev/null; a later Pages deploy broke because Jekyll tried to Liquid-parse Jinja syntax in the new task file — fixed with a repo-root .nojekyll file."
+    ],
+    cmds: [
+      "ansible-galaxy collection install community.docker",
+      "ansible-playbook -i inventory.ini playbook.yml -v",
+      "docker compose down && ansible-playbook -i inventory.ini playbook.yml   # cold run, changed=1",
+      "ansible-playbook -i inventory.ini playbook.yml                          # warm run, changed=0"
+    ]
+  }
+];
+
+const rowsEl = document.getElementById("rows");
+const panelEl = document.getElementById("panel");
+
+function badgeClass(status) {
+  return status === "ok" ? "ok" : status === "partial" ? "partial" : "progress";
+}
+
+function renderRows() {
+  rowsEl.innerHTML = "";
+  ROWS.forEach((r, i) => {
+    const row = document.createElement("div");
+    row.className = "row";
+    row.id = "row-" + i;
+    row.innerHTML = `
+      <div>
+        <div class="req">${r.req}</div>
+        <div class="where"><code>${r.where}</code></div>
+      </div>
+      <div class="status-cell">
+        <button class="badge-btn" data-idx="${i}" aria-pressed="false">
+          <span class="badge ${badgeClass(r.status)}">${r.statusLabel}</span>
+        </button>
+      </div>`;
+    row.addEventListener("click", () => openPanel(i));
+    rowsEl.appendChild(row);
+  });
+}
+
+function openPanel(i) {
+  const r = ROWS[i];
+  document.querySelectorAll(".row").forEach(el => el.classList.remove("active"));
+  document.getElementById("row-" + i).classList.add("active");
+  document.querySelectorAll(".badge-btn").forEach(b => b.setAttribute("aria-pressed", "false"));
+  document.querySelector('.badge-btn[data-idx="' + i + '"]').setAttribute("aria-pressed", "true");
+
+  const toolsHtml = r.tools.map(t => `<li>${t}</li>`).join("");
+  const stepsHtml = r.steps.map(s => `<li>${s}</li>`).join("");
+  const cmdsHtml = r.cmds.join("\n");
+
+  panelEl.innerHTML = `
+    <button class="close-btn" id="closeBtn">close ✕</button>
+    <h3>${r.req}</h3>
+    <p class="panel-status"><span class="badge ${badgeClass(r.status)}">${r.statusLabel}</span> <code>${r.where}</code></p>
+    <h4>Tools used</h4>
+    <ul>${toolsHtml}</ul>
+    <h4>Process / what was actually done</h4>
+    <ul>${stepsHtml}</ul>
+    <h4>Representative commands</h4>
+    <pre><code>${cmdsHtml.replace(/</g, "&lt;")}</code></pre>`;
+  document.getElementById("closeBtn").addEventListener("click", (e) => {
+    e.stopPropagation();
+    document.querySelectorAll(".row").forEach(el => el.classList.remove("active"));
+    document.querySelectorAll(".badge-btn").forEach(b => b.setAttribute("aria-pressed", "false"));
+    panelEl.innerHTML = '<div class="placeholder">Click a status badge on the left to see the tools, commands, and verification steps behind that row.</div>';
+  });
+}
+
+renderRows();
+</script>
 </body>
 </html>
