@@ -54,3 +54,17 @@ MAIDEN/mat-original-backup.png
 *~
 .ghc.environment.*
 Oracle/pm-top/verilog/
+
+# Terraform: local plan/state/working-dir files. State contains real
+# resource IDs/ARNs once applied and must never be committed; the repo
+# ships only the .tf source, not the state of any particular apply.
+infra/terraform/.terraform/
+infra/terraform/**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+tfplan*
+crash.log
+crash.*.log
+*.tfvars.local
