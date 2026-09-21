@@ -76,7 +76,7 @@ header.top .links a:hover { text-decoration: underline; }
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: 0.7rem;
+  align-items: baseline;
 }
 .pill {
   font-size: 0.74rem;
@@ -267,6 +267,11 @@ footer a { color: var(--accent); }
 
 <header class="top">
   <h1>poetic-musings — DevSecOps Dashboard</h1>
+  <div class="summary-bar">
+    <span class="pill ok">4 pillars implemented</span>
+    <span class="pill partial">2 pillars design-complete, unverified live</span>
+    <span class="pill gap">3 pillars not started</span>
+  </div>
   <nav class="links">
     <a href="qrg.html" style="font-weight:700;">📖 QRG / Help</a>
     <a href="DEVSECOPS.html">Full book (HTML)</a>
@@ -275,12 +280,6 @@ footer a { color: var(--accent); }
     <a href="SECURITY.md">SECURITY.md</a>
   </nav>
 </header>
-
-<div class="summary-bar">
-  <span class="pill ok">4 pillars implemented</span>
-  <span class="pill partial">2 pillars design-complete, unverified live</span>
-  <span class="pill gap">3 pillars not started</span>
-</div>
 
 <h2 class="section-title">Platform Pillars</h2>
 <div class="grid">
