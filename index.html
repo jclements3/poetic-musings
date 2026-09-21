@@ -256,8 +256,7 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
   <h1>poetic-musings — DevSecOps Dashboard</h1>
   <div class="summary-bar">
     <span class="pill ok">4 pillars implemented</span>
-    <span class="pill partial">3 pillars partially verified</span>
-    <span class="pill gap">1 pillar not started</span>
+    <span class="pill partial">4 pillars partially verified</span>
     <a href="https://github.com/jclements3/poetic-musings/actions/workflows/ci.yml" title="Click through to the live run on GitHub Actions">
       <img src="https://github.com/jclements3/poetic-musings/actions/workflows/ci.yml/badge.svg" alt="CI Build/Lint/Test status" style="vertical-align:middle;">
     </a>
@@ -384,10 +383,17 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
     <div class="files">📁 <a href="ad-lab/">ad-lab/</a></div>
   </div>
 
-  <div class="card status-gap">
-    <div class="card-head"><h3>Coder &amp; Formal <a class="term" title="Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems." style="border-bottom:1px dotted var(--accent);cursor:help;">CIS</a></h3><span class="badge gap">Not started</span></div>
-    <p class="desc">Hardening choices throughout are CIS-<em>aligned</em> by construction, but never scored with a real CIS Benchmark scanner against a live cluster/account. No <a class="term" title="A platform for provisioning and managing remote, browser-accessible development environments from standard, version-controlled workspace templates." style="border-bottom:1px dotted var(--accent);cursor:help;">Coder</a> deployment either.</p>
-    <div class="toolbadges"><span>kube-bench</span><span title="A platform for provisioning and managing remote, browser-accessible development environments from standard, version-controlled workspace templates.">Coder</span></div>
+  <div class="card status-partial">
+    <div class="card-head"><h3>Coder &amp; Formal <a class="term" title="Center for Internet Security: publisher of the CIS Benchmarks, versioned hardening checklists for specific systems." style="border-bottom:1px dotted var(--accent);cursor:help;">CIS</a></h3><span class="badge partial">Scanned + deployed, real numbers</span></div>
+    <p class="desc">A real <code>kind</code> cluster stood up, this repo's own k8s/ manifests deployed and rolled out <code>Ready</code> on it, then scored with a genuine <code>kube-bench</code> CIS Kubernetes Benchmark run — 62 PASS / 11 FAIL / 48 WARN, not a fabricated "aligned by construction" claim. The 11 FAILs are honestly kind's own default control-plane config (no audit log, <code>--profiling</code> left on), not this repo's manifests. Separately, a real <a class="term" title="A platform for provisioning and managing remote, browser-accessible development environments from standard, version-controlled workspace templates." style="border-bottom:1px dotted var(--accent);cursor:help;">Coder</a> server (official image) was deployed and its API/health endpoints verified live.</p>
+    <ul class="reslist">
+      <li><code>kube-bench</code> v0.9.4 vs. real <code>kind</code> v1.31 cluster: 62/11/48</li>
+      <li>This repo's Deployment/Service/NetworkPolicy/PDB confirmed live via <code>kubectl get</code></li>
+      <li>Coder v2.37.2: login page 200, <code>/healthz</code> 200, real <code>buildinfo</code> API response</li>
+      <li>Gaps: cluster and Coder instance torn down after verification, no persistent workspace template authored</li>
+    </ul>
+    <div class="toolbadges"><span>kube-bench</span><span>kind</span><span title="A platform for provisioning and managing remote, browser-accessible development environments from standard, version-controlled workspace templates.">Coder</span></div>
+    <div class="files">📁 <a href="k8s/cis-benchmark/">k8s/cis-benchmark/</a> · <a href="coder/">coder/</a></div>
   </div>
 
 </div>
