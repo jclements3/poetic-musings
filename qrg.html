@@ -15,6 +15,19 @@
   --accent-soft: #eaf2fa;
   --rule: #d8dee6;
   --code-bg: #f0f1f3;
+  --c1: #0a5a96; --c1-soft: #eaf2fa;
+  --c2: #0f7a6b; --c2-soft: #e5f5f2;
+  --c3: #7b4fc9; --c3-soft: #f1ecfb;
+  --c4: #b8860b; --c4-soft: #fbf3df;
+  --c5: #b3341c; --c5-soft: #fbecee;
+  --c6: #2f8f4e; --c6-soft: #eaf7ee;
+  --c7: #0e7ca8; --c7-soft: #e6f4fa;
+  --c8: #c23b8c; --c8-soft: #fbebf4;
+  --c9: #a8700f; --c9-soft: #f6ecda;
+  --q1: #b3341c; --q1-soft: #fbecee;
+  --q2: #0a5a96; --q2-soft: #eaf2fa;
+  --q3: #b8860b; --q3-soft: #fbf3df;
+  --q4: #2f8f4e; --q4-soft: #eaf7ee;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -26,6 +39,19 @@
     --accent-soft: #16293a;
     --rule: #2c3038;
     --code-bg: #22252b;
+    --c1: #6fb3e0; --c1-soft: #16293a;
+    --c2: #4fc2ac; --c2-soft: #113029;
+    --c3: #b294eb; --c3-soft: #241c38;
+    --c4: #d9a441; --c4-soft: #2b2413;
+    --c5: #e2828d; --c5-soft: #2c1a1d;
+    --c6: #4caf72; --c6-soft: #16261c;
+    --c7: #57bce0; --c7-soft: #122a35;
+    --c8: #e587c2; --c8-soft: #2e1727;
+    --c9: #e0ae5c; --c9-soft: #2e2413;
+    --q1: #e2828d; --q1-soft: #2c1a1d;
+    --q2: #6fb3e0; --q2-soft: #16293a;
+    --q3: #d9a441; --q3-soft: #2b2413;
+    --q4: #4caf72; --q4-soft: #16261c;
   }
 }
 * { box-sizing: border-box; }
@@ -35,10 +61,10 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-  font-size: 12.5px;
-  line-height: 1.35;
+  font-size: 15.5px;
+  line-height: 1.48;
 }
-.wrap { max-width: none; padding: 0.75rem clamp(0.75rem, 2vw, 2rem) 1rem; }
+.wrap { max-width: none; padding: 1rem clamp(1rem, 2.5vw, 2.5rem) 1.5rem; }
 
 header.top {
   display: flex;
@@ -50,49 +76,62 @@ header.top {
   margin-bottom: 0.6rem;
   border-bottom: 2px solid var(--rule);
 }
-header.top h1 { margin: 0; font-size: 1.15rem; }
-header.top .sub { color: var(--muted); font-size: 0.78rem; }
-header.top .links a { color: var(--accent); text-decoration: none; font-size: 0.78rem; margin-left: 0.9rem; }
+header.top h1 { margin: 0; font-size: 1.5rem; }
+header.top .sub { color: var(--muted); font-size: 0.92rem; }
+header.top .links a { color: var(--accent); text-decoration: none; font-size: 0.9rem; margin-left: 1rem; font-weight: 600; }
 header.top .links a:hover { text-decoration: underline; }
 
 h2.stripe {
-  font-size: 0.78rem;
+  font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--accent);
   background: var(--accent-soft);
-  padding: 0.25rem 0.6rem;
-  margin: 0.75rem 0 0.4rem;
-  border-radius: 4px;
+  padding: 0.4rem 0.75rem;
+  margin: 1.1rem 0 0.6rem;
+  border-radius: 5px;
+  font-weight: 700;
 }
 
 /* ---- Function Index: category blocks with a nested sub-list, flowed into columns ---- */
 .index-flow {
-  columns: 3 15rem;
+  columns: 3 18rem;
   column-gap: 1.5rem;
 }
 @media (min-width: 1500px) {
-  .index-flow { columns: 5 14rem; }
+  .index-flow { columns: 4 17rem; }
 }
 .index-cat {
   break-inside: avoid;
-  padding: 0.2rem 0 0.35rem;
-  border-bottom: 1px solid var(--rule);
-  margin-bottom: 0.2rem;
-  font-size: 0.79rem;
+  padding: 0.35rem 0 0.5rem 0.6rem;
+  border-left: 4px solid var(--cat-color, var(--accent));
+  background: var(--cat-soft, transparent);
+  border-radius: 0 5px 5px 0;
+  margin-bottom: 0.5rem;
+  font-size: 0.96rem;
 }
-.index-cat .cat { font-weight: 700; color: var(--fg); }
+.index-cat .cat { font-weight: 800; color: var(--cat-color, var(--fg)); }
 .index-cat .desc { color: var(--muted); font-style: italic; }
 .index-cat ul.sub {
-  margin: 0.15rem 0 0;
-  padding-left: 1.05rem;
+  margin: 0.3rem 0 0;
+  padding-left: 1.15rem;
   list-style: disc;
 }
 .index-cat ul.sub li {
   color: var(--fg);
-  opacity: 0.85;
-  line-height: 1.25;
+  opacity: 0.9;
+  line-height: 1.4;
+  margin: 0.1rem 0;
 }
+.index-cat.cat-1 { --cat-color: var(--c1); --cat-soft: var(--c1-soft); }
+.index-cat.cat-2 { --cat-color: var(--c2); --cat-soft: var(--c2-soft); }
+.index-cat.cat-3 { --cat-color: var(--c3); --cat-soft: var(--c3-soft); }
+.index-cat.cat-4 { --cat-color: var(--c4); --cat-soft: var(--c4-soft); }
+.index-cat.cat-5 { --cat-color: var(--c5); --cat-soft: var(--c5-soft); }
+.index-cat.cat-6 { --cat-color: var(--c6); --cat-soft: var(--c6-soft); }
+.index-cat.cat-7 { --cat-color: var(--c7); --cat-soft: var(--c7-soft); }
+.index-cat.cat-8 { --cat-color: var(--c8); --cat-soft: var(--c8-soft); }
+.index-cat.cat-9 { --cat-color: var(--c9); --cat-soft: var(--c9-soft); }
 
 /* ---- Triage: Q1-Q4 in a tight grid ---- */
 .triage-grid {
@@ -103,24 +142,29 @@ h2.stripe {
 .q-card {
   background: var(--panel);
   border: 1px solid var(--rule);
+  border-top: 4px solid var(--q-color, var(--accent));
   border-radius: 6px;
-  padding: 0.5rem 0.6rem;
+  padding: 0.75rem 0.9rem;
 }
-.q-card h3 { margin: 0 0 0.2rem; font-size: 0.85rem; color: var(--accent); }
-.q-card .when { margin: 0 0 0.3rem; color: var(--muted); font-size: 0.72rem; font-style: italic; }
+.q-card h3 { margin: 0 0 0.3rem; font-size: 1.05rem; color: var(--q-color, var(--accent)); }
+.q-card .when { margin: 0 0 0.45rem; color: var(--muted); font-size: 0.85rem; font-style: italic; }
 .q-card pre {
-  margin: 0 0 0.3rem;
+  margin: 0 0 0.45rem;
   background: var(--code-bg);
-  border-radius: 4px;
-  padding: 0.35rem 0.45rem;
-  font-size: 0.68rem;
-  line-height: 1.3;
+  border-radius: 5px;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.82rem;
+  line-height: 1.42;
   overflow-x: auto;
   white-space: pre-wrap;
   word-break: break-word;
 }
 .q-card code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; }
-.q-card .note { margin: 0; color: var(--muted); font-size: 0.7rem; }
+.q-card .note { margin: 0; color: var(--muted); font-size: 0.85rem; }
+.q-card.q1 { --q-color: var(--q1); background: var(--q1-soft); }
+.q-card.q2 { --q-color: var(--q2); background: var(--q2-soft); }
+.q-card.q3 { --q-color: var(--q3); background: var(--q3-soft); }
+.q-card.q4 { --q-color: var(--q4); background: var(--q4-soft); }
 
 /* ---- bottom rows: mini reference panels ---- */
 .bottom-grid {
@@ -132,34 +176,43 @@ h2.stripe {
 .mini-panel {
   background: var(--panel);
   border: 1px solid var(--rule);
+  border-left: 4px solid var(--m-color, var(--accent));
   border-radius: 6px;
-  padding: 0.55rem 0.7rem;
-  font-size: 0.76rem;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.9rem;
 }
-.mini-panel h3 { margin: 0 0 0.35rem; font-size: 0.82rem; color: var(--accent); }
-.mini-panel ul { margin: 0; padding-left: 1.1rem; }
-.mini-panel li { margin: 0.15rem 0; }
+.mini-panel h3 { margin: 0 0 0.5rem; font-size: 1rem; color: var(--m-color, var(--accent)); }
+.mini-panel ul { margin: 0; padding-left: 1.15rem; }
+.mini-panel li { margin: 0.3rem 0; }
 .mini-panel .stage { font-weight: 700; }
 .mini-panel pre {
-  margin: 0.3rem 0;
+  margin: 0.45rem 0;
   background: var(--code-bg);
-  border-radius: 4px;
-  padding: 0.3rem 0.4rem;
-  font-size: 0.66rem;
-  line-height: 1.25;
+  border-radius: 5px;
+  padding: 0.45rem 0.55rem;
+  font-size: 0.8rem;
+  line-height: 1.4;
   overflow-x: auto;
   white-space: pre-wrap;
   word-break: break-word;
 }
 .mini-panel code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; }
-.mini-panel .note { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.7rem; }
+.mini-panel .note { margin: 0.35rem 0 0; color: var(--muted); font-size: 0.84rem; }
+.mini-panel:nth-of-type(8n+1) { --m-color: var(--c1); }
+.mini-panel:nth-of-type(8n+2) { --m-color: var(--c2); }
+.mini-panel:nth-of-type(8n+3) { --m-color: var(--c3); }
+.mini-panel:nth-of-type(8n+4) { --m-color: var(--c4); }
+.mini-panel:nth-of-type(8n+5) { --m-color: var(--c5); }
+.mini-panel:nth-of-type(8n+6) { --m-color: var(--c6); }
+.mini-panel:nth-of-type(8n+7) { --m-color: var(--c7); }
+.mini-panel:nth-of-type(8n+8) { --m-color: var(--c8); }
 
 footer.colophon {
-  margin-top: 0.6rem;
-  padding-top: 0.4rem;
+  margin-top: 1rem;
+  padding-top: 0.6rem;
   border-top: 1px solid var(--rule);
   color: var(--muted);
-  font-size: 0.68rem;
+  font-size: 0.82rem;
 }
 
 @media (max-width: 1100px) {
@@ -190,31 +243,31 @@ footer.colophon {
 
 <h2 class="stripe">Function Index — what is compared where (40 functions, 1.1–9.6)</h2>
 <div class="index-flow">
-  <div class="index-cat"><span class="cat">1 PLAN &amp; SOURCE</span> — <span class="desc">where work is defined and code lives</span>
+  <div class="index-cat cat-1"><span class="cat">1 PLAN &amp; SOURCE</span> — <span class="desc">where work is defined and code lives</span>
     <ul class="sub"><li>1.1 Open an MR from the CLI</li></ul>
   </div>
-  <div class="index-cat"><span class="cat">2 DEVELOP</span> — <span class="desc">standardized workspaces kill toolchain drift</span>
+  <div class="index-cat cat-2"><span class="cat">2 DEVELOP</span> — <span class="desc">standardized workspaces kill toolchain drift</span>
     <ul class="sub"><li>2.1 Provision a dev workspace</li><li>2.2 Pre-commit hook</li></ul>
   </div>
-  <div class="index-cat"><span class="cat">3 BUILD</span> — <span class="desc">source to artifacts, repeatably, on shared runners</span>
+  <div class="index-cat cat-3"><span class="cat">3 BUILD</span> — <span class="desc">source to artifacts, repeatably, on shared runners</span>
     <ul class="sub"><li>3.1 CI pipeline</li><li>3.2 Path-filtered jobs</li><li>3.3 Inject a secret</li><li>3.4 Schedules</li><li>3.5 Artifacts &amp; cache</li><li>3.6 Build an image</li><li>3.7 Air-gap transfer</li></ul>
   </div>
-  <div class="index-cat"><span class="cat">4 TEST</span> — <span class="desc">correctness gates; cheapest checks first</span>
+  <div class="index-cat cat-4"><span class="cat">4 TEST</span> — <span class="desc">correctness gates; cheapest checks first</span>
     <ul class="sub"><li>4.1 SAST (§5.1)</li><li>4.2 Ephemeral integration tests</li><li>4.3 Coverage gate</li></ul>
   </div>
-  <div class="index-cat"><span class="cat">5 SECURE</span> — <span class="desc">the shift-left gates; every category a pipeline stage</span>
+  <div class="index-cat cat-5"><span class="cat">5 SECURE</span> — <span class="desc">the shift-left gates; every category a pipeline stage</span>
     <ul class="sub"><li>5.1 SAST</li><li>5.2 SBOM</li><li>5.3 Dependency updates</li><li>5.4 Image CVE scan</li><li>5.5 Secret detection</li><li>5.6 Compliance scan</li><li>5.7 Runtime secret</li><li>5.8 Admission policy</li><li>5.9 Sign/verify image</li></ul>
   </div>
-  <div class="index-cat"><span class="cat">6 PROVISION</span> — <span class="desc">declare the environment; reviewed diff = executed diff</span>
+  <div class="index-cat cat-6"><span class="cat">6 PROVISION</span> — <span class="desc">declare the environment; reviewed diff = executed diff</span>
     <ul class="sub"><li>6.1 Declare a resource</li><li>6.2 IaC verbs</li><li>6.3 Drift</li><li>6.4 Modules</li><li>6.5 Configure a host</li><li>6.6 Windows config</li><li>6.7 Read-only access</li><li>6.8 Workload identity</li></ul>
   </div>
-  <div class="index-cat"><span class="cat">7 DEPLOY &amp; ORCHESTRATE</span> — <span class="desc">desired state plus a reconciliation loop</span>
+  <div class="index-cat cat-7"><span class="cat">7 DEPLOY &amp; ORCHESTRATE</span> — <span class="desc">desired state plus a reconciliation loop</span>
     <ul class="sub"><li>7.1 Create a cluster</li><li>7.2 Deploy to K8s</li><li>7.3 Roll back</li><li>7.4 Progressive delivery</li><li>7.5 Expose a service</li><li>7.6 Autoscale</li></ul>
   </div>
-  <div class="index-cat"><span class="cat">8 OPERATE &amp; OBSERVE</span> — <span class="desc">see what changed without SSH spelunking</span>
+  <div class="index-cat cat-8"><span class="cat">8 OPERATE &amp; OBSERVE</span> — <span class="desc">see what changed without SSH spelunking</span>
     <ul class="sub"><li>8.1 Query telemetry</li><li>8.2 Define an alert</li><li>8.3 Administer an AD user</li><li>8.4 Windows config (§6.6)</li></ul>
   </div>
-  <div class="index-cat"><span class="cat">9 EVIDENCE &amp; GOVERN</span> — <span class="desc">engineering activity turned into accreditation evidence</span>
+  <div class="index-cat cat-9"><span class="cat">9 EVIDENCE &amp; GOVERN</span> — <span class="desc">engineering activity turned into accreditation evidence</span>
     <ul class="sub"><li>9.1 Compliance scan (§5.6)</li><li>9.2 SBOM (§5.2)</li><li>9.3 Air gap (§3.7)</li><li>9.4 Sign/verify (§5.9)</li><li>9.5 TLS cert</li><li>9.6 Network intent</li></ul>
   </div>
 </div>
@@ -222,7 +275,7 @@ footer.colophon {
 <h2 class="stripe">Troubleshooting Triage — the four questions, in order</h2>
 <div class="triage-grid">
 
-  <div class="q-card">
+  <div class="q-card q1">
     <h3>Q1 — Blast radius?</h3>
     <p class="when">First 120 seconds; scope decides urgency.</p>
     <pre><code>kubectl get pods -A | grep -v 'Running\|Completed'
@@ -232,7 +285,7 @@ df -h</code></pre>
     <p class="note">One pod, one user, one host — or everything? Ask a second human. Write the answer down.</p>
   </div>
 
-  <div class="q-card">
+  <div class="q-card q2">
     <h3>Q2 — What changed?</h3>
     <p class="when">Highest-yield question; run the whole battery.</p>
     <pre><code>kubectl get events -A --sort-by=.lastTimestamp | tail -30
@@ -244,7 +297,7 @@ journalctl --since "-24h" -p warning | tail -40</code></pre>
     <p class="note">Something almost always changed. Nothing found usually means the wrong layer, not no cause.</p>
   </div>
 
-  <div class="q-card">
+  <div class="q-card q3">
     <h3>Q3 — Which layer?</h3>
     <p class="when">Walk the request path, half-split.</p>
     <pre><code>dig &lt;name&gt;
@@ -255,7 +308,7 @@ kubectl logs &lt;pod&gt; -n &lt;ns&gt; --previous</code></pre>
     <p class="note">DNS → LB → ingress → service → endpoints → pod → app. Start at endpoints, half-split.</p>
   </div>
 
-  <div class="q-card">
+  <div class="q-card q4">
     <h3>Q4 — Fastest safe rollback?</h3>
     <p class="when">Answer before any fix attempt.</p>
     <pre><code>helm rollback &lt;release&gt; -n &lt;ns&gt;
