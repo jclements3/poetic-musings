@@ -69,8 +69,19 @@ button.badge-btn[aria-pressed="true"] .badge { box-shadow: 0 0 0 2px var(--accen
   max-height: calc(100vh - 2.4rem); overflow-y: auto;
 }
 .panel .placeholder { color: var(--muted); font-size: 0.88rem; }
+.panel-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 320px); gap: 1rem 1.5rem; align-items: start; }
+@media (max-width: 620px) { .panel-head { grid-template-columns: 1fr; } }
 .panel h3 { margin: 0 0 0.15rem; font-size: 1rem; }
-.panel .panel-status { margin: 0 0 0.8rem; }
+.panel .panel-status { margin: 0; }
+.exec-summary {
+  background: var(--accent-soft); border: 1px solid var(--accent);
+  border-radius: 6px; padding: 0.6rem 0.75rem;
+}
+.exec-summary .exec-label {
+  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--accent); font-weight: 700; margin-bottom: 0.25rem;
+}
+.exec-summary p { margin: 0; font-size: 0.84rem; line-height: 1.4; }
 .panel h4 { margin: 0.9rem 0 0.35rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
 .panel ul { margin: 0; padding-left: 1.1rem; }
 .panel li { margin: 0.35rem 0; font-size: 0.88rem; }
@@ -123,6 +134,7 @@ const ROWS = [
     req: "Terraform for complex IaC deployments",
     where: "infra/terraform/",
     status: "ok", statusLabel: "Covered",
+    summary: "I wrote and actually applied a multi-cloud Terraform layer against a real AWS account — hit a real KMS permissions bug on the way, fixed the root cause, then tore it down clean.",
     tools: ["Terraform (HCL)", "AWS provider ~>5.60", "azurerm provider ~>3.110", "AWS CLI"],
     steps: [
       "Wrote modules/aws-platform (VPC across 2 AZs, ECR, KMS-encrypted S3 artifacts + access-log bucket, least-priv IAM role) and modules/azure-platform, wired via one root module reused across environments/{dev,prod}/terraform.tfvars.",
@@ -142,6 +154,7 @@ const ROWS = [
     req: "Kubernetes: build, deploy, manage, HA/resilience",
     where: "k8s/",
     status: "ok", statusLabel: "Covered",
+    summary: "I stood up a real cluster, deployed hardened manifests to it, and ran a scored CIS Benchmark scan against the live control plane instead of just claiming best practices.",
     tools: ["kind v0.24.0", "kubectl", "Kustomize", "kube-bench v0.9.4"],
     steps: [
       "Wrote k8s/base + overlays/{dev,prod} via Kustomize: Deployment (non-root, readOnlyRootFilesystem, restricted Pod Security Standard), Service, 2 NetworkPolicies (default-deny + explicit allow), PodDisruptionBudget, pod anti-affinity.",
@@ -162,6 +175,7 @@ const ROWS = [
     req: "CI/CD pipelines (GitLab CI, Jenkins, Azure DevOps)",
     where: ".github/workflows/, .gitlab-ci.yml",
     status: "partial", statusLabel: "Partial",
+    summary: "I run two parallel real pipelines (GitHub Actions + GitLab CI) with five security gates each, and the first real run caught and fixed five genuine failures. No Jenkins/Azure DevOps experience to claim here.",
     tools: ["GitHub Actions", "GitLab CI"],
     steps: [
       "Two parallel pipelines, same stages, different dialects: lint/test, then five security scanning gates, on every push/PR.",
@@ -179,6 +193,7 @@ const ROWS = [
     req: "Hybrid cloud: AWS and Azure",
     where: "infra/terraform/modules/azure-platform/",
     status: "partial", statusLabel: "Partial",
+    summary: "AWS is real, applied, and verified end to end. Azure is written and validated but never applied — I'd say that honestly rather than overclaim it in an interview.",
     tools: ["Terraform azurerm provider"],
     steps: [
       "AWS side applied for real (see the Terraform row) — VPC, ECR, S3, KMS, IAM all verified against the live API and destroyed cleanly.",
@@ -194,6 +209,7 @@ const ROWS = [
     req: "Windows Server admin, AD, GPOs, SCCM",
     where: "ad-lab/",
     status: "partial", statusLabel: "Partial",
+    summary: "I built and verified a real AD domain — real Kerberos, real GPO object linked to an OU, two real bugs fixed. No domain-joined Windows client or real SCCM, and I'd say that plainly.",
     tools: ["Samba4 AD DC", "samba-tool", "Kerberos (kinit/klist)", "Docker"],
     steps: [
       "Provisioned a real Active Directory forest/domain (poeticmusings.lab) via samba-tool domain provision — open-source, no Windows license, wire-compatible with real Windows clients.",
@@ -215,6 +231,7 @@ const ROWS = [
     req: "STIG evaluation, analysis, implementation",
     where: "stig/",
     status: "ok", statusLabel: "Covered",
+    summary: "I ran a real DISA STIG scan (not CIS) with OpenSCAP against DISA's own RHEL8 profile — 67 pass, 51 fail, and I can speak to exactly why each failure exists and how I'd remediate it.",
     tools: ["OpenSCAP (oscap) 1.3.9", "DISA SCAP Security Guide (ssg-rhel8-ds.xml)", "Red Hat UBI8 (registry.access.redhat.com/ubi8/ubi)"],
     steps: [
       "DISA STIG is a distinct standard from CIS Benchmark — kube-bench (see the Kubernetes row) covers CIS, not STIG, so this closes a separate, real gap the posting names explicitly.",
@@ -236,6 +253,7 @@ const ROWS = [
     req: "Security/code scanning embedded in CI/CD",
     where: "dashboard Security Scanning Gates table",
     status: "ok", statusLabel: "Covered",
+    summary: "Seven real gates run on every push. I can walk through real findings each one caught — a live CVE, hardening misses, a rate-limit bug — not a hypothetical checklist.",
     tools: ["gitleaks", "bandit", "Syft", "pip-audit", "Trivy", "tfsec", "kube-linter", "CodeQL"],
     steps: [
       "7 layered shift-left gates run on every push/PR: secrets detection, SAST, SBOM+SCA, container scan, IaC scan, K8s manifest scan, plus CodeQL — findings centralize as SARIF in GitHub code scanning.",
@@ -256,6 +274,7 @@ const ROWS = [
     req: "IDE experience, e.g. Coder",
     where: "coder/",
     status: "ok", statusLabel: "Covered",
+    summary: "I deployed the actual Coder server and verified it live against its own API — the control plane is proven; I'd be upfront that no workspace template exists yet.",
     tools: ["Coder (ghcr.io/coder/coder)", "Docker Compose"],
     steps: [
       "Ran the official, unmodified ghcr.io/coder/coder:latest image with its built-in PostgreSQL — a real running server, not a config file that was never started.",
@@ -273,6 +292,7 @@ const ROWS = [
     req: "Config management on top of IaC (Ansible)",
     where: "ansible/",
     status: "ok", statusLabel: "Covered",
+    summary: "I can articulate the real IaC-vs-config-management distinction and back it with a role I proved idempotent by running it twice and diffing changed counts.",
     tools: ["Ansible / ansible-core", "community.docker collection"],
     steps: [
       "Terraform answers 'does the infrastructure exist'; this answers 'is the right software deployed and configured on it, every time, idempotently' — the real IaC-vs-config-management distinction.",
@@ -331,8 +351,16 @@ function openPanel(i) {
 
   panelEl.innerHTML = `
     <button class="close-btn" id="closeBtn">close ✕</button>
-    <h3>${r.req}</h3>
-    <p class="panel-status"><span class="badge ${badgeClass(r.status)}">${r.statusLabel}</span> <code>${r.where}</code></p>
+    <div class="panel-head">
+      <div>
+        <h3>${r.req}</h3>
+        <p class="panel-status"><span class="badge ${badgeClass(r.status)}">${r.statusLabel}</span> <code>${r.where}</code></p>
+      </div>
+      <div class="exec-summary">
+        <div class="exec-label">Interview pitch</div>
+        <p>${r.summary}</p>
+      </div>
+    </div>
     <h4>Tools used</h4>
     <ul>${toolsHtml}</ul>
     <h4>Process / what was actually done</h4>
