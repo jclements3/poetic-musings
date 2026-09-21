@@ -1,0 +1,16 @@
+---
+# Config management layer on top of the Terraform-provisioned/local
+# infrastructure: deploys and verifies the real observability stack.
+# Terraform answers "does the infra exist"; this playbook answers
+# "is the right software running and configured on it, every time,
+# idempotently" -- the distinction a DevSecOps interviewer will ask about.
+- name: Deploy and verify the observability stack
+  hosts: observability
+  become: false
+  gather_facts: true
+
+  vars:
+    project_root: "{{ playbook_dir }}/.."
+
+  roles:
+    - observability_stack

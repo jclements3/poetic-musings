@@ -1,0 +1,75 @@
+---
+- name: Assert Docker is present and reachable
+  ansible.builtin.command: docker info
+  changed_when: false
+  register: docker_info
+
+- name: Ensure the observability compose stack is deployed and up to date
+  community.docker.docker_compose_v2:
+    project_src: "{{ project_root }}/observability"
+    build: always
+    state: present
+  register: compose_result
+
+- name: Report what compose actually changed
+  ansible.builtin.debug:
+    msg: >-
+      services changed: {{ compose_result.changed }},
+      containers: {{ compose_result.containers | map(attribute='Service') | list }}
+
+- name: Wait for status-service /healthz to answer
+  ansible.builtin.uri:
+    url: "http://localhost:{{ status_service_port }}/healthz"
+    status_code: 200
+  register: healthz
+  retries: 15
+  delay: 2
+  until: healthz.status == 200
+
+- name: Wait for status-service /metrics to expose Prometheus format
+  ansible.builtin.uri:
+    url: "http://localhost:{{ status_service_port }}/metrics"
+    status_code: 200
+    return_content: true
+  register: metrics
+  retries: 10
+  delay: 2
+  until: metrics.status == 200
+
+- name: Assert http_requests_total metric is actually present
+  ansible.builtin.assert:
+    that:
+      - "'http_requests_total' in metrics.content"
+    fail_msg: "status-service is up but not exporting the expected metric"
+
+- name: Wait for Prometheus to report itself healthy
+  ansible.builtin.uri:
+    url: "http://localhost:{{ prometheus_port }}/-/healthy"
+    status_code: 200
+  register: prom_healthy
+  retries: 15
+  delay: 2
+  until: prom_healthy.status == 200
+
+- name: Confirm Prometheus actually scraped status-service (target up)
+  ansible.builtin.uri:
+    url: "http://localhost:{{ prometheus_port }}/api/v1/targets"
+    status_code: 200
+    return_content: true
+  register: prom_targets
+  retries: 10
+  delay: 3
+  until: >-
+    (prom_targets.content | from_json).data.activeTargets
+    | selectattr('labels.job', 'equalto', 'status-service')
+    | selectattr('health', 'equalto', 'up')
+    | list | length > 0
+
+- name: Wait for Grafana to report itself healthy
+  ansible.builtin.uri:
+    url: "http://localhost:{{ grafana_port }}/api/health"
+    status_code: 200
+  register: grafana_healthy
+  retries: 15
+  delay: 2
+  until: grafana_healthy.status == 200

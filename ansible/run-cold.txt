@@ -1,0 +1,47 @@
+
+PLAY [Deploy and verify the observability stack] *******************************
+
+TASK [Gathering Facts] *********************************************************
+[WARNING]: Platform linux on host localhost is using the discovered Python
+interpreter at /usr/bin/python3.10, but future installation of another Python
+interpreter could change the meaning of that path. See
+https://docs.ansible.com/ansible-
+core/2.17/reference_appendices/interpreter_discovery.html for more information.
+ok: [localhost]
+
+TASK [observability_stack : Assert Docker is present and reachable] ************
+ok: [localhost]
+
+TASK [observability_stack : Ensure the observability compose stack is deployed and up to date] ***
+changed: [localhost]
+
+TASK [observability_stack : Report what compose actually changed] **************
+ok: [localhost] => {
+    "msg": "services changed: True, containers: ['grafana', 'prometheus', 'status-service']"
+}
+
+TASK [observability_stack : Wait for status-service /healthz to answer] ********
+ok: [localhost]
+
+TASK [observability_stack : Wait for status-service /metrics to expose Prometheus format] ***
+ok: [localhost]
+
+TASK [observability_stack : Assert http_requests_total metric is actually present] ***
+ok: [localhost] => {
+    "changed": false,
+    "msg": "All assertions passed"
+}
+
+TASK [observability_stack : Wait for Prometheus to report itself healthy] ******
+ok: [localhost]
+
+TASK [observability_stack : Confirm Prometheus actually scraped status-service (target up)] ***
+FAILED - RETRYING: [localhost]: Confirm Prometheus actually scraped status-service (target up) (10 retries left).
+ok: [localhost]
+
+TASK [observability_stack : Wait for Grafana to report itself healthy] *********
+ok: [localhost]
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=10   changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+

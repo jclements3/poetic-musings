@@ -294,8 +294,8 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
 <div class="grid">
 
   <div class="card status-partial">
-    <div class="card-head"><h3><a class="term" title="Infrastructure as Code: describing infrastructure in version-controlled text instead of manual console clicks.">IaC</a> · Terraform</h3><span class="badge partial">AWS applied &amp; verified</span></div>
-    <p class="desc">Dual-cloud platform module: <a class="term" title="Virtual Private Cloud: your own private, isolated network inside a cloud provider's infrastructure.">VPC</a> across 2 AZs, KMS-encrypted immutable-tag <a class="term" title="Elastic Container Registry: AWS's managed registry for storing and scanning container images.">ECR</a>, encrypted/versioned <a class="term" title="Simple Storage Service: AWS's object storage for files and blobs at effectively unlimited scale.">S3</a> with a separate access-log bucket, least-privilege <a class="term" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a> role for CI — plus an Azure module (ACR, geo-redundant storage). AWS side <code>apply</code>'d for real against a free-tier account, verified via the AWS CLI, then <code>destroy</code>'d — caught a real bug (CloudWatch Logs needs an explicit KMS key-policy grant, not covered by the default account-root policy). Azure side remains written-only (no subscription available).</p>
+    <div class="card-head"><h3><a class="term" title="Infrastructure as Code: describing infrastructure in version-controlled text instead of manual console clicks.">IaC</a> · Terraform + Config Mgmt · Ansible</h3><span class="badge partial">AWS applied &amp; verified</span></div>
+    <p class="desc">Dual-cloud platform module: <a class="term" title="Virtual Private Cloud: your own private, isolated network inside a cloud provider's infrastructure.">VPC</a> across 2 AZs, KMS-encrypted immutable-tag <a class="term" title="Elastic Container Registry: AWS's managed registry for storing and scanning container images.">ECR</a>, encrypted/versioned <a class="term" title="Simple Storage Service: AWS's object storage for files and blobs at effectively unlimited scale.">S3</a> with a separate access-log bucket, least-privilege <a class="term" title="Identity and Access Management: the system for controlling who or what can do what to which resource.">IAM</a> role for CI — plus an Azure module (ACR, geo-redundant storage). AWS side <code>apply</code>'d for real against a free-tier account, verified via the AWS CLI, then <code>destroy</code>'d — caught a real bug (CloudWatch Logs needs an explicit KMS key-policy grant, not covered by the default account-root policy). Azure side remains written-only (no subscription available). Terraform answers "does the infra exist" — <a class="term" title="Configuration management: keeping a system's installed software and settings in a known, repeatable state, applied idempotently.">Ansible</a> answers "is the right software deployed and configured on it, every time": a real role deploys the observability stack via <code>community.docker</code>, then polls <code>/healthz</code>, <code>/metrics</code>, and Prometheus's own <code>/api/v1/targets</code> to prove the metrics pipeline actually works end to end — not just that a container is running.</p>
     <ul class="reslist">
       <li><code>aws_vpc</code> + public/private <code>aws_subnet</code></li>
       <li><code>aws_internet_gateway</code>, <code>aws_route_table</code></li>
@@ -306,9 +306,10 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
       <li><code>azurerm_resource_group</code></li>
       <li><code>azurerm_container_registry</code> (Premium)</li>
       <li><code>azurerm_storage_account</code> + container</li>
+      <li>Ansible: cold run <code>ok=10 changed=1</code>, re-run <code>ok=10 changed=0</code> — real idempotency proof</li>
     </ul>
-    <div class="toolbadges"><span>Terraform</span><span>hashicorp/aws</span><span>hashicorp/azurerm</span><span>HCL</span></div>
-    <div class="files">📁 <a href="infra/terraform/">infra/terraform/</a> · <code>modules/aws-platform</code> · <code>modules/azure-platform</code> · <code>environments/{dev,prod}</code></div>
+    <div class="toolbadges"><span>Terraform</span><span>hashicorp/aws</span><span>hashicorp/azurerm</span><span>HCL</span><span>Ansible</span><span>community.docker</span></div>
+    <div class="files">📁 <a href="infra/terraform/">infra/terraform/</a> · <code>modules/aws-platform</code> · <code>modules/azure-platform</code> · <code>environments/{dev,prod}</code> · <a href="ansible/">ansible/</a></div>
   </div>
 
   <div class="card status-ok">

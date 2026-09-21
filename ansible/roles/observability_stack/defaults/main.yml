@@ -1,0 +1,4 @@
+---
+status_service_port: 8080
+prometheus_port: 9090
+grafana_port: 3000
