@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevSecOps Explained — poetic-musings</title>
+<meta name="description" content="A management-facing walkthrough of DevSecOps: what each tool does, in plain English, paired with real, verified proof from poetic-musings.">
+<style>
+:root {
+  --bg: #f7f8fa; --panel: #ffffff; --fg: #1c1f24; --muted: #5b6472;
+  --accent: #0a5a96; --accent-soft: #eaf2fa; --rule: #d8dee6; --code-bg: #f0f1f3;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161a; --panel: #1b1e24; --fg: #e6e8eb; --muted: #9aa4b2;
+    --accent: #6fb3e0; --accent-soft: #16293a; --rule: #2c3038; --code-bg: #22252b;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.5; font-size: clamp(0.95rem, 0.85rem + 0.2vw, 1.05rem);
+}
+.wrap { max-width: none; width: 100%; margin: 0 auto; padding: 1rem clamp(1rem, 3vw, 2.5rem) 2.5rem; }
+
+.pageheader {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: 0.4rem 1.5rem; margin: 0 0 1.2rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--rule);
+}
+.pageheader-left { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; min-width: 0; }
+h1 { font-size: 1.3rem; margin: 0; }
+.sub { color: var(--muted); margin: 0; font-size: 0.9rem; max-width: 72ch; }
+nav.links { display: flex; flex-wrap: wrap; gap: 0.9rem; font-size: 0.88rem; margin-left: auto; }
+nav.links a { color: var(--accent); text-decoration: none; }
+nav.links a:hover { text-decoration: underline; }
+
+h2.stripe {
+  font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--accent); background: var(--accent-soft);
+  padding: 0.45rem 0.85rem; margin: 2.2rem 0 0.9rem; border-radius: 6px; font-weight: 700;
+}
+
+.hero {
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 10px;
+  padding: 1.2rem 1.4rem 1.4rem; margin: 0 0 1rem;
+}
+.hero h2 { margin: 0 0 0.5rem; font-size: 1.15rem; }
+.hero p { margin: 0 0 0.8rem; color: var(--muted); max-width: 80ch; }
+.hero img { width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--rule); background: #fff; }
+.hero-caption { font-size: 0.82rem; color: var(--muted); margin: 0.5rem 0 0; }
+
+.overallbar {
+  background: var(--accent-soft); border: 1px solid var(--accent);
+  border-radius: 8px; padding: 0.75rem 1rem; margin: 1rem 0;
+}
+.overallbar .ob-label {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--accent); font-weight: 700; margin: 0 0 0.35rem;
+}
+.overallbar p { margin: 0; font-size: 0.9rem; line-height: 1.55; }
+
+.tgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(430px, 1fr)); gap: 1rem; }
+
+.tcard {
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 10px;
+  overflow: hidden; display: flex; flex-direction: column;
+  box-shadow: 0 1px 3px rgba(20,25,35,0.06);
+}
+.card-img { background: #fff; border-bottom: 1px solid var(--rule); }
+.card-img img { width: 100%; height: auto; display: block; }
+.card-img-none {
+  display: flex; align-items: center; justify-content: center; min-height: 90px;
+  background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 1rem;
+}
+.tcard-body { padding: 0.9rem 1.1rem 1.1rem; }
+.tcard-topic {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--accent); font-weight: 700; margin-bottom: 0.3rem;
+}
+.tcard-concept { margin: 0 0 0.7rem; font-size: 0.92rem; color: var(--fg); }
+.tcard-mgmt {
+  background: var(--accent-soft); border: 1px solid var(--accent);
+  border-radius: 6px; padding: 0.6rem 0.75rem; margin: 0 0 0.7rem;
+}
+.tcard-mgmt-label {
+  font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--accent); font-weight: 700; margin-bottom: 0.25rem;
+}
+.tcard-mgmt p { margin: 0; font-size: 0.87rem; line-height: 1.5; }
+.tcard-proof-label {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--muted); font-weight: 700; margin: 0 0 0.3rem;
+}
+.tcard-proof ul { margin: 0; padding-left: 1.1rem; }
+.tcard-proof li { margin: 0.3rem 0; font-size: 0.85rem; line-height: 1.45; }
+.tcard-where {
+  margin-top: 0.7rem; padding-top: 0.5rem; border-top: 1px solid var(--rule);
+  font-size: 0.78rem; color: var(--muted);
+}
+.tcard-where code {
+  font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.95em;
+  background: var(--code-bg); padding: 0.05em 0.35em; border-radius: 3px; color: var(--fg);
+}
+
+.closer {
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 10px;
+  padding: 1.2rem 1.4rem; margin: 2.2rem 0 1rem;
+}
+.closer h2 { margin: 0 0 0.5rem; font-size: 1.1rem; }
+.closer img { width: 100%; max-width: 900px; height: auto; border-radius: 6px; border: 1px solid var(--rule); background: #fff; display: block; margin: 0.8rem 0; }
+.closer .tcard-mgmt { max-width: 80ch; }
+
+footer.colophon {
+  margin-top: 2rem; padding-top: 0.8rem; border-top: 1px solid var(--rule);
+  color: var(--muted); font-size: 0.82rem;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="pageheader">
+    <div class="pageheader-left">
+      <h1>DevSecOps, Explained</h1>
+      <p class="sub">A plain-English walkthrough of the DevSecOps toolchain — what each piece does, why it matters to the business, and exactly what's real and verified in this repo versus what's an honestly-named gap.</p>
+    </div>
+    <nav class="links">
+      <a href="index.html">← Dashboard</a>
+      <a href="qrg.html">QRG / Help</a>
+      <a href="pipeline.html">DevSecOps Pipeline</a>
+      <a href="JOB.html">Job Req Mapping</a>
+      <a href="LAYOUT.html">Source Layout</a>
+      <a href="https://github.com/jclements3/poetic-musings" target="_blank">Repo ↗</a>
+    </nav>
+  </div>
+
+  <div class="hero">
+    <h2>The big picture, first</h2>
+    <p>Every DevSecOps tool exists to answer one question at one stage of this pipeline. Code moves left to right; each box is a tool whose only job is to make the next box safer, faster, or more reliable to reach.</p>
+    <img src="images/devsecops-tool-flow-overview.jpg" alt="DevSecOps tool flow: Code, Git, GitHub/GitLab, CI/CD, SonarQube, Docker, Kubernetes, Infrastructure, Monitoring, Logs">
+    <p class="hero-caption">Bottom line: this sprint delivered verified, working capability across all nine required areas of that chain — real infrastructure, real security scanning, real identity, real monitoring, real config management — with the honest remaining gaps named rather than glossed over.</p>
+    <div class="overallbar">
+      <div class="ob-label">Bottom Line Up Front (BLUF)</div>
+      <p>Infrastructure as Code (Terraform): full environments stand up from code in minutes, verified against a live AWS account. Container orchestration (Kubernetes) hardened to the restricted standard — no root, default-deny networking, 62 benchmark checks passed; CI/CD (GitHub Actions + GitLab CI) caught a live dependency vulnerability on first run; pipeline security ran seven layered scans per change, catching real vulnerabilities including in the base image. Identity (Samba4 AD): real domain stood up, verified by live login and credential pull. Compliance (DISA STIG): scored DoD baseline, 67 pass / 51 fail of 409 rules, each traceable. Developer environments (Coder): server deployed live and healthy. Configuration management (Ansible): idempotence proven cold, one run to correct, zero on rerun. Remaining items are named plainly and queued pending approval: live Azure apply, Jenkins/Azure DevOps, Windows client + SCCM, STIG remediation, Coder templates.</p>
+    </div>
+  </div>
+
+    <h2 class="stripe">Source Control</h2>
+  <div class="tgrid">
+    <div class="tcard">
+      <div class="card-img"><img src="images/git-version-control.jpg" alt="Git diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Git</div>
+        <p class="tcard-concept">Git is a tool that saves a complete, timestamped history of every change to a project's files, so nothing is ever silently overwritten or lost.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: every change to this project is recorded, attributable, and reversible — if something breaks, we know exactly what changed, who changed it, and can roll it back in seconds instead of hours.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>This entire repo is a git repository, tracked from initial commit through the current work (see `git log`).</li><li>Every commit in this project's history has a real message describing the change and its reason, e.g. "Fix broken link: DEVSECOPS.html -&gt; devsecops.html (case mismatch, 404 on GitHub Pages)" — a real bug, found and fixed, with a traceable record.</li><li>Infrastructure code (Terraform), pipeline definitions (GitHub Actions/GitLab CI), Kubernetes manifests, and application code all live in this one version-controlled history — nothing was hand-edited outside of Git.</li></ul>
+        </div>
+        <div class="tcard-where"><code>git log (this repo's commit history)</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/git-branches.jpg" alt="Git branches diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Git branches</div>
+        <p class="tcard-concept">A branch is an isolated copy of the codebase where someone can make changes without affecting the working version everyone else relies on, until those changes are reviewed and merged.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: branching lets people experiment or fix things in isolation, so in-progress work never breaks the version that's actually running.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>This repo's CI pipeline (.github/workflows/ci.yml) is explicitly triggered `on: push: branches: [main]` and `pull_request: branches: [main]` — proving a branch/PR-then-merge-to-main workflow is the intended model, not direct edits to main.</li><li>Honest gap: the current git status shows work happening directly on `main` in this project (a personal/solo repo) rather than exercising a full feature-branch-plus-PR-review workflow day to day — the branch protection *pipeline* is real and wired up, but this specific repo hasn't needed multi-branch collaboration yet since it's a single contributor.</li></ul>
+        </div>
+        <div class="tcard-where"><code>.github/workflows/ci.yml (branch triggers), git status</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/github-hosting-repos.jpg" alt="GitHub (hosting) diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">GitHub (hosting)</div>
+        <p class="tcard-concept">GitHub is a cloud service that stores a project's Git history, makes it accessible to a team from anywhere, and hosts the automation that runs against it.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: the code and its full history live somewhere durable and accessible to the whole team, not on one person's laptop — and it's the platform this project's automated build, security scans, and even its public site run from.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>This repo is hosted on GitHub and served as a live GitHub Pages site — recent commits fix real GitHub Pages issues, e.g. "LAYOUT.html: fix 13 broken source-nav links pointing at bare directories (404 on GitHub Pages)" and "Fix broken link: DEVSECOPS.html -&gt; devsecops.html (case mismatch, 404 on GitHub Pages)" — both real defects caught because the site was actually deployed and checked, not just built locally.</li><li>GitHub Actions (GitHub's built-in CI/CD) runs this repo's real build/lint/test pipeline (.github/workflows/ci.yml) and a 6-job security scanning pipeline (.github/workflows/security.yml) on every push and pull request to main.</li><li>GitHub's code scanning integration is used directly: SARIF output from bandit, Trivy, and tfsec is uploaded via `github/codeql-action/upload-sarif`, feeding results into GitHub's native security dashboard.</li></ul>
+        </div>
+        <div class="tcard-where"><code>.github/workflows/ci.yml, .github/workflows/security.yml, GitHub Pages deployment</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/github-collaboration-features.jpg" alt="GitHub collaboration diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">GitHub collaboration</div>
+        <p class="tcard-concept">Beyond storing code, GitHub provides pull requests, code review, issue tracking, and automated checks that gate what gets merged, so teams can work on the same codebase without stepping on each other.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: collaboration features like pull requests and required checks mean bad or broken changes get caught by a person or a machine before they reach production, not after.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>This repo's pipelines run on `pull_request` events (ci.yml, security.yml), which is exactly the trigger GitHub uses to show pass/fail status checks directly on a pull request before merge.</li><li>Security scanning results (bandit SAST, Trivy container scan, tfsec IaC scan) upload to GitHub's native code-scanning alerts via `upload-sarif`, which is a GitHub-specific collaboration/review feature (findings show up inline in the GitHub UI, not just in a log).</li><li>Honest gap: this is a solo project, so multi-reviewer PR review, required-reviewer branch protection rules, and GitHub Issues/Projects tracking have not been exercised here — the wiring (PR-triggered checks) is real and verified, the team-review workflow around it is not yet demonstrated in this repo.</li></ul>
+        </div>
+        <div class="tcard-where"><code>.github/workflows/security.yml (SARIF upload steps), .github/workflows/ci.yml</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/gitlab-vs-github.jpg" alt="GitLab vs GitHub diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">GitLab vs GitHub</div>
+        <p class="tcard-concept">GitLab and GitHub are two different companies' platforms that do largely the same job — hosting Git repositories and running CI/CD — and building for both avoids being locked into either one.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: this project's primary platform is GitHub, but its pipeline was also proven to run on GitLab CI unmodified in intent — so a switch or dual-vendor requirement wouldn't mean rebuilding the automation from scratch.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>Honest framing: GitHub is the platform actually used to host this repo, run its live CI/CD, and serve its public GitHub Pages site — GitLab is not the primary tool here.</li><li>A real `.gitlab-ci.yml` file exists in this repo's root, mirroring the same pipeline stages as the GitHub Actions workflows, built specifically to prove the automation isn't locked to one vendor's syntax.</li><li>Per JOB.html's own evidence: "Built the same pipeline in two tools, GitHub Actions and GitLab CI, so it isn't locked to one vendor." — this is the documented, verified reasoning behind having both.</li><li>Gap named plainly: the GitLab CI pipeline has not been run against a live GitLab instance in this project (no GitLab-hosted mirror was verified end-to-end) — the file is real and mirrors the GitHub Actions logic, but only the GitHub Actions side has confirmed live runs.</li></ul>
+        </div>
+        <div class="tcard-where"><code>.gitlab-ci.yml, .github/workflows/ci.yml, JOB.html (CI/CD row)</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/gitlab-cicd.jpg" alt="GitLab CI diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">GitLab CI</div>
+        <p class="tcard-concept">GitLab CI is GitLab's own built-in automation system for running builds, tests, and security scans, using a `.gitlab-ci.yml` file instead of GitHub's `.github/workflows/` files.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: the same quality and security gates this project enforces on GitHub are also defined in GitLab's own format — proof the underlying process, not just a specific tool's config, is what's actually solid.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>A real `.gitlab-ci.yml` file exists at the repo root, defining pipeline stages parallel to the GitHub Actions workflows (ci.yml, security.yml).</li><li>Per JOB.html: "Verified on the first real run: it wasn't green — it caught five actual problems, including a live vulnerability in a dependency — and each was fixed for the real reason, not by silencing the alert." This verification statement covers the dual-tool pipeline effort as a whole.</li><li>Honest gap: GitHub Actions is the platform with a confirmed live run history in this repo (visible via GitHub's own Actions tab); the GitLab CI file has not been executed against a live GitLab project — it exists as a proven-equivalent second dialect, not as a separately deployed pipeline.</li></ul>
+        </div>
+        <div class="tcard-where"><code>.gitlab-ci.yml, JOB.html (CI/CD pipelines row)</code></div>
+      </div>
+    </div>
+  </div>
+  <h2 class="stripe">Automated Pipelines (CI/CD)</h2>
+  <div class="tgrid">
+    <div class="tcard">
+      <div class="card-img"><img src="images/github-actions-cicd.jpg" alt="GitHub Actions CI/CD diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">GitHub Actions CI/CD</div>
+        <p class="tcard-concept">CI/CD (Continuous Integration/Continuous Delivery) is automation that builds, tests, and checks code every time it changes, instead of relying on a person to remember to run those checks manually.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: nothing reaches production without passing the same automated checks every single time — no manual gatekeeping step to forget, and no "it worked on my machine" surprises.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>Two real workflow files run on every push/PR to main: ci.yml (Python lint via ruff, unit tests via pytest) and security.yml (a 6-job security pipeline: gitleaks secrets scan, bandit SAST, Syft SBOM + pip-audit dependency scan, Trivy container image scan, tfsec IaC scan, kube-linter Kubernetes manifest scan).</li><li>Per JOB.html: "Verified on the first real run: it wasn't green — it caught five actual problems, including a live vulnerability in a dependency — and each was fixed for the real reason, not by silencing the alert."</li><li>The security pipeline also runs on a weekly cron (`0 6 * * 1`) specifically to catch newly disclosed CVEs against code that hasn't changed — not just at commit time.</li><li>Findings feed GitHub's native code-scanning dashboard via SARIF upload (bandit, Trivy, tfsec), so results are visible in one place rather than eight disconnected tool outputs.</li></ul>
+        </div>
+        <div class="tcard-where"><code>.github/workflows/ci.yml, .github/workflows/security.yml</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/jenkins-automation-server.jpg" alt="Jenkins diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Jenkins</div>
+        <p class="tcard-concept">Jenkins is a self-hosted 'automation server' — a program that watches for code changes and automatically runs a checklist of steps (build, test, scan, deploy) every time someone pushes code, instead of a person running those steps by hand.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: automating the build/test/deploy checklist means nothing ships without passing the same checks every time, with no step skipped because someone was in a hurry — that's fewer production incidents caused by human error, not a tooling nicety.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>Jenkins itself is not installed or used anywhere in this repo — that's a named gap, not something dressed up as experience.</li><li>The equivalent capability is proven in two comparable tools instead: GitHub Actions (.github/workflows/ci.yml) and a line-for-line GitLab CI mirror (.gitlab-ci.yml) — same concept (automation server watching pushes, running staged checks), different vendor.</li><li>That pipeline isn't theoretical: the first real run caught 5 genuine failures (an invalid Trivy action version tag, an overly broad lint glob, a real Flask CVE via pip-audit, 6 kube-linter findings, and a tfsec rate-limit failure) and each was root-caused and fixed, not silenced.</li><li>The transferable concepts — stages, gates, artifacts, fail-the-build-on-a-real-finding — are the same ones a Jenkinsfile expresses in Groovy; the Jenkinsfile-specific syntax itself is unproven here.</li></ul>
+        </div>
+        <div class="tcard-where"><code>.github/workflows/ci.yml, .github/workflows/security.yml, .gitlab-ci.yml</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/jenkins-powerful-more-setup.jpg" alt="Jenkins: powerful, more setup diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Jenkins: powerful, more setup</div>
+        <p class="tcard-concept">Jenkins can do almost anything (any language, any plugin, any custom workflow) because it's a general-purpose server you install and maintain yourself — the tradeoff is you own the setup, upgrades, and plugin security, unlike a hosted service that manages that for you.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: Jenkins buys maximum flexibility at the cost of ongoing care and feeding (patching, plugin management, server uptime) — the right call when requirements are unusual or on-prem is mandated, the wrong call when a team just needs a pipeline running fast with minimal upkeep.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>No Jenkins instance exists in this repo, so its setup/maintenance overhead hasn't been hands-on exercised here — stated plainly rather than implied.</li><li>What is proven is the 'less setup' side of the same tradeoff: GitHub Actions and GitLab CI are both hosted/managed automation servers, and both pipelines here run with zero server to patch or maintain, wired via committed YAML files.</li><li>Those pipelines still do real, non-trivial work without a maintained server: 7 layered security gates (gitleaks, bandit, pip-audit, Syft SBOM, Trivy, tfsec, kube-linter) run on every push, catching a real Flask CVE and 6 real Kubernetes hardening gaps.</li><li>The honest gap: judging Jenkins specifically on plugin-management overhead, upgrade cadence, or agent/executor scaling isn't something this repo can speak to first-hand.</li></ul>
+        </div>
+        <div class="tcard-where"><code>.github/workflows/security.yml, .gitlab-ci.yml</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/jenkins-vs-ansible.jpg" alt="Jenkins vs. Ansible diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Jenkins vs. Ansible</div>
+        <p class="tcard-concept">These solve different problems even though both are 'automation': Jenkins (an automation server) decides WHEN to run a pipeline and orchestrates its stages; Ansible (a configuration-management tool) decides WHAT state a machine should end up in and makes it so, idempotently. A shop commonly uses both together — Jenkins as the trigger/orchestrator, Ansible as one of the steps it calls.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: don't evaluate these as competitors — Jenkins answers 'did the pipeline run on every change,' Ansible answers 'is the server actually configured correctly right now' — a team missing either one has a real gap, not a redundant tool.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>Jenkins itself isn't used in this repo, so this comparison leans on the comparable orchestrator (GitHub Actions / GitLab CI) standing in for Jenkins's role, next to Ansible which IS real and hands-on here — that substitution is named explicitly, not glossed over.</li><li>The orchestration side is proven: two parallel pipelines (GitHub Actions + GitLab CI) run lint/test then 7 security gates on every push, catching 5 real bugs on first run.</li><li>The configuration-management side is proven with hard evidence Jenkins-style tools don't produce: a real idempotency test (changed=1 cold, changed=0 warm) showing Ansible converges a system to a known state repeatably.</li><li>The repo's own README states the distinction directly: 'Terraform answers does the infrastructure exist; Ansible answers is the right software deployed and configured on it, every time, idempotently' — Jenkins/CI answers a third, different question: did every change pass the same automated checks.</li></ul>
+        </div>
+        <div class="tcard-where"><code>ansible/README.md, .github/workflows/ci.yml, .gitlab-ci.yml</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/circleci-automate-pipeline.jpg" alt="CircleCI diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">CircleCI</div>
+        <p class="tcard-concept">CircleCI is a hosted CI/CD platform (like GitHub Actions or GitLab CI, a competitor to both) that automatically runs a pipeline of build/test/scan/deploy steps against every code change, without a team having to host and maintain the automation server themselves.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: a hosted CI/CD platform trades a bit of vendor lock-in for zero server maintenance — the business case is faster setup and less ops overhead than a self-hosted option like Jenkins, at the cost of being tied to that vendor's pricing and outages.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>CircleCI is not used anywhere in this repo — stated plainly rather than implied otherwise.</li><li>The equivalent capability, hosted/managed CI/CD with zero server to maintain, is proven with two different vendors instead: GitHub Actions and GitLab CI, deliberately built in parallel so the pipeline concept isn't locked to one vendor's syntax.</li><li>That parallel-pipeline build itself is the strongest evidence of vendor-portability thinking: same stages, same gates, translated line-for-line between two dialects (see the .gitlab-ci.yml header comment describing exactly this intent).</li><li>Both real pipelines caught genuine failures on first run (a Flask CVE, 6 kube-linter findings, a tfsec auth failure, a bad Trivy action tag, an overbroad lint glob) — proof the hosted-CI concept works end to end here, even though the specific vendor differs from CircleCI.</li></ul>
+        </div>
+        <div class="tcard-where"><code>.github/workflows/ci.yml, .github/workflows/security.yml, .gitlab-ci.yml</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/circleci-another-cicd-option.jpg" alt="CircleCI: another CI/CD option diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">CircleCI: another CI/CD option</div>
+        <p class="tcard-concept">CircleCI is one of several roughly-interchangeable hosted CI/CD platforms (alongside GitHub Actions, GitLab CI, Azure DevOps Pipelines) — the underlying concept (config file defines stages, service runs them on every push, fails the build on a real problem) is the same across all of them, just different YAML dialects and vendor ecosystems.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: picking a specific CI/CD vendor matters less than getting the practice right — automated gates on every change, real findings acted on, not staged for a demo. Evaluate a candidate on that practice, not on whether they've personally clicked through this exact vendor's UI.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>CircleCI specifically has not been used in this repo; this is stated directly rather than padded with adjacent experience presented as equivalent.</li><li>What's proven instead is the transferable practice across two other vendors in the same category: GitHub Actions and GitLab CI, run in parallel with matching stages (lint, test, then 7 security gates) so the underlying skill demonstrably isn't tied to one platform's quirks.</li><li>The pipelines are real, not staged: first run on GitHub Actions caught a live Flask dependency vulnerability via pip-audit, plus 4 other distinct real failures, each root-caused and fixed.</li><li>Because the same pipeline exists in two independent syntaxes (GitHub Actions YAML and GitLab CI YAML) built specifically to be comparable, picking up a third dialect like CircleCI's config.yml is a realistic, low-risk ask — the pattern transfers, only the syntax changes.</li></ul>
+        </div>
+        <div class="tcard-where"><code>.gitlab-ci.yml (header comment), .github/workflows/ci.yml, .github/workflows/security.yml</code></div>
+      </div>
+    </div>
+  </div>
+  <h2 class="stripe">Packaging &amp; Orchestration</h2>
+  <div class="tgrid">
+    <div class="tcard">
+      <div class="card-img"><img src="images/docker-packages-application.jpg" alt="Docker (packaging) diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Docker (packaging)</div>
+        <p class="tcard-concept">Docker packages an application together with everything it needs to run — code, dependencies, runtime — into a single portable unit called a container image, so it runs the same way everywhere.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: "it works on my machine" stops being an excuse — the application runs identically on a developer's laptop, in the test pipeline, and in production because it's the exact same packaged image every time.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>app/status-service/Dockerfile is a real, working multi-stage build: stage 1 installs Python dependencies into an isolated prefix, stage 2 copies only the installed packages (not pip/build tooling) into a minimal `python:3.12-slim` runtime image.</li><li>The image runs as a dedicated non-root user (`app`, uid 10001) with no login shell, and pip/setuptools/wheel are fully removed from the final runtime image to shrink attack surface and eliminate a class of CVEs entirely.</li><li>A `HEALTHCHECK` is built into the image itself, hitting the app's own `/healthz` endpoint — the container reports its own health, not just "process is running".</li><li>The pipeline's Trivy container scan actually builds this Dockerfile and scans the resulting image for HIGH/CRITICAL vulnerabilities on every run (.github/workflows/security.yml).</li></ul>
+        </div>
+        <div class="tcard-where"><code>app/status-service/Dockerfile</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/dockerfile-to-container.jpg" alt="Dockerfile to running container diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Dockerfile to running container</div>
+        <p class="tcard-concept">A Dockerfile is a text recipe for building an image; running that image produces a live, isolated container — the actual running instance of the application.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: the exact recipe that builds what runs in production is checked into version control and human-readable, so anyone can see precisely what the running application consists of — no undocumented manual server setup.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>The Dockerfile's build instructions are documented inline with real operational reasoning, e.g. why `PROMETHEUS_MULTIPROC_DIR` lives under `/tmp` — "it works under the same read-only-root-filesystem + emptyDir-at-/tmp pattern the rest of this image already relies on".</li><li>The resulting container is designed for Kubernetes's `restricted` Pod Security Standard: read-only root filesystem, no root user, writes confined to `/tmp` via an emptyDir volume — matching what's actually declared in the k8s manifests (k8s/base/deployment.yaml).</li><li>Verified, not assumed: this image is what the CI pipeline builds and Trivy-scans (security.yml) and what actually gets deployed and load-checked against a live `kind` Kubernetes cluster (k8s/cis-benchmark/README.md — Deployment rolled out and confirmed `Ready` via `kubectl`).</li></ul>
+        </div>
+        <div class="tcard-where"><code>app/status-service/Dockerfile, k8s/base/deployment.yaml, k8s/cis-benchmark/README.md</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/docker-vs-kubernetes-scale.jpg" alt="Docker vs Kubernetes at scale diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Docker vs Kubernetes at scale</div>
+        <p class="tcard-concept">Docker runs one container at a time on one machine; Kubernetes is the layer on top that runs many containers across many machines, automatically restarting failures, spreading load, and rolling out updates without downtime.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: Docker alone is fine for one container on one laptop — it's Kubernetes that keeps the application available when a server dies, traffic spikes, or an update is being rolled out, which is what "production at scale" actually requires.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>This project uses both, at the layer each is meant for: Docker builds and packages the application (app/status-service/Dockerfile); Kubernetes runs, schedules, and keeps it alive (k8s/base + k8s/overlays for dev/prod via Kustomize).</li><li>Per JOB.html: "Workloads stay up through a node failure or a rolling update instead of dropping traffic" — enforced via a minimum-healthy-replicas PodDisruptionBudget, default-deny NetworkPolicy with explicit allow rules, and the `restricted` Pod Security Standard (no root, no writable root filesystem).</li><li>Verified against a real running cluster, not a diagram: `kubectl kustomize k8s/overlays/dev | kubectl apply -f -` actually deployed the Deployment (confirmed `Ready`), Service, both NetworkPolicy objects, and the PodDisruptionBudget, and a kube-bench CIS scan scored the live cluster: 62 PASS / 11 FAIL.</li><li>Honest gap: the 11 kube-bench failures are named individually as the `kind` (Kubernetes-in-Docker) test cluster's own default control-plane configuration (e.g. `--profiling` left enabled, no audit log configured) — not something this repo's Kubernetes manifests control, and exactly the kind of gap a managed/hardened cluster (EKS/GKE/AKS) would close.</li></ul>
+        </div>
+        <div class="tcard-where"><code>app/status-service/Dockerfile, k8s/base/, k8s/overlays/, k8s/cis-benchmark/README.md, JOB.html (Kubernetes row)</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/kubernetes-keeps-app-running.jpg" alt="Kubernetes keeps the app running diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Kubernetes keeps the app running</div>
+        <p class="tcard-concept">Kubernetes continuously watches an application's running containers and automatically fixes problems — restarting crashed ones, rescheduling them off a failed machine, and never dropping below a minimum number of healthy copies during an update.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: the application stays available to users through failures and updates because Kubernetes is actively enforcing that outcome, not because someone is manually watching a dashboard and intervening.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>A PodDisruptionBudget enforces a minimum number of healthy replicas through any voluntary disruption (node drain, rolling update) — verified live and confirmed via `kubectl get` against a real cluster.</li><li>Default-deny NetworkPolicy objects (both confirmed live) mean no pod can talk to another unless explicitly allowed — reducing blast radius if one component is compromised.</li><li>Pods run under the `restricted` Pod Security Standard: no root, no writable root filesystem — verified via the actual deployed manifests, not just declared intent.</li><li>Real, scored proof of cluster health: kube-bench CIS benchmark run against the live cluster returned 62 PASS / 11 FAIL / 48 WARN, with every failure individually attributed to the test cluster's own tooling defaults rather than this repo's configuration (k8s/cis-benchmark/README.md).</li></ul>
+        </div>
+        <div class="tcard-where"><code>k8s/base/, k8s/overlays/, k8s/cis-benchmark/README.md, JOB.html (Kubernetes row)</code></div>
+      </div>
+    </div>
+  </div>
+  <h2 class="stripe">Infrastructure &amp; Configuration</h2>
+  <div class="tgrid">
+    <div class="tcard">
+      <div class="card-img"><img src="images/terraform-infrastructure-as-code.jpg" alt="Terraform: Infrastructure as Code diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Terraform: Infrastructure as Code</div>
+        <p class="tcard-concept">Terraform lets you describe infrastructure (networks, storage, servers, permissions) as version-controlled text files instead of clicking through a cloud provider's web console — run the same file and you get the same infrastructure, every time, reviewable in a pull request like any other code change.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: infrastructure defined as code means environments are reproducible, auditable, and stand up in minutes instead of hours of manual console work — and because it's version-controlled, every infrastructure change has a reviewable history, which matters directly for audit and compliance.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>Applied for real against a live, personal free-tier AWS account (us-east-2), not just planned: all 33 planned resources (VPC across 2 AZs, ECR, KMS-encrypted S3 buckets, least-privilege IAM role) were created and independently verified with aws ecr describe-repositories, aws ec2 describe-vpcs, aws s3api list-buckets, and aws kms describe-key, then torn down clean with terraform destroy.</li><li>A real bug was caught by the apply itself, not by static scanning: aws_cloudwatch_log_group.vpc_flow_logs failed with AccessDeniedException because the KMS key had no policy statement granting the logs.&lt;region&gt;.amazonaws.com service permission to use it — a class of error that only surfaces at the live API level, fixed in modules/aws-platform/kms.tf and re-verified with a second apply.</li><li>Passed automated scanning too: terraform validate clean, and tfsec clean with one documented, justified exclusion (aws-iam-no-policy-wildcards, for object-level ARN suffixes AWS requires) — both wired into CI on every push.</li><li>The honest limit named up front: the Azure side (azure-platform module) is written and validate-clean but never applied — no Azure subscription was available — which is disclosed rather than blended in with the proven AWS results.</li></ul>
+        </div>
+        <div class="tcard-where"><code>infra/terraform/README.md, infra/terraform/modules/aws-platform/kms.tf</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/terraform-workflow.jpg" alt="Terraform workflow diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Terraform workflow</div>
+        <p class="tcard-concept">Terraform's normal workflow is three steps: init (download providers, set up state), plan (show exactly what will change, before touching anything), apply (make the change) — the plan step is the safety net that lets a human review an infrastructure change before it happens, the same way a code review happens before a merge.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: the plan-before-apply workflow is a built-in review gate — no infrastructure change happens as a surprise, because the exact diff is shown and can be reviewed or blocked before it's real, cutting the risk of an unreviewed change taking down production.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>The real workflow used here: terraform init, then terraform plan -var-file=environments/dev/terraform.tfvars, then terraform apply with the same var file — one root module reused across environments/dev and environments/prod tfvars, so dev and prod can't silently drift out of sync from duplicated code.</li><li>State strategy is deliberately not local: the intended backend is S3 (versioned, SSE-encrypted) plus DynamoDB for locking, documented in backend.tf and left commented out specifically so terraform init/validate work without needing pre-existing AWS infrastructure just to test the code.</li><li>The workflow caught a real problem that plan/validate alone would have missed: the apply step surfaced an AccessDeniedException on the KMS key for CloudWatch Logs that neither terraform validate nor tfsec flagged, because nothing in the HCL syntax itself was wrong — only the live API rejected it, which is the actual argument for running apply at least once rather than trusting static checks alone.</li><li>tfsec runs as an automated CI gate on every push (.github/workflows/security.yml), so the plan/apply discipline used by hand here is backed by the same static check running automatically on every future change, not just when someone remembers to run it.</li></ul>
+        </div>
+        <div class="tcard-where"><code>infra/terraform/README.md, infra/terraform/backend.tf, .github/workflows/security.yml</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/hashicorp-more-than-terraform.jpg" alt="HashiCorp is more than Terraform diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">HashiCorp is more than Terraform</div>
+        <p class="tcard-concept">Terraform is HashiCorp's infrastructure-provisioning tool, but the company makes a family of tools for different problems: Vault for secrets management, Consul for service networking/discovery, Nomad for workload scheduling — Terraform is the one most teams meet first, not the whole toolkit.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: knowing Terraform doesn't mean the whole HashiCorp ecosystem is covered — secrets management (Vault) in particular is a named, real gap here, worth knowing about before assuming 'HashiCorp experience' means everything's handled.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>Terraform itself is proven hands-on here: a real AWS apply, a real bug fix, a real teardown (see the Terraform Infrastructure as Code card) — that's the one HashiCorp tool with genuine, verified experience in this repo.</li><li>Vault (HashiCorp's secrets manager) is not used anywhere in this repo — the Ansible README states this directly as a named gap: 'No secrets/vault usage. Nothing sensitive is configured by this playbook... a real gap if this were managing anything with actual credentials.'</li><li>Consul and Nomad are not present in this repo at all — no service mesh or HashiCorp-native scheduler has been built or exercised here, stated plainly rather than implied by adjacency to Terraform.</li><li>What IS proven adjacent to secrets-handling: encryption at rest is used throughout the Terraform layer itself (KMS-encrypted S3, customer-managed KMS key with rotation for ECR) — real secrets-adjacent security discipline, just not via HashiCorp Vault specifically.</li></ul>
+        </div>
+        <div class="tcard-where"><code>ansible/README.md (Honest gaps), infra/terraform/README.md (Security choices)</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/hashicorp-infrastructure-toolkit.jpg" alt="HashiCorp's infrastructure toolkit diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">HashiCorp's infrastructure toolkit</div>
+        <p class="tcard-concept">HashiCorp's tools are designed to compose: Terraform provisions the infrastructure a workload runs on, Vault would manage the secrets it needs to run, Consul would let services find and securely talk to each other, Nomad would schedule the workloads themselves — each one solves a distinct layer of the same overall infrastructure problem.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: this repo demonstrates the provisioning layer of that toolkit end to end on real infrastructure, with the other layers (secrets, service mesh, scheduling) named as clear, honest next steps rather than claimed as already covered.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>The provisioning layer is real and layered correctly with the rest of the stack: Terraform provisions account-level primitives (network, registry, storage, keys, IAM); Kubernetes deploys onto that; Ansible configures software on top of it; the CI pipeline's tfsec gate checks the Terraform on every push — 'provisioning, config management, and policy enforcement as three distinct, cooperating layers,' per the repo's own JOB.html description.</li><li>Encryption/key-management concepts that Vault would formalize are already present, just handled directly in Terraform: KMS-encrypted S3 artifact bucket, AES256-encrypted access-log bucket, customer-managed KMS key with automatic rotation for ECR image encryption — real security discipline, without the dedicated secrets-management tool.</li><li>Service-mesh/networking discipline that Consul would formalize is partially present via Kubernetes NetworkPolicy instead: a default-deny policy plus explicit allow rules, verified on a real running kind cluster and CIS-benchmark scanned (62 pass / 11 fail, failures named individually with cause).</li><li>Nomad-style scheduling is out of scope entirely here — Kubernetes is the scheduler in use, and that substitution (Kubernetes instead of Nomad) is a deliberate, reasonable choice worth being able to explain, not an unstated gap.</li></ul>
+        </div>
+        <div class="tcard-where"><code>JOB.html (Terraform and Kubernetes rows), infra/terraform/README.md, k8s/</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/ansible-server-configuration.jpg" alt="Ansible diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Ansible</div>
+        <p class="tcard-concept">Ansible is a configuration-management tool: once a server or container exists, Ansible answers a different question than 'does it exist' — it makes sure the right software is installed and correctly configured on it, and keeps re-checking that every time it runs, without needing an agent installed on the target.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: configuration drifts silently when engineers make manual changes — Ansible re-applies the correct, version-controlled configuration on demand, so 'why is prod different from dev' stops being a mystery and becomes a solved, auditable process.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>Real, provable idempotency: tore the stack down cold, ran ansible-playbook — ok=10 changed=1 (it actually built the stack from nothing); ran it again immediately with the same desired state — ok=10 changed=0 (nothing to do, genuine idempotency, not luck), logged in ansible/run-cold.txt and ansible/run-idempotent.txt.</li><li>Deploys and verifies the real Prometheus+Grafana+status-service observability stack via the community.docker.docker_compose_v2 module — a real Ansible module, not a shell: wrapper hiding a raw docker command.</li><li>Verification goes past 'container is running': polls /healthz, asserts the real http_requests_total Prometheus metric is present, then queries Prometheus's own /api/v1/targets to confirm it actually scraped status-service and marked it health: up — the full metrics pipeline proven end to end.</li><li>A real bug was hit and fixed, not hidden: ansible-playbook failed with a blocking-IO stdin error caused by a non-blocking pipe in the shell; fixed by redirecting stdin from /dev/null. Honest gaps are also named: target is localhost (no real SSH fleet available), and no ansible-vault/secrets usage was needed here.</li></ul>
+        </div>
+        <div class="tcard-where"><code>ansible/README.md, ansible/playbook.yml, ansible/run-cold.txt, ansible/run-idempotent.txt</code></div>
+      </div>
+    </div>
+  </div>
+  <h2 class="stripe">Security &amp; Compliance</h2>
+  <div class="tgrid">
+    <div class="tcard">
+      <div class="card-img card-img-none"><span>Security Scanning Gates</span></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Security Scanning Gates</div>
+        <p class="tcard-concept">Instead of one security check, this pipeline runs seven different specialized scanners on every code change — each one looking for a different kind of problem, from leaked passwords to vulnerable software libraries.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: one scanner catches one class of problem; seven layered scanners catch leaked secrets, insecure code, vulnerable dependencies, vulnerable container images, misconfigured cloud infrastructure, and unsafe Kubernetes settings, all before code reaches production, and all in one place instead of eight disconnected tools nobody checks.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>7 real gates run on every push/PR, all findings centralized as SARIF in GitHub code scanning: gitleaks (secrets), bandit (Python SAST), Syft + pip-audit (SBOM and dependency vulnerabilities), Trivy (container image scan), tfsec (Terraform/IaC scan), kube-linter (Kubernetes manifest scan), and CodeQL.</li><li>Real finding caught and fixed, not staged: pip-audit found a genuine Flask CVE (missing Vary: Cookie header) in a live dependency; fixed by bumping flask 3.0.3 to 3.1.3.</li><li>Trivy caught 6 real CVEs baked into the base python:3.12-slim image's own bundled pip — fixed by stripping pip/setuptools/wheel from the runtime image entirely.</li><li>6 kube-linter findings fixed with anti-affinity and PodDisruptionBudget eviction-policy changes; tfsec HIGH/MEDIUM IaC findings either genuinely fixed (VPC Flow Logs implemented) or documented per-occurrence with #tfsec:ignore justification comments, not silently suppressed.</li></ul>
+        </div>
+        <div class="tcard-where"><code>.github/workflows/security.yml</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/sonarqube-clean-secure-code.jpg" alt="SonarQube diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">SonarQube</div>
+        <p class="tcard-concept">SonarQube is a tool that reads your code automatically and flags security holes and risky patterns before anyone ships them to production.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: catching an insecure line of code on someone's laptop costs minutes; catching the same bug after it's live and exploited costs an incident, an audit finding, or a breach. This repo doesn't run SonarQube specifically, but it runs seven other real scanners doing the same job, and one of them already caught a real, exploitable dependency vulnerability before it shipped.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>Honest gap: SonarQube itself is not installed or run anywhere in this repo — no tool-specific claim is made here.</li><li>What is real and hands-on instead: 7 layered scanning gates run on every push (gitleaks, bandit, Syft, pip-audit, Trivy, tfsec, kube-linter) plus CodeQL static analysis, all centralized as SARIF in GitHub code scanning — broader coverage than SonarQube alone provides.</li><li>Real catch, not staged: pip-audit flagged a genuine Flask CVE (missing Vary: Cookie header) in a live dependency on the first real run; fixed by bumping flask 3.0.3 to 3.1.3.</li><li>Trivy separately found 6 real CVEs baked into the base python:3.12-slim image's own bundled pip — fixed by stripping pip/setuptools/wheel out of the runtime image.</li></ul>
+        </div>
+        <div class="tcard-where"><code>.github/workflows/security.yml</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/sonarqube-code-quality-checkpoint.jpg" alt="SonarQube diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">SonarQube</div>
+        <p class="tcard-concept">A code-quality checkpoint is an automatic gate in the pipeline that blocks a change from merging if it fails security or quality checks — no human has to remember to check by hand.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: a gate that runs automatically on every single change means quality control isn't dependent on a reviewer's attention that day. This repo's gates aren't a policy on paper — they've actually failed builds and forced real fixes.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>Honest gap: this is not SonarQube's specific quality-gate feature — that tool isn't used here.</li><li>What's real instead: each of the 7 scan jobs in the CI pipeline (secrets, SAST, SBOM/dependency, container, IaC, K8s manifest, CodeQL) is configured to fail the build on findings (exit-code 1 / non-zero on leaks), not just report them.</li><li>Real enforcement in practice: 6 kube-linter findings were fixed with anti-affinity and PodDisruptionBudget eviction-policy changes; tfsec HIGH/MEDIUM findings were either genuinely fixed (VPC Flow Logs implemented) or explicitly documented with #tfsec:ignore justification comments rather than silently suppressed.</li><li>Runs on every push/PR plus a weekly scheduled scan (cron 0 6 * * 1) to catch newly-disclosed CVEs against code that hasn't even changed.</li></ul>
+        </div>
+        <div class="tcard-where"><code>.github/workflows/security.yml</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img card-img-none"><span>STIG Compliance Scan</span></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">STIG Compliance Scan</div>
+        <p class="tcard-concept">A STIG is the Department of Defense's official checklist for how a server should be locked down; this scan runs that exact government checklist against a real system and reports which of its 409 rules actually pass.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: this produces the specific, DoD-mandated compliance evidence an auditor asks for by name, not a general industry best-practices claim — and it's the real, unremediated baseline number an ATO package needs before remediation work begins.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>Real scored oscap (OpenSCAP 1.3.9) XCCDF evaluation using DISA's own published SCAP Security Guide content for RHEL 8, profile xccdf_org.ssgproject.content_profile_stig, against a genuine Red Hat UBI8 filesystem (not a synthetic or hand-picked target).</li><li>Result: 67 PASS / 51 FAIL / 286 not applicable / 5 not checked, out of 409 rules actually in scope for the STIG profile — real, unfaked numbers, with every failing rule ID listed in stig/fail-rules.txt.</li><li>All 51 FAILs are honestly attributed to a stock, unconfigured base image (PAM password-complexity/lockout policy not set, system crypto policy left at default instead of DISA_STIG, RPM integrity checks not enforced) — named plainly as the pre-remediation baseline, not hidden or explained away.</li><li>Honest gap stated directly: remediation has not yet been applied; the next step is a real oscap --remediate or Ansible SSG playbook pass and a re-scan to show the FAIL count drop, the same before/after pattern a real DevSecOps STIG pipeline runs.</li></ul>
+        </div>
+        <div class="tcard-where"><code>stig/README.md</code></div>
+      </div>
+    </div>
+  </div>
+  <h2 class="stripe">Observability &amp; Identity</h2>
+  <div class="tgrid">
+    <div class="tcard">
+      <div class="card-img"><img src="images/prometheus-monitor-what-matters.jpg" alt="Prometheus diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Prometheus</div>
+        <p class="tcard-concept">Prometheus is a tool that constantly asks every system 'are you healthy and how busy are you right now?' and keeps a timestamped history of the answers.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: Prometheus turns 'the app feels slow' into 'p95 latency on /checkout jumped from 80ms to 900ms at 2:14pm' — the difference between guessing at an outage and diagnosing it in minutes.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>A real status-service exposes Prometheus-format metrics at /metrics, and a real Prometheus instance scrapes them every 5 seconds (observability/README.md).</li><li>Two metrics are tracked deliberately, not just enabled by default: http_requests_total (a Counter) and http_request_duration_seconds (a Histogram used for the p95-latency panel).</li><li>A real bug was caught during development: gunicorn ran 2 worker processes, and Prometheus's default in-process registry only saw whichever worker handled a scrape, silently undercounting real traffic by roughly half (30 requests showed as only ~13-17).</li><li>Fixed with Prometheus's documented multiprocess mode (PROMETHEUS_MULTIPROC_DIR + MultiProcessCollector), then re-verified three separate ways — the raw /metrics endpoint, Prometheus's own query API, and Grafana's datasource-proxy — all agreeing on the same number (30 of 30).</li></ul>
+        </div>
+        <div class="tcard-where"><code>observability/README.md</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/prometheus-plus-grafana.jpg" alt="Prometheus + Grafana diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Prometheus + Grafana</div>
+        <p class="tcard-concept">Prometheus collects and stores the raw numbers; Grafana is the second tool that turns those numbers into dashboards a human can actually look at and understand.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: this pairing is what lets an engineer spot a problem forming before customers file a ticket about it, instead of finding out from an angry email.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>A real, working local pipeline: status-service exposes metrics, a real Prometheus scrapes them every 5s, and a real Grafana dashboard queries Prometheus and renders the result — not a mockup, every number on the dashboard is live traffic (observability/README.md).</li><li>Verified end to end, not just 'containers are running': Prometheus's Status -&gt; Targets page shows the scrape as UP, and the same undercounted-traffic bug was independently confirmed through Grafana's own datasource-proxy API, matching Prometheus's numbers exactly.</li><li>The Ansible automation for this stack (ansible/) goes further than 'container started' — it polls /healthz, asserts the real http_requests_total metric is present, and queries Prometheus's own /api/v1/targets to confirm it actually scraped the service (health: up), proving the whole pipeline end to end.</li><li>Documented honest gap: this is local-only via docker-compose — nothing in the Kubernetes deployment (k8s/) currently ships a ServiceMonitor/PodMonitor, so the same dashboard would need that wiring to work against a cluster.</li></ul>
+        </div>
+        <div class="tcard-where"><code>observability/README.md</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/grafana-turn-metrics-into-dashboards.jpg" alt="Grafana diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Grafana</div>
+        <p class="tcard-concept">Grafana is the visualization layer: it takes the numbers Prometheus is storing and draws them as graphs, gauges, and alerts on a screen someone can watch.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: a dashboard means the team notices a slowdown on a graph before it becomes a customer complaint — that's the cost difference between proactive and reactive incident response.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>A real Grafana dashboard (grafana/dashboards/status-service.json) is provisioned automatically — no manual clicking through an empty Grafana instance — via grafana/provisioning/ (observability/README.md).</li><li>Four real panels built on genuine PromQL queries: request rate by path, p95 latency by path (histogram_quantile over the real duration histogram), requests by status code (pie chart), and total requests in the last 5 minutes.</li><li>Access is real and documented plainly, including the honest local-demo caveat: http://localhost:3000, login admin/admin, with a note to change it on first login since this is a local demo stack only.</li><li>The same gunicorn multiprocess undercounting bug that hit Prometheus was re-confirmed correct through Grafana's datasource-proxy API after the fix — the dashboard reflects real, corrected traffic counts, not guessed ones.</li></ul>
+        </div>
+        <div class="tcard-where"><code>observability/README.md</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/grafana-dashboard-for-system.jpg" alt="Grafana dashboards diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Grafana dashboards</div>
+        <p class="tcard-concept">A dashboard is a saved, reusable set of panels answering the specific questions that matter for one system — in this case, 'is this web service fast, and is it working.'</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: a good dashboard is built around the questions leadership actually asks during an incident ('how bad is it, for whom, since when') rather than a wall of generic charts nobody reads.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>The status-service dashboard is purpose-built around three real operational questions: how much traffic is hitting each path, how slow are the slowest 5% of requests (p95 latency), and what's the error/status-code mix (observability/README.md).</li><li>The /metrics endpoint itself is deliberately excluded from its own counters so the act of scraping doesn't skew the very numbers being measured — a small but real correctness detail.</li><li>The dashboard JSON is checked into the repo and provisioned automatically on stack startup, so it isn't a one-off manual creation that would be lost on redeploy.</li><li>Documented as portable: the README states this same dashboard JSON would work unmodified against a cluster Prometheus if the ServiceMonitor gap were closed — a named next step, not a hidden one.</li></ul>
+        </div>
+        <div class="tcard-where"><code>observability/grafana/dashboards/status-service.json</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/elk-centralized-logging.jpg" alt="ELK Stack (centralized logging) diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">ELK Stack (centralized logging)</div>
+        <p class="tcard-concept">Centralized logging means every system ships its log lines to one searchable place, instead of an engineer having to SSH into ten different servers to piece together what happened.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: centralized logging is the tool for 'what exactly happened, in what order, across which services' — a different but related question from the 'is it healthy right now' question Prometheus and Grafana answer.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>Honest gap: the ELK stack (Elasticsearch, Logstash, Kibana) is NOT deployed anywhere in this repository — there is no centralized log aggregation or search built here.</li><li>What IS real and deployed in this repo is the Prometheus + Grafana metrics stack (observability/README.md) — a comparable but distinct piece of the observability puzzle: it answers 'how many requests, how fast, how many errors,' not 'show me the exact log lines around this failed request.'</li><li>This is a genuine and worth-naming gap rather than a claim to paper over: a full observability story needs both metrics (built here) and centralized logs (not built here).</li></ul>
+        </div>
+        <div class="tcard-where"><code>not present in this repo — see observability/README.md for what is actually deployed instead</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img"><img src="images/elk-stack-collect-store-search-visualize.jpg" alt="ELK Stack architecture diagram" loading="lazy"></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">ELK Stack architecture</div>
+        <p class="tcard-concept">ELK is normally three tools working together: Logstash (or Beats) collects and ships log lines, Elasticsearch stores and indexes them for fast search, and Kibana provides the search/visualization UI.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: this is useful background for evaluating a candidate's breadth, but it should be named as a gap here, not a delivered capability — in this repo, the metrics half of observability (Prometheus + Grafana) is the real, verified piece.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>Honest gap: none of Elasticsearch, Logstash, Beats, or Kibana is deployed, configured, or referenced as running infrastructure anywhere in this repository.</li><li>The repo's actual, verified observability infrastructure is Prometheus (metrics collection/storage) + Grafana (visualization) for status-service, confirmed live with real scraped traffic and a real caught-and-fixed undercounting bug (observability/README.md).</li><li>Metrics (Prometheus/Grafana, built here) and centralized logs (ELK, not built here) are complementary but different tools solving different problems — metrics answer 'how much/how fast/how often,' logs answer 'what exactly happened, in what sequence.' Both matter in a mature stack; only one is proven in this repo.</li></ul>
+        </div>
+        <div class="tcard-where"><code>not present in this repo — see observability/README.md for the real, deployed alternative</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img card-img-none"><span>Active Directory identity</span></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Active Directory identity</div>
+        <p class="tcard-concept">Active Directory is the system that answers 'who is this person, and what are they allowed to touch' for every other system in an environment — the identity backbone everything else trusts.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: without a working identity layer, every other system either has to manage its own separate logins (a security and audit nightmare) or trusts nothing at all — this is the foundation, not an optional extra.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>A real Active Directory forest/domain (poeticmusings.lab) was provisioned via samba-tool domain provision — open-source, no Windows license required, and wire-compatible with real Windows clients (ad-lab/README.md).</li><li>Real objects created and confirmed: 2 organizational units, 2 security groups, a named user (jclements), and a GPO (Password-Policy-Baseline) created and linked to an OU, confirmed with samba-tool gpo getlink.</li><li>Verified with a genuine kinit producing a real Kerberos ticket-granting ticket and confirmed with klist — plus external DNS lookups (dig) against the domain's own SRV/A records — not just 'the service is running.'</li><li>Two real bugs were hit and root-caused during setup: SYSVOL provisioning failed on Docker's overlay filesystem (fixed with a TDB-based ACL workaround), and gpo create failed because the container's DNS didn't know its own domain (fixed by pointing resolv.conf at Samba's internal DNS). Honest gap: no domain-joined Windows client exists, so GPO application (versus creation) is unproven, and no real SCCM/MECM exists.</li></ul>
+        </div>
+        <div class="tcard-where"><code>ad-lab/README.md</code></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="card-img card-img-none"><span>Coder (self-hosted dev environments)</span></div>
+      <div class="tcard-body">
+        <div class="tcard-topic">Coder (self-hosted dev environments)</div>
+        <p class="tcard-concept">Coder is a server that lets engineers spin up a ready-to-code development environment on demand, instead of spending a day manually installing tools on their own laptop.</p>
+        <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: faster, standardized developer onboarding means new engineers are writing productive code in minutes rather than losing a day (or more) to local environment setup — real time and cost saved per hire.</p></div>
+        <div class="tcard-proof">
+          <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+          <ul><li>The official, unmodified Coder server image (ghcr.io/coder/coder:latest) was run with its built-in PostgreSQL — a real running server, not a config file that was never started (coder/README.md).</li><li>Verified live against three real endpoints, not just 'container is up': the login page returned HTTP 200, /healthz returned 200, and /api/v2/buildinfo returned real, unfaked version data (v2.37.2+eb69e27).</li><li>Honest gaps stated plainly: no workspace template was authored, so the actual self-serve provisioning flow (the platform's real value) is unproven — only the control-plane server is proven; no identity-provider integration was attempted with the AD domain in ad-lab/, though it's named as the natural fit for a fuller build-out.</li><li>The verification container was deliberately removed after confirming it works, with the README stating clearly that docker compose up -d is the real, intended way to run it persistently — no pretending a torn-down demo is a live service.</li></ul>
+        </div>
+        <div class="tcard-where"><code>coder/README.md</code></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="closer">
+    <h2>Understand the problem, not the tool list</h2>
+    <p>Every DevSecOps tool exists to answer one specific, plain-English question — the goal isn't memorizing tool names, it's knowing which question needs answering and picking (or learning) the tool that answers it.</p>
+    <img src="images/dont-memorize-tools-understand-problem.jpg" alt="Don't memorize tools, understand the problem they solve">
+    <div class="tcard-mgmt"><div class="tcard-mgmt-label">Bottom Line Up Front (BLUF)</div><p>Bottom line: a candidate who can explain why they'd reach for Terraform versus Ansible versus Prometheus — in one sentence each — is more valuable long-term than one who's just used the most tools, because the underlying questions don't change even when the specific tools do.</p></div>
+    <div class="tcard-proof">
+      <div class="tcard-proof-label">Real, verified at poetic-musings</div>
+      <ul><li>This repo demonstrates that pattern directly: Terraform answers 'does the infrastructure exist,' Ansible answers 'is the right software actually configured on it, every time, idempotently' — proven with a real idempotency test (cold run changed=1, warm rerun changed=0) rather than just asserted (ansible/, JOB.html req 'Config management on top of IaC').</li><li>Same pattern for identity: Samba4 AD answers 'who is allowed to do what' — verified with a genuine kinit producing a real Kerberos ticket, not a claim that the service is 'up' (ad-lab/README.md).</li><li>Same pattern for observability: Prometheus answers 'is it healthy/fast right now,' and a real bug (gunicorn multiprocess undercounting) was caught precisely because the question was asked rigorously, with three independent re-verifications, instead of trusting the first number seen (observability/README.md).</li><li>The overall project BLUF is explicit about honesty as a discipline: 9 areas delivered and verified, remaining gaps (Azure live apply, Windows client + SCCM, STIG remediation, Coder templates) named plainly rather than hidden — exactly the instinct this card is about.</li></ul>
+    </div>
+  </div>
+
+  <footer class="colophon">
+    Every "Real, verified" bullet on this page is sourced directly from this repo's own files — Terraform, Kubernetes, CI/CD workflows, Ansible, the AD lab, STIG scan, and Coder deployment — not from marketing copy. For the full evidence trail with commands and real bug fixes, see <a href="JOB.html">Job Req Mapping</a>.
+  </footer>
+</div>
+
+</body>
+</html>

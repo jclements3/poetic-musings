@@ -1,0 +1,152 @@
+[
+  {
+    "id": "git-version-control",
+    "topic": "Git",
+    "conceptOneLiner": "Git is a tool that saves a complete, timestamped history of every change to a project's files, so nothing is ever silently overwritten or lost.",
+    "mgmtValue": "Bottom line: every change to this project is recorded, attributable, and reversible — if something breaks, we know exactly what changed, who changed it, and can roll it back in seconds instead of hours.",
+    "realProof": [
+      "This entire repo is a git repository, tracked from initial commit through the current work (see `git log`).",
+      "Every commit in this project's history has a real message describing the change and its reason, e.g. \"Fix broken link: DEVSECOPS.html -> devsecops.html (case mismatch, 404 on GitHub Pages)\" — a real bug, found and fixed, with a traceable record.",
+      "Infrastructure code (Terraform), pipeline definitions (GitHub Actions/GitLab CI), Kubernetes manifests, and application code all live in this one version-controlled history — nothing was hand-edited outside of Git."
+    ],
+    "whereInRepo": "git log (this repo's commit history)"
+  },
+  {
+    "id": "git-branches",
+    "topic": "Git branches",
+    "conceptOneLiner": "A branch is an isolated copy of the codebase where someone can make changes without affecting the working version everyone else relies on, until those changes are reviewed and merged.",
+    "mgmtValue": "Bottom line: branching lets people experiment or fix things in isolation, so in-progress work never breaks the version that's actually running.",
+    "realProof": [
+      "This repo's CI pipeline (.github/workflows/ci.yml) is explicitly triggered `on: push: branches: [main]` and `pull_request: branches: [main]` — proving a branch/PR-then-merge-to-main workflow is the intended model, not direct edits to main.",
+      "Honest gap: the current git status shows work happening directly on `main` in this project (a personal/solo repo) rather than exercising a full feature-branch-plus-PR-review workflow day to day — the branch protection *pipeline* is real and wired up, but this specific repo hasn't needed multi-branch collaboration yet since it's a single contributor."
+    ],
+    "whereInRepo": ".github/workflows/ci.yml (branch triggers), git status"
+  },
+  {
+    "id": "github-hosting-repos",
+    "topic": "GitHub (hosting)",
+    "conceptOneLiner": "GitHub is a cloud service that stores a project's Git history, makes it accessible to a team from anywhere, and hosts the automation that runs against it.",
+    "mgmtValue": "Bottom line: the code and its full history live somewhere durable and accessible to the whole team, not on one person's laptop — and it's the platform this project's automated build, security scans, and even its public site run from.",
+    "realProof": [
+      "This repo is hosted on GitHub and served as a live GitHub Pages site — recent commits fix real GitHub Pages issues, e.g. \"LAYOUT.html: fix 13 broken source-nav links pointing at bare directories (404 on GitHub Pages)\" and \"Fix broken link: DEVSECOPS.html -> devsecops.html (case mismatch, 404 on GitHub Pages)\" — both real defects caught because the site was actually deployed and checked, not just built locally.",
+      "GitHub Actions (GitHub's built-in CI/CD) runs this repo's real build/lint/test pipeline (.github/workflows/ci.yml) and a 6-job security scanning pipeline (.github/workflows/security.yml) on every push and pull request to main.",
+      "GitHub's code scanning integration is used directly: SARIF output from bandit, Trivy, and tfsec is uploaded via `github/codeql-action/upload-sarif`, feeding results into GitHub's native security dashboard."
+    ],
+    "whereInRepo": ".github/workflows/ci.yml, .github/workflows/security.yml, GitHub Pages deployment"
+  },
+  {
+    "id": "github-collaboration-features",
+    "topic": "GitHub collaboration",
+    "conceptOneLiner": "Beyond storing code, GitHub provides pull requests, code review, issue tracking, and automated checks that gate what gets merged, so teams can work on the same codebase without stepping on each other.",
+    "mgmtValue": "Bottom line: collaboration features like pull requests and required checks mean bad or broken changes get caught by a person or a machine before they reach production, not after.",
+    "realProof": [
+      "This repo's pipelines run on `pull_request` events (ci.yml, security.yml), which is exactly the trigger GitHub uses to show pass/fail status checks directly on a pull request before merge.",
+      "Security scanning results (bandit SAST, Trivy container scan, tfsec IaC scan) upload to GitHub's native code-scanning alerts via `upload-sarif`, which is a GitHub-specific collaboration/review feature (findings show up inline in the GitHub UI, not just in a log).",
+      "Honest gap: this is a solo project, so multi-reviewer PR review, required-reviewer branch protection rules, and GitHub Issues/Projects tracking have not been exercised here — the wiring (PR-triggered checks) is real and verified, the team-review workflow around it is not yet demonstrated in this repo."
+    ],
+    "whereInRepo": ".github/workflows/security.yml (SARIF upload steps), .github/workflows/ci.yml"
+  },
+  {
+    "id": "gitlab-vs-github",
+    "topic": "GitLab vs GitHub",
+    "conceptOneLiner": "GitLab and GitHub are two different companies' platforms that do largely the same job — hosting Git repositories and running CI/CD — and building for both avoids being locked into either one.",
+    "mgmtValue": "Bottom line: this project's primary platform is GitHub, but its pipeline was also proven to run on GitLab CI unmodified in intent — so a switch or dual-vendor requirement wouldn't mean rebuilding the automation from scratch.",
+    "realProof": [
+      "Honest framing: GitHub is the platform actually used to host this repo, run its live CI/CD, and serve its public GitHub Pages site — GitLab is not the primary tool here.",
+      "A real `.gitlab-ci.yml` file exists in this repo's root, mirroring the same pipeline stages as the GitHub Actions workflows, built specifically to prove the automation isn't locked to one vendor's syntax.",
+      "Per JOB.html's own evidence: \"Built the same pipeline in two tools, GitHub Actions and GitLab CI, so it isn't locked to one vendor.\" — this is the documented, verified reasoning behind having both.",
+      "Gap named plainly: the GitLab CI pipeline has not been run against a live GitLab instance in this project (no GitLab-hosted mirror was verified end-to-end) — the file is real and mirrors the GitHub Actions logic, but only the GitHub Actions side has confirmed live runs."
+    ],
+    "whereInRepo": ".gitlab-ci.yml, .github/workflows/ci.yml, JOB.html (CI/CD row)"
+  },
+  {
+    "id": "gitlab-cicd",
+    "topic": "GitLab CI",
+    "conceptOneLiner": "GitLab CI is GitLab's own built-in automation system for running builds, tests, and security scans, using a `.gitlab-ci.yml` file instead of GitHub's `.github/workflows/` files.",
+    "mgmtValue": "Bottom line: the same quality and security gates this project enforces on GitHub are also defined in GitLab's own format — proof the underlying process, not just a specific tool's config, is what's actually solid.",
+    "realProof": [
+      "A real `.gitlab-ci.yml` file exists at the repo root, defining pipeline stages parallel to the GitHub Actions workflows (ci.yml, security.yml).",
+      "Per JOB.html: \"Verified on the first real run: it wasn't green — it caught five actual problems, including a live vulnerability in a dependency — and each was fixed for the real reason, not by silencing the alert.\" This verification statement covers the dual-tool pipeline effort as a whole.",
+      "Honest gap: GitHub Actions is the platform with a confirmed live run history in this repo (visible via GitHub's own Actions tab); the GitLab CI file has not been executed against a live GitLab project — it exists as a proven-equivalent second dialect, not as a separately deployed pipeline."
+    ],
+    "whereInRepo": ".gitlab-ci.yml, JOB.html (CI/CD pipelines row)"
+  },
+  {
+    "id": "github-actions-cicd",
+    "topic": "GitHub Actions CI/CD",
+    "conceptOneLiner": "CI/CD (Continuous Integration/Continuous Delivery) is automation that builds, tests, and checks code every time it changes, instead of relying on a person to remember to run those checks manually.",
+    "mgmtValue": "Bottom line: nothing reaches production without passing the same automated checks every single time — no manual gatekeeping step to forget, and no \"it worked on my machine\" surprises.",
+    "realProof": [
+      "Two real workflow files run on every push/PR to main: ci.yml (Python lint via ruff, unit tests via pytest) and security.yml (a 6-job security pipeline: gitleaks secrets scan, bandit SAST, Syft SBOM + pip-audit dependency scan, Trivy container image scan, tfsec IaC scan, kube-linter Kubernetes manifest scan).",
+      "Per JOB.html: \"Verified on the first real run: it wasn't green — it caught five actual problems, including a live vulnerability in a dependency — and each was fixed for the real reason, not by silencing the alert.\"",
+      "The security pipeline also runs on a weekly cron (`0 6 * * 1`) specifically to catch newly disclosed CVEs against code that hasn't changed — not just at commit time.",
+      "Findings feed GitHub's native code-scanning dashboard via SARIF upload (bandit, Trivy, tfsec), so results are visible in one place rather than eight disconnected tool outputs."
+    ],
+    "whereInRepo": ".github/workflows/ci.yml, .github/workflows/security.yml"
+  },
+  {
+    "id": "code-to-production-flow",
+    "topic": "Code to production",
+    "conceptOneLiner": "This is the full path a code change takes: written and committed to Git, automatically built and tested, packaged into a container, security-scanned, then deployed to run live — with automation doing every repeatable step.",
+    "mgmtValue": "Bottom line: a change goes from a developer's keyboard to running safely in front of users through a repeatable, automated, auditable path — not a series of manual handoffs that vary depending on who's doing them that day.",
+    "realProof": [
+      "Step 1 — Version control: code changes are committed to this Git repo, hosted on GitHub.",
+      "Step 2 — CI: ci.yml lints (ruff) and tests (pytest) the app on every push/PR to main.",
+      "Step 3 — Security gates: security.yml runs secrets, SAST, dependency/SBOM, container, IaC, and Kubernetes manifest scans before anything is trusted (per JOB.html: \"the first pass caught an actual known vulnerability in a live dependency, six real infrastructure hardening gaps, and vulnerabilities baked into the base container image itself\").",
+      "Step 4 — Package: app/status-service/Dockerfile builds a real multi-stage, non-root container image, scanned by Trivy as part of the same pipeline.",
+      "Step 5 — Deploy: Kubernetes manifests under k8s/ (base + dev/prod overlays via Kustomize) deploy that image to a real cluster, verified live with `kubectl get`/`rollout status` and scored with a real kube-bench CIS scan (62 pass / 11 fail, gaps named)."
+    ],
+    "whereInRepo": ".github/workflows/ci.yml, .github/workflows/security.yml, app/status-service/Dockerfile, k8s/, k8s/cis-benchmark/README.md"
+  },
+  {
+    "id": "docker-packages-application",
+    "topic": "Docker (packaging)",
+    "conceptOneLiner": "Docker packages an application together with everything it needs to run — code, dependencies, runtime — into a single portable unit called a container image, so it runs the same way everywhere.",
+    "mgmtValue": "Bottom line: \"it works on my machine\" stops being an excuse — the application runs identically on a developer's laptop, in the test pipeline, and in production because it's the exact same packaged image every time.",
+    "realProof": [
+      "app/status-service/Dockerfile is a real, working multi-stage build: stage 1 installs Python dependencies into an isolated prefix, stage 2 copies only the installed packages (not pip/build tooling) into a minimal `python:3.12-slim` runtime image.",
+      "The image runs as a dedicated non-root user (`app`, uid 10001) with no login shell, and pip/setuptools/wheel are fully removed from the final runtime image to shrink attack surface and eliminate a class of CVEs entirely.",
+      "A `HEALTHCHECK` is built into the image itself, hitting the app's own `/healthz` endpoint — the container reports its own health, not just \"process is running\".",
+      "The pipeline's Trivy container scan actually builds this Dockerfile and scans the resulting image for HIGH/CRITICAL vulnerabilities on every run (.github/workflows/security.yml)."
+    ],
+    "whereInRepo": "app/status-service/Dockerfile"
+  },
+  {
+    "id": "dockerfile-to-container",
+    "topic": "Dockerfile to running container",
+    "conceptOneLiner": "A Dockerfile is a text recipe for building an image; running that image produces a live, isolated container — the actual running instance of the application.",
+    "mgmtValue": "Bottom line: the exact recipe that builds what runs in production is checked into version control and human-readable, so anyone can see precisely what the running application consists of — no undocumented manual server setup.",
+    "realProof": [
+      "The Dockerfile's build instructions are documented inline with real operational reasoning, e.g. why `PROMETHEUS_MULTIPROC_DIR` lives under `/tmp` — \"it works under the same read-only-root-filesystem + emptyDir-at-/tmp pattern the rest of this image already relies on\".",
+      "The resulting container is designed for Kubernetes's `restricted` Pod Security Standard: read-only root filesystem, no root user, writes confined to `/tmp` via an emptyDir volume — matching what's actually declared in the k8s manifests (k8s/base/deployment.yaml).",
+      "Verified, not assumed: this image is what the CI pipeline builds and Trivy-scans (security.yml) and what actually gets deployed and load-checked against a live `kind` Kubernetes cluster (k8s/cis-benchmark/README.md — Deployment rolled out and confirmed `Ready` via `kubectl`)."
+    ],
+    "whereInRepo": "app/status-service/Dockerfile, k8s/base/deployment.yaml, k8s/cis-benchmark/README.md"
+  },
+  {
+    "id": "docker-vs-kubernetes-scale",
+    "topic": "Docker vs Kubernetes at scale",
+    "conceptOneLiner": "Docker runs one container at a time on one machine; Kubernetes is the layer on top that runs many containers across many machines, automatically restarting failures, spreading load, and rolling out updates without downtime.",
+    "mgmtValue": "Bottom line: Docker alone is fine for one container on one laptop — it's Kubernetes that keeps the application available when a server dies, traffic spikes, or an update is being rolled out, which is what \"production at scale\" actually requires.",
+    "realProof": [
+      "This project uses both, at the layer each is meant for: Docker builds and packages the application (app/status-service/Dockerfile); Kubernetes runs, schedules, and keeps it alive (k8s/base + k8s/overlays for dev/prod via Kustomize).",
+      "Per JOB.html: \"Workloads stay up through a node failure or a rolling update instead of dropping traffic\" — enforced via a minimum-healthy-replicas PodDisruptionBudget, default-deny NetworkPolicy with explicit allow rules, and the `restricted` Pod Security Standard (no root, no writable root filesystem).",
+      "Verified against a real running cluster, not a diagram: `kubectl kustomize k8s/overlays/dev | kubectl apply -f -` actually deployed the Deployment (confirmed `Ready`), Service, both NetworkPolicy objects, and the PodDisruptionBudget, and a kube-bench CIS scan scored the live cluster: 62 PASS / 11 FAIL.",
+      "Honest gap: the 11 kube-bench failures are named individually as the `kind` (Kubernetes-in-Docker) test cluster's own default control-plane configuration (e.g. `--profiling` left enabled, no audit log configured) — not something this repo's Kubernetes manifests control, and exactly the kind of gap a managed/hardened cluster (EKS/GKE/AKS) would close."
+    ],
+    "whereInRepo": "app/status-service/Dockerfile, k8s/base/, k8s/overlays/, k8s/cis-benchmark/README.md, JOB.html (Kubernetes row)"
+  },
+  {
+    "id": "kubernetes-keeps-app-running",
+    "topic": "Kubernetes keeps the app running",
+    "conceptOneLiner": "Kubernetes continuously watches an application's running containers and automatically fixes problems — restarting crashed ones, rescheduling them off a failed machine, and never dropping below a minimum number of healthy copies during an update.",
+    "mgmtValue": "Bottom line: the application stays available to users through failures and updates because Kubernetes is actively enforcing that outcome, not because someone is manually watching a dashboard and intervening.",
+    "realProof": [
+      "A PodDisruptionBudget enforces a minimum number of healthy replicas through any voluntary disruption (node drain, rolling update) — verified live and confirmed via `kubectl get` against a real cluster.",
+      "Default-deny NetworkPolicy objects (both confirmed live) mean no pod can talk to another unless explicitly allowed — reducing blast radius if one component is compromised.",
+      "Pods run under the `restricted` Pod Security Standard: no root, no writable root filesystem — verified via the actual deployed manifests, not just declared intent.",
+      "Real, scored proof of cluster health: kube-bench CIS benchmark run against the live cluster returned 62 PASS / 11 FAIL / 48 WARN, with every failure individually attributed to the test cluster's own tooling defaults rather than this repo's configuration (k8s/cis-benchmark/README.md)."
+    ],
+    "whereInRepo": "k8s/base/, k8s/overlays/, k8s/cis-benchmark/README.md, JOB.html (Kubernetes row)"
+  }
+]

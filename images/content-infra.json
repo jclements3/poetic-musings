@@ -1,0 +1,132 @@
+[
+  {
+    "id": "jenkins-automation-server",
+    "topic": "Jenkins",
+    "conceptOneLiner": "Jenkins is a self-hosted 'automation server' — a program that watches for code changes and automatically runs a checklist of steps (build, test, scan, deploy) every time someone pushes code, instead of a person running those steps by hand.",
+    "mgmtValue": "Bottom line: automating the build/test/deploy checklist means nothing ships without passing the same checks every time, with no step skipped because someone was in a hurry — that's fewer production incidents caused by human error, not a tooling nicety.",
+    "realProof": [
+      "Jenkins itself is not installed or used anywhere in this repo — that's a named gap, not something dressed up as experience.",
+      "The equivalent capability is proven in two comparable tools instead: GitHub Actions (.github/workflows/ci.yml) and a line-for-line GitLab CI mirror (.gitlab-ci.yml) — same concept (automation server watching pushes, running staged checks), different vendor.",
+      "That pipeline isn't theoretical: the first real run caught 5 genuine failures (an invalid Trivy action version tag, an overly broad lint glob, a real Flask CVE via pip-audit, 6 kube-linter findings, and a tfsec rate-limit failure) and each was root-caused and fixed, not silenced.",
+      "The transferable concepts — stages, gates, artifacts, fail-the-build-on-a-real-finding — are the same ones a Jenkinsfile expresses in Groovy; the Jenkinsfile-specific syntax itself is unproven here."
+    ],
+    "whereInRepo": ".github/workflows/ci.yml, .github/workflows/security.yml, .gitlab-ci.yml"
+  },
+  {
+    "id": "jenkins-powerful-more-setup",
+    "topic": "Jenkins: powerful, more setup",
+    "conceptOneLiner": "Jenkins can do almost anything (any language, any plugin, any custom workflow) because it's a general-purpose server you install and maintain yourself — the tradeoff is you own the setup, upgrades, and plugin security, unlike a hosted service that manages that for you.",
+    "mgmtValue": "Bottom line: Jenkins buys maximum flexibility at the cost of ongoing care and feeding (patching, plugin management, server uptime) — the right call when requirements are unusual or on-prem is mandated, the wrong call when a team just needs a pipeline running fast with minimal upkeep.",
+    "realProof": [
+      "No Jenkins instance exists in this repo, so its setup/maintenance overhead hasn't been hands-on exercised here — stated plainly rather than implied.",
+      "What is proven is the 'less setup' side of the same tradeoff: GitHub Actions and GitLab CI are both hosted/managed automation servers, and both pipelines here run with zero server to patch or maintain, wired via committed YAML files.",
+      "Those pipelines still do real, non-trivial work without a maintained server: 7 layered security gates (gitleaks, bandit, pip-audit, Syft SBOM, Trivy, tfsec, kube-linter) run on every push, catching a real Flask CVE and 6 real Kubernetes hardening gaps.",
+      "The honest gap: judging Jenkins specifically on plugin-management overhead, upgrade cadence, or agent/executor scaling isn't something this repo can speak to first-hand."
+    ],
+    "whereInRepo": ".github/workflows/security.yml, .gitlab-ci.yml"
+  },
+  {
+    "id": "ansible-server-configuration",
+    "topic": "Ansible",
+    "conceptOneLiner": "Ansible is a configuration-management tool: once a server or container exists, Ansible answers a different question than 'does it exist' — it makes sure the right software is installed and correctly configured on it, and keeps re-checking that every time it runs, without needing an agent installed on the target.",
+    "mgmtValue": "Bottom line: configuration drifts silently when engineers make manual changes — Ansible re-applies the correct, version-controlled configuration on demand, so 'why is prod different from dev' stops being a mystery and becomes a solved, auditable process.",
+    "realProof": [
+      "Real, provable idempotency: tore the stack down cold, ran ansible-playbook — ok=10 changed=1 (it actually built the stack from nothing); ran it again immediately with the same desired state — ok=10 changed=0 (nothing to do, genuine idempotency, not luck), logged in ansible/run-cold.txt and ansible/run-idempotent.txt.",
+      "Deploys and verifies the real Prometheus+Grafana+status-service observability stack via the community.docker.docker_compose_v2 module — a real Ansible module, not a shell: wrapper hiding a raw docker command.",
+      "Verification goes past 'container is running': polls /healthz, asserts the real http_requests_total Prometheus metric is present, then queries Prometheus's own /api/v1/targets to confirm it actually scraped status-service and marked it health: up — the full metrics pipeline proven end to end.",
+      "A real bug was hit and fixed, not hidden: ansible-playbook failed with a blocking-IO stdin error caused by a non-blocking pipe in the shell; fixed by redirecting stdin from /dev/null. Honest gaps are also named: target is localhost (no real SSH fleet available), and no ansible-vault/secrets usage was needed here."
+    ],
+    "whereInRepo": "ansible/README.md, ansible/playbook.yml, ansible/run-cold.txt, ansible/run-idempotent.txt"
+  },
+  {
+    "id": "jenkins-vs-ansible",
+    "topic": "Jenkins vs. Ansible",
+    "conceptOneLiner": "These solve different problems even though both are 'automation': Jenkins (an automation server) decides WHEN to run a pipeline and orchestrates its stages; Ansible (a configuration-management tool) decides WHAT state a machine should end up in and makes it so, idempotently. A shop commonly uses both together — Jenkins as the trigger/orchestrator, Ansible as one of the steps it calls.",
+    "mgmtValue": "Bottom line: don't evaluate these as competitors — Jenkins answers 'did the pipeline run on every change,' Ansible answers 'is the server actually configured correctly right now' — a team missing either one has a real gap, not a redundant tool.",
+    "realProof": [
+      "Jenkins itself isn't used in this repo, so this comparison leans on the comparable orchestrator (GitHub Actions / GitLab CI) standing in for Jenkins's role, next to Ansible which IS real and hands-on here — that substitution is named explicitly, not glossed over.",
+      "The orchestration side is proven: two parallel pipelines (GitHub Actions + GitLab CI) run lint/test then 7 security gates on every push, catching 5 real bugs on first run.",
+      "The configuration-management side is proven with hard evidence Jenkins-style tools don't produce: a real idempotency test (changed=1 cold, changed=0 warm) showing Ansible converges a system to a known state repeatably.",
+      "The repo's own README states the distinction directly: 'Terraform answers does the infrastructure exist; Ansible answers is the right software deployed and configured on it, every time, idempotently' — Jenkins/CI answers a third, different question: did every change pass the same automated checks."
+    ],
+    "whereInRepo": "ansible/README.md, .github/workflows/ci.yml, .gitlab-ci.yml"
+  },
+  {
+    "id": "circleci-automate-pipeline",
+    "topic": "CircleCI",
+    "conceptOneLiner": "CircleCI is a hosted CI/CD platform (like GitHub Actions or GitLab CI, a competitor to both) that automatically runs a pipeline of build/test/scan/deploy steps against every code change, without a team having to host and maintain the automation server themselves.",
+    "mgmtValue": "Bottom line: a hosted CI/CD platform trades a bit of vendor lock-in for zero server maintenance — the business case is faster setup and less ops overhead than a self-hosted option like Jenkins, at the cost of being tied to that vendor's pricing and outages.",
+    "realProof": [
+      "CircleCI is not used anywhere in this repo — stated plainly rather than implied otherwise.",
+      "The equivalent capability, hosted/managed CI/CD with zero server to maintain, is proven with two different vendors instead: GitHub Actions and GitLab CI, deliberately built in parallel so the pipeline concept isn't locked to one vendor's syntax.",
+      "That parallel-pipeline build itself is the strongest evidence of vendor-portability thinking: same stages, same gates, translated line-for-line between two dialects (see the .gitlab-ci.yml header comment describing exactly this intent).",
+      "Both real pipelines caught genuine failures on first run (a Flask CVE, 6 kube-linter findings, a tfsec auth failure, a bad Trivy action tag, an overbroad lint glob) — proof the hosted-CI concept works end to end here, even though the specific vendor differs from CircleCI."
+    ],
+    "whereInRepo": ".github/workflows/ci.yml, .github/workflows/security.yml, .gitlab-ci.yml"
+  },
+  {
+    "id": "circleci-another-cicd-option",
+    "topic": "CircleCI: another CI/CD option",
+    "conceptOneLiner": "CircleCI is one of several roughly-interchangeable hosted CI/CD platforms (alongside GitHub Actions, GitLab CI, Azure DevOps Pipelines) — the underlying concept (config file defines stages, service runs them on every push, fails the build on a real problem) is the same across all of them, just different YAML dialects and vendor ecosystems.",
+    "mgmtValue": "Bottom line: picking a specific CI/CD vendor matters less than getting the practice right — automated gates on every change, real findings acted on, not staged for a demo. Evaluate a candidate on that practice, not on whether they've personally clicked through this exact vendor's UI.",
+    "realProof": [
+      "CircleCI specifically has not been used in this repo; this is stated directly rather than padded with adjacent experience presented as equivalent.",
+      "What's proven instead is the transferable practice across two other vendors in the same category: GitHub Actions and GitLab CI, run in parallel with matching stages (lint, test, then 7 security gates) so the underlying skill demonstrably isn't tied to one platform's quirks.",
+      "The pipelines are real, not staged: first run on GitHub Actions caught a live Flask dependency vulnerability via pip-audit, plus 4 other distinct real failures, each root-caused and fixed.",
+      "Because the same pipeline exists in two independent syntaxes (GitHub Actions YAML and GitLab CI YAML) built specifically to be comparable, picking up a third dialect like CircleCI's config.yml is a realistic, low-risk ask — the pattern transfers, only the syntax changes."
+    ],
+    "whereInRepo": ".gitlab-ci.yml (header comment), .github/workflows/ci.yml, .github/workflows/security.yml"
+  },
+  {
+    "id": "terraform-infrastructure-as-code",
+    "topic": "Terraform: Infrastructure as Code",
+    "conceptOneLiner": "Terraform lets you describe infrastructure (networks, storage, servers, permissions) as version-controlled text files instead of clicking through a cloud provider's web console — run the same file and you get the same infrastructure, every time, reviewable in a pull request like any other code change.",
+    "mgmtValue": "Bottom line: infrastructure defined as code means environments are reproducible, auditable, and stand up in minutes instead of hours of manual console work — and because it's version-controlled, every infrastructure change has a reviewable history, which matters directly for audit and compliance.",
+    "realProof": [
+      "Applied for real against a live, personal free-tier AWS account (us-east-2), not just planned: all 33 planned resources (VPC across 2 AZs, ECR, KMS-encrypted S3 buckets, least-privilege IAM role) were created and independently verified with aws ecr describe-repositories, aws ec2 describe-vpcs, aws s3api list-buckets, and aws kms describe-key, then torn down clean with terraform destroy.",
+      "A real bug was caught by the apply itself, not by static scanning: aws_cloudwatch_log_group.vpc_flow_logs failed with AccessDeniedException because the KMS key had no policy statement granting the logs.<region>.amazonaws.com service permission to use it — a class of error that only surfaces at the live API level, fixed in modules/aws-platform/kms.tf and re-verified with a second apply.",
+      "Passed automated scanning too: terraform validate clean, and tfsec clean with one documented, justified exclusion (aws-iam-no-policy-wildcards, for object-level ARN suffixes AWS requires) — both wired into CI on every push.",
+      "The honest limit named up front: the Azure side (azure-platform module) is written and validate-clean but never applied — no Azure subscription was available — which is disclosed rather than blended in with the proven AWS results."
+    ],
+    "whereInRepo": "infra/terraform/README.md, infra/terraform/modules/aws-platform/kms.tf"
+  },
+  {
+    "id": "terraform-workflow",
+    "topic": "Terraform workflow",
+    "conceptOneLiner": "Terraform's normal workflow is three steps: init (download providers, set up state), plan (show exactly what will change, before touching anything), apply (make the change) — the plan step is the safety net that lets a human review an infrastructure change before it happens, the same way a code review happens before a merge.",
+    "mgmtValue": "Bottom line: the plan-before-apply workflow is a built-in review gate — no infrastructure change happens as a surprise, because the exact diff is shown and can be reviewed or blocked before it's real, cutting the risk of an unreviewed change taking down production.",
+    "realProof": [
+      "The real workflow used here: terraform init, then terraform plan -var-file=environments/dev/terraform.tfvars, then terraform apply with the same var file — one root module reused across environments/dev and environments/prod tfvars, so dev and prod can't silently drift out of sync from duplicated code.",
+      "State strategy is deliberately not local: the intended backend is S3 (versioned, SSE-encrypted) plus DynamoDB for locking, documented in backend.tf and left commented out specifically so terraform init/validate work without needing pre-existing AWS infrastructure just to test the code.",
+      "The workflow caught a real problem that plan/validate alone would have missed: the apply step surfaced an AccessDeniedException on the KMS key for CloudWatch Logs that neither terraform validate nor tfsec flagged, because nothing in the HCL syntax itself was wrong — only the live API rejected it, which is the actual argument for running apply at least once rather than trusting static checks alone.",
+      "tfsec runs as an automated CI gate on every push (.github/workflows/security.yml), so the plan/apply discipline used by hand here is backed by the same static check running automatically on every future change, not just when someone remembers to run it."
+    ],
+    "whereInRepo": "infra/terraform/README.md, infra/terraform/backend.tf, .github/workflows/security.yml"
+  },
+  {
+    "id": "hashicorp-more-than-terraform",
+    "topic": "HashiCorp is more than Terraform",
+    "conceptOneLiner": "Terraform is HashiCorp's infrastructure-provisioning tool, but the company makes a family of tools for different problems: Vault for secrets management, Consul for service networking/discovery, Nomad for workload scheduling — Terraform is the one most teams meet first, not the whole toolkit.",
+    "mgmtValue": "Bottom line: knowing Terraform doesn't mean the whole HashiCorp ecosystem is covered — secrets management (Vault) in particular is a named, real gap here, worth knowing about before assuming 'HashiCorp experience' means everything's handled.",
+    "realProof": [
+      "Terraform itself is proven hands-on here: a real AWS apply, a real bug fix, a real teardown (see the Terraform Infrastructure as Code card) — that's the one HashiCorp tool with genuine, verified experience in this repo.",
+      "Vault (HashiCorp's secrets manager) is not used anywhere in this repo — the Ansible README states this directly as a named gap: 'No secrets/vault usage. Nothing sensitive is configured by this playbook... a real gap if this were managing anything with actual credentials.'",
+      "Consul and Nomad are not present in this repo at all — no service mesh or HashiCorp-native scheduler has been built or exercised here, stated plainly rather than implied by adjacency to Terraform.",
+      "What IS proven adjacent to secrets-handling: encryption at rest is used throughout the Terraform layer itself (KMS-encrypted S3, customer-managed KMS key with rotation for ECR) — real secrets-adjacent security discipline, just not via HashiCorp Vault specifically."
+    ],
+    "whereInRepo": "ansible/README.md (Honest gaps), infra/terraform/README.md (Security choices)"
+  },
+  {
+    "id": "hashicorp-infrastructure-toolkit",
+    "topic": "HashiCorp's infrastructure toolkit",
+    "conceptOneLiner": "HashiCorp's tools are designed to compose: Terraform provisions the infrastructure a workload runs on, Vault would manage the secrets it needs to run, Consul would let services find and securely talk to each other, Nomad would schedule the workloads themselves — each one solves a distinct layer of the same overall infrastructure problem.",
+    "mgmtValue": "Bottom line: this repo demonstrates the provisioning layer of that toolkit end to end on real infrastructure, with the other layers (secrets, service mesh, scheduling) named as clear, honest next steps rather than claimed as already covered.",
+    "realProof": [
+      "The provisioning layer is real and layered correctly with the rest of the stack: Terraform provisions account-level primitives (network, registry, storage, keys, IAM); Kubernetes deploys onto that; Ansible configures software on top of it; the CI pipeline's tfsec gate checks the Terraform on every push — 'provisioning, config management, and policy enforcement as three distinct, cooperating layers,' per the repo's own JOB.html description.",
+      "Encryption/key-management concepts that Vault would formalize are already present, just handled directly in Terraform: KMS-encrypted S3 artifact bucket, AES256-encrypted access-log bucket, customer-managed KMS key with automatic rotation for ECR image encryption — real security discipline, without the dedicated secrets-management tool.",
+      "Service-mesh/networking discipline that Consul would formalize is partially present via Kubernetes NetworkPolicy instead: a default-deny policy plus explicit allow rules, verified on a real running kind cluster and CIS-benchmark scanned (62 pass / 11 fail, failures named individually with cause).",
+      "Nomad-style scheduling is out of scope entirely here — Kubernetes is the scheduler in use, and that substitution (Kubernetes instead of Nomad) is a deliberate, reasonable choice worth being able to explain, not an unstated gap."
+    ],
+    "whereInRepo": "JOB.html (Terraform and Kubernetes rows), infra/terraform/README.md, k8s/"
+  }
+]

@@ -1,0 +1,130 @@
+[
+  {
+    "id": "prometheus-monitor-what-matters",
+    "topic": "Prometheus",
+    "conceptOneLiner": "Prometheus is a tool that constantly asks every system 'are you healthy and how busy are you right now?' and keeps a timestamped history of the answers.",
+    "mgmtValue": "Bottom line: Prometheus turns 'the app feels slow' into 'p95 latency on /checkout jumped from 80ms to 900ms at 2:14pm' — the difference between guessing at an outage and diagnosing it in minutes.",
+    "realProof": [
+      "A real status-service exposes Prometheus-format metrics at /metrics, and a real Prometheus instance scrapes them every 5 seconds (observability/README.md).",
+      "Two metrics are tracked deliberately, not just enabled by default: http_requests_total (a Counter) and http_request_duration_seconds (a Histogram used for the p95-latency panel).",
+      "A real bug was caught during development: gunicorn ran 2 worker processes, and Prometheus's default in-process registry only saw whichever worker handled a scrape, silently undercounting real traffic by roughly half (30 requests showed as only ~13-17).",
+      "Fixed with Prometheus's documented multiprocess mode (PROMETHEUS_MULTIPROC_DIR + MultiProcessCollector), then re-verified three separate ways — the raw /metrics endpoint, Prometheus's own query API, and Grafana's datasource-proxy — all agreeing on the same number (30 of 30)."
+    ],
+    "whereInRepo": "observability/README.md"
+  },
+  {
+    "id": "prometheus-plus-grafana",
+    "topic": "Prometheus + Grafana",
+    "conceptOneLiner": "Prometheus collects and stores the raw numbers; Grafana is the second tool that turns those numbers into dashboards a human can actually look at and understand.",
+    "mgmtValue": "Bottom line: this pairing is what lets an engineer spot a problem forming before customers file a ticket about it, instead of finding out from an angry email.",
+    "realProof": [
+      "A real, working local pipeline: status-service exposes metrics, a real Prometheus scrapes them every 5s, and a real Grafana dashboard queries Prometheus and renders the result — not a mockup, every number on the dashboard is live traffic (observability/README.md).",
+      "Verified end to end, not just 'containers are running': Prometheus's Status -> Targets page shows the scrape as UP, and the same undercounted-traffic bug was independently confirmed through Grafana's own datasource-proxy API, matching Prometheus's numbers exactly.",
+      "The Ansible automation for this stack (ansible/) goes further than 'container started' — it polls /healthz, asserts the real http_requests_total metric is present, and queries Prometheus's own /api/v1/targets to confirm it actually scraped the service (health: up), proving the whole pipeline end to end.",
+      "Documented honest gap: this is local-only via docker-compose — nothing in the Kubernetes deployment (k8s/) currently ships a ServiceMonitor/PodMonitor, so the same dashboard would need that wiring to work against a cluster."
+    ],
+    "whereInRepo": "observability/README.md"
+  },
+  {
+    "id": "grafana-turn-metrics-into-dashboards",
+    "topic": "Grafana",
+    "conceptOneLiner": "Grafana is the visualization layer: it takes the numbers Prometheus is storing and draws them as graphs, gauges, and alerts on a screen someone can watch.",
+    "mgmtValue": "Bottom line: a dashboard means the team notices a slowdown on a graph before it becomes a customer complaint — that's the cost difference between proactive and reactive incident response.",
+    "realProof": [
+      "A real Grafana dashboard (grafana/dashboards/status-service.json) is provisioned automatically — no manual clicking through an empty Grafana instance — via grafana/provisioning/ (observability/README.md).",
+      "Four real panels built on genuine PromQL queries: request rate by path, p95 latency by path (histogram_quantile over the real duration histogram), requests by status code (pie chart), and total requests in the last 5 minutes.",
+      "Access is real and documented plainly, including the honest local-demo caveat: http://localhost:3000, login admin/admin, with a note to change it on first login since this is a local demo stack only.",
+      "The same gunicorn multiprocess undercounting bug that hit Prometheus was re-confirmed correct through Grafana's datasource-proxy API after the fix — the dashboard reflects real, corrected traffic counts, not guessed ones."
+    ],
+    "whereInRepo": "observability/README.md"
+  },
+  {
+    "id": "grafana-dashboard-for-system",
+    "topic": "Grafana dashboards",
+    "conceptOneLiner": "A dashboard is a saved, reusable set of panels answering the specific questions that matter for one system — in this case, 'is this web service fast, and is it working.'",
+    "mgmtValue": "Bottom line: a good dashboard is built around the questions leadership actually asks during an incident ('how bad is it, for whom, since when') rather than a wall of generic charts nobody reads.",
+    "realProof": [
+      "The status-service dashboard is purpose-built around three real operational questions: how much traffic is hitting each path, how slow are the slowest 5% of requests (p95 latency), and what's the error/status-code mix (observability/README.md).",
+      "The /metrics endpoint itself is deliberately excluded from its own counters so the act of scraping doesn't skew the very numbers being measured — a small but real correctness detail.",
+      "The dashboard JSON is checked into the repo and provisioned automatically on stack startup, so it isn't a one-off manual creation that would be lost on redeploy.",
+      "Documented as portable: the README states this same dashboard JSON would work unmodified against a cluster Prometheus if the ServiceMonitor gap were closed — a named next step, not a hidden one."
+    ],
+    "whereInRepo": "observability/grafana/dashboards/status-service.json"
+  },
+  {
+    "id": "elk-centralized-logging",
+    "topic": "ELK Stack (centralized logging)",
+    "conceptOneLiner": "Centralized logging means every system ships its log lines to one searchable place, instead of an engineer having to SSH into ten different servers to piece together what happened.",
+    "mgmtValue": "Bottom line: centralized logging is the tool for 'what exactly happened, in what order, across which services' — a different but related question from the 'is it healthy right now' question Prometheus and Grafana answer.",
+    "realProof": [
+      "Honest gap: the ELK stack (Elasticsearch, Logstash, Kibana) is NOT deployed anywhere in this repository — there is no centralized log aggregation or search built here.",
+      "What IS real and deployed in this repo is the Prometheus + Grafana metrics stack (observability/README.md) — a comparable but distinct piece of the observability puzzle: it answers 'how many requests, how fast, how many errors,' not 'show me the exact log lines around this failed request.'",
+      "This is a genuine and worth-naming gap rather than a claim to paper over: a full observability story needs both metrics (built here) and centralized logs (not built here)."
+    ],
+    "whereInRepo": "not present in this repo — see observability/README.md for what is actually deployed instead"
+  },
+  {
+    "id": "elk-stack-collect-store-search-visualize",
+    "topic": "ELK Stack architecture",
+    "conceptOneLiner": "ELK is normally three tools working together: Logstash (or Beats) collects and ships log lines, Elasticsearch stores and indexes them for fast search, and Kibana provides the search/visualization UI.",
+    "mgmtValue": "Bottom line: this is useful background for evaluating a candidate's breadth, but it should be named as a gap here, not a delivered capability — in this repo, the metrics half of observability (Prometheus + Grafana) is the real, verified piece.",
+    "realProof": [
+      "Honest gap: none of Elasticsearch, Logstash, Beats, or Kibana is deployed, configured, or referenced as running infrastructure anywhere in this repository.",
+      "The repo's actual, verified observability infrastructure is Prometheus (metrics collection/storage) + Grafana (visualization) for status-service, confirmed live with real scraped traffic and a real caught-and-fixed undercounting bug (observability/README.md).",
+      "Metrics (Prometheus/Grafana, built here) and centralized logs (ELK, not built here) are complementary but different tools solving different problems — metrics answer 'how much/how fast/how often,' logs answer 'what exactly happened, in what sequence.' Both matter in a mature stack; only one is proven in this repo."
+    ],
+    "whereInRepo": "not present in this repo — see observability/README.md for the real, deployed alternative"
+  },
+  {
+    "id": "dont-memorize-tools-understand-problem",
+    "topic": "Understand the problem, not the tool list",
+    "conceptOneLiner": "Every DevSecOps tool exists to answer one specific, plain-English question — the goal isn't memorizing tool names, it's knowing which question needs answering and picking (or learning) the tool that answers it.",
+    "mgmtValue": "Bottom line: a candidate who can explain why they'd reach for Terraform versus Ansible versus Prometheus — in one sentence each — is more valuable long-term than one who's just used the most tools, because the underlying questions don't change even when the specific tools do.",
+    "realProof": [
+      "This repo demonstrates that pattern directly: Terraform answers 'does the infrastructure exist,' Ansible answers 'is the right software actually configured on it, every time, idempotently' — proven with a real idempotency test (cold run changed=1, warm rerun changed=0) rather than just asserted (ansible/, JOB.html req 'Config management on top of IaC').",
+      "Same pattern for identity: Samba4 AD answers 'who is allowed to do what' — verified with a genuine kinit producing a real Kerberos ticket, not a claim that the service is 'up' (ad-lab/README.md).",
+      "Same pattern for observability: Prometheus answers 'is it healthy/fast right now,' and a real bug (gunicorn multiprocess undercounting) was caught precisely because the question was asked rigorously, with three independent re-verifications, instead of trusting the first number seen (observability/README.md).",
+      "The overall project BLUF is explicit about honesty as a discipline: 9 areas delivered and verified, remaining gaps (Azure live apply, Windows client + SCCM, STIG remediation, Coder templates) named plainly rather than hidden — exactly the instinct this card is about."
+    ],
+    "whereInRepo": "JOB.html (OVERALL_BLUF)"
+  },
+  {
+    "id": "devsecops-tool-flow-overview",
+    "topic": "How it all fits together",
+    "conceptOneLiner": "DevSecOps tools form a chain: infrastructure is defined as code, provisioned, configured, secured, monitored, and continuously re-checked — each tool covering one link, and no single tool covering the whole chain.",
+    "mgmtValue": "Bottom line: this sprint delivered verified, working capability across all nine required areas of that chain — real infrastructure, real security scanning, real identity, real monitoring, real config management — with the honest remaining gaps named rather than glossed over.",
+    "realProof": [
+      "Infrastructure as Code (Terraform): full environments stand up from code in minutes, verified against a live AWS account.",
+      "Container orchestration (Kubernetes) hardened to the restricted standard — no root, default-deny networking, 62 benchmark checks passed; CI/CD (GitHub Actions + GitLab CI) caught a live dependency vulnerability on first run; pipeline security ran seven layered scans per change, catching real vulnerabilities including in the base image.",
+      "Identity (Samba4 AD): real domain stood up, verified by live login and credential pull. Compliance (DISA STIG): scored DoD baseline, 67 pass / 51 fail of 409 rules, each traceable.",
+      "Developer environments (Coder): server deployed live and healthy. Configuration management (Ansible): idempotence proven cold, one run to correct, zero on rerun. Remaining items are named plainly and queued pending approval: live Azure apply, Jenkins/Azure DevOps, Windows client + SCCM, STIG remediation, Coder templates."
+    ],
+    "whereInRepo": "JOB.html (OVERALL_BLUF)"
+  },
+  {
+    "id": "windows-ad-identity",
+    "topic": "Active Directory identity",
+    "conceptOneLiner": "Active Directory is the system that answers 'who is this person, and what are they allowed to touch' for every other system in an environment — the identity backbone everything else trusts.",
+    "mgmtValue": "Bottom line: without a working identity layer, every other system either has to manage its own separate logins (a security and audit nightmare) or trusts nothing at all — this is the foundation, not an optional extra.",
+    "realProof": [
+      "A real Active Directory forest/domain (poeticmusings.lab) was provisioned via samba-tool domain provision — open-source, no Windows license required, and wire-compatible with real Windows clients (ad-lab/README.md).",
+      "Real objects created and confirmed: 2 organizational units, 2 security groups, a named user (jclements), and a GPO (Password-Policy-Baseline) created and linked to an OU, confirmed with samba-tool gpo getlink.",
+      "Verified with a genuine kinit producing a real Kerberos ticket-granting ticket and confirmed with klist — plus external DNS lookups (dig) against the domain's own SRV/A records — not just 'the service is running.'",
+      "Two real bugs were hit and root-caused during setup: SYSVOL provisioning failed on Docker's overlay filesystem (fixed with a TDB-based ACL workaround), and gpo create failed because the container's DNS didn't know its own domain (fixed by pointing resolv.conf at Samba's internal DNS). Honest gap: no domain-joined Windows client exists, so GPO application (versus creation) is unproven, and no real SCCM/MECM exists."
+    ],
+    "whereInRepo": "ad-lab/README.md"
+  },
+  {
+    "id": "coder-dev-environments",
+    "topic": "Coder (self-hosted dev environments)",
+    "conceptOneLiner": "Coder is a server that lets engineers spin up a ready-to-code development environment on demand, instead of spending a day manually installing tools on their own laptop.",
+    "mgmtValue": "Bottom line: faster, standardized developer onboarding means new engineers are writing productive code in minutes rather than losing a day (or more) to local environment setup — real time and cost saved per hire.",
+    "realProof": [
+      "The official, unmodified Coder server image (ghcr.io/coder/coder:latest) was run with its built-in PostgreSQL — a real running server, not a config file that was never started (coder/README.md).",
+      "Verified live against three real endpoints, not just 'container is up': the login page returned HTTP 200, /healthz returned 200, and /api/v2/buildinfo returned real, unfaked version data (v2.37.2+eb69e27).",
+      "Honest gaps stated plainly: no workspace template was authored, so the actual self-serve provisioning flow (the platform's real value) is unproven — only the control-plane server is proven; no identity-provider integration was attempted with the AD domain in ad-lab/, though it's named as the natural fit for a fuller build-out.",
+      "The verification container was deliberately removed after confirming it works, with the README stating clearly that docker compose up -d is the real, intended way to run it persistently — no pretending a torn-down demo is a live service."
+    ],
+    "whereInRepo": "coder/README.md"
+  }
+]
