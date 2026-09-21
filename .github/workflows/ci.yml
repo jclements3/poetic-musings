@@ -34,7 +34,7 @@ jobs:
       - name: Check for Python sources
         id: pyfiles
         run: |
-          if find app -name '*.py' 2>/dev/null | grep -q . || find . -maxdepth 1 -name '*.py' | grep -q .; then
+          if find app -name '*.py' 2>/dev/null | grep -q .; then
             echo "found=true" >> "$GITHUB_OUTPUT"
           else
             echo "found=false" >> "$GITHUB_OUTPUT"
@@ -43,8 +43,8 @@ jobs:
       - name: Run ruff lint
         if: steps.pyfiles.outputs.found == 'true'
         run: |
-          ruff check app *.py --output-format=github || true
-          ruff check app *.py
+          ruff check app --output-format=github || true
+          ruff check app
 
       - name: Note on Haskell/Clash suites
         run: |

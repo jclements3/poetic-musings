@@ -148,4 +148,9 @@ def readyz():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    # Binding all interfaces is correct, not a vulnerability, in a
+    # containerized deployment: the container's network namespace is the
+    # real boundary, restricted further by the k8s NetworkPolicy in
+    # k8s/base/networkpolicy.yaml. Production runs under gunicorn (see
+    # Dockerfile CMD), not this block -- it's local-dev-only convenience.
+    app.run(host="0.0.0.0", port=8080)  # nosec B104

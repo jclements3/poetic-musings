@@ -45,6 +45,9 @@ resource "aws_s3_bucket_ownership_controls" "artifacts" {
   }
 }
 
+# This IS the logging destination bucket; enabling logging on it would log
+# it to itself, the exact self-logging antipattern this bucket avoids.
+#tfsec:ignore:aws-s3-enable-bucket-logging
 resource "aws_s3_bucket" "access_logs" {
   bucket = "${var.name_prefix}-access-logs-${random_id.bucket_suffix.hex}"
 
@@ -59,12 +62,17 @@ resource "aws_s3_bucket_versioning" "access_logs" {
   }
 }
 
+# SSE-KMS is deliberately not used here: the S3 logging service principal
+# can't easily be granted to a customer-managed key without extra key-policy
+# complexity, and this bucket holds access logs only, not the artifacts
+# themselves (those use the customer-managed key; see s3_bucket.artifacts).
+#tfsec:ignore:aws-s3-encryption-customer-key
 resource "aws_s3_bucket_server_side_encryption_configuration" "access_logs" {
   bucket = aws_s3_bucket.access_logs.id
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256" # SSE-KMS not required for log-only bucket; avoids KMS grant complexity for the S3 logging service principal
+      sse_algorithm = "AES256"
     }
   }
 }

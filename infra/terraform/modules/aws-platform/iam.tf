@@ -67,6 +67,9 @@ data "aws_iam_policy_document" "ci_push" {
       "s3:GetObject",
       "s3:ListBucket",
     ]
+    # tfsec:ignore:aws-iam-no-policy-wildcards -- "/*" here is the standard
+    # S3 object-path suffix scoped to this one named bucket's ARN, not an
+    # account- or service-wide wildcard; S3 object-level permissions require it.
     resources = [
       aws_s3_bucket.artifacts.arn,
       "${aws_s3_bucket.artifacts.arn}/*",

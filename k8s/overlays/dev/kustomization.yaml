@@ -19,3 +19,10 @@ patches:
       - op: replace
         path: /spec/replicas
         value: 1
+  - target:
+      kind: PodDisruptionBudget
+      name: status-service
+    patch: |-
+      - op: replace
+        path: /spec/minAvailable
+        value: 0
