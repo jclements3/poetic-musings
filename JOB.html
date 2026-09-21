@@ -33,9 +33,13 @@ body {
   line-height: 1.5; font-size: clamp(0.92rem, 0.8rem + 0.25vw, 1.02rem);
 }
 .wrap { max-width: none; width: 100%; margin: 0 auto; padding: 1.5rem clamp(1.25rem, 4vw, 3rem) 3rem; }
-h1 { font-size: 1.4rem; margin: 0 0 0.2rem; }
-.sub { color: var(--muted); margin: 0 0 1.2rem; font-size: 0.92rem; max-width: 74ch; }
-nav.links { margin: 0 0 1.5rem; display: flex; flex-wrap: wrap; gap: 0.9rem; font-size: 0.88rem; }
+.pageheader {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem;
+  margin: 0 0 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--rule);
+}
+h1 { font-size: 1.15rem; margin: 0; white-space: nowrap; }
+.sub { color: var(--muted); margin: 0; font-size: 0.86rem; flex: 1 1 auto; min-width: 0; }
+nav.links { display: flex; flex-wrap: wrap; gap: 0.8rem; font-size: 0.84rem; white-space: nowrap; }
 nav.links a { color: var(--accent); text-decoration: none; }
 nav.links a:hover { text-decoration: underline; }
 h2 { font-size: 1.05rem; margin: 1.6rem 0 0.6rem; border-bottom: 1px solid var(--rule); padding-bottom: 0.3rem; }
@@ -106,14 +110,15 @@ footer { margin-top: 2rem; color: var(--muted); font-size: 0.82rem; }
 </head>
 <body>
 <div class="wrap">
-  <h1>Job Requirement Mapping</h1>
-  <p class="sub">GMD DevSecOps Engineer — Valkyrie Enterprises, Job ID 4472. Click any status badge to see the real tools and commands behind that row. Source: <a href="JOB.md">JOB.md</a>.</p>
-
-  <nav class="links">
-    <a href="index.html">← Dashboard</a>
-    <a href="https://jclements3.github.io/poetic-musings/" target="_blank">Live site ↗</a>
-    <a href="https://github.com/jclements3/poetic-musings" target="_blank">Repo ↗</a>
-  </nav>
+  <div class="pageheader">
+    <h1>Job Requirement Mapping</h1>
+    <p class="sub">GMD DevSecOps Engineer — Valkyrie Enterprises, Job ID 4472. Click any status badge to see the real tools and commands behind that row. Source: <a href="JOB.md">JOB.md</a>.</p>
+    <nav class="links">
+      <a href="index.html">← Dashboard</a>
+      <a href="https://jclements3.github.io/poetic-musings/" target="_blank">Live site ↗</a>
+      <a href="https://github.com/jclements3/poetic-musings" target="_blank">Repo ↗</a>
+    </nav>
+  </div>
 
   <h2>Requirement → repo mapping</h2>
   <div class="layout">
