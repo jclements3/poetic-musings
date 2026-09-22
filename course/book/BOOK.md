@@ -2273,7 +2273,7 @@ Take the word apart: Dev-Sec-Ops. Security sits in the middle on purpose. Not
 bolted onto the end after Dev builds it and Ops ships it — folded into the
 loop, running on every commit, before a human ever has to remember to ask for
 it. That is the entire pitch of the discipline, and it is also the part most
-easiliy faked on a resume, because "security is embedded in our pipeline" is
+easily faked on a resume, because "security is embedded in our pipeline" is
 a sentence anyone can write. The only way to tell the difference between a
 team that means it and a team that's decorating a diagram is to ask: show me
 the last real finding your gates caught, and show me the fix.
@@ -5320,458 +5320,529 @@ collected for direct reuse in the book's toolkit appendix.
 
 # Chapter 9 — Evidence & Govern
 
-*Zone 9 of 9 in the DevSecOps playbook. Where the previous eight zones do the
-engineering — scan, gate, harden, deploy — this zone converts that
-engineering activity into accreditation evidence.*
+*Zone 9 of 9, and the capstone of this book. Where the previous eight zones
+do the engineering — plan, develop, build, secure, provision, deploy,
+operate — this zone is where that engineering activity either becomes
+accreditation evidence, or evaporates.*
 
-## 1. Why this zone matters, especially for this job
+## 1. Why this zone matters, and why it's last
 
-Every zone before this one produces an *action*: a secret gets caught before
-it's pushed, a container gets scanned, a Kubernetes cluster gets hardened to
-a benchmark. `MASTER-PLAYBOOK.md` frames Zone 9 in one line worth quoting
-directly, because it's the whole chapter in miniature: this zone turns
-**"engineering activity turned into accreditation evidence."** An action
-that happened but wasn't recorded, dated, and retrievable might as well not
-have happened, from an auditor's point of view — and if you are reading this
-book because you're studying for a GMD DevSecOps Engineer role at a company
-like Valkyrie Enterprises, "an auditor's point of view" is not a hypothetical
-future problem. It's the job.
+Every zone before this one produces an *action*: a secret gets caught
+before it's pushed, a dependency gets pinned, a container gets scanned, a
+Kubernetes cluster gets hardened against a benchmark, a host gets STIG
+scanned. `MASTER-PLAYBOOK.md` frames Zone 9 in one line worth quoting
+directly, because it is this chapter in miniature: this is the zone that
+turns "engineering activity" into "accreditation evidence." An action that
+happened but was never recorded, dated, and made retrievable might as well
+not have happened, from the point of view of an auditor, a new hire trying
+to understand what's actually running, or your own future self trying to
+answer "wait, did we fix that?" six months from now.
 
-Here is the reality of DoD-adjacent contracting that this zone exists to
-serve: **a control isn't real until it's documented and auditable.** You can
-run the most sophisticated STIG remediation pipeline in the world, but if
-nobody can produce, on demand, the specific artifact proving rule
-`SV-230222r743935_rule` passed on `2026-03-14` against `host-42`, that
-control does not exist for accreditation purposes. This isn't bureaucratic
-theater — it's how the government's Risk Management Framework (RMF) and the
-Authority to Operate (ATO) process work. A system does not get to go live on
-a DoD network until an Authorizing Official (AO) reviews a package of
-evidence — STIG scan results, POA&Ms (Plans of Action and Milestones) for
-open findings, SBOMs, vulnerability scan history, configuration baselines —
-and signs off that the residual risk is acceptable. The ATO package *is* the
-concrete artifact this whole zone produces. Everything else in this chapter
-— SBOMs, waiver ledgers, evidence retention, maturity models — exists to
-make that package buildable on demand instead of assembled in a two-week
-fire drill the week before an assessment.
+Zone 9 is last in the numbering for a reason that isn't arbitrary. Zones
+1–8 are about doing the work — writing code securely, building it,
+scanning it, provisioning infrastructure, deploying it, operating it. Zone
+9 doesn't do any new engineering work of its own; it sits downstream of
+all eight other zones and asks the same question of each one: *can you
+prove that happened, on demand, without a fire drill?* If the answer is
+no, everything upstream is unverifiable — not necessarily false, but
+unverifiable, which for audit and accreditation purposes amounts to the
+same thing. A control that isn't documented and retrievable does not
+exist for an Authorizing Official reviewing a package for an Authority to
+Operate (ATO) decision. This isn't bureaucratic theater; it's how DoD-style
+Risk Management Framework (RMF) accreditation actually works, and if
+you're reading this book because you're studying for a role like GMD
+DevSecOps Engineer at a place like Valkyrie Enterprises, "an auditor asks
+to see it" is not a hypothetical future problem. It is the job description.
 
-This is also the zone that most cleanly separates "we did security work"
-from "we can prove we did security work," and a DevSecOps engineer who
-cannot make that distinction plainly to a program manager or an assessor is
-going to have a bad time in this specific industry. So the house rule for
-this chapter, inherited from the rest of this book: no invented statistics,
-no claimed verification that didn't happen, name every gap plainly. That
-rule is not incidental to a chapter about evidence — it *is* the chapter's
-subject matter, applied to itself.
+This is also the zone that most cleanly separates "we did DevSecOps" from
+"we can prove we did DevSecOps." Those are different claims, and a
+DevSecOps engineer who cannot tell a program manager or an assessor which
+one they're making is going to have a bad time in this industry. So the
+house rule inherited from the rest of this book — brutally honest,
+evidence-based, name every gap plainly, never invent a statistic or claim
+a verification that didn't happen — is not incidental to a chapter about
+evidence. It *is* the chapter's subject matter, applied recursively to
+itself. Everything in this chapter, including the worked examples, follows
+that rule; where this repo has a real gap (and it has several), this
+chapter says so by name rather than rounding it up to "done."
 
-## 2. SBOM fundamentals
+## 2. SBOM — Software Bill of Materials
 
-A **Software Bill of Materials (SBOM)** is a manifest: a structured,
-machine-readable list of every component that went into a shipped software
-artifact — every direct dependency, every transitive dependency, often down
-to the OS packages inside a container image. Think of it as the ingredient
-label on a piece of software, except the label has to be complete or it's
-useless.
+A **Software Bill of Materials (SBOM)** is a structured, machine-readable
+inventory of every component that went into a built artifact: every
+direct dependency, every transitive dependency, often down to the exact
+version and package hash, plus enough metadata (license, supplier,
+package URL) to answer questions about the artifact without re-deriving
+them from source. The standard formats are **CycloneDX** (OWASP-governed,
+JSON or XML) and **SPDX** (Linux Foundation-governed); this repo's tooling
+targets CycloneDX.
 
-The reason it matters is almost entirely reactive, and the trigger question
-is always the same shape: **"Are we affected by CVE-2024-XXXXX?"** When a
-critical vulnerability drops in, say, a logging library or a compression
-utility, the organizations that answer that question in minutes are the ones
-with SBOMs on file for every shipped artifact — they grep the manifest for
-the package name and version, and they have their answer. The organizations
-without SBOMs answer that question by paging every team, asking them to
-manually check their `requirements.txt` or `package-lock.json` or container
-base image, and hoping nobody misses a service. In a DoD-adjacent
-environment, "we don't know if we're affected" is not an acceptable answer
-to an AO or an incident response tasking, and it's genuinely not an
-acceptable answer to a program manager either.
+The reason an SBOM matters is almost entirely about the question it lets
+you answer in seconds instead of days: **"are we affected by CVE-X?"**
+Without an SBOM, that question means grepping through Dockerfiles,
+requirements files, and lockfiles across however many services you run,
+hoping you didn't miss a transitive dependency three layers deep. With an
+SBOM archived per release, it's a `grep` or a query against a container
+catalog. This is the practical payoff of supply-chain security: Log4Shell
+and the `xz` backdoor were both "does this specific component, at this
+specific version, exist anywhere in our shipped software" questions, and
+organizations with SBOMs answered them in hours; organizations without
+them spent days on archaeology while the exposure window stayed open.
 
-Two formats dominate: **CycloneDX** (originated in the OWASP ecosystem, JSON
-or XML, strong on vulnerability and license metadata) and **SPDX** (Linux
-Foundation project, also JSON or XML/tag-value, historically stronger on
-license compliance, now an ISO standard). Neither is "more correct" — pick
-one and be consistent, or generate both if your tooling and downstream
-consumers require it. This repo's actual pipeline standardizes on
-CycloneDX.
-
-Generating one is a single command with **Syft**, the tool this repo
-actually uses:
+**Generating one with Syft** (Anchore's open-source SBOM generator, and
+the tool `security.yml` in this repo actually runs via
+`anchore/sbom-action`):
 
 ```
-syft dir:. -o cyclonedx-json > sbom.json
+syft app/status-service -o cyclonedx-json > sbom.json
 ```
 
-That's the `FIELD-MANUAL.md` §3 scanner-cookbook form, run against a local
-directory. The repo's live GitHub Actions pipeline
-(`.github/workflows/security.yml`) runs the equivalent as a real, automated
-step — not hand-run, not aspirational:
+That produces a CycloneDX JSON document listing every Python package
+`status-service`'s container pulls in, with versions and package URLs
+(`pkg:pypi/flask@3.1.3`, etc.).
 
-```yaml
-- name: Generate SBOM (Syft)
-  if: steps.reqs.outputs.found == 'true'
-  uses: anchore/sbom-action@v0
-  with:
-    path: app/status-service
-    format: cyclonedx-json
-    output-file: sbom-status-service.cdx.json
-    upload-artifact: true
-```
+**SBOM diffing as a supply-chain changelog.** A single SBOM is a snapshot;
+the more operationally useful artifact is the *diff* between two SBOMs —
+the previous release's and the current one's. That diff answers "what
+changed in our supply chain between v1.2 and v1.3" the same way a code
+diff answers what changed in source: added components (new attack
+surface), removed components (shrinking attack surface, worth noting),
+and changed components (version bumps, some of which fix CVEs and some of
+which introduce them). `MASTER-PLAYBOOK.md` lists `sbom_diff.py` under
+Zone 9 as a `[run]`-tagged play — a script that was actually executed, not
+just planned — and its job is exactly this: CycloneDX component drift
+between two SBOMs, reported as added/removed/changed.
 
-This is worth being precise about, because it's exactly the kind of
-precision an assessor will demand of you: **SBOM generation in this repo is
-real, automated, and running on every CI trigger that touches
-`app/status-service`.** It is a job step (`sbom-and-dependency-scan`) inside
-`security.yml`, uploaded as a build artifact via `upload-artifact: true`.
-That is a fully verified, currently-executing control. Section 3 below is
-about a *different* piece of Zone 9 tooling — SBOM drift detection — which
-is not yet verified against this repo's real containers, and the chapter is
-going to be equally precise about that gap. Conflating "we generate SBOMs"
-with "we diff SBOMs between releases and have proven the diff logic against
-our own artifacts" is exactly the kind of overclaim an assessor will catch,
-and exactly the kind this book refuses to make.
+**This repo's honest gap, worth citing as a teaching example.** Per
+`playbook/README.md`, `sbom_diff.py` was verified for real, but only
+against the repo's seeded demo fixtures (`sbom-old.json`/`sbom-new.json`),
+correctly reporting 1 added, 1 removed, 1 changed component. It was *not*
+verified against a real CycloneDX SBOM of this repo's own
+`app/status-service` container, because `syft` is not installed in the
+verification environment (not on `PATH`). `security.yml` already runs
+`anchore/sbom-action` in CI, so real SBOMs of this repo's own container
+exist somewhere in that pipeline's artifact history — wiring
+`sbom_diff.py` to two of them (current release vs. previous) is the
+natural next step, named as a next step, not done here.
 
-## 3. SBOM drift detection
+The distinction that gap illustrates is worth internalizing as a general
+principle for this whole zone: **"the tool works" and "the tool was
+verified against this environment" are different claims, and conflating
+them is exactly the kind of overclaim this book refuses to make.**
+`sbom_diff.py`'s diff logic is demonstrably correct against known-good
+fixtures. Whether it behaves correctly against a real, messy, 40-component
+CycloneDX document from an actual container build is a separate, still-open
+question. A resume or a status report that said "SBOM diffing: done" without
+that caveat would be lying by omission. `playbook/README.md` says it plainly
+instead — "Honest gap, not silently skipped" — which is the entire discipline
+of this zone, applied to a two-line tool.
 
-Generating one SBOM per release is necessary but not sufficient. The
-question that actually matters for supply-chain risk over time is: **what
-changed?** A new dependency silently pulled in, a transitive dependency
-quietly bumped three major versions, a package that disappeared between
-releases because a maintainer yanked it — all of that is a supply-chain
-changelog, and if you're not diffing SBOMs release-over-release, you're
-finding out about that changelog only when something breaks or a CVE forces
-the question.
+## 3. Waiver ledgers done right
 
-This repo's tool for that is `playbook/sbom_diff.py`, and its logic is
-genuinely simple and readable — it's a good teaching example of doing SBOM
-diffing without reaching for a heavyweight framework:
+Every scanning gate in a real pipeline eventually produces a finding that
+someone, correctly, decides not to fix right now — a low-severity issue in
+a vendored file you don't control, a CVE with no available patch and no
+reachable exploit path, a false positive the scanner can't be tuned around.
+The wrong way to handle that is a blanket suppression: an
+`# nosec`/`.trivyignore`/inline-comment that silences the finding forever,
+with no record of who approved it, why, or when it should be revisited.
+That pattern is a security anti-pattern for a specific reason: **suppressed
+findings accumulate silently and never expire**, and eighteen months later
+nobody remembers which of the forty suppressions in a codebase were
+genuinely reviewed risk acceptances and which were someone unblocking a
+build at 11pm and forgetting to come back.
 
-```python
-comps = lambda s: dict(mapMaybe(
-    lambda c: (c["name"], c.get("version", "?")) if "name" in c else NOTHING,
-    s.get("components", [])))
+The disciplined alternative is a **waiver ledger**: a structured record
+(this repo's is `playbook/waivers.json`) where each entry requires, at
+minimum, four fields — **rule** (which specific check is being waived),
+**path** (which specific file/resource it applies to, not a blanket "all
+findings of this type"), **reason** (a human-readable justification an
+auditor can read and evaluate), and **expiry** (a date after which the
+waiver stops applying). `triage.py`, this repo's SARIF-to-summary script,
+is waiver-aware — it cross-references findings against the ledger and
+reports a `waived:` count in every summary, so waived findings are visible
+in the output, not hidden from it.
 
-def main(old, new):
-    a, b = (comps(json.loads(Path(p).read_text())) for p in (old, new))
-    added   = sortOn(str, b.keys() - a.keys())
-    removed = sortOn(str, a.keys() - b.keys())
-    changed = sortOn(str, [(k, a[k], b[k]) for k in a.keys() & b.keys() if a[k] != b[k]])
-```
+**Why expiry dates matter, specifically.** An accepted risk from eighteen
+months ago is not the same accepted risk today. The threat landscape
+changes (a CVE with no known exploit gets a public PoC), the codebase
+changes (the file the waiver applied to gets refactored and the waiver's
+`path` field silently stops matching anything, or worse, starts matching
+something it was never reviewed against), and the person who approved the
+original waiver may have left the team. A waiver with no expiry date is a
+permanent, unreviewed exception — which is functionally identical to no
+gate existing at all for that rule/path combination, except it *looks*
+like governance because there's a ledger entry.
 
-It loads two CycloneDX documents, builds `{name: version}` maps out of each
-`components[]` array, and set-diffs the keys: names only in the new SBOM are
-`added`, names only in the old are `removed`, names in both with a different
-version are `changed`. Run it:
+**Auto-reactivation of expired waivers as a design principle.**
+`MASTER-PLAYBOOK.md` lists this explicitly: expired waivers reactivate
+automatically. The design principle behind that default matters more than
+the specific mechanism — a waiver ledger's *default* behavior on expiry
+must be "the finding comes back and blocks the gate again," not "the
+waiver silently stays in effect until someone notices." The failure mode
+this prevents is exactly the failure mode blanket suppression creates: a
+risk acceptance that was time-boxed on paper but permanent in practice
+because nobody built the mechanism that makes the time-box actually bind.
+A waiver ledger that requires a human to notice expiry and manually
+re-flag the finding is a ledger that will, eventually, have overdue
+entries nobody caught — auto-reactivation is what makes the expiry field
+mean something rather than being decorative.
 
-```
-sbom_diff.py sbom-old.json sbom-new.json
-```
+## 4. Evidence retention policy
 
-Output is a line per change (`+ name==version`, `- name==version`, `~ name
-old -> new`) plus a one-line summary count, and it always exits 0 —
-informational, not a gate (drift itself isn't a failure; an *unreviewed*
-drift is a process problem, not a tool problem).
+The waiver ledger and SBOM diffing are evidence that gets *generated*.
+Retention is the separate, easy-to-skip discipline of making sure that
+evidence still exists and is retrievable when someone needs it — which is
+never when you're generating it, and always later, under time pressure.
 
-Now the honest part, and this is the single best worked example in this
-whole book of the difference between "the logic is proven" and "the logic
-is proven against my real artifacts." `playbook/README.md` documents exactly
-this distinction for `sbom_diff.py`:
+**What to keep**, per `MASTER-PLAYBOOK.md`'s Zone 9 entry: SARIF (the
+structured static-analysis output format most scanners in this book's
+pipeline emit), SBOMs, and scan summaries — archived per run.
 
-> `syft` is not installed in this environment (not on `PATH`), so this one
-> is **not** re-verified against a real SBOM of this repo's containers — it
-> ran only against the zip's demo fixtures (`sbom-old.json`/`sbom-new.json`),
-> correctly reporting 1 added, 1 removed, 1 changed. Honest gap, not
-> silently skipped.
+**For how long, and why the retention period isn't uniform.**
+`MASTER-PLAYBOOK.md` states the policy as two tiers: **30 days in CI**
+(every pipeline run's artifacts — enough to debug a recent failure or
+answer "what did last Tuesday's build actually scan," but not meant to be
+an eternal archive of every commit's transient CI output) and
+**per-release, forever** (the SBOM, SARIF summary, and gate result for
+anything that actually shipped). The reasoning behind the split is
+practical, not arbitrary: CI runs against every PR, including ones that
+get abandoned, force-pushed over, or superseded within hours — retaining
+all of that forever is mostly noise. A *release*, by contrast, is a
+durable claim about what's running in production, and the question "what
+did we know about this release's security posture, and when did we know
+it" doesn't have a 30-day shelf life. A real incident six months from now
+is going to ask exactly that question, and "we don't have the scan output
+anymore, it aged out of CI retention" is not an answer an incident
+responder or an auditor will accept.
 
-Read that carefully, because it's the pattern to internalize for your own
-evidence work, not just this one script. The demo-fixture run *did*
-succeed, and it *did* correctly report the expected diff — that proves the
-diff algorithm is correct. What it does not prove is that the tool produces
-a correct, complete diff against this repo's own actual container SBOMs,
-because the environment this verification happened in never had `syft`
-installed to generate one. Those are two different claims, and conflating
-them is exactly the kind of quiet overclaim that gets someone in trouble in
-front of an assessor. The correct behavior — and the behavior this repo's
-own documentation models — is: run what you can, state precisely what you
-verified, and name the gap instead of hiding it or letting the reader
-infer more confidence than the evidence supports. "I ran the tool against
-demo fixtures and it's correct there; I have not yet run it against our real
-release artifacts because the generator wasn't installed" is a complete,
-honest, and *auditable* statement. An assessor can work with that. An
-assessor cannot work with silence, and will trust you much less once they
-discover silence was covering a gap.
+**This repo's real, committed examples of evidence retention done right**
+— not claimed, actually checked into version control where anyone can
+retrieve them without re-running anything:
 
-## 4. The waiver ledger
+- **`stig/scap-results.xml.gz`, `stig/scap-report.html`,
+  `stig/fail-rules.txt`** — the full machine-readable OpenSCAP results
+  (gzipped, 17MB raw / 1.3MB compressed), the full human-readable HTML
+  report with every rule's DISA rationale text, and the plain list of the
+  51 failing rule IDs from a real `oscap` DISA STIG evaluation against a
+  RHEL 8 (UBI8) filesystem. This is genuinely retrievable evidence: someone
+  asking "did rule X pass on the STIG scan" doesn't need to re-run
+  OpenSCAP — the answer is sitting in `stig/scap-report.html` right now.
+- **`k8s/cis-benchmark/kube-bench-report.txt`** — the full output of a
+  real `kube-bench` v0.9.4 run against a live `kind` cluster (62 PASS, 11
+  FAIL, 48 WARN), committed as a text file rather than only described in
+  prose.
+- **`jenkins/build-7-console.txt`** — the actual console log of Jenkins
+  build #7, an honest **FAILURE** (a real CRITICAL `trivy config` finding
+  in `infra/terraform/modules/azure-platform/main.tf` — a storage account
+  with no `network_rules` block, defaulting to `Allow`), archived as a
+  real artifact rather than summarized as a rounded-up "pipeline works."
 
-No scan pipeline runs clean forever, and pretending every finding gets fixed
-immediately produces one of two bad outcomes: either the gate blocks
-legitimate work indefinitely, or someone quietly disables the gate. The
-correct mechanism is a **waiver ledger** — an explicit, reviewed record of
-accepted risk, not a bypass.
+These three are worth sitting with as a set, because they demonstrate the
+same discipline three different ways: a STIG scan's evidence is a
+compressed XML blob plus a human-readable report, a CIS benchmark's
+evidence is a plain-text tool log, and a CI pipeline's evidence is a
+console transcript that records a *failure*, not just a success. None of
+them are summaries written after the fact from memory. All three answer
+"what did we know and when" without requiring anyone to re-run anything or
+trust an unsupported claim.
 
-This repo's `playbook/waivers.json` is the concrete shape:
+## 5. Reading this repo's own JOB.html as a Zone 9 artifact
 
-```json
-[
-  {"rule": "B602", "path": "app/run.py", "reason": "vetted subprocess use", "expires": "2026-12-31"},
-  {"rule": "B105", "path": "", "reason": "expired example", "expires": "2025-01-01"}
-]
-```
+`JOB.html`, this repo's own requirement-mapping page for the target job
+posting, is itself a Zone 9 artifact — a state-of-the-union report,
+structured the way a real audit-readiness document should be: one row per
+requirement, a status badge, and a link to where the evidence actually
+lives. It is worth reading as a worked example rather than just as
+supporting material, because its `OVERALL_BLUF` constant is a genuinely
+honest BLUF (Bottom Line Up Front) in the military/contracting sense — a
+single paragraph meant to be read first, that doesn't hedge and doesn't
+inflate.
 
-Every entry needs four fields, and each one earns its place:
+As of this writing, `OVERALL_BLUF` reads, in full:
 
-- **rule** — which specific finding is waived (a Bandit rule ID here; could
-  be a CVE ID, a STIG rule ID, anything a scanner emits as a stable
-  identifier). Never waive by description text — descriptions change
-  between scanner versions, IDs don't.
-- **path** — scope the waiver to the specific file or location. An empty
-  path (as in the second example above) waives the rule everywhere, which
-  is a much bigger blast radius and should be rare and deliberately chosen,
-  not a default.
-- **reason** — human-readable justification, reviewed like code. "vetted
-  subprocess use" tells the next reviewer *why* someone decided this
-  specific finding is acceptable risk, not just that someone clicked
-  approve.
-- **expires** — an ISO date, not a boolean. This is the field that makes
-  the whole mechanism honest.
+> "This sprint cycle, the DevSecOps effort has delivered verified
+> capability across all required areas: **1) Infrastructure as Code
+> (Terraform)** — full environments stand up from code in minutes,
+> verified against a live AWS account; **2) Container orchestration
+> (Kubernetes)** — hardened to the restricted standard, no root,
+> default-deny networking, 62 benchmark checks passed; **3) CI/CD
+> automation (GitHub Actions, GitLab CI, Jenkins)** — same pipeline in
+> three vendors, caught a live dependency vulnerability on first run and a
+> real Terraform misconfiguration on Jenkins; **4) Hybrid cloud (AWS,
+> Azure)** — AWS proven end-to-end, Azure built to identical standard;
+> **5) Identity & directory services (Samba4 AD)** — real domain stood up,
+> verified by live login and credential pull; **6) Compliance & hardening
+> (DISA STIG)** — scored DoD baseline, 67 pass / 51 fail of 409 rules,
+> each traceable; **7) Pipeline security scanning (SAST, SCA,
+> container/IaC scans)** — seven layered scans on every change, caught
+> real vulnerabilities including in the base image; **8) Developer
+> environments (Coder)** — server deployed live and healthy; **9)
+> Configuration management (Ansible)** — idempotence proven cold: one run
+> to correct, zero on rerun. Remaining items queued pending approval: live
+> Azure apply, Azure DevOps pipelines, Windows client + SCCM, STIG
+> remediation, Coder templates."
 
-`FIELD-MANUAL.md` states the underlying principle bluntly: **"Timestamps in
-waivers, not booleans: `expires` forces re-review; `permanent: true` is how
-waivers become policy without anyone deciding."** This is worth sitting
-with. An "accepted risk" that never expires isn't a risk decision at all —
-it's an unaddressed finding wearing a green checkmark. Risk changes over
-time: the threat landscape shifts, the code around the vetted subprocess
-call gets refactored by someone who didn't know why it was vetted, a
-dependency that was fine last year gets a CVE this year. An expiry date
-forces someone to look at the waiver again and make a fresh decision, rather
-than letting one person's judgment from eighteen months ago silently govern
-forever.
+Read that closely and notice what it's actually doing. It states a real
+number for the STIG result (67 pass / 51 fail of 409 rules) rather than
+"STIG compliant" or "STIG work completed." It states a real number for the
+Kubernetes benchmark (62 checks passed) rather than "hardened." It names a
+*specific* real finding the pipeline caught (a live dependency
+vulnerability, a real Terraform misconfiguration on Jenkins) rather than
+"security scanning works." And critically, it ends with an explicit,
+named punch list of what is *not* done — "Remaining items queued pending
+approval: live Azure apply, Azure DevOps pipelines, Windows client +
+SCCM, STIG remediation, Coder templates" — rather than quietly omitting
+those nine words and letting the reader assume everything is finished.
 
-Two more design principles worth carrying into any real program you run:
+**Contrast that with what a dishonest state-of-the-union would look
+like**, because the contrast is the actual teaching point: "DevSecOps
+implementation is complete across all required domains, with robust
+security controls in place and continuous monitoring operational." That
+sentence is grammatically identical in shape to a real BLUF and contains
+zero verifiable claims — no numbers, no named tool, no named gap, no way
+for a reader to check any part of it against evidence. It would pass a
+skim. It would not survive five minutes of an assessor asking "show me."
+`OVERALL_BLUF`'s actual text survives that, because every clause in it
+points at something checkable: a rule count, a benchmark score, a specific
+misconfiguration, a specific missing piece. That checkability — not the
+optimism or pessimism of the tone — is what makes it a real Zone 9
+artifact instead of a marketing paragraph.
 
-- **Two-approval rules for policy loosening.** Widening a waiver's scope,
-  extending an expiry, or raising a gate's tolerance threshold should never
-  be a single person's unilateral action — it's a policy decision, and
-  `FIELD-MANUAL.md`'s lifecycle map explicitly separates "Plan" phase policy
-  definition from day-to-day gate operation for exactly this reason. Treat
-  waiver-ledger changes like the code review they are: PR-reviewed, not
-  edited in place on a shared branch.
-- **Expired waivers reactivate automatically.** This is the design
-  principle that makes the whole ledger trustworthy rather than aspirational
-  paperwork: the moment the `expires` date passes, the waived finding goes
-  back to counting against the gate as if the waiver never existed — no
-  human has to remember to revoke it. `MASTER-PLAYBOOK.md`'s Zone 9 entry
-  states this as a load-bearing behavior of the system, and it's what
-  prevents "we'll revisit this waiver" from quietly becoming "we forgot
-  about this waiver forever." The second entry in the example ledger above
-  — `expires: "2025-01-01"`, well in the past relative to this book's
-  writing date — is exactly the state a live system should surface loudly:
-  an expired-but-present waiver, waiting to be either re-justified or
-  dropped, not silently honored.
+## 6. DevSecOps maturity models
 
-Every scan summary should surface a `waived:` count so the number is visible
-in the same place as pass/fail counts — a waiver ledger nobody looks at is
-functionally the same as no waiver ledger.
+A maturity model gives a team a vocabulary for answering "how good is our
+DevSecOps practice, really" without either false modesty or hand-waving.
+`playbook/FIELD-MANUAL.md` §8 gives a practical four-level checklist for
+this repo's own practice, worth using as a general template:
 
-## 5. Evidence retention
+- **L1 — Scan.** Secrets scanning, SAST, and dependency auditing run on
+  every PR, plus a weekly cron for drift. This is the floor: automated
+  detection exists, even if nothing downstream of it is disciplined yet.
+- **L2 — Gate.** A single policy chokepoint (this repo's `gate.py`) that
+  all scan summaries flow through, waivers with expiry (Section 3 above),
+  and a dirty-fixture regression test — proof the gate can actually fail,
+  not just pass by construction. This is where "we scan things" becomes
+  "we block things," which is the real inflection point most teams that
+  claim DevSecOps never actually cross.
+- **L3 — Supply chain.** SHA-pinned GitHub Actions (not tag-pinned, which
+  is mutable and spoofable), pinned and bot-bumped dependencies, an SBOM
+  generated per release, signed artifacts. This is where supply-chain
+  integrity — not just "our code is clean" but "the things we built our
+  code *from* are provably the things we think they are" — becomes a
+  gated property instead of an assumption.
+- **L4 — Operate.** Hardening baselines (STIG/CIS) automated and
+  continuously scored, scan freshness monitored (an automated check that
+  the *last* scan wasn't stale — this repo's `freshness.py`), incident
+  response roles named ahead of time rather than improvised during an
+  incident, and SBOM-driven blast-radius lookup (Section 2's "are we
+  affected by CVE-X" answered from stored data, in minutes).
 
-A scan that ran and produced results that nobody kept is, for audit
-purposes, indistinguishable from a scan that never ran. Retention policy is
-therefore not a storage-hygiene afterthought — it's the mechanism that makes
-every other control in this book *provable* later.
+**A practical self-assessment has to be quantified, not vibes-based**, and
+this repo's own zone-coverage table from `MASTER-PLAYBOOK.md` is a worked
+example of doing that honestly:
 
-The pattern this repo's playbook documents: **SARIF + SBOM + summaries
-archived per run**, with two different retention windows for two different
-purposes:
+| Zone | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|---|---|---|---|---|---|---|---|---|
+| Plays | 2 | 2 | 4 | 2 | 7 | 3 | 2 | 3 | 4 |
+| Executed | 0 | 1 | 2 | 1 | 6 | 0 | 1 | 1 | 2 |
 
-- **30 days in CI** — the short-lived, high-volume evidence: every PR's
-  SARIF output, every branch build's dependency scan. This window exists to
-  answer "what did the last few weeks of development look like" and to give
-  triage and debugging a recent history, without paying to store every
-  transient CI run forever.
-- **Per-release, forever** — the evidence tied to something that actually
-  shipped. A release's SBOM, its gate summary, its STIG/CIS scan snapshot —
-  these need to survive as long as the artifact they describe might still
-  be running somewhere, which for a DoD-adjacent system can be years. An
-  ATO is typically reauthorized on a cycle (commonly three years, though
-  continuous monitoring is increasingly the expectation under newer RMF
-  guidance) — evidence has to outlive not just the release, but the
-  authorization period built on top of it.
+**29 plays, 14 executed** — just under half, stated as a number rather than
+rounded up to "most of the playbook is done" or rounded down to "not much
+is done." Two zones (1 and 6) show zero executed plays, and
+`MASTER-PLAYBOOK.md` names *why* rather than leaving the zero
+unexplained: Zone 1 is process-bound (planning/sourcing controls that need
+an organizational process to execute against, not a script) and Zone 6 is
+credential-bound (needs real cloud credentials this environment doesn't
+have). Naming the reason a number is zero is exactly the difference
+between an honest maturity self-assessment and a scorecard that just looks
+bad with no context.
 
-The payoff for getting this right is concrete and operational, not just
-audit-theater: the question **"do we ship X?"** — some vulnerable package,
-some deprecated library, some component under a newly-discovered CVE —
-should be answerable by grepping stored SBOMs across releases, not by
-polling engineers' memories or re-cloning old branches to regenerate
-manifests after the fact. `MASTER-PLAYBOOK.md` states this explicitly as the
-retention policy's reason for existing: the blast-radius question gets
-answered from stored evidence, not institutional memory. Institutional
-memory leaves the company; stored evidence doesn't.
+Applying the L1–L4 ladder to this repo honestly: it clears L1 cleanly
+(secrets/SAST/deps scanning genuinely runs and genuinely catches things —
+see Chapter 5). It clears most of L2 — `gate.py` is a real chokepoint with
+a proven fail path, and the waiver ledger design is sound — but the
+toolbox that implements it (`playbook/`) is explicitly **not wired into
+live CI** (`.github/workflows/ci.yml` and `security.yml` still call
+gitleaks/bandit/pip-audit/trivy/tfsec/kube-linter directly), which is a
+real L2 gap, not a passed checkbox. It's partway into L3: SBOMs are
+generated in CI (`anchore/sbom-action`) but `actions_pin.py` found a real,
+unfixed gap — **21 `uses:` lines tag-pinned, not SHA-pinned**, across this
+repo's GitHub Actions workflows — so "supply chain" is aspirational, not
+achieved, on that specific dimension. L4 is real in pieces (STIG and CIS
+scans exist and are scored, `freshness.py` works) but not continuous — these
+are one-time scans, not a running monitored baseline. That's the honest
+answer: **this repo sits at a strong L1, a partial L2, and a partial L3**,
+with real L4 building blocks that aren't yet operating continuously. A
+maturity self-assessment that can't produce a sentence that specific isn't
+actually an assessment.
 
-## 6. STIG as flagship evidence
+## 7. Audit readiness in practice
 
-This is where Zone 5 (the technical hardening/scanning zone) and Zone 9 meet
-directly, and it's worth walking the connection explicitly because it's the
-clearest real example this repo has of a technical control becoming
-accreditation evidence.
+What does an auditor, a new manager doing a 90-day review, or a security
+review board actually ask for? In practice, some version of these
+questions, almost always with a deadline measured in hours or days, not
+weeks:
 
-`stig/README.md` documents a real, scored OpenSCAP XCCDF evaluation: `oscap`
-1.3.9 running DISA's own published SCAP Security Guide content for RHEL 8
-(`ssg-rhel8-ds.xml`, profile
-`xccdf_org.ssgproject.content_profile_stig`) against a genuine RHEL 8
-filesystem (Red Hat's UBI8 base image, exported and probed offline via
-`OSCAP_PROBE_ROOT`). The scored result:
+- "Show me the SBOM for what's currently running in production."
+- "Show me the most recent vulnerability scan and its results, with dates."
+- "Show me every currently-waived finding, who approved it, and when it
+  expires."
+- "Show me your compliance baseline (STIG/CIS) scan and the delta from
+  100%."
+- "Show me evidence that your pipeline actually blocks bad changes, not
+  just that it runs."
 
-```
-   67 PASS
-   51 FAIL
-  286 notapplicable
-    5 notchecked
- 1163 notselected
-----
-  409 rules actually in scope for the STIG profile (67+51+286+5)
-```
+A well-run Zone 9 answers every one of those from stored evidence, in
+minutes: `syft <target> -o cyclonedx-json` output already archived
+per-release answers the first; the archived SARIF/summary from the last CI
+run (or `stig/scap-report.html` / `k8s/cis-benchmark/kube-bench-report.txt`
+for baseline questions) answers the second and fourth; `playbook/waivers.json`
+plus `triage.py`'s `waived:` count answers the third directly, field by
+field; and `playbook/README.md`'s reproduced `pipeline.sh demo` run
+(exit 1 against seeded bad input, real command transcript included)
+answers the fifth — a gate that can't fail on demand is decoration, and
+this repo proves its gate can fail, on the record.
 
-That is Zone 5's output — a technical scan against a real filesystem,
-producing a real pass/fail count. Zone 9's job is what happens to that
-output next: it becomes evidence, in three forms this repo actually
-produces and retains —
+A poorly-run Zone 9 answers the same five questions with "let me get back
+to you" and then spends the next several days reconstructing what should
+have been sitting in an archive the whole time — pulling old build logs
+out of CI systems that may have already rotated them past retention,
+asking whoever wrote a suppression six months ago whether they remember
+why, re-running scans that should already have results on file. The
+difference between those two experiences is not talent or effort; it's
+entirely whether Sections 2–4 of this chapter were actually practiced
+before the question got asked.
 
-- **`scap-results.xml`** (gzipped, 1.3MB compressed) — the machine-readable
-  XCCDF results, the canonical artifact an automated evidence pipeline or a
-  downstream tool would ingest.
-- **`scap-report.html`** — the self-contained human-readable report,
-  including every rule's DISA rationale text, exactly the form an AO or a
-  security control assessor (SCA) would actually read during a package
-  review.
-- **`fail-rules.txt`** — the specific list of the 51 failing rule IDs, which
-  is the seed of a POA&M: each failing rule ID becomes a line item with an
-  owner, a remediation plan, and a target date, which is precisely what an
-  ATO package's Plan of Action and Milestones document is built from.
+## 8. The quarterly re-audit discipline
 
-This is exactly the kind of artifact a real ATO package needs, and it's
-worth naming precisely why the *unremediated* baseline is the honest and
-correct first deliverable rather than something to be embarrassed about.
-`stig/README.md`'s own framing: all 51 failures are genuine, expected gaps
-in an unconfigured base image — PAM password-complexity policy
-(`pam_faillock`, `pam_pwquality`), crypto policy not set to
-`DISA_STIG` (`update-crypto-policies --set DISA_STIG` is the real fix), RPM
-integrity checks not enforced. None of that is a flaw in the pipeline; it's
-the accurate, honest state of a stock base image before site-specific
-hardening is applied. A real STIG compliance program runs exactly this
-sequence: **baseline first** (scan, unremediated, score it honestly), **then
-remediate** (apply `--remediate` or an Ansible role built from SSG's
-published remediation playbooks), **then re-scan** to show the FAIL count
-drop as a documented delta. That before/after pair — not the baseline alone
-— is what eventually goes in front of an AO. A baseline with no remediation
-plan is an admission; a baseline with a dated remediation plan and a
-re-scan showing progress is exactly the evidence trail RMF continuous
-monitoring wants to see. `stig/README.md` names the missing remediation pass
-as an honest, undone next step rather than glossing over it — that's the
-correct posture for evidence documentation generally, and it's the posture
-this chapter has been modeling throughout.
+`MASTER-PLAYBOOK.md`'s own scope statement contains a line worth taking
+as seriously as any technical claim in this book: **"no fixed document
+survives tool churn... re-audit this document against the QRG
+quarterly."** That is this repo's own stated practice for itself, and it
+names a real Zone 9 failure mode that has nothing to do with scanners or
+ledgers: **documentation rot**. A playbook, a runbook, a compliance
+mapping, or a maturity self-assessment that was accurate the day it was
+written and has not been checked against reality since is not evidence —
+it's a historical document wearing evidence's clothing. Tools get
+upgraded, actions get renamed, a script that worked against last quarter's
+`syft` version silently breaks against this quarter's, a waiver that was
+supposed to expire slips past its date because nobody re-ran the ledger
+check. None of those are exotic failures; they are the default outcome of
+leaving any document unattended for a fixed period of time.
 
-## 7. Compliance maturity models
+The discipline that prevents it is unglamorous and exactly what the
+sentence says: **re-check the whole 9-zone playbook against current
+reality on a fixed cadence**, not "whenever someone remembers" or "before
+the next audit." That means literally re-running the commands
+`playbook/README.md` documents — `secrets.py`, `deps.py`, `cve.py`,
+`actions_pin.py`, `triage.py`, `gate.py`, `freshness.py` — against the
+current state of the repo, not trusting that last quarter's "0 findings,
+exit 0" is still true. It means checking whether `syft` is finally
+installed in the verification environment, closing the SBOM-diff gap from
+Section 2 instead of letting it become permanent by default. It means
+re-reading `actions_pin.py`'s 21-finding result and asking whether the
+number has changed, not assuming it's still 21 because nobody looked. The
+quarterly cadence matters because it's frequent enough to catch drift
+before it compounds into a full-blown "our documentation describes a
+system that no longer exists," and infrequent enough to be sustainable
+rather than becoming its own burden. A maturity model that isn't itself
+re-audited on a cadence is exactly the kind of thing Section 6 warns
+against: a number stated once and never checked again is a vibe wearing a
+number's clothing.
 
-Zone 9 closes its own loop with a maturity self-assessment, and
-`FIELD-MANUAL.md` §8 gives a concrete, four-level ladder rather than an
-abstract maturity-model diagram. In plain English:
+## 9. Tying the book together
 
-- **L1 — Scan.** The absolute floor: secrets scanning, SAST, and dependency
-  audit run on every pull request, plus a weekly scheduled scan so CVEs
-  disclosed against unchanged code don't rot silently. If you're at L1,
-  you're finding things; you're not yet controlling what happens after you
-  find them.
-- **L2 — Gate.** A single policy chokepoint (one place that decides
-  pass/fail, not five inconsistent ad-hoc checks), waivers with expiry (not
-  permanent bypass flags), and a regression test proving the gate actually
-  fails on known-bad input (a "dirty fixture" test — if your gate has never
-  been proven to fail, you don't know it works). L2 is where "we scan
-  things" becomes "we enforce a decision."
-- **L3 — Supply chain.** SHA-pinned GitHub Actions (not tag-pinned — tags
-  are mutable), pinned and bot-bumped dependencies, an SBOM generated per
-  release, and signed artifacts (cosign or equivalent). L3 is where you stop
-  trusting that your build inputs are what you think they are and start
-  proving it cryptographically.
-- **L4 — Operate.** Hardening baselines (STIG/CIS) automated rather than
-  run by hand once, scan freshness actively monitored (something alerts if
-  the weekly cron silently stopped firing), incident response roles named
-  in advance rather than improvised during an incident, and SBOM-driven
-  blast-radius lookup (the "do we ship X" question from Section 5,
-  answerable in minutes). L4 is where evidence generation stops being a
-  project and becomes an operating characteristic of the system.
+Step back across all nine zones and one honest question repeats at every
+stage, in a different costume each time: **did this actually happen, and
+can I prove it?** Zone 1 (Plan & Source) asks it of requirements and
+architecture decisions. Zone 2 (Develop) asks it of code review and secure
+coding practice. Zone 3 (Build & Test) asks it of the build pipeline
+itself — did this artifact actually get built from this source, verifiably.
+Zone 4 (Secure) asks it of every scanner — did the gate actually run, and
+can it actually fail. Zone 5 (Provision) asks it of infrastructure-as-code
+— does the environment that exists match the code that describes it. Zone
+6 (Deploy & Orchestrate) asks it of the deployment itself — is what's
+running actually what was intended to ship. Zone 7 (the seventh zone in
+this book's numbering, Operate & Observe) asks it of production — is the
+system's real behavior visible, or just assumed healthy. And Zone 9,
+finally, asks the question of *all the other zones at once*: can the
+answers to all of the above be produced on demand, from stored evidence,
+without reconstruction?
 
-How to honestly self-assess where a given control sits: don't grade the
-zone as a whole — grade each control against the checklist line it
-actually satisfies, and be willing to sit at different levels for different
-controls simultaneously. This repo's own honest state is a useful worked
-example: dependency/secret/SAST scanning on every PR is solidly L1-L2 (gated,
-waivers with expiry, a proven dirty-fixture regression test);
-SHA-pinning is a named, open L3 gap (21 `uses:` lines are tag-pinned, not
-SHA-pinned — `playbook/README.md` reports this as a genuine finding, not
-fixed, not hidden); SBOM generation is L3 (real, automated, per-build);
-SBOM *diffing* is proven-on-fixtures but not yet L3-complete against real
-artifacts (Section 3); the STIG baseline is a real L4-shaped artifact but
-without the remediate-and-rescan delta that L4 operational maturity
-implies. That's not one maturity score — it's a checklist with some boxes
-checked, some half-checked, and some honestly unchecked, which is the only
-honest way a maturity self-assessment should ever look. `MASTER-PLAYBOOK.md`
-itself models this same discipline at the whole-playbook level: it reports
-"29 plays, 14 executed, zero zones at zero" rather than claiming full
-coverage, and names the two zones (1 and 6) with no executed play instead of
-omitting them.
+That's why Zone 9 is the capstone rather than just another item on the
+list. It isn't a ninth independent discipline sitting next to the other
+eight — it's the discipline that determines whether the other eight were
+real. A team can run flawless scans in Zone 4 and still fail an audit in
+Zone 9, if the scan results aren't retained. A team can build a technically
+excellent Terraform module in Zone 5 and still fail Zone 9, if nobody can
+show when it was last validated against drift. Zone 9 is where the rest of
+this book either pays off — because the evidence was captured honestly and
+retained deliberately, the way `stig/`, `k8s/cis-benchmark/`, and
+`jenkins/build-7-console.txt` demonstrate it was captured in this repo —
+or reveals itself as theater, because the actions were real but nobody
+kept the receipts.
 
-## 8. Day-one checklist for this zone
+## 10. Day-one checklist for this zone
 
-If you inherit or start a real DevSecOps Evidence & Govern function, here is
-where to begin, in order:
+1. **Find out what evidence retention policy, if any, currently exists.**
+   Ask directly: where do scan results go after a CI run finishes, and for
+   how long are they kept? If the honest answer is "they age out with the
+   CI job and nobody archives releases separately," that's the first gap
+   to close — see Section 4's 30-day/per-release-forever split.
+2. **Ask to see the most recent audit or compliance report, and check its
+   age.** A STIG or CIS report from fourteen months ago being presented as
+   "current" is a documentation-rot problem (Section 8), not a compliance
+   win — check the date on it before believing the number.
+3. **Find where SBOMs are stored, if they exist at all.** Ask specifically
+   whether they're generated per build (noise) or per release (signal),
+   and whether anyone has ever actually diffed two of them to answer a
+   real "are we affected by CVE-X" question, or whether that capability is
+   theoretical.
+4. **Check for any waivers with no expiry date.** This is a concrete,
+   fast, high-value red flag to look for on day one — open the waiver
+   ledger (or grep for `nosec`/`.trivyignore`/inline suppression comments
+   if there's no structured ledger yet) and count how many suppressions
+   have no expiry field at all. Every one of those is an unreviewed,
+   effectively-permanent risk acceptance hiding behind what looks like
+   governance.
+5. **Ask who owns the quarterly re-audit, and when the last one happened.**
+   If the honest answer is "nobody" or "we've never done one," that's the
+   single highest-leverage process gap to raise, because it's the gap that
+   lets every other gap in this checklist go undetected indefinitely.
+6. **Pull one real finding through the whole chain, start to finish** — a
+   scan result, through the gate, through the waiver ledger if waived,
+   into retained evidence — and confirm each handoff actually produces a
+   retrievable artifact. If any link in that chain is "trust me, it
+   happened," that's the specific spot to fix first.
 
-1. **Find where SBOMs and scan evidence are actually archived, and for how
-   long.** Check CI artifact retention settings (GitHub Actions defaults to
-   90 days unless configured otherwise — don't assume it matches your
-   intended policy), and separately confirm whether per-release evidence
-   has a *different*, longer-lived home (a release-tagged artifact store,
-   an evidence bucket, a document management system tied to the ATO
-   package) rather than living only inside CI's own retention window.
-2. **Audit every existing waiver for expired-but-still-active status.**
-   Pull the waiver ledger and check every `expires` date against today.
-   Anything already past its date and still suppressing a finding is either
-   silently broken tooling (should be reactivating automatically — verify
-   it actually does) or an unreviewed risk acceptance that's overdue for a
-   real decision.
-3. **Identify what compliance framework the organization is actually
-   accountable to.** Don't assume — ask directly, and get it in writing if
-   possible: NIST SP 800-53 controls under RMF, a specific DoD Instruction
-   (8510.01 governs the RMF process itself), CMMC level if this is a
-   contractor context, FedRAMP if there's a cloud-hosted component. The
-   controls you need evidence for, and the format an assessor expects, both
-   depend entirely on which framework governs.
-4. **Confirm SBOM generation is actually wired into the pipeline for every
-   shipped artifact**, not just the one service someone set it up for first
-   — check every container/service that ships, not just the one with an
-   existing `security.yml` job.
-5. **Locate the most recent STIG/CIS (or equivalent hardening) scan for
-   every system in scope, and check its age.** A scan from eight months ago
-   is a stale baseline, not current evidence — RMF continuous monitoring
-   expects recency, not a one-time snapshot.
-6. **Ask directly whether a POA&M exists, and whether it's current.** Every
-   known open finding (every STIG FAIL, every unwaived scan finding past
-   its intended fix date) should have a line in it with an owner and a
-   target date. If it doesn't exist yet, the STIG `fail-rules.txt`-style
-   list from Section 6 is exactly the seed to build one from.
+## 11. Troubleshooting quick-reference
 
-## 9. Troubleshooting quick-reference
-
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| Auditor asks "prove you scanned X on date Y" and you can't find the artifact | Retention window too short, or evidence was never separated from short-lived CI storage | Fix retention policy going forward (per-release evidence to permanent storage, not just CI's 30-90 day default); for the immediate gap, be honest that the artifact doesn't exist rather than reconstructing a fake one — a documented gap with a fix date is recoverable, a fabricated artifact is not |
-| A waiver expired silently and nobody noticed | No automated surfacing of the `waived:` count in scan summaries, or the reactivation logic was never actually verified to work | Confirm gate logic truly treats an expired waiver as absent (test it against a deliberately-expired fixture, the same "dirty fixture" discipline as L2); add the expired-waiver count to every summary output, not just total findings |
-| SBOM generation succeeds but produces an empty or incomplete manifest | Syft ran against the wrong path (e.g., a monorepo root with no manifest file at that exact location), or a private/vendored dependency isn't resolvable so its entry gets silently dropped | Check the tool's own exit output/logs for skipped-package warnings, not just exit code 0; run `syft dir:. -o cyclonedx-json` and manually spot-check a known dependency's presence before trusting automation over a new path |
-| Evidence retention policy conflicts with storage cost | Treating all evidence as one tier (everything kept forever, or everything on a short CI window) instead of the two-tier model | Apply the two-window pattern from Section 5 deliberately: short CI window for high-volume per-PR evidence, permanent (or authorization-cycle-length) retention only for per-release evidence — this is a policy decision to make explicitly with stakeholders, not a default to inherit silently |
+| Situation | What to do |
+|---|---|
+| An auditor asks a question with no stored evidence to answer it | Say so directly — "we don't have that evidence retained" is a correct, defensible answer; fabricating or reconstructing-from-memory a plausible-looking answer is not. Then close the retention gap (Section 4) so the same question has a real answer next time. |
+| A waiver with an expired date is still silently suppressing a finding | Treat it as a broken control, not a paperwork oversight — auto-reactivation (Section 3) should have caught this; audit why it didn't (ledger not re-checked on a cadence, or the reactivation logic itself isn't wired into the gate), fix the mechanism, and re-run the gate against the now-unwaived finding. |
+| An SBOM diff shows an unexpected new component | Treat it as a real supply-chain investigation, not noise to dismiss: identify what introduced it (direct dependency bump vs. a transitive dependency someone upstream added), whether it was reviewed by anyone, and whether it has known CVEs before assuming it's benign. |
+| A maturity self-assessment doesn't match what an external scan finds | Trust the external scan and correct the self-assessment, not the other way around — a maturity model is only useful if it's falsifiable by evidence; a team that adjusts the scan's credibility instead of the self-assessment has turned the maturity model into theater, which is exactly the failure mode this whole chapter exists to prevent. |
 
 ---
 
-Runnable recipes for this zone — `sbom_diff.py` usage, the waiver ledger
-JSON shape, and the `syft`/`oscap` command forms referenced throughout this
-chapter — are collected in the book's toolkit appendix.
+The title of this book is "The Wheel — What Does Not Need To Be
+Reinvented," and this final chapter is where that title earns its keep
+most literally. Nothing in Zone 9 is exotic: SBOMs, waiver ledgers, a
+retention policy with two tiers, a four-level maturity ladder, a quarterly
+re-check. None of it required inventing a new methodology — every piece of
+it is a well-worn wheel that RMF assessors, SOC 2 auditors, and every
+mature engineering org before you have already built and rebuilt. What
+this book's own appendix toolkit (`playbook/`) and this repo's real
+artifacts (`stig/`, `k8s/cis-benchmark/`, `jenkins/`) demonstrate across
+all nine chapters is that the hard part was never inventing the wheel — it
+was assembling the pieces correctly, running them for real instead of
+describing them, and being honest in writing about which parts actually
+turned and which parts are still sitting half-bolted-on. That's the whole
+discipline this book teaches, condensed into one zone: don't reinvent the
+wheel, don't just claim you rolled it — put it on the ground, push it, and
+keep the receipt.
 
 
 ---

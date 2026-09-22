@@ -10,7 +10,7 @@ Take the word apart: Dev-Sec-Ops. Security sits in the middle on purpose. Not
 bolted onto the end after Dev builds it and Ops ships it — folded into the
 loop, running on every commit, before a human ever has to remember to ask for
 it. That is the entire pitch of the discipline, and it is also the part most
-easiliy faked on a resume, because "security is embedded in our pipeline" is
+easily faked on a resume, because "security is embedded in our pipeline" is
 a sentence anyone can write. The only way to tell the difference between a
 team that means it and a team that's decorating a diagram is to ask: show me
 the last real finding your gates caught, and show me the fix.
