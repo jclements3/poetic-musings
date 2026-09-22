@@ -48,6 +48,12 @@ a.src:hover{background:var(--code-bg)}
 @media (min-width: 1400px) {
   .wrap svg{max-width:1600px;margin:0 auto;display:block}
 }
+.introcols{display:grid;grid-template-columns:1fr;gap:1rem;align-items:start}
+@media (min-width: 1100px) {
+  .introcols{grid-template-columns:1fr 460px}
+}
+.srcmap{border:1px solid var(--rule);border-radius:8px;background:var(--panel);padding:0.6rem}
+.srcmap svg{width:100%;height:auto;display:block}
 </style></head><body><div class="wrap-page">
 <div class="pageheader">
   <div class="pageheader-left">
@@ -67,6 +73,8 @@ a.src:hover{background:var(--code-bg)}
     <a href="https://github.com/jclements3/poetic-musings" target="_blank">Repo ↗</a>
   </nav>
 </div>
+<div class="introcols">
+<div>
 <p class="sub">One portable controller: 3D-printed 49-key panel (~504 × 150 mm face, 16 mm key pitch), ULX3S ECP5-85F inside,
 Oracle as the brains. Boots to a mode menu on the bar TFT; every demonstration reachable in under a
 minute, no laptop. Sleigh Glide travels alongside (tube + driver board, gate ribbon to the box); the Erand49 harp is a separate
@@ -101,6 +109,52 @@ Every spoke takes its knobs from S0–S4 and the keys and shows its output on V0
 <a href="PROGRAM.md">PROGRAM.md</a> (program index) ·
 <a href="Erand49/DESIGN.md">Erand49/DESIGN.md</a> ·
 <a href="Erand49/frame-spec.md">Erand49/frame-spec.md</a>
+</div>
+</div>
+</div>
+
+<div class="srcmap">
+<svg viewBox="0 0 600 620" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Source layout: root Panel and Oracle with ten hardware spokes">
+<style>
+.smt{font-size:13px;font-weight:700;fill:var(--fg);font-family:ui-monospace,Menlo,Consolas,monospace}
+.sms{font-size:10px;fill:var(--muted);font-family:ui-monospace,Menlo,Consolas,monospace}
+.smw{font-size:12px;font-weight:700;fill:#ffffff;font-family:ui-monospace,Menlo,Consolas,monospace}
+.smtitle{font-size:12px;font-weight:700;letter-spacing:.04em;fill:var(--accent);font-family:ui-monospace,Menlo,Consolas,monospace}
+</style>
+<text x="10" y="18" class="smtitle">SOURCE LAYOUT — root + 10 spokes (PROGRAM.md)</text>
+<!-- spoke lines -->
+<g stroke="var(--rule)" stroke-width="2">
+<line x1="300" y1="310" x2="300" y2="118"/>
+<line x1="300" y1="310" x2="410" y2="153"/>
+<line x1="300" y1="310" x2="479" y2="252"/>
+<line x1="300" y1="310" x2="479" y2="368"/>
+<line x1="300" y1="310" x2="410" y2="467"/>
+<line x1="300" y1="310" x2="300" y2="502"/>
+<line x1="300" y1="310" x2="190" y2="467"/>
+<line x1="300" y1="310" x2="121" y2="368"/>
+<line x1="300" y1="310" x2="121" y2="252"/>
+<line x1="300" y1="310" x2="190" y2="153"/>
+</g>
+<!-- root -->
+<rect x="230" y="270" width="140" height="80" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+<text x="300" y="300" class="smt" text-anchor="middle">ROOT</text>
+<text x="300" y="316" class="sms" text-anchor="middle">Panel/ (P) — body</text>
+<text x="300" y="330" class="sms" text-anchor="middle">Oracle/ (O) — brains</text>
+<!-- spoke nodes -->
+<g>
+<circle cx="300.0" cy="100.0" r="34" fill="#3b5a7a"/><text x="300.0" y="96" class="smw" text-anchor="middle">Erand49</text><text x="300.0" y="110" class="sms" text-anchor="middle" fill="#e9e4d6">E — harp</text>
+<circle cx="423.4" cy="140.1" r="34" fill="#3b5a7a"/><text x="423.4" y="136" class="smw" text-anchor="middle">Theremin</text><text x="423.4" y="150" class="sms" text-anchor="middle" fill="#e9e4d6">T — antenna</text>
+<circle cx="499.7" cy="245.1" r="34" fill="#3b5a7a"/><text x="499.7" y="241" class="smw" text-anchor="middle">IRIG</text><text x="499.7" y="255" class="sms" text-anchor="middle" fill="#e9e4d6">I — clock</text>
+<circle cx="499.7" cy="374.9" r="34" fill="#3b5a7a"/><text x="499.7" y="371" class="smw" text-anchor="middle">Coil</text><text x="499.7" y="385" class="sms" text-anchor="middle" fill="#e9e4d6">C — sleigh link</text>
+<circle cx="423.4" cy="479.9" r="34" fill="#3b5a7a"/><text x="423.4" y="476" class="smw" text-anchor="middle">UHF</text><text x="423.4" y="490" class="sms" text-anchor="middle" fill="#e9e4d6">U — beacon</text>
+<circle cx="300.0" cy="520.0" r="34" fill="#3b5a7a"/><text x="300.0" y="516" class="smw" text-anchor="middle">SDR</text><text x="300.0" y="530" class="sms" text-anchor="middle" fill="#e9e4d6">S — ADC</text>
+<circle cx="176.6" cy="479.9" r="34" fill="#3b5a7a"/><text x="176.6" y="476" class="smw" text-anchor="middle">Imaging</text><text x="176.6" y="490" class="sms" text-anchor="middle" fill="#e9e4d6">I — camera</text>
+<circle cx="100.3" cy="374.9" r="34" fill="#3b5a7a"/><text x="100.3" y="371" class="smw" text-anchor="middle">Network</text><text x="100.3" y="385" class="sms" text-anchor="middle" fill="#e9e4d6">N — PHY</text>
+<circle cx="100.3" cy="245.1" r="34" fill="#3b5a7a"/><text x="100.3" y="241" class="smw" text-anchor="middle">GPS</text><text x="100.3" y="255" class="sms" text-anchor="middle" fill="#e9e4d6">G — GPS</text>
+<circle cx="176.6" cy="140.1" r="34" fill="#3b5a7a"/><text x="176.6" y="132" class="smw" text-anchor="middle">MAIDEN/</text><text x="176.6" y="144" class="smw" text-anchor="middle">doppler</text><text x="176.6" y="158" class="sms" text-anchor="middle" fill="#e9e4d6">M — radar</text>
+</g>
+<text x="10" y="608" class="sms">Every spoke DESIGN.md lives under its own top-level directory (MAIDEN/firmware/doppler/ pending promotion). Click a node's name in SOURCE — spokes to open it.</text>
+</svg>
 </div>
 </div>
 
