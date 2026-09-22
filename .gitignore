@@ -73,3 +73,8 @@ crash.*.log
 # .env.example placeholder.
 ad-lab/.env
 __pycache__/
+
+# course/: the purchased course PDF is third-party copyrighted material,
+# never committed. TOC.md (a derived summary) and book/ (original content
+# written for this repo) are fine to commit.
+course/*.pdf
