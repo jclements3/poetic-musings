@@ -43,15 +43,6 @@ h2.section-title {
   padding: 0.22rem 0.6rem; margin: 1rem 0 0.5rem; border-radius: 4px;
 }
 
-.featured {
-  background: var(--panel); border: 1px solid var(--rule); border-radius: 8px;
-  padding: 0.8rem 1rem; box-shadow: var(--shadow); border-left: 4px solid var(--accent);
-  margin-bottom: 0.5rem;
-}
-.featured h3 { margin: 0 0 0.4rem; font-size: 0.98rem; }
-.featured p { margin: 0 0 0.55rem; font-size: 0.85rem; }
-.featured p:last-child { margin-bottom: 0; }
-
 .grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0.6rem;
   margin-bottom: 0.5rem;
@@ -108,17 +99,20 @@ footer.colophon {
     </nav>
   </div>
 
-  <div class="featured">
-    <h3>“Tell me about yourself” — primary answer</h3>
-    <p>I started working the technical side of DevSecOps when I designed and procured $1.2 million of computer equipment for the Missile Logistics Center — 1,531 users, 8 Sperry supercomputers, and I ran the cables, updated the software, automated tasks, ran backups, and did user support myself.</p>
-    <p>I then transitioned into the “catch bugs quickly” zone — unit testing, property-based testing, formal methods testing, using automated tools to find bugs and vulnerabilities. As Chief Engineer on AMRDEC’s DARPA SAFE secure-computing program, formal verification with machine-assisted proofs cut security vulnerabilities 95% — a custom hardware/software architecture that defeats the top 25 cyber-attacks out of the box.</p>
-    <p>I’ve built AGILE style cooperative-adversarial relationships between developers, testers, quality assurance, customers, and management — presenting problems, solutions, and paths forward, not just findings. I’ve done penetration testing, software IV&amp;V, and lab planning through procurement, installation, and operations — up to a $22 million annual budget across 13 companies and 7 contract vehicles.</p>
-    <p>I transitioned to Valkyrie’s Artificial Intelligence Lead and worked on RiPPiTT (Rapid Parametric Prototypes Threat Tool) simulations in a DevSecOps environment — demonstrated at the SMD conference. Developed prototypes for the Army Corps of Engineers to use drones to detect cracks in dams and bridges. Helped develop AI reverse engineering binaries for NASIC. Got really burned with AI code generation and have many lessons learned as the world replaces junior software developers with AI. As DevSecOps evolves, this experience will come in handy.</p>
-    <p>Currently I’m working on an IRAD FPGA product for the test ranges with a complete DevSecOps pipeline and a customized dashboard. That pipeline is what caught a CRITICAL Terraform misconfiguration a standard scanner missed, and root-caused why 51 of 409 STIG controls were failing on a RHEL image instead of just reporting the count. With this pipeline in place I can focus on the core signal processing FPGA hardware and software.</p>
-  </div>
-
   <h2 class="section-title">Story Bank — likely follow-ups</h2>
   <div class="grid">
+
+    <div class="card">
+      <h3>“Tell me about yourself” — primary answer</h3>
+      <p>I started working the technical side of DevSecOps when I designed and procured $1.2 million of computer equipment for the Missile Logistics Center — 1,531 users, 8 Sperry supercomputers, and I ran the cables, updated the software, automated tasks, ran backups, and did user support myself.</p>
+      <p>I then transitioned into the “catch bugs quickly” zone — unit testing, property-based testing, formal methods testing, using automated tools to find bugs and vulnerabilities. As Chief Engineer on AMRDEC’s DARPA SAFE secure-computing program, formal verification with machine-assisted proofs cut security vulnerabilities 95% — a custom hardware/software architecture that defeats the top 25 cyber-attacks out of the box.</p>
+      <details>
+        <summary>Long version</summary>
+        <p>I’ve built AGILE style cooperative-adversarial relationships between developers, testers, quality assurance, customers, and management — presenting problems, solutions, and paths forward, not just findings. I’ve done penetration testing, software IV&amp;V, and lab planning through procurement, installation, and operations — up to a $22 million annual budget across 13 companies and 7 contract vehicles.</p>
+        <p>I transitioned to Valkyrie’s Artificial Intelligence Lead and worked on RiPPiTT (Rapid Parametric Prototypes Threat Tool) simulations in a DevSecOps environment — demonstrated at the SMD conference. Developed prototypes for the Army Corps of Engineers to use drones to detect cracks in dams and bridges. Helped develop AI reverse engineering binaries for NASIC. Got really burned with AI code generation and have many lessons learned as the world replaces junior software developers with AI. As DevSecOps evolves, this experience will come in handy.</p>
+        <p>Currently I’m working on an IRAD FPGA product for the test ranges with a complete DevSecOps pipeline and a customized dashboard. That pipeline is what caught a CRITICAL Terraform misconfiguration a standard scanner missed, and root-caused why 51 of 409 STIG controls were failing on a RHEL image instead of just reporting the count. With this pipeline in place I can focus on the core signal processing FPGA hardware and software.</p>
+      </details>
+    </div>
 
     <div class="card">
       <h3>“That AI code generation experience — what burned you?”</h3>
