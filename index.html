@@ -72,6 +72,38 @@ header.top .links a {
 }
 header.top .links a:hover { text-decoration: underline; }
 
+nav.links { display: flex; flex-wrap: wrap; align-items: center; gap: 0 1rem; }
+.navdrop { position: relative; margin-left: 1rem; }
+.navdrop summary {
+  color: var(--accent);
+  font-size: 0.82rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.navdrop summary::-webkit-details-marker { display: none; }
+.navdrop summary::after { content: " ▾"; }
+.navdrop summary:hover { text-decoration: underline; }
+.navdrop[open] summary::after { content: " ▴"; }
+.navdrop-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  box-shadow: var(--shadow);
+  padding: 0.5rem 0.75rem;
+  margin-top: 0.4rem;
+  min-width: 12rem;
+  white-space: nowrap;
+}
+.navdrop-menu a { margin-left: 0 !important; }
+
 .live-strip {
   display: flex;
   flex-wrap: wrap;
@@ -266,21 +298,33 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
   </div>
   <nav class="links">
     <a href="qrg.html" style="font-weight:700;">📖 QRG / Help</a>
-    <a href="https://jclements3.github.io/poetic-musings/" target="_blank" style="font-weight:700;">🌐 Live site ↗</a>
-    <a href="https://github.com/jclements3/poetic-musings" target="_blank">Repo ↗</a>
-    <a href="https://github.com/jclements3/poetic-musings/actions" target="_blank">Actions ↗</a>
-    <a href="https://github.com/jclements3/poetic-musings/security/code-scanning" target="_blank">Code scanning ↗</a>
-    <a href="devsecops.html">Full book (HTML)</a>
-    <a href="pipeline.html">DevSecOps</a>
-    <a href="DEFSECOPS.md">Build log (DEFSECOPS.md)</a>
-    <a href="SECURITY.md">SECURITY.md</a>
-    <a href="JOB.html">Job Req Mapping</a>
-    <a href="LAYOUT.html">Source Layout</a>
     <a href="devsecops-explainer.html" style="font-weight:700;">🧭 DevSecOps Explained</a>
-    <a href="docs.html">Docs</a>
-      <a href="playbook.html">Playbook</a>
-      <a href="jenkins-study.html">Jenkins Study Notes</a>
-      <a href="me.html">Me</a>
+    <a href="https://jclements3.github.io/poetic-musings/" target="_blank" style="font-weight:700;">🌐 Live site ↗</a>
+
+    <details class="navdrop">
+      <summary>Repo &amp; CI</summary>
+      <div class="navdrop-menu">
+        <a href="https://github.com/jclements3/poetic-musings" target="_blank">Repo ↗</a>
+        <a href="https://github.com/jclements3/poetic-musings/actions" target="_blank">Actions ↗</a>
+        <a href="https://github.com/jclements3/poetic-musings/security/code-scanning" target="_blank">Code scanning ↗</a>
+        <a href="DEFSECOPS.md">Build log (DEFSECOPS.md)</a>
+        <a href="SECURITY.md">SECURITY.md</a>
+      </div>
+    </details>
+
+    <details class="navdrop">
+      <summary>Docs &amp; Guides</summary>
+      <div class="navdrop-menu">
+        <a href="devsecops.html">Full book (HTML)</a>
+        <a href="pipeline.html">DevSecOps Pipeline</a>
+        <a href="JOB.html">Job Req Mapping</a>
+        <a href="LAYOUT.html">Source Layout</a>
+        <a href="docs.html">Docs</a>
+        <a href="playbook.html">Playbook</a>
+        <a href="jenkins-study.html">Jenkins Study Notes</a>
+        <a href="me.html">Me</a>
+      </div>
+    </details>
   </nav>
 </header>
 

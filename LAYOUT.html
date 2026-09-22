@@ -14,35 +14,45 @@
   }
 }
 * { box-sizing: border-box; }
-html,body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 ui-monospace,Menlo,Consolas,monospace}
-main{max-width:1100px;margin:0 auto;padding:16px}
-header.top {
+html,body{margin:0;background:var(--bg);color:var(--fg);
+  font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  line-height:1.5;font-size:clamp(0.95rem, 0.85rem + 0.2vw, 1.05rem)}
+.wrap-page{max-width:none;width:100%;margin:0 auto;padding:1rem clamp(1rem, 3vw, 2.5rem) 2.5rem}
+
+.pageheader {
   display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
-  gap:0.5rem 1.5rem;padding-bottom:10px;margin-bottom:10px;border-bottom:2px solid var(--rule);
+  gap:0.4rem 1.5rem;margin:0 0 1.2rem;padding-bottom:0.7rem;border-bottom:1px solid var(--rule);
 }
-header.top h1{margin:0;font-size:20px}
-header.top .links a{color:var(--accent);text-decoration:none;font-size:13px;margin-left:14px}
-header.top .links a:hover{text-decoration:underline}
-h2{font-size:17px;margin:28px 0 8px;border-bottom:2px solid var(--rule);padding-bottom:4px;color:var(--fg)}
-p{margin:0 0 10px} .sub{color:var(--muted)}
-table{border-collapse:collapse;width:100%;font-size:14px} th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--rule);vertical-align:top} th{background:var(--accent-soft)}
-.wrap{overflow:auto;border:1px solid var(--rule);margin:8px 0;background:var(--panel)} .wrap svg{min-width:900px}
-.chain{font-size:15px;font-weight:700;letter-spacing:.04em;padding:10px;background:var(--accent-soft);border-left:6px solid var(--accent)}
+.pageheader-left{display:flex;flex-wrap:wrap;align-items:baseline;gap:0.4rem 1rem;min-width:0}
+h1{font-size:1.3rem;margin:0}
+nav.links{display:flex;flex-wrap:wrap;gap:0.9rem;font-size:0.88rem;margin-left:auto}
+nav.links a{color:var(--accent);text-decoration:none}
+nav.links a:hover{text-decoration:underline}
+
+h2{font-size:0.95rem;text-transform:uppercase;letter-spacing:0.04em;
+  color:var(--accent);background:var(--accent-soft);
+  padding:0.45rem 0.85rem;margin:1.8rem 0 0.8rem;border-radius:6px;font-weight:700;border-bottom:none}
+p{margin:0 0 10px} .sub{color:var(--muted);font-size:0.9rem;max-width:90ch}
+table{border-collapse:collapse;width:100%;font-size:0.88rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--rule);vertical-align:top} th{background:var(--accent-soft)}
+.wrap{overflow:auto;border:1px solid var(--rule);border-radius:8px;margin:8px 0;background:var(--panel)} .wrap svg{width:100%;min-width:700px}
+.chain{font-size:15px;font-weight:700;letter-spacing:.04em;padding:10px;background:var(--accent-soft);border-left:6px solid var(--accent);font-family:ui-monospace,Menlo,Consolas,monospace}
 .k{font-weight:700}
-.srcnav{font-size:13px;background:var(--accent-soft);border:1px solid var(--accent);border-radius:4px;padding:10px 12px;margin:10px 0}
+.srcnav{font-size:0.85rem;background:var(--accent-soft);border:1px solid var(--accent);border-radius:8px;padding:10px 12px;margin:10px 0;font-family:ui-monospace,Menlo,Consolas,monospace}
 .srcnav .lbl2{color:var(--accent);font-weight:700;margin-right:6px}
 .srcnav a{color:var(--fg);text-decoration:none;border-bottom:1px solid var(--accent);margin:0 2px}
 .srcnav a:hover{background:var(--code-bg)}
 .srcnav .grp{margin:4px 0}
 a.src{color:var(--fg);text-decoration:none;border-bottom:1px dotted var(--accent)}
 a.src:hover{background:var(--code-bg)}
-@media (max-width: 560px) {
-  header.top .links{display:flex;flex-wrap:wrap}
-  header.top .links a{margin-left:0;margin-right:14px}
+@media (min-width: 1400px) {
+  .wrap svg{max-width:1600px;margin:0 auto;display:block}
 }
-</style></head><body><main>
-<header class="top">
-  <h1>PM CONTROLLER — FINAL LAYOUT</h1>
+</style></head><body><div class="wrap-page">
+<div class="pageheader">
+  <div class="pageheader-left">
+    <h1>PM Controller — Final Layout</h1>
+  </div>
   <nav class="links">
     <a href="index.html">← Dashboard</a>
     <a href="qrg.html">QRG / Help</a>
@@ -52,10 +62,11 @@ a.src:hover{background:var(--code-bg)}
     <a href="docs.html">Docs</a>
       <a href="playbook.html">Playbook</a>
       <a href="jenkins-study.html">Jenkins Study Notes</a>
+      <a href="me.html">Me</a>
     <a href="https://jclements3.github.io/poetic-musings/" target="_blank">Live site ↗</a>
     <a href="https://github.com/jclements3/poetic-musings" target="_blank">Repo ↗</a>
   </nav>
-</header>
+</div>
 <p class="sub">One portable controller: 3D-printed 49-key panel (~504 × 150 mm face, 16 mm key pitch), ULX3S ECP5-85F inside,
 Oracle as the brains. Boots to a mode menu on the bar TFT; every demonstration reachable in under a
 minute, no laptop. Sleigh Glide travels alongside (tube + driver board, gate ribbon to the box); the Erand49 harp is a separate
@@ -437,4 +448,4 @@ and they work with eyes on the room. If the matched TFT kit offers an I²C capac
 (GT911-class), take it as a bonus — tap-to-select on the mode menu is a cheap I²C reader block — but
 nothing in any mode may <em>require</em> touch. USB-host touch panels are ruled out (USB host on the
 FPGA is a project of its own).</p>
-</main></body></html>
+</div></body></html>
