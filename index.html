@@ -155,15 +155,42 @@ nav.links { display: flex; flex-wrap: wrap; align-items: center; gap: 0 1rem; }
 .pill.partial { background: var(--partial-bg); color: var(--partial-border); border: 1px solid var(--partial-border); }
 .pill.gap { background: var(--gap-bg); color: var(--gap-border); border: 1px solid var(--gap-border); }
 
+.pillar-section {
+  display: flex;
+  align-items: stretch;
+  gap: 0.6rem;
+  margin: 0.85rem 0 0.5rem;
+}
 h2.section-title {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
   font-size: 0.76rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--accent);
   background: var(--accent-soft);
-  padding: 0.22rem 0.6rem;
-  margin: 0.85rem 0 0.5rem;
+  padding: 0.6rem 0.3rem;
+  margin: 0;
   border-radius: 4px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.pillar-section > .grid,
+.pillar-section > table.scan-table {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+@media (max-width: 700px) {
+  .pillar-section { flex-direction: column; }
+  h2.section-title {
+    writing-mode: horizontal-tb;
+    transform: none;
+    padding: 0.22rem 0.6rem;
+  }
 }
 
 .grid {
@@ -340,6 +367,7 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
   </nav>
 </header>
 
+<div class="pillar-section">
 <h2 class="section-title">Platform Pillars</h2>
 <div class="grid">
 
@@ -450,7 +478,9 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
   </div>
 
 </div>
+</div>
 
+<div class="pillar-section">
 <h2 class="section-title">Security Scanning Gates</h2>
 <table class="scan-table">
   <thead><tr><th>Gate</th><th>Tool</th><th>Catches</th><th>Scope</th></tr></thead>
@@ -464,6 +494,7 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
     <tr><td>Findings hub</td><td><code>CodeQL</code> SARIF sink</td><td>Centralizes bandit/Trivy/tfsec results in one dashboard</td><td>GitHub code scanning</td></tr>
   </tbody>
 </table>
+</div>
 
 </div>
 
