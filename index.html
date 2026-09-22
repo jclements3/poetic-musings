@@ -284,6 +284,19 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
 <body>
 <div class="wrap">
 
+<div class="live-strip" id="live-strip">
+  <span class="live-strip-label">Live job status:</span>
+  <span class="live-job" data-job="Lint Python (app/status-service)">ruff<i class="dot"></i></span>
+  <span class="live-job" data-job="Python unit tests (status-service)">pytest<i class="dot"></i></span>
+  <span class="live-job" data-job="Secrets Detection (gitleaks)">gitleaks<i class="dot"></i></span>
+  <span class="live-job" data-job="SAST - Python (bandit)">bandit<i class="dot"></i></span>
+  <span class="live-job" data-job="SBOM + Dependency Vulnerability Scan">pip-audit<i class="dot"></i></span>
+  <span class="live-job" data-job="Container Image Scan (Trivy)">Trivy<i class="dot"></i></span>
+  <span class="live-job" data-job="IaC Scan - Terraform (tfsec)">tfsec<i class="dot"></i></span>
+  <span class="live-job" data-job="K8s Manifest Scan (kube-linter)">kube-linter<i class="dot"></i></span>
+  <a href="#" id="live-refresh">refresh</a><span id="live-stamp"></span>
+</div>
+
 <header class="top">
   <h1>poetic-musings — DevSecOps Dashboard</h1>
   <div class="summary-bar">
@@ -327,19 +340,6 @@ a.term:hover, .toolbadges span[title]:hover { background: var(--accent-soft); }
     </details>
   </nav>
 </header>
-
-<div class="live-strip" id="live-strip">
-  <span class="live-strip-label">Live job status:</span>
-  <span class="live-job" data-job="Lint Python (app/status-service)">ruff<i class="dot"></i></span>
-  <span class="live-job" data-job="Python unit tests (status-service)">pytest<i class="dot"></i></span>
-  <span class="live-job" data-job="Secrets Detection (gitleaks)">gitleaks<i class="dot"></i></span>
-  <span class="live-job" data-job="SAST - Python (bandit)">bandit<i class="dot"></i></span>
-  <span class="live-job" data-job="SBOM + Dependency Vulnerability Scan">pip-audit<i class="dot"></i></span>
-  <span class="live-job" data-job="Container Image Scan (Trivy)">Trivy<i class="dot"></i></span>
-  <span class="live-job" data-job="IaC Scan - Terraform (tfsec)">tfsec<i class="dot"></i></span>
-  <span class="live-job" data-job="K8s Manifest Scan (kube-linter)">kube-linter<i class="dot"></i></span>
-  <a href="#" id="live-refresh">refresh</a><span id="live-stamp"></span>
-</div>
 
 <h2 class="section-title">Platform Pillars</h2>
 <div class="grid">

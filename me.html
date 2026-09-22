@@ -9,45 +9,86 @@
 :root {
   --bg: #f7f8fa; --panel: #ffffff; --fg: #1c1f24; --muted: #5b6472;
   --accent: #0a5a96; --accent-soft: #eaf2fa; --rule: #d8dee6; --code-bg: #f0f1f3;
+  --shadow: 0 1px 3px rgba(20,25,35,0.08), 0 1px 2px rgba(20,25,35,0.06);
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #14161a; --panel: #1b1e24; --fg: #e6e8eb; --muted: #9aa4b2;
     --accent: #6fb3e0; --accent-soft: #16293a; --rule: #2c3038; --code-bg: #22252b;
+    --shadow: 0 1px 3px rgba(0,0,0,0.4);
   }
 }
 * { box-sizing: border-box; }
 body {
   margin: 0; background: var(--bg); color: var(--fg);
   font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-  line-height: 1.6; font-size: clamp(0.95rem, 0.85rem + 0.2vw, 1.05rem);
+  line-height: 1.45; font-size: clamp(0.92rem, 0.8rem + 0.2vw, 1rem);
 }
-.wrap { max-width: 860px; width: 100%; margin: 0 auto; padding: 1rem clamp(1rem, 3vw, 2.5rem) 2.5rem; }
+.wrap { max-width: none; width: 100%; margin: 0 auto; padding: 0.6rem clamp(1rem, 3vw, 2.5rem) 2rem; }
 
 .pageheader {
   display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
-  gap: 0.4rem 1.5rem; margin: 0 0 1.2rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--rule);
+  gap: 0.4rem 1.5rem; margin: 0 0 0.9rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--rule);
 }
 .pageheader-left { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; min-width: 0; }
 h1 { font-size: 1.3rem; margin: 0; }
-.sub { color: var(--muted); margin: 0; font-size: 0.9rem; max-width: 72ch; }
-nav.links { display: flex; flex-wrap: wrap; gap: 0.9rem; font-size: 0.88rem; margin-left: auto; }
+.sub { color: var(--muted); margin: 0; font-size: 0.85rem; max-width: 72ch; }
+nav.links { display: flex; flex-wrap: wrap; gap: 0.9rem; font-size: 0.82rem; margin-left: auto; }
 nav.links a { color: var(--accent); text-decoration: none; }
 nav.links a:hover { text-decoration: underline; }
 
-h3 { font-size: 1.1rem; margin: 2.2rem 0 0.6rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--rule); color: var(--fg); }
-p { margin: 0 0 0.9rem; }
-ul, ol { margin: 0 0 0.9rem; padding-left: 1.4rem; }
-li { margin-bottom: 0.35rem; }
-strong { color: var(--accent); }
-code {
-  font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.9em;
-  background: var(--code-bg); padding: 0.05em 0.35em; border-radius: 3px;
+h2.section-title {
+  font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--accent); background: var(--accent-soft);
+  padding: 0.22rem 0.6rem; margin: 1rem 0 0.5rem; border-radius: 4px;
 }
 
+.featured {
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 8px;
+  padding: 0.8rem 1rem; box-shadow: var(--shadow); border-left: 4px solid var(--accent);
+  margin-bottom: 0.5rem;
+}
+.featured h3 { margin: 0 0 0.4rem; font-size: 0.98rem; }
+.featured p { margin: 0 0 0.55rem; font-size: 0.85rem; }
+.featured p:last-child { margin-bottom: 0; }
+
+.grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+.grid.mini { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+@media (min-width: 1500px) { .grid:not(.mini) { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 900px) and (max-width: 1499px) { .grid:not(.mini) { grid-template-columns: repeat(2, 1fr); } }
+
+.card {
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 8px;
+  padding: 0.6rem 0.75rem 0.7rem; box-shadow: var(--shadow); border-top: 4px solid var(--accent);
+}
+.card.mini { border-top-width: 3px; padding: 0.55rem 0.65rem 0.6rem; }
+.card h3 { margin: 0 0 0.3rem; font-size: 0.86rem; line-height: 1.3; }
+.card p { margin: 0.3rem 0; font-size: 0.8rem; color: var(--fg); }
+.card p:first-of-type { margin-top: 0; }
+.card strong { color: var(--accent); }
+.card code {
+  font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.9em;
+  background: var(--code-bg); padding: 0.05em 0.3em; border-radius: 3px;
+}
+.card details { margin-top: 0.4rem; font-size: 0.8rem; }
+.card details summary {
+  cursor: pointer; color: var(--accent); font-weight: 600; font-size: 0.78rem;
+  list-style: none; user-select: none;
+}
+.card details summary::-webkit-details-marker { display: none; }
+.card details summary::before { content: "▸ "; }
+.card details[open] summary::before { content: "▾ "; }
+.card details ul { margin: 0.3rem 0; padding-left: 1.1rem; }
+.card details li { margin-bottom: 0.35rem; }
+.card ul { margin: 0.3rem 0; padding-left: 1.1rem; font-size: 0.8rem; }
+.card li { margin-bottom: 0.25rem; }
+
 footer.colophon {
-  margin-top: 2.5rem; padding-top: 0.8rem; border-top: 1px solid var(--rule);
-  color: var(--muted); font-size: 0.82rem;
+  margin-top: 1.5rem; padding-top: 0.6rem; border-top: 1px solid var(--rule);
+  color: var(--muted); font-size: 0.78rem;
 }
 </style>
 </head>
@@ -67,440 +108,169 @@ footer.colophon {
     </nav>
   </div>
 
-<h3
-id="tell-me-about-yourself-primary-working-answer-narrative-my-own-voice">“Tell
-me about yourself” — PRIMARY working answer (narrative, my own
-voice)</h3>
-<p>I started working the technical side of DevSecOps when I designed and
-procured $1.2 million of computer equipment for the Missile Logistics
-Center — 1,531 users, 8 Sperry supercomputers, and I ran the cables,
-updated the software, automated tasks, ran backups, and did user support
-myself.</p>
-<p>I then transitioned into the “catch bugs quickly” zone — unit
-testing, property-based testing, formal methods testing, using automated
-tools to find bugs and vulnerabilities. As Chief Engineer on AMRDEC’s
-DARPA SAFE secure-computing program, formal verification with
-machine-assisted proofs cut security vulnerabilities 95% — a custom
-hardware/software architecture that defeats the top 25 cyber-attacks out
-of the box.</p>
-<p>I’ve built AGILE style cooperative-adversarial relationships between
-developers, testers, quality assurance, customers, and management —
-presenting problems, solutions, and paths forward, not just findings.
-I’ve done penetration testing, software IV&amp;V, and lab planning
-through procurement, installation, and operations — up to a $22 million
-annual budget across 13 companies and 7 contract vehicles.</p>
-<p>I transitioned to Valkyrie’s Artificial Intelligence Lead and worked
-on RiPPiTT (Rapid Parametric Prototypes Threat Tool) simulations in a
-DevSecOps environment. Developed prototypes for the Army Corps of
-Engineers to use drones to detect cracks in dams and bridges. Helped
-develop AI reverse engineering binaries for NASIC. Got really burned
-with AI code generation and have many lessons learned as the world
-replaces junior software developers with AI. As DevSecOps evolves, this
-experience will come in handy.</p>
-<p>Currently I’m working on an IRAD FPGA product for the test ranges
-with a complete DevSecOps pipeline and a customized dashboard. That
-pipeline is what caught a CRITICAL Terraform misconfiguration a standard
-scanner missed, and root-caused why 51 of 409 STIG controls were failing
-on a RHEL image instead of just reporting the count. With this pipeline
-in place I can focus on the core signal processing FPGA hardware and
-software.</p>
-<h3
-id="likely-follow-up-1-tell-me-about-that-ai-code-generation-experience-what-burned-you-short-version">Likely
-follow-up #1: “Tell me about that AI code generation experience — what
-burned you?” — SHORT version</h3>
-<p>Over about 9 months I repeatedly used a top-tier AI coding assistant
-to port working physics/GNC simulation code between languages — C# to
-Rust, Python to Rust. Every time, the ported code compiled and looked
-right, but the covariance matrix math was wrong. Not once — repeatedly.
-Property-based testing and unit testing both missed it — only a
-subject-matter expert’s visual inspection actually caught the bug. So
-now AI-generated code gets the same verification gate as anything else —
-arguably stricter, since a fluent, confident, wrong answer is a failure
-mode a human reviewer is less likely to catch by eye. That’s a real,
-current DevSecOps risk — AI code entering a pipeline is just a newer
-flavor of “don’t trust it because it looks right, verify it.”</p>
-<h3
-id="likely-follow-up-1-tell-me-about-that-ai-code-generation-experience-what-burned-you-long-version">Likely
-follow-up #1: “Tell me about that AI code generation experience — what
-burned you?” — LONG version</h3>
-<p><strong>The failure mode, specifically:</strong> over about 9 months,
-using a top-tier AI coding subscription, I repeatedly tried to have AI
-port working code between languages — C# to Rust, Python to Rust — on
-physics/GNC simulation code where correctness is the entire point. Every
-time, the ported code looked plausible and compiled, but the covariance
-matrix math was wrong. Not once — repeatedly, across many attempts over
-that period. The AI could not reliably preserve the actual mathematical
-semantics across the language port; it could produce code that read
-correctly without being correct.</p>
-<p><strong>How it was caught:</strong> not by trusting the output — by
-independent verification against the original. Property-based testing
-against the known-good source implementation, function by function,
-failed. Unit testing failed. Only visual inspection by a SME caught the
-bug. If I had merged on “it compiles and looks right,” the errors would
-have shipped silently into a simulation whose whole value is numerical
-correctness.</p>
-<p><strong>The concrete change:</strong> I don’t trust AI-generated code
-translated from a working implementation in another language without
-independently verifying it against that original, the same rigor I’d
-apply to any safety- or correctness-critical port regardless of who or
-what wrote it. AI-assisted code gets the same test/verification gate as
-anything else — arguably a stricter one, since a fluent,
-confident-looking wrong answer is a specific new failure mode a human
-developer is less likely to produce. AI is like a junior developer with
-suboptimal and misleading test results (like happy pass tests).</p>
-<p><strong>Why this matters for the role:</strong> AI-generated code
-entering a pipeline is a real, current DevSecOps risk — same category as
-an unvetted dependency, just a newer one, and I’ve hit its actual
-failure mode firsthand, not hypothetically. The gate discipline is the
-same instinct as the Terraform/STIG root-cause work below: don’t trust
-that something is right because it looks right — verify it
-independently, and this is exactly the emerging security surface a
-DevSecOps practice needs to account for as AI-assisted development
-spreads.</p>
-<h3
-id="likely-follow-up-2-walk-me-through-that-terraformstig-catch-in-more-detail.-short-version">Likely
-follow-up #2: “Walk me through that Terraform/STIG catch in more
-detail.” — SHORT version</h3>
-<p><strong>Terraform:</strong> A Jenkins build passed every gate — lint,
-tests, secrets scan, SAST, SBOM, dependency scan, container scan — then
-failed on the IaC stage. <code>trivy config</code> caught a real
-CRITICAL: a storage account in the Terraform with no network rules
-block, so it defaulted to public access. The same commit had already
-passed GitHub Actions’ <code>tfsec</code> scan clean —
-<code>tfsec</code> simply has no rule for that misconfiguration class.
-Same code, two tools, two different verdicts. Lesson: a passing scan
-proves that tool found nothing, not that nothing’s wrong — which is why
-I don’t sign off on a single tool’s “clean.”</p>
-<p><strong>STIG:</strong> A real DISA STIG scan against a RHEL8 image
-came back 51 failures out of 409 rules evaluated. Instead of treating
-that as 51 problems, I root-caused them into three buckets —
-PAM/password policy, crypto policy, RPM package integrity — each
-traceable to one root cause: a vendor base image ships unopinionated
-defaults on purpose, because those are site-specific hardening
-decisions, not vendor bugs. The scan’s value isn’t “the image is
-broken,” it’s “here’s exactly which rules the hardening pass has to
-touch.” Same root-cause instinct I’ve used in FRACAS for 20 years, just
-pointed at a security scan instead of a hardware failure report.</p>
-<h3
-id="likely-follow-up-2-walk-me-through-that-terraformstig-catch-in-more-detail.-long-version">Likely
-follow-up #2: “Walk me through that Terraform/STIG catch in more
-detail.” — LONG version</h3>
-<p><strong>Terraform / CRITICAL misconfig, real and verifiable in this
-repo</strong> (<code>course/book/chapter-03-build-and-test.md</code> §4,
-Jenkins build #7):</p>
-<ul>
-<li>Jenkins build #7 of the <code>devsecops-pipeline</code> job ran a
-full gate: lint, test, secrets scan, SAST, SBOM, dependency scan,
-container scan — all passed clean — then failed at the IaC scan
-stage.</li>
-<li><code>trivy config</code> (Aqua’s actively-maintained successor to
-<code>tfsec</code>, which was archived by its own maintainer) flagged a
-real CRITICAL finding:
-<code>infra/terraform/modules/azure-platform/main.tf:23-51</code> — an
-<code>azurerm_storage_account</code> resource with no
-<code>network_rules</code> block, so the implicit default action is
-<code>Allow</code> — public network access to the storage account by
-default.</li>
-<li><strong>The catch, specifically:</strong> the same commit, same
-target directory, was also scanned by <code>tfsec</code> in the GitHub
-Actions pipeline — and <code>tfsec</code> didn’t flag it. Its
-Terraform-only, narrower ruleset simply doesn’t have a rule for this
-misconfiguration class. Two tools, same input, different results — and
-the narrower one was the one wired into the “official” pipeline.</li>
-<li><strong>The lesson to state out loud:</strong> tool coverage is not
-uniform, and a passing scan from one tool is not proof of security —
-it’s proof that tool’s specific ruleset found nothing. That’s why the
-gate needs the actively-maintained, broader-coverage tool, and why a
-real finding was left in place rather than quietly fixed — the failed
-build IS the evidence the gate works.</li>
-</ul>
-<p><strong>STIG / 51-of-409 root cause, real and verifiable</strong>
-(<code>chapter-05-secure.md</code>):</p>
-<ul>
-<li>Real OpenSCAP DISA STIG scan against a RHEL8 image, 409 rules
-evaluated in-scope (1,163 more correctly excluded as not-selected for
-that profile). 51 failed. I root-caused all 51 into three categories
-instead of treating them as 51 separate problems:
-<ol type="1">
-<li><strong>PAM password/account policy</strong>
-(<code>pam_faillock</code>, <code>pam_pwquality</code>, etc.) — root
-cause: base OS images ship PAM in vendor-default configuration, because
-password-complexity policy is site-specific and can’t be baked in by a
-vendor. Verify with <code>cat /etc/security/pwquality.conf</code>.</li>
-<li><strong>Crypto policy</strong> (SSH cipher/MAC hardening) — root
-cause: RHEL’s system-wide crypto policy defaults to
-general-compatibility, not <code>DISA_STIG</code>. Verify with
-<code>update-crypto-policies --show</code>; fix is
-<code>update-crypto-policies --set DISA_STIG</code> — one command, but
-it changes what ciphers the whole box negotiates, so it’s not something
-to run blind on a box with live traffic.</li>
-<li><strong>RPM package integrity</strong>
-(<code>rpm_verify_hashes</code>, <code>gpgcheck_local_packages</code>) —
-root cause: package-manager-level integrity verification isn’t enforced
-by default. Verify with <code>rpm -Va</code> and check
-<code>gpgcheck=1</code> in <code>/etc/dnf/dnf.conf</code>.</li>
-</ol></li>
-<li><strong>The point to make explicitly:</strong> none of these 51 are
-bugs in the base image — a minimal, unopinionated OS image doing
-minimal, unopinionated things is <em>correct</em> vendor behavior. A
-STIG scan’s value isn’t telling you the image is broken, it’s telling
-you exactly which rules a hardening pass has to touch, by rule ID,
-instead of guessing. That’s the root-cause-analysis instinct from
-decades of IV&amp;V/FRACAS work, applied to a security scan instead of a
-hardware failure report.</li>
-</ul>
-<h3 id="tell-me-about-a-time-you-led-a-team-short-version">“Tell me
-about a time you led a team” — SHORT version</h3>
-<p>It started with one sentence: “We need IV&amp;V for the GMD-RKV
-interceptor, about 1.5 FTE.” I grew that into a 17-person team and a
-defensible, metrics-driven IV&amp;V process, and I wrote and presented a
-paper on the model I built to run it: “Moneyball IV&amp;V.” The idea,
-borrowed straight from the book — stop buying activities, start buying
-outcomes. Traditional IV&amp;V sells Level-of-Effort: hours against a
-Scope of Work, with no answer to “is the fielded software actually
-better?” Moneyball IV&amp;V reduces the whole management problem to one
-number, Defect Removal Efficiency, anchored to real industry data from
-26,000 other software projects, with weekly metrics instead of
-status-report adjectives. That process — objective, in-phase,
-defect-focused — is what took the effort from 1.5 FTE to 17, a $22
-million annual budget across 13 companies and 7 contract vehicles, and
-earned MDA Letters of Recognition for Innovative Agile IV&amp;V two
-years running. The model is also what kept the budget funded: asked in a
-budget drill “what if your budget was cut a million dollars,” I didn’t
-answer with opinion, I answered with a number — here’s how many defects
-go unremoved and get fielded instead. I could run it forward too: given
-3 months of funding, here’s the predicted number of SEV-1 defects that
-funding would actually catch versus miss.</p>
-<h3 id="tell-me-about-a-time-you-led-a-team-long-version">“Tell me about
-a time you led a team” — LONG version</h3>
-<p><strong>How it started:</strong> a single ask — “we need IV&amp;V for
-the GMD-RKV interceptor, about 1.5 FTE.” No process, no team, no budget
-line beyond that.</p>
-<p><strong>What I built it into:</strong> I grew that into a 17-person
-team, and — more important than the headcount — I built and formalized
-the actual management model underneath it, which I wrote up and
-presented as a paper: “Moneyball IV&amp;V.” By the time I was GME-S
-IV&amp;V Deputy, the scope had grown to all of GMD — Ground Systems,
-Booster, Redesigned Kill Vehicle, Exo-atmospheric Kill Vehicle — a $22
-million annual budget across 13 companies and 7 contract vehicles, plus
-two labs and new facility development.</p>
-<p><strong>The innovation, specifically — the Moneyball IV&amp;V
-model:</strong> the paper’s core argument, borrowed directly from the
-Moneyball baseball analogy: stop buying activities, start buying
-outcomes. Traditional IV&amp;V cost estimates are Level-of-Effort —
-hours against a Scope of Work — with no real answer to “after the
-funding’s spent, is the fielded software better?” Moneyball IV&amp;V
-reduces the whole management challenge to one number: Defect Removal
-Efficiency (DRE), a predictive cost model anchored to Capers Jones’
-dataset of 26,000 other software development efforts. Instead of status
-reports saying “continuing to look at this,” stakeholders get weekly
-graphs of planned versus actual defects removed. It’s the same shift as
-in-phase, distributed Agile IV&amp;V generally: assess alongside
-development as it happens, not after a phase is already done, and make
-the value objectively visible every week instead of asserted.</p>
-<p><strong>Proof it worked, not just my opinion of it:</strong> MDA
-Letter of Recognition for Innovative Agile IV&amp;V on the Redesigned
-Kill Vehicle in 2017, and again for GME-S more broadly in 2018 — the
-same innovation recognized two years running by the customer, not just
-internally. Plus MDA Individual and Best Team Recognition in 2019. I
-also formally presented the Moneyball IV&amp;V paper and model to the
-organization, not just used it quietly — it was built to be replicated,
-with every equation and input documented so other stakeholders could run
-it themselves.</p>
-<p><strong>The model is also what kept the budget alive.</strong> In a
-budget drill I was asked, “What if your budget was cut by $1 million?”
-Because the model predicts defect removal as a function of funding, I
-didn’t answer with opinion — I answered with a number: here’s how many
-additional defects go unremoved and get fielded instead, quantified. I
-could run the same model forward too — given 3 months of funding, here’s
-the predicted number of SEV-1 defects that funding level would actually
-catch versus miss. That’s the entire point of reducing IV&amp;V to a
-single defensible metric: when someone asks to cut the budget, you don’t
-have to argue feelings against their spreadsheet — you have your own
-spreadsheet, and it’s the reason the funding kept getting approved.</p>
-<p><strong>What made it a “great team,” not just a bigger
-budget:</strong> I designed and taught the leadership and technical
-training myself — assessment tools and techniques, team building, how to
-communicate a controversial defect finding without the room shutting
-down, effective technical writing. I trained junior staff, balanced
-staffing across efforts, and mentored people on MBSE and Design
-Structure Matrix system-architecture assessment. The measure I actually
-care about: people I trained into that process are still running
-high-performing Agile IV&amp;V teams on GMD today, well past when I
-moved on to other roles.</p>
-<h3 id="tell-me-about-a-time-you-failed-short-version">“Tell me about a
-time you failed” — SHORT version</h3>
-<p>The C#/Rust and Python/Rust physics simulation port. Nine months, a
-top-tier AI coding assistant, and I still could not get AI-generated
-ports to reliably preserve the covariance matrix math — it kept
-producing code that compiled, looked right, and was quietly wrong, over
-and over. I never solved it. That’s the honest answer: it’s an open
-failure, not a tidy story with a fix at the end. What I do have is the
-discipline that came out of it — I don’t trust an AI-assisted language
-port without independent verification against the original, full stop,
-because I’ve proven to myself firsthand how convincingly it can be
-wrong.</p>
-<h3 id="tell-me-about-a-time-you-failed-long-version">“Tell me about a
-time you failed” — LONG version</h3>
-<p><strong>What happened:</strong> I spent about 9 months trying to get
-a top-tier AI coding assistant to port working physics/GNC simulation
-code — C# to Rust, Python to Rust — code where the entire point is
-numerical correctness. Every attempt produced code that compiled cleanly
-and read as correct. The covariance matrix math was wrong every time.
-Not an occasional miss — consistently, across many attempts, over
-months. I could not find a prompt, a process, or a review technique that
-made the AI reliably preserve the actual mathematical semantics across
-the language boundary.</p>
-<p><strong>Why it was a real failure, not just a bad day:</strong> this
-wasn’t one bug I found and fixed. It was months of repeated attempts
-against the same fundamental problem, and I never cracked it.
-Property-based testing missed it. Unit testing missed it. Only a
-subject-matter expert doing visual inspection caught the errors, every
-time — which doesn’t scale, and isn’t a real solution, it’s a stopgap.
-Embarrassing to admit as someone with decades of formal verification
-background: I could not find a verification method that closed the gap
-for this specific failure mode.</p>
-<p><strong>What I actually did with it:</strong> I stopped trusting
-AI-generated language ports as a shortcut. Full stop. Every AI-assisted
-port now goes through the same independent-verification rigor I’d apply
-to any safety-critical change, and I built that expectation into how I
-evaluate AI-assisted work generally — not just for this one tool or this
-one codebase. I have not solved the underlying problem — I don’t
-currently have a testing method that reliably catches this class of
-AI-introduced error other than SME inspection. I’m honest about that gap
-rather than claiming a fix I don’t have.</p>
-<p><strong>Why I’d tell an interviewer this instead of a safer failure
-story:</strong> because it’s real, it’s current, it’s unresolved, and
-it’s directly relevant to a DevSecOps role where AI-assisted development
-is only going to get more common. Admitting I haven’t solved it is more
-credible than a neat failure-with-a-bow-on-it story — and it sets up a
-legitimate question back to the interviewer: how is their team handling
-AI-generated code verification, because it’s a live problem, not a
-solved one.</p>
-<h3 id="what-would-you-do-if-probable-situational-questions">“What would
-you do if…” — probable situational questions</h3>
-<p>Terse answers, grounded in real experience and this repo’s own
-playbook (<code>playbook/MASTER-PLAYBOOK.md</code>) where relevant — not
-generic DevSecOps platitudes.</p>
-<p><strong>“…a security scan blocks a release the team says is
-urgent?”</strong> Check the finding first — is it real or a false
-positive. If real, it doesn’t ship; a deadline doesn’t override a
-CRITICAL. If there’s a genuine business case for accepted risk, that’s a
-waiver — documented, with an expiry and a compensating control, not a
-silent override. Same discipline as breakeven analysis on IV&amp;V:
-quantify the risk, don’t just feel it.</p>
-<p><strong>“…two scanning tools give conflicting results on the same
-code?”</strong> Real example, not hypothetical: <code>tfsec</code>
-passed a Terraform misconfig that <code>trivy config</code> caught as
-CRITICAL on the same commit. A pass from one tool proves that tool’s
-ruleset found nothing — not that nothing’s wrong. Trust the
-broader/actively-maintained tool, and treat a narrower tool’s silence as
-absence of evidence, not evidence of absence.</p>
-<p><strong>“…you inherit a pipeline with no tests and years of legacy
-code?”</strong> Don’t try to boil the ocean. Root-cause and categorize
-first — same method as the STIG 51-failure triage: group failures into a
-handful of underlying causes instead of fixing 500 symptoms one at a
-time. Gate new code immediately; backfill coverage on the legacy code by
-risk, highest-blast-radius modules first.</p>
-<p><strong>“…a developer pushes back that a finding is a false
-positive?”</strong> Don’t argue from authority — verify. If they’re
-right, fix the rule/exclude it with documentation of why. If they’re
-wrong, show them the evidence, not just the tool’s opinion. This is the
-same “cooperative-adversarial” relationship-building from decades of
-IV&amp;V — the goal is a correct answer both sides can defend, not a
-win.</p>
-<p><strong>“…you find a critical vulnerability already in
-production?”</strong> Assess blast radius and severity first — that
-drives the timeline, not panic. Contain if actively exploitable, patch,
-verify the fix, then root-cause how it got past the gate in the first
-place and close that gap too — fixing the instance without fixing the
-gate just guarantees a repeat.</p>
-<p><strong>“…leadership wants to skip the security gate to hit a
-deadline?”</strong> Make the risk visible and quantified, in writing,
-and let leadership make an informed, accountable decision — that’s the
-waiver process, not a private compromise. I’ve run IV&amp;V panels for
-milestone reviews; the job is surfacing risk clearly, not personally
-absorbing the decision to accept it.</p>
-<p><strong>“…you’re asked to review AI-generated code before it
-merges?”</strong> Same gate as anything else, arguably stricter — I’ve
-been burned by exactly this (see the AI code generation story above): AI
-can produce code that compiles and looks right while being subtly,
-confidently wrong. Verify against the original/spec independently; don’t
-let fluency substitute for correctness.</p>
-<p><strong>“…you join a team or program with no real DevSecOps culture
-yet?”</strong> Same playbook as standing up an Agile IV&amp;V process
-across a dozen-plus companies: define the gate, get the tooling running
-end-to-end even minimally, prove it can actually fail on a real finding
-(a gate that never fails isn’t trusted), then expand coverage from
-there. Culture change follows a working, visible process — it doesn’t
-precede it.</p>
-<h3 id="zone-checklist-pipeline-order-coverage-backup">9-zone checklist
-(pipeline order, coverage backup)</h3>
-<p>Use this to make sure nothing gets left out when answering follow-up
-questions, or as a fallback structure — not the live opening answer (see
-primary version above; this is flat pipeline order, not sequenced for
-hook/interest).</p>
-<p>CISSP, CEH-M, 38 years in defense systems engineering. I’ve covered
-all nine DevSecOps zones — under different names, before most of the
-tooling existed:</p>
-<ol type="1">
-<li><strong>Plan &amp; Source</strong>
-<ul>
-<li>Designed the Agile IV&amp;V process for GMD</li>
-<li>Governed work intake across 13 companies, 7 contract vehicles</li>
-</ul></li>
-<li><strong>Develop</strong>
-<ul>
-<li>Sole admin, 1,531 users</li>
-<li>Full workstation-to-server chain, alone</li>
-</ul></li>
-<li><strong>Build</strong>
-<ul>
-<li>Owned procurement through production for 8 Sperry
-supercomputers</li>
-<li>$1.2M acquisition, paperwork to install</li>
-</ul></li>
-<li><strong>Test</strong>
-<ul>
-<li>Formal verification, machine-assisted proofs</li>
-<li>Property-based testing</li>
-<li>Cut vulnerabilities 95% on DARPA SAFE</li>
-</ul></li>
-<li><strong>Secure</strong>
-<ul>
-<li>CEH-M, hands-on pen testing</li>
-<li>Root-caused a CRITICAL Terraform misconfig a scanner missed</li>
-<li>Root-caused 51 of 409 failing STIG controls</li>
-</ul></li>
-<li><strong>Provision</strong>
-<ul>
-<li>Fixed a live KMS/CloudWatch bug in Terraform-applied AWS
-infrastructure</li>
-</ul></li>
-<li><strong>Deploy &amp; Orchestrate</strong>
-<ul>
-<li>Backups, installs, daily ops</li>
-<li>750 terminals, 100 printers</li>
-</ul></li>
-<li><strong>Operate &amp; Observe</strong>
-<ul>
-<li>FRACAS, failure review boards</li>
-<li>Root-cause and trend analysis on fielded weapon systems</li>
-</ul></li>
-<li><strong>Evidence &amp; Govern</strong>
-<ul>
-<li>$22M budget, Earned Value Management</li>
-<li>Breakeven analysis tying assessment to defects removed before
-fielding</li>
-</ul></li>
-</ol>
-<p>Nine zones, one person, decades of practice. That’s what I bring.</p>
+  <div class="featured">
+    <h3>“Tell me about yourself” — primary answer</h3>
+    <p>I started working the technical side of DevSecOps when I designed and procured $1.2 million of computer equipment for the Missile Logistics Center — 1,531 users, 8 Sperry supercomputers, and I ran the cables, updated the software, automated tasks, ran backups, and did user support myself.</p>
+    <p>I then transitioned into the “catch bugs quickly” zone — unit testing, property-based testing, formal methods testing, using automated tools to find bugs and vulnerabilities. As Chief Engineer on AMRDEC’s DARPA SAFE secure-computing program, formal verification with machine-assisted proofs cut security vulnerabilities 95% — a custom hardware/software architecture that defeats the top 25 cyber-attacks out of the box.</p>
+    <p>I’ve built AGILE style cooperative-adversarial relationships between developers, testers, quality assurance, customers, and management — presenting problems, solutions, and paths forward, not just findings. I’ve done penetration testing, software IV&amp;V, and lab planning through procurement, installation, and operations — up to a $22 million annual budget across 13 companies and 7 contract vehicles.</p>
+    <p>I transitioned to Valkyrie’s Artificial Intelligence Lead and worked on RiPPiTT (Rapid Parametric Prototypes Threat Tool) simulations in a DevSecOps environment — demonstrated at the SMD conference. Developed prototypes for the Army Corps of Engineers to use drones to detect cracks in dams and bridges. Helped develop AI reverse engineering binaries for NASIC. Got really burned with AI code generation and have many lessons learned as the world replaces junior software developers with AI. As DevSecOps evolves, this experience will come in handy.</p>
+    <p>Currently I’m working on an IRAD FPGA product for the test ranges with a complete DevSecOps pipeline and a customized dashboard. That pipeline is what caught a CRITICAL Terraform misconfiguration a standard scanner missed, and root-caused why 51 of 409 STIG controls were failing on a RHEL image instead of just reporting the count. With this pipeline in place I can focus on the core signal processing FPGA hardware and software.</p>
+  </div>
 
-<footer class="colophon">
-  Built from <code>interviews/me.md</code> — the private working document with
-  full detail (career timeline, resume data, prep notes) lives there and is
-  intentionally not published here.
-</footer>
+  <h2 class="section-title">Story Bank — likely follow-ups</h2>
+  <div class="grid">
+
+    <div class="card">
+      <h3>“That AI code generation experience — what burned you?”</h3>
+      <p>Over about 9 months I repeatedly used a top-tier AI coding assistant to port working physics/GNC simulation code between languages — C# to Rust, Python to Rust. Every time, the ported code compiled and looked right, but the covariance matrix math was wrong. Property-based testing and unit testing both missed it — only a subject-matter expert’s visual inspection actually caught the bug. So now AI-generated code gets the same verification gate as anything else — arguably stricter, since a fluent, confident, wrong answer is a failure mode a human reviewer is less likely to catch by eye.</p>
+      <details>
+        <summary>Long version</summary>
+        <p><strong>The failure mode:</strong> the AI could not reliably preserve the actual mathematical semantics across the language port; it could produce code that read correctly without being correct — repeatedly, across many attempts over months.</p>
+        <p><strong>How it was caught:</strong> not by trusting the output. Property-based testing against the known-good source, function by function, failed. Unit testing failed. Only visual inspection by a SME caught the bug.</p>
+        <p><strong>The concrete change:</strong> I don’t trust AI-generated code translated from a working implementation without independently verifying it against the original — the same rigor as any safety- or correctness-critical port. AI is like a junior developer with misleading, happy-path test results.</p>
+        <p><strong>Why it matters:</strong> AI-generated code entering a pipeline is a real, current DevSecOps risk — same category as an unvetted dependency, just newer, and I’ve hit its actual failure mode firsthand.</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <h3>“Walk me through that Terraform/STIG catch.”</h3>
+      <p><strong>Terraform:</strong> a Jenkins build passed every gate — lint, tests, secrets, SAST, SBOM, dependency scan, container scan — then failed on IaC. <code>trivy config</code> caught a CRITICAL that <code>tfsec</code> passed clean on the same commit — <code>tfsec</code> simply has no rule for that misconfig class. A passing scan proves that tool found nothing, not that nothing’s wrong.</p>
+      <p><strong>STIG:</strong> a real DISA STIG scan came back 51 failures of 409 rules. I root-caused all 51 into three buckets — PAM/password policy, crypto policy, RPM integrity — instead of treating them as 51 separate problems.</p>
+      <details>
+        <summary>Long version</summary>
+        <p><code>trivy config</code> (Aqua’s successor to <code>tfsec</code>, which was archived by its maintainer) flagged <code>infra/terraform/modules/azure-platform/main.tf:23-51</code> — an <code>azurerm_storage_account</code> with no <code>network_rules</code> block, defaulting to public access. Same commit, same directory, <code>tfsec</code>’s narrower ruleset missed it entirely.</p>
+        <p>STIG root causes: (1) PAM ships vendor-default because password policy is site-specific — check <code>/etc/security/pwquality.conf</code>. (2) Crypto policy defaults to general-compatibility, not <code>DISA_STIG</code> — <code>update-crypto-policies --set DISA_STIG</code> fixes it, but changes ciphers for the whole box. (3) RPM integrity isn’t enforced by default — check <code>rpm -Va</code> and <code>gpgcheck=1</code>.</p>
+        <p>None of the 51 are bugs in the base image — a minimal, unopinionated image is <em>correct</em> vendor behavior. The scan tells you exactly which rules a hardening pass has to touch, by rule ID, instead of guessing.</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <h3>“Tell me about a time you led a team.”</h3>
+      <p>It started with one sentence: “We need IV&amp;V for the GMD-RKV interceptor, about 1.5 FTE.” I grew that into a 17-person team and a defensible, metrics-driven IV&amp;V process, and wrote and presented a paper on the model: “Moneyball IV&amp;V” — stop buying activities, start buying outcomes. Reduces the whole management problem to one number, Defect Removal Efficiency, anchored to real data from 26,000 software projects.</p>
+      <p>That process took the effort to a $22M annual budget across 13 companies and 7 contract vehicles, and earned MDA Letters of Recognition for Innovative Agile IV&amp;V two years running.</p>
+      <details>
+        <summary>Long version</summary>
+        <p><strong>The innovation:</strong> traditional IV&amp;V is Level-of-Effort with no answer to “is the fielded software actually better?” Moneyball IV&amp;V gives stakeholders weekly graphs of planned vs. actual defects removed instead of status-report adjectives.</p>
+        <p><strong>Proof it worked:</strong> MDA Letter of Recognition for RKV (2017) and GME-S (2018), plus MDA Individual/Best Team Recognition (2019). The model was formally presented, not used quietly — every equation documented so others could run it.</p>
+        <p><strong>The model kept the budget alive:</strong> asked in a budget drill “what if your budget was cut $1M,” I answered with a number — how many defects go unremoved and fielded instead. I could run it forward too: given 3 months of funding, the predicted SEV-1 defects that funding would catch vs. miss.</p>
+        <p><strong>What made it a great team:</strong> I designed and taught the leadership/technical training myself, mentored on MBSE and DSM assessment. People I trained are still running high-performing Agile IV&amp;V teams on GMD today.</p>
+      </details>
+    </div>
+
+    <div class="card">
+      <h3>“Tell me about a time you failed.”</h3>
+      <p>The C#/Rust and Python/Rust physics simulation port. Nine months, a top-tier AI coding assistant, and I still could not get AI-generated ports to reliably preserve the covariance matrix math. I never solved it — that’s the honest answer, not a tidy story with a fix at the end. What I do have is the discipline that came out of it: I don’t trust an AI-assisted language port without independent verification against the original, because I’ve proven to myself firsthand how convincingly it can be wrong.</p>
+      <details>
+        <summary>Long version</summary>
+        <p><strong>Why it was a real failure:</strong> not one bug found and fixed — months of repeated attempts against the same problem, never cracked. Property-based testing missed it, unit testing missed it. Only SME visual inspection caught the errors every time — a stopgap, not a real solution.</p>
+        <p><strong>What I did with it:</strong> stopped trusting AI-generated language ports as a shortcut, full stop. I have not solved the underlying problem — no testing method reliably catches this class of error other than SME inspection, and I’m honest about that gap.</p>
+        <p><strong>Why tell an interviewer this instead of a safer story:</strong> it’s real, current, unresolved, and directly relevant to a role where AI-assisted development is only getting more common. It also sets up a legitimate question back to them: how does their team handle AI-generated code verification?</p>
+      </details>
+    </div>
+
+  </div>
+
+  <h2 class="section-title">“What would you do if…” — situational questions</h2>
+  <div class="grid mini">
+
+    <div class="card mini">
+      <h3>…a security scan blocks an urgent release?</h3>
+      <p>Check the finding first — real or false positive. If real, it doesn’t ship; a deadline doesn’t override a CRITICAL. A genuine accepted-risk case needs a documented waiver with expiry and a compensating control, not a silent override.</p>
+    </div>
+
+    <div class="card mini">
+      <h3>…two scanning tools disagree?</h3>
+      <p>Real example: <code>tfsec</code> passed a misconfig <code>trivy config</code> caught as CRITICAL, same commit. A pass proves that tool found nothing — not that nothing’s wrong. Trust the broader, actively-maintained tool.</p>
+    </div>
+
+    <div class="card mini">
+      <h3>…you inherit an untested legacy pipeline?</h3>
+      <p>Don’t boil the ocean. Root-cause and categorize first, same as the STIG triage — group into a handful of causes, not 500 symptoms. Gate new code immediately; backfill legacy coverage by risk.</p>
+    </div>
+
+    <div class="card mini">
+      <h3>…a developer disputes a finding?</h3>
+      <p>Don’t argue from authority — verify. If they’re right, fix or exclude the rule with documentation. If wrong, show evidence, not the tool’s opinion. Cooperative-adversarial: a correct answer both sides can defend.</p>
+    </div>
+
+    <div class="card mini">
+      <h3>…you find a live production vulnerability?</h3>
+      <p>Assess blast radius and severity first — drives the timeline, not panic. Contain if exploitable, patch, verify the fix, then root-cause how it got past the gate and close that gap too.</p>
+    </div>
+
+    <div class="card mini">
+      <h3>…leadership wants to skip the gate for a deadline?</h3>
+      <p>Make the risk visible and quantified in writing; let leadership make an informed, accountable decision — that’s the waiver process, not a private compromise. Surface risk clearly; don’t personally absorb the decision.</p>
+    </div>
+
+    <div class="card mini">
+      <h3>…you review AI-generated code pre-merge?</h3>
+      <p>Same gate as anything else, arguably stricter — I’ve been burned by exactly this. AI can produce code that compiles and looks right while being subtly, confidently wrong. Verify against the spec independently.</p>
+    </div>
+
+    <div class="card mini">
+      <h3>…no real DevSecOps culture exists yet?</h3>
+      <p>Same playbook as standing up Agile IV&amp;V across a dozen-plus companies: define the gate, get tooling running end-to-end, prove it can actually fail on a real finding, then expand. Culture follows a working process.</p>
+    </div>
+
+  </div>
+
+  <h2 class="section-title">9-zone coverage — CISSP, CEH-M, 38 years, under different names</h2>
+  <div class="grid mini">
+
+    <div class="card mini"><h3>1. Plan &amp; Source</h3><ul>
+      <li>Designed the Agile IV&amp;V process for GMD</li>
+      <li>Governed work intake across 13 companies, 7 contract vehicles</li>
+    </ul></div>
+
+    <div class="card mini"><h3>2. Develop</h3><ul>
+      <li>Sole admin, 1,531 users</li>
+      <li>Full workstation-to-server chain, alone</li>
+    </ul></div>
+
+    <div class="card mini"><h3>3. Build</h3><ul>
+      <li>Owned procurement through production for 8 Sperry supercomputers</li>
+      <li>$1.2M acquisition, paperwork to install</li>
+    </ul></div>
+
+    <div class="card mini"><h3>4. Test</h3><ul>
+      <li>Formal verification, machine-assisted proofs</li>
+      <li>Property-based testing</li>
+      <li>Cut vulnerabilities 95% on DARPA SAFE</li>
+    </ul></div>
+
+    <div class="card mini"><h3>5. Secure</h3><ul>
+      <li>CEH-M, hands-on pen testing</li>
+      <li>Root-caused a CRITICAL Terraform misconfig a scanner missed</li>
+      <li>Root-caused 51 of 409 failing STIG controls</li>
+    </ul></div>
+
+    <div class="card mini"><h3>6. Provision</h3><ul>
+      <li>Fixed a live KMS/CloudWatch bug in Terraform-applied AWS infrastructure</li>
+    </ul></div>
+
+    <div class="card mini"><h3>7. Deploy &amp; Orchestrate</h3><ul>
+      <li>Backups, installs, daily ops</li>
+      <li>750 terminals, 100 printers</li>
+    </ul></div>
+
+    <div class="card mini"><h3>8. Operate &amp; Observe</h3><ul>
+      <li>FRACAS, failure review boards</li>
+      <li>Root-cause and trend analysis on fielded weapon systems</li>
+    </ul></div>
+
+    <div class="card mini"><h3>9. Evidence &amp; Govern</h3><ul>
+      <li>$22M budget, Earned Value Management</li>
+      <li>Breakeven analysis tying assessment to defects removed before fielding</li>
+    </ul></div>
+
+  </div>
+
+  <footer class="colophon">
+    Built from <code>interviews/me.md</code> — the private working document with
+    full detail (career timeline, resume data, prep notes) lives there and is
+    intentionally not published here.
+  </footer>
 </div>
 </body>
 </html>
